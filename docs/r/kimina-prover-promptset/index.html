@@ -10,38 +10,39 @@
 <meta property="og:image" content="https://code.renaissancelabs.eu/assets/og/r-kimina-prover-promptset.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Kimina-Prover-Promptset: Dataset | Renaissance Labs Code"><meta property="og:site_name" content="Renaissance Labs Code">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://code.renaissancelabs.eu/assets/og/r-kimina-prover-promptset.jpg"><meta name="twitter:title" content="Kimina-Prover-Promptset: Dataset | Renaissance Labs Code"><meta name="twitter:description" content="Lean 4 formal statements with natural-language versions used for Kimina-Prover RL."><meta name="theme-color" content="#121311">
 <link rel="icon" href="/assets/favicon.png">
-<link rel="stylesheet" href="/styles.css?v=a7072e73">
+<link rel="stylesheet" href="/styles.css?v=33e4a37a">
 <script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="bar">
   <a class="brand" href="/"><img src="/assets/mark.png" alt=""><span>Renaissance Labs &middot; Code</span></a>
-  <nav><a href="/catalog/" aria-current="page">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/pitfalls/">Pitfalls</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
+  <nav><a href="/program/">Program</a><a href="/stack/">Stack</a><a href="/languages/">Languages</a><a href="/world/">World</a><a href="/intelligence/">Intelligence</a><a href="/train/" aria-current="page">Train</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
   <button class="theme" id="theme" type="button" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
 </header>
 <main id="main">
-<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/catalog/">Catalog</a> / <a href="/stage/rl/">RL</a></div>
+<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/train/">Train</a> / <a href="/catalog/">Catalog</a> / <a href="/stage/rl/">RL</a></div>
 <span class="eyebrow">Dataset &middot; 2025-08</span><h1>Kimina-Prover-Promptset</h1><p class="lede">Lean 4 formal statements with natural-language versions used for Kimina-Prover RL.</p></div>
 <div class="layout"><div class="prose">
 <h2>How to use it</h2><p>Pair with kimina-lean-server as verifier.</p>
 <h2>Caveats</h2><p>No license on card. Project repo MIT for the server.</p>
 <div class="callout warn"><b>License</b>This entry is not plainly permissive (family: unknown, read the source). Read the license on the source page before using it for training or for a product.</div><div class="codebox"><div class="lab"><span>load</span><button class="copy" type="button">Copy</button></div><pre><span class="k">from</span> datasets <span class="k">import</span> load_dataset
 ds = load_dataset(<span class="s">&quot;project-numina/Kimina-Prover-Promptset&quot;</span>, split=<span class="s">&quot;train&quot;</span>)</pre></div>
-<h2>Related</h2><ul><li><a href="/r/formalmath/">FormalMATH</a>: Large Lean 4 formal math benchmark spanning olympiad to undergraduate...</li><li><a href="/r/lean-workbook/">Lean Workbook</a>: Auto-formalized competition-style problems in Lean 4, used for theorem-prover RL;...</li><li><a href="/r/numinamath-lean/">NuminaMath-LEAN</a>: Competition problems with formal statements, ground-truth proofs and an rl_data field for Lean 4...</li><li><a href="/r/verina/">Verina</a>: Verifiable code generation in Lean: each task has description, Lean code, signature, tests and rejected...</li><li><a href="/r/apps/">APPS</a>: Interview-level and competition Python problems with solutions and test...</li><li><a href="/r/fw-areal/">AReaL</a>: Async RL system for LLM agents (repo now under areal-project). Verified active on GitHub...</li></ul>
+<h2>Related</h2><ul><li><a href="/r/formalmath/">FormalMATH</a>: Large Lean 4 formal math benchmark spanning olympiad to undergraduate...</li><li><a href="/r/lean-workbook/">Lean Workbook</a>: Auto-formalized competition-style problems in Lean 4, used for theorem-prover RL;...</li><li><a href="/r/numinamath-lean/">NuminaMath-LEAN</a>: Competition problems with formal statements, ground-truth proofs and an rl_data field for Lean 4...</li><li><a href="/r/verina/">Verina</a>: Verifiable code generation in Lean: each task has description, Lean code, signature, tests and rejected...</li><li><a href="/r/aiopslab/">AIOpsLab</a>: Microsoft framework that deploys microservice applications, injects faults, generates workloads and exports...</li><li><a href="/r/apps/">APPS</a>: Interview-level and competition Python problems with solutions and test...</li></ul>
 </div><aside class="aside"><div class="panel"><h3>At a glance</h3><dl>
 <dt>Source</dt><dd><a href="https://huggingface.co/datasets/project-numina/Kimina-Prover-Promptset">huggingface.co/datasets/project-numina/Kimina-Pr</a></dd>
 <dt>License</dt><dd>none stated (API null)</dd><dt>Size</dt><dd>24,418 train statements</dd>
 <dt>Stage</dt><dd><a class="pill st st-rl" href="/stage/rl/">RL</a></dd>
-<dt>Languages</dt><dd>lean</dd><dt>Tasks</dt><dd>Formal and verified code</dd><dt>Difficulty</dt><dd>hard</dd>
+<dt>Languages</dt><dd><a href="/languages/lean/">Lean</a> <small>(source lists 1 in all)</small></dd>
+<dt>Form</dt><dd><a class="pill" href="/program/proof/">Proof</a></dd><dt>Stack level</dt><dd><a class="pill" href="/stack/languages/">Languages</a></dd><dt>Tasks</dt><dd>Formal and verified code</dd><dt>Difficulty</dt><dd>hard</dd>
 <dt>Checked</dt><dd>2026-11-24</dd></dl></div>
 <div class="panel"><h3>More links</h3><ul><li><a href="https://github.com/project-numina/kimina-lean-server">Lean server</a></li></ul></div>
 <div class="panel"><h3>Evidence</h3><p class="mono">huggingface.co/api/datasets/project-numina/Kimina-Prover-Promptset (features, train=24418)</p></div></aside></div></div></div>
 </main>
 <footer class="wrap foot">
   <a class="brand" href="https://renaissancelabs.eu"><img src="/assets/mark.png" alt="">Renaissance Labs</a>
-  <div class="foot-links"><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
+  <div class="foot-links"><a href="/catalog/">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
 </footer>
-<script src="/app.js?v=a7072e73" defer></script>
+<script src="/app.js?v=33e4a37a" defer></script>
 </body>
 </html>

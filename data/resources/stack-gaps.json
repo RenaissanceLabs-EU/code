@@ -1,0 +1,2667 @@
+[
+ {
+  "id": "verilogeval",
+  "name": "VerilogEval",
+  "kind": "benchmark",
+  "url": "https://github.com/NVlabs/verilog-eval",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2309.07544"
+   },
+   {
+    "label": "Paper (v2)",
+    "url": "https://arxiv.org/abs/2408.11053"
+   }
+  ],
+  "license": "MIT",
+  "size": "156 problems from the HDLBits instructional site (paper abstract)",
+  "summary": "Verilog generation benchmark from NVIDIA Research, scored by simulation. The 2024 revision adds specification-to-RTL tasks next to the original code completion task.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "verilog"
+  ],
+  "tasks": [
+   "generation",
+   "completion"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Run the repository harness with Icarus Verilog. Tasks are code-complete-iccad2023 and spec-to-rtl; the README says the problems are identical between the two and only the format changes.",
+  "caveats": "Simulation-based (functional) scoring. Problems come from a public teaching site, so contamination is likely. The README says the v2 harness supports only the Human Eval problem statements, not MachineEval, and reports pass@1 only. Last commit 2025-02-07. The GitHub API reports the license as NOASSERTION; the LICENSE file is MIT text.",
+  "released": "2023-09",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API NVlabs/verilog-eval (created 2023-08-23, last commit 2025-02-07) and LICENSE file; README; arxiv.org/abs/2309.07544 and 2408.11053 abstracts",
+  "levels": [
+   "gates"
+  ],
+  "layers": [
+   "text",
+   "execution",
+   "tests"
+  ]
+ },
+ {
+  "id": "rtllm",
+  "name": "RTLLM",
+  "kind": "benchmark",
+  "url": "https://github.com/hkust-zhiyao/RTLLM",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2308.05345"
+   }
+  ],
+  "license": "MIT",
+  "size": "50 designs in RTLLM 2.0 (README); current version 2.1",
+  "summary": "Benchmark for generating design RTL from natural-language descriptions. Each design has its own folder of files.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "verilog"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Generate RTL from each design description and check it with the files supplied for that design. Use it next to VerilogEval, since the designs are larger than HDLBits exercises.",
+  "caveats": "Small (tens of designs), so scores are noisy. Version 2.1 corrected several design descriptions and testbenches, so state the version you ran. Last commit 2026-08-15.",
+  "released": "2023-08",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API hkust-zhiyao/RTLLM (license MIT, last commit 2026-08-15); README (v2.1 notes, 50 designs in 2.0); arxiv.org/abs/2308.05345",
+  "levels": [
+   "gates"
+  ],
+  "layers": [
+   "text",
+   "execution",
+   "tests"
+  ]
+ },
+ {
+  "id": "cvdp",
+  "name": "CVDP (Comprehensive Verilog Design Problems)",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/nvidia/cvdp-benchmark-dataset",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2506.14074"
+   }
+  ],
+  "license": "other (HF card). LICENSE file: multiple licenses, non-code content CC BY 4.0, code-derived datapoints under upstream terms; see LICENSE and NOTICE",
+  "size": "783 problems across 13 task categories (paper abstract); the v1.1.0 files on HF hold 749 rows in six configs",
+  "summary": "NVIDIA benchmark for RTL design and verification, with both single-turn and agentic problems written by hardware engineers. Covers RTL generation, verification, debugging, specification alignment and technical Q&A.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "verilog"
+  ],
+  "tasks": [
+   "generation",
+   "repair",
+   "agentic",
+   "testing"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Pick a config (nonagentic, agentic, or agentic heavy code generation). Each exists in a commercial and a no_commercial variant; read the card to see which one your tool setup can run.",
+  "caveats": "The paper abstract reports no more than 34% pass@1 on code generation for the best models at release. The license is not a single SPDX license; read LICENSE and NOTICE before training on it. Row counts on HF (68, 92, 25, 75, 187, 302) do not sum to the 783 in the paper.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"nvidia/cvdp-benchmark-dataset\", \"cvdp_nonagentic_code_generation_no_commercial\", split=\"eval\")",
+  "released": "2025-06",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/nvidia/cvdp-benchmark-dataset (license other, created 2025-06-18, modified 2026-07-21); LICENSE file head; datasets-server sizes; arxiv.org/abs/2506.14074 abstract",
+  "levels": [
+   "gates"
+  ],
+  "layers": [
+   "text",
+   "execution",
+   "tests"
+  ]
+ },
+ {
+  "id": "verigen-verilog-github",
+  "name": "Verilog_GitHub (VeriGen training data)",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/shailja/Verilog_GitHub",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2212.11140"
+   }
+  ],
+  "license": "mit in HF metadata, but the card text says BigCode OpenRAIL-M v1; the card also says the data was not filtered for permissive licenses",
+  "size": "108,971 rows (train)",
+  "summary": "Verilog modules collected from GitHub through BigQuery, used to fine-tune the VeriGen models. One of the few sizable open Verilog corpora.",
+  "stages": [
+   "pretrain",
+   "sft"
+  ],
+  "languages": [
+   "verilog"
+  ],
+  "tasks": [
+   "completion",
+   "generation"
+  ],
+  "difficulty": "intro",
+  "how_to_use": "Use as raw Verilog for continued pretraining or fine-tuning. Filter by license and compile each module with a simulator or linter before use.",
+  "caveats": "The card states the entries can be non-compilable, low-quality and vulnerable code, and that the source was not filtered for permissive licenses. The license statements on the card conflict. Last modified 2023-09-20.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"shailja/Verilog_GitHub\", split=\"train\")",
+  "released": "2022-12",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/shailja/Verilog_GitHub (license mit, created 2022-12-19); card README; datasets-server size; arxiv.org/abs/2212.11140",
+  "levels": [
+   "gates"
+  ],
+  "layers": [
+   "text"
+  ]
+ },
+ {
+  "id": "rtl-repo",
+  "name": "RTL-Repo",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/ahmedallam/RTL-Repo",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2405.17378"
+   },
+   {
+    "label": "GitHub",
+    "url": "https://github.com/AUCOHL/RTL-Repo"
+   }
+  ],
+  "license": null,
+  "size": "2,924 train and 1,174 test rows",
+  "summary": "Repository-level Verilog completion: predict the next line of code given the context of a whole public GitHub RTL project.",
+  "stages": [
+   "eval",
+   "sft"
+  ],
+  "languages": [
+   "verilog"
+  ],
+  "tasks": [
+   "completion",
+   "repo-level"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Evaluate on the test split with the scripts in the GitHub repository. The train split can be used for fine-tuning.",
+  "caveats": "The HF card states no license; the GitHub code repository is Apache-2.0. Text-match metrics, no simulation, so it measures completion quality and not functional correctness. Last commit 2024-06-05.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"ahmedallam/RTL-Repo\", split=\"test\")",
+  "released": "2024-05",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/ahmedallam/RTL-Repo (no license field, splits train 2924, test 1174); GitHub API AUCOHL/RTL-Repo (Apache-2.0, last commit 2024-06-05); arxiv.org/abs/2405.17378 abstract",
+  "levels": [
+   "gates"
+  ],
+  "layers": [
+   "text"
+  ]
+ },
+ {
+  "id": "exebench",
+  "name": "ExeBench",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/jordiae/exebench",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://dl.acm.org/doi/abs/10.1145/3520312.3534867"
+   },
+   {
+    "label": "GitHub",
+    "url": "https://github.com/jordiae/exebench"
+   }
+  ],
+  "license": "MIT for ExeBench contributions; each C function keeps the license of its source repository (README). No license field in HF metadata",
+  "size": "Millions of C functions; README lists 2.308M synthetic and 0.675M real compilable training functions, with smaller subsets that have input/output examples",
+  "summary": "C functions from GitHub paired with their dependencies and metadata, and for a subset, input/output examples so the function can be executed. Built for machine learning applications such as compilation and decompilation.",
+  "stages": [
+   "pretrain",
+   "sft",
+   "eval"
+  ],
+  "languages": [
+   "c",
+   "assembly"
+  ],
+  "tasks": [
+   "generation",
+   "reasoning"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Compile the functions to get source and assembly pairs for compilation or decompilation training, and use the executable subsets (for example test_synth, test_real) to check outputs by running them. Helpers are in the GitHub repository.",
+  "caveats": "Per-function licenses vary; read the metadata. The HF dataset uses a loading script, and the dataset viewer returned an error when checked. Last commit to the helper repository 2022-09-15.",
+  "released": "2022-07",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/jordiae/exebench (created 2022-07-30, no license field); card README (v1.01 split sizes, license paragraph); GitHub API jordiae/exebench (last commit 2022-09-15)",
+  "levels": [
+   "machine",
+   "compilers"
+  ],
+  "layers": [
+   "text",
+   "execution",
+   "tests"
+  ]
+ },
+ {
+  "id": "decompile-bench",
+  "name": "Decompile-Bench",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/LLM4Binary/decompile-bench",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2505.12668"
+   },
+   {
+    "label": "GitHub",
+    "url": "https://github.com/albertan017/LLM4Decompile"
+   }
+  ],
+  "license": "CC0-1.0",
+  "size": "1,359,586 rows in the viewer; the card and paper describe two million binary-source function pairs",
+  "summary": "Function-level pairs of compiled binary (as assembly) and original C or C++ source, condensed from 100 million pairs compiled from permissively licensed GitHub projects. Training data for the LLM4Decompile models.",
+  "stages": [
+   "sft"
+  ],
+  "languages": [
+   "c",
+   "cpp",
+   "assembly"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Fine-tune a model to map assembly or decompiler pseudo-code back to source. Evaluate on Decompile-Bench-Eval, which uses later repositories.",
+  "caveats": "The card says 450 GB of binaries were compiled to build it. The row count shown by the viewer is lower than the two million in the card; check before relying on either number.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"LLM4Binary/decompile-bench\", split=\"train\")",
+  "released": "2025-05",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/LLM4Binary/decompile-bench (cc0-1.0, created 2025-05-12); card README; datasets-server size; arxiv.org/abs/2505.12668 abstract",
+  "levels": [
+   "machine"
+  ],
+  "layers": [
+   "text",
+   "execution"
+  ]
+ },
+ {
+  "id": "decompile-bench-eval",
+  "name": "Decompile-Bench-Eval",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/LLM4Binary/decompile-eval",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2505.12668"
+   },
+   {
+    "label": "GitHub",
+    "url": "https://github.com/albertan017/LLM4Decompile"
+   }
+  ],
+  "license": "CC0-1.0",
+  "size": "75,610 rows in the viewer; three parts named humaneval, mbpp and github2025 on the card",
+  "summary": "Evaluation set for binary decompilation: hand-built binaries from HumanEval and MBPP, plus GitHub repositories released after 2025 to limit leakage. C and C++.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "c",
+   "cpp",
+   "assembly"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Decompile each function and score with the scripts in the LLM4Decompile repository.",
+  "caveats": "The HumanEval and MBPP parts inherit the contamination of those benchmarks. LLM4Decompile repository last commit 2026-02-12.",
+  "released": "2025-05",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/LLM4Binary/decompile-eval (cc0-1.0, created 2025-05-13); card README; GitHub API albertan017/LLM4Decompile (MIT, last commit 2026-02-12)",
+  "levels": [
+   "machine"
+  ],
+  "layers": [
+   "text",
+   "execution",
+   "tests"
+  ]
+ },
+ {
+  "id": "binkit",
+  "name": "BinKit",
+  "kind": "benchmark",
+  "url": "https://github.com/SoftSec-KAIST/BinKit",
+  "extra_links": [],
+  "license": "MIT",
+  "size": "371,928 binaries: 1,904 combinations of 8 architectures, 6 optimization levels and 23 compilers (README, BinKit 2.0)",
+  "summary": "Binary code similarity benchmark: the same source packages cross-compiled under many compilers, architectures and optimization levels, with the build scripts to reproduce them.",
+  "stages": [
+   "eval",
+   "sft"
+  ],
+  "languages": [
+   "assembly",
+   "c"
+  ],
+  "tasks": [
+   "reasoning"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use for binary similarity and function matching across compilers and architectures. Download the prebuilt dataset linked in the README or rebuild with the scripts.",
+  "caveats": "Not an LLM benchmark by design; you must build your own task format on top. Last commit 2023-12-15. GCC and Clang versions stop at 11 and 13.",
+  "released": "2020-11",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API SoftSec-KAIST/BinKit (MIT, created 2020-11-21, last commit 2023-12-15); README",
+  "levels": [
+   "machine",
+   "compilers"
+  ],
+  "layers": [
+   "execution"
+  ]
+ },
+ {
+  "id": "wasmbench",
+  "name": "WasmBench",
+  "kind": "dataset",
+  "url": "https://github.com/sola-st/WasmBench",
+  "extra_links": [],
+  "license": "MIT for the crawling and analysis code; the binaries are third-party and redistributed for research only (README)",
+  "size": "8,461 unique WebAssembly binaries with metadata (filtered release)",
+  "summary": "Real-world WebAssembly binaries collected from websites, GitHub, NPM and browser extensions, from the WWW 2021 study of WebAssembly in the wild.",
+  "stages": [
+   "pretrain",
+   "eval"
+  ],
+  "languages": [
+   "wasm"
+  ],
+  "tasks": [
+   "reasoning"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Download the filtered release archive. Convert to the text format with standard tools if you want token-level training data or decompilation inputs.",
+  "caveats": "Binaries only, with no paired source and no tasks. The authors do not claim ownership of the binaries, so licensing per file is unknown. Last commit 2022-07-20. This pass found no open LLM benchmark specific to WebAssembly.",
+  "released": "2020-11",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API sola-st/WasmBench (MIT, created 2020-11-26, last commit 2022-07-20); README",
+  "levels": [
+   "machine"
+  ],
+  "layers": [
+   "execution"
+  ]
+ },
+ {
+  "id": "compilergym",
+  "name": "CompilerGym",
+  "kind": "environment",
+  "url": "https://github.com/facebookresearch/CompilerGym",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2109.08267"
+   },
+   {
+    "label": "Site",
+    "url": "https://compilergym.ai/"
+   }
+  ],
+  "license": "MIT",
+  "size": null,
+  "summary": "Reinforcement learning environments for compiler optimization, exposing LLVM optimization passes as actions with rewards such as reduction in instruction count.",
+  "stages": [
+   "rl",
+   "eval"
+  ],
+  "languages": [
+   "c",
+   "cpp"
+  ],
+  "tasks": [
+   "tool-use",
+   "reasoning"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use the llvm environments (for example llvm-ic-v0 with cbench programs) to train or evaluate a policy that orders optimization passes.",
+  "caveats": "The repository is archived; last commit 2024-10-09. Built for classic RL agents with a gym interface, not for LLM chat agents, so you need a wrapper.",
+  "released": "2021-09",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API facebookresearch/CompilerGym (MIT, archived, last commit 2024-10-09); README; arxiv.org/abs/2109.08267",
+  "levels": [
+   "compilers"
+  ],
+  "layers": [
+   "tree",
+   "execution"
+  ]
+ },
+ {
+  "id": "compile-llvm-ir",
+  "name": "ComPile",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/llvm-ml/ComPile",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2309.15432"
+   }
+  ],
+  "license": "CC-BY-4.0 for the dataset; each module carries the license of its source project in license_expression",
+  "size": "602 GB of deduplicated LLVM bitcode IR in release v1.0 (card); 182B tokens (paper abstract)",
+  "summary": "LLVM intermediate representation compiled from permissively licensed production code in C, C++, Rust, Swift and Julia. The largest open IR corpus this pass found.",
+  "stages": [
+   "pretrain"
+  ],
+  "languages": [
+   "c",
+   "cpp",
+   "rust",
+   "swift",
+   "julia"
+  ],
+  "tasks": [
+   "completion",
+   "reasoning"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Stream it and disassemble bitcode to textual IR for pretraining models that read or optimize IR. Keep the license columns with each module.",
+  "caveats": "Very large; do not download whole. Last modified 2024-04-03.",
+  "released": "2023-08",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/llvm-ml/ComPile (cc-by-4.0, created 2023-08-30, modified 2024-04-03); card README; arxiv.org/abs/2309.15432 abstract",
+  "levels": [
+   "compilers"
+  ],
+  "layers": [
+   "tree",
+   "text"
+  ]
+ },
+ {
+  "id": "llvm-apr-benchmark",
+  "name": "LLVM APR Benchmark",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/dtcxzyw/llvm-apr-benchmark",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "491 rows (test) when checked; the card counted 295 issues on 2025-05-19",
+  "summary": "Program repair on the LLVM compiler itself: each item is a real LLVM issue (for example a miscompilation in InstCombine) with minimal reproducing tests.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "cpp"
+  ],
+  "tasks": [
+   "repair",
+   "repo-level",
+   "agentic"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Give the model the issue and the failing tests and have it patch LLVM. Building LLVM is required, so plan for heavy compute per attempt.",
+  "caveats": "Growing dataset, so report the date or revision. Requires an LLVM build environment. The card documents rules on what counts as using hints.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"dtcxzyw/llvm-apr-benchmark\", split=\"test\")",
+  "released": "2025-02",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/dtcxzyw/llvm-apr-benchmark (apache-2.0, created 2025-02-02, modified 2026-03-05); card README; datasets-server size",
+  "levels": [
+   "compilers"
+  ],
+  "layers": [
+   "tree",
+   "tests",
+   "change"
+  ]
+ },
+ {
+  "id": "csmith",
+  "name": "Csmith",
+  "kind": "tool",
+  "url": "https://github.com/csmith-project/csmith",
+  "extra_links": [
+   {
+    "label": "Site",
+    "url": "http://embed.cs.utah.edu/csmith/"
+   }
+  ],
+  "license": "BSD-style (LICENSE file says it is the license often called the BSD License; GitHub reports NOASSERTION)",
+  "size": null,
+  "summary": "Random generator of C programs free of undefined behavior, built to find compiler bugs by differential testing.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "c"
+  ],
+  "tasks": [
+   "testing"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Generate programs, compile with two compilers or optimization levels, and compare outputs. Useful as a source of fresh, never-seen C programs for execution-prediction or compiler tasks.",
+  "caveats": "A tool, not a dataset. Generated programs are synthetic and unlike human code. Last commit 2026-03-02. The released date is the GitHub repository creation date, not the first publication.",
+  "released": "2011-05",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API csmith-project/csmith (created 2011-05-04, last commit 2026-03-02); LICENSE file; README",
+  "levels": [
+   "compilers"
+  ],
+  "layers": [
+   "execution",
+   "tests"
+  ]
+ },
+ {
+  "id": "codetransocean",
+  "name": "CodeTransOcean",
+  "kind": "benchmark",
+  "url": "https://github.com/WeixiangYAN/CodeTransOcean",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2310.04951"
+   },
+   {
+    "label": "Hugging Face",
+    "url": "https://huggingface.co/datasets/WeixiangYan/CodeTransOcean"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": null,
+  "summary": "Code translation benchmark with four parts: MultilingualTrans (popular languages), NicheTrans (niche to popular), LLMTrans (executability of translated code) and DLTrans (between deep learning frameworks).",
+  "stages": [
+   "eval",
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use LLMTrans when you want execution-based scoring of translations; the larger parts are scored by text similarity and suit fine-tuning.",
+  "caveats": "Most of the data is scored by text match, not by tests. Last commit 2023-11-16. The HF dataset viewer lists no splits.",
+  "released": "2023-10",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API WeixiangYAN/CodeTransOcean (Apache-2.0, last commit 2023-11-16); README; huggingface.co/api/datasets/WeixiangYan/CodeTransOcean (apache-2.0); arxiv.org/abs/2310.04951 abstract",
+  "levels": [
+   "compilers",
+   "languages"
+  ],
+  "layers": [
+   "text",
+   "execution"
+  ]
+ },
+ {
+  "id": "crust-bench",
+  "name": "CRUST-Bench",
+  "kind": "benchmark",
+  "url": "https://github.com/anirudhkhatry/CRUST-bench",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2504.15254"
+   },
+   {
+    "label": "Site",
+    "url": "https://crust-bench.github.io"
+   }
+  ],
+  "license": "GPL-3.0",
+  "size": "100 C repositories",
+  "summary": "C to safe Rust transpilation at repository scale. Each C repository is paired with a hand-written safe Rust interface and tests that the translation must pass.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "c",
+   "rust"
+  ],
+  "tasks": [
+   "generation",
+   "repo-level"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Translate each repository to Rust that matches the given interface, then build and run the Rust tests. Report single-shot and repair-loop results separately.",
+  "caveats": "The paper abstract reports the best model solving 15 of 100 tasks single-shot at release. GPL-3.0 applies to the dataset. Last commit 2026-04-27.",
+  "released": "2025-04",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API anirudhkhatry/CRUST-bench (GPL-3.0, last commit 2026-04-27); README; arxiv.org/abs/2504.15254 abstract",
+  "levels": [
+   "compilers",
+   "languages"
+  ],
+  "layers": [
+   "text",
+   "types",
+   "tests"
+  ]
+ },
+ {
+  "id": "xcodeeval",
+  "name": "xCodeEval",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/NTU-NLP-sg/xCodeEval",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2303.03004"
+   }
+  ],
+  "license": "CC-BY-4.0",
+  "size": "25M document-level examples from about 7.5K problems (card and paper abstract)",
+  "summary": "Executable multilingual benchmark with seven tasks, including program synthesis, repair, code translation and retrieval, scored by unit tests through the ExecEval engine.",
+  "stages": [
+   "eval",
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation",
+   "repair",
+   "competitive"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use the code translation and program repair tasks with ExecEval for test-based scoring across languages.",
+  "caveats": "The card says up to 17 languages while the current paper abstract says 11. Large; load one task at a time. Problems come from a public competitive programming site, so contamination is likely. The viewer returned an error when checked.",
+  "released": "2023-03",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/NTU-NLP-sg/xCodeEval (cc-by-4.0, created 2023-04-09, modified 2025-09-18); card README; arxiv.org/abs/2303.03004 abstract",
+  "levels": [
+   "compilers",
+   "languages"
+  ],
+  "layers": [
+   "text",
+   "execution",
+   "tests"
+  ]
+ },
+ {
+  "id": "kgym",
+  "name": "kGym and kBench (Linux kernel crash resolution)",
+  "kind": "benchmark",
+  "url": "https://github.com/Alex-Mathai-98/kGym-Kernel-Playground",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2407.02680"
+   },
+   {
+    "label": "kGymSuite",
+    "url": "https://github.com/ARiSE-Lab/kGymSuite"
+   }
+  ],
+  "license": null,
+  "size": "504 kernel bugs in the C-reproducer set added December 2024, plus a smaller original set (README)",
+  "summary": "Platform and dataset for fixing real Linux kernel crashes found by the Syzkaller fuzzer. A patch is judged by building the kernel and re-running the crash reproducer.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "c"
+  ],
+  "tasks": [
+   "repair",
+   "repo-level",
+   "agentic"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Use kGymSuite, the successor that runs on QEMU, to build kernels and replay reproducers. Start with the smaller set, which the authors trust more.",
+  "caveats": "This repository has no license file; kGymSuite has an MIT license file. The paper abstract reports 0.72% (unassisted) and 5.38% (buggy files given) for the best model at release. Each evaluation is a kernel build, so it is slow and costly. Last commit 2025-11-08; kGymSuite last commit 2026-05-08.",
+  "released": "2024-07",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API Alex-Mathai-98/kGym-Kernel-Playground (no license, last commit 2025-11-08) and ARiSE-Lab/kGymSuite (LICENSE file MIT, last commit 2026-05-08); READMEs; arxiv.org/abs/2407.02680 abstract",
+  "levels": [
+   "os"
+  ],
+  "layers": [
+   "execution",
+   "change",
+   "tests"
+  ]
+ },
+ {
+  "id": "syzkaller",
+  "name": "syzkaller",
+  "kind": "tool",
+  "url": "https://github.com/google/syzkaller",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": null,
+  "summary": "Unsupervised coverage-guided kernel fuzzer from Google. Its crash reproducers are the raw material behind kernel bug datasets such as kBench.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "c",
+   "go"
+  ],
+  "tasks": [
+   "testing"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use it to generate fresh kernel crashes and reproducers for a private evaluation set, or to validate that a model-written patch removes a crash.",
+  "caveats": "A fuzzer, not a dataset. Running it needs virtual machines and kernel builds. Actively maintained (last commit 2026-11-24).",
+  "released": "2015-10",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API google/syzkaller (Apache-2.0, created 2015-10-12, last commit 2026-11-24); README",
+  "levels": [
+   "os"
+  ],
+  "layers": [
+   "execution",
+   "tests"
+  ]
+ },
+ {
+  "id": "nl2bash",
+  "name": "NL2Bash",
+  "kind": "dataset",
+  "url": "https://github.com/TellinaTool/nl2bash",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/1802.08979"
+   }
+  ],
+  "license": "MIT for data/bash; GPL-3.0 for the code (README)",
+  "size": "About 10,000 English description and Bash one-liner pairs",
+  "summary": "Bash one-liners collected from sites such as Stack Overflow, paired with English descriptions written by Bash programmers. The classic natural language to shell corpus.",
+  "stages": [
+   "sft",
+   "eval"
+  ],
+  "languages": [
+   "bash"
+  ],
+  "tasks": [
+   "terminal",
+   "generation"
+  ],
+  "difficulty": "intro",
+  "how_to_use": "Use as seed data for shell command generation. For evaluation prefer an execution-checked derivative such as InterCode or NL2SH-ALFA.",
+  "caveats": "From 2018, widely copied, so contamination is near certain. Original scoring is by text match; many commands are not safe to run blindly. Last commit 2026-04-18.",
+  "released": "2018-02",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API TellinaTool/nl2bash (GPL-3.0, last commit 2026-04-18); README (data license note dated 2020-04-24); arxiv.org/abs/1802.08979",
+  "levels": [
+   "os"
+  ],
+  "layers": [
+   "text"
+  ]
+ },
+ {
+  "id": "nl2sh-alfa",
+  "name": "NL2SH-ALFA",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/westenfelder/NL2SH-ALFA",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2502.06858"
+   }
+  ],
+  "license": "MIT",
+  "size": "Test config: 300 rows (card: 600 manually verified instruction-command pairs). Train config: 40,639 unverified pairs",
+  "summary": "Natural language to Bash translation data with a manually verified test set and a large unverified training set Released with the paper \"LLM-Supported Natural Language to Bash Translation\".",
+  "stages": [
+   "sft",
+   "eval"
+  ],
+  "languages": [
+   "bash"
+  ],
+  "tasks": [
+   "terminal",
+   "generation"
+  ],
+  "difficulty": "intro",
+  "how_to_use": "Fine-tune on the train config and evaluate on the test config. Note that the config name, not the split name, selects train or test.",
+  "caveats": "The training pairs are unverified. The paper abstract gives 40,939 training pairs while the card gives 40,639. One-line commands only, not multi-step administration.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"westenfelder/NL2SH-ALFA\", \"test\", split=\"train\")",
+  "released": "2025-01",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/westenfelder/NL2SH-ALFA (mit, created 2025-01-29, modified 2026-02-28); card README; datasets-server sizes; arxiv.org/abs/2502.06858 abstract",
+  "levels": [
+   "os"
+  ],
+  "layers": [
+   "text",
+   "execution"
+  ]
+ },
+ {
+  "id": "intercode",
+  "name": "InterCode",
+  "kind": "environment",
+  "url": "https://github.com/princeton-nlp/intercode",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2306.14898"
+   },
+   {
+    "label": "Site",
+    "url": "https://intercode-benchmark.github.io/"
+   }
+  ],
+  "license": "MIT",
+  "size": null,
+  "summary": "Framework for interactive coding environments in Docker, where the agent issues commands and sees execution feedback. Ships Bash, SQL and Python environments built from NL2Bash, Spider and MBPP.",
+  "stages": [
+   "eval",
+   "rl"
+  ],
+  "languages": [
+   "bash",
+   "sql",
+   "python"
+  ],
+  "tasks": [
+   "terminal",
+   "agentic",
+   "sql"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use the Bash environment for multi-turn shell tasks with real execution. The gym-style interface also makes it a template for your own environments.",
+  "caveats": "Task data comes from older public datasets, so contamination is likely. Last commit 2024-05-05.",
+  "released": "2023-06",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API princeton-nlp/intercode (MIT, last commit 2024-05-05); README; arxiv.org/abs/2306.14898 abstract",
+  "levels": [
+   "os",
+   "apps"
+  ],
+  "layers": [
+   "execution"
+  ]
+ },
+ {
+  "id": "manytypes4py",
+  "name": "ManyTypes4Py",
+  "kind": "dataset",
+  "url": "https://github.com/saltudelft/many-types-4-py-dataset",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2104.04706"
+   },
+   {
+    "label": "Zenodo (v0.7)",
+    "url": "https://zenodo.org/records/5244636"
+   }
+  ],
+  "license": "CC-BY-4.0 for the dataset on Zenodo; Apache-2.0 for the repository",
+  "size": "Clean version: 5.1K type-checked Python repositories and 1.2M type annotations. Complete version: 5.2K repositories and 3.3M annotations (README)",
+  "summary": "Python dataset for machine-learning-based type inference, built from repositories that use type annotations.",
+  "stages": [
+   "sft",
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "completion",
+   "reasoning"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Train or evaluate type prediction for arguments, returns and variables. Use the clean version when you need labels that passed a type checker.",
+  "caveats": "Last commit 2022-03-27, so it predates recent typing features. Scoring is by match to the developer annotation, which can be wrong or needlessly narrow.",
+  "released": "2021-04",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API saltudelft/many-types-4-py-dataset (Apache-2.0, last commit 2022-03-27); README; zenodo.org/api/records/4719447 and 5244636 (cc-by-4.0, v0.7 dated 2021-08-24); arxiv.org/abs/2104.04706 abstract",
+  "levels": [
+   "languages"
+  ],
+  "layers": [
+   "types"
+  ]
+ },
+ {
+  "id": "manytypes4typescript",
+  "name": "ManyTypes4TypeScript",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/kevinjesse/ManyTypes4TypeScript",
+  "extra_links": [],
+  "license": "CC-BY-4.0",
+  "size": "662,055 train, 33,502 validation and 38,098 test rows",
+  "summary": "TypeScript type prediction dataset: token sequences with a type label per token, taken from human annotations and compiler-inferred types.",
+  "stages": [
+   "sft",
+   "eval"
+  ],
+  "languages": [
+   "typescript"
+  ],
+  "tasks": [
+   "completion",
+   "reasoning"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use as a token-classification or sequence-to-sequence task for type inference. Splits are by project, which limits leakage between train and test.",
+  "caveats": "Last modified 2022-10-22. Data is pre-tokenized, which fits encoder models better than chat models. Many labels are compiler-inferred and not written by people.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"kevinjesse/ManyTypes4TypeScript\", split=\"test\")",
+  "released": "2022-03",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/kevinjesse/ManyTypes4TypeScript (cc-by-4.0, created 2022-03-02, modified 2022-10-22); card README; datasets-server sizes",
+  "levels": [
+   "languages"
+  ],
+  "layers": [
+   "types",
+   "tokens"
+  ]
+ },
+ {
+  "id": "typeevalpy",
+  "name": "TypeEvalPy",
+  "kind": "benchmark",
+  "url": "https://github.com/secure-software-engineering/TypeEvalPy",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2312.16882"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "154 code snippets with 845 type annotations in 18 categories",
+  "summary": "Micro-benchmark for Python type inference. Small programs each target one language feature, with ground-truth types, and the framework runs tools in containers and compares their output.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "reasoning"
+  ],
+  "difficulty": "intro",
+  "how_to_use": "Use as a fast, feature-by-feature check of type inference.",
+  "caveats": "Small and synthetic: it shows which language features break inference, not how a model does on real repositories. Actively maintained (last commit 2026-10-18).",
+  "released": "2023-12",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API secure-software-engineering/TypeEvalPy (Apache-2.0, last commit 2026-10-18); README; arxiv.org/abs/2312.16882 abstract",
+  "levels": [
+   "languages"
+  ],
+  "layers": [
+   "types"
+  ]
+ },
+ {
+  "id": "typybench",
+  "name": "TypyBench",
+  "kind": "benchmark",
+  "url": "https://github.com/typybench/typybench",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://openreview.net/pdf?id=xl9sv9vEDy"
+   }
+  ],
+  "license": "MIT",
+  "size": "50 well-typed Python repositories",
+  "summary": "Repository-level type inference for untyped Python, from ICML 2025. Introduces TypeSim (semantic similarity of predicted and true types) and TypeCheck (consistency across the codebase).",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "repo-level",
+   "reasoning"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Have the model infer types for each untyped repository, then score with the TypeSim and TypeCheck metrics from the repository.",
+  "caveats": "The dataset is a Google Drive download linked from the README, not a versioned release. Last commit 2025-06-22. The released date is the repository creation date.",
+  "released": "2025-05",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API typybench/typybench (MIT, created 2025-05-25, last commit 2025-06-22, description names ICML 2025); README",
+  "levels": [
+   "languages"
+  ],
+  "layers": [
+   "types"
+  ]
+ },
+ {
+  "id": "reval",
+  "name": "REval",
+  "kind": "benchmark",
+  "url": "https://github.com/r-eval/REval",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2403.16437"
+   },
+   {
+    "label": "Site",
+    "url": "https://r-eval.github.io"
+   }
+  ],
+  "license": null,
+  "size": null,
+  "summary": "Tests whether a model can reason about the runtime behavior of a program, and whether its answers stay consistent across related questions (incremental consistency). From ICSE 2025.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "reasoning"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Run the replication package on your model. Report both runtime behavior accuracy and the incremental consistency score.",
+  "caveats": "No license file in the repository. Built on HumanEval and ClassEval programs, which are public. The paper abstract reports average accuracy of 44.4% and an average consistency score of 10.3 at release. Last commit 2024-07-03.",
+  "released": "2024-03",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API r-eval/REval (no license, last commit 2024-07-03); README; arxiv.org/abs/2403.16437 abstract",
+  "levels": [
+   "languages",
+   "compilers"
+  ],
+  "layers": [
+   "execution"
+  ]
+ },
+ {
+  "id": "codemind",
+  "name": "CodeMind",
+  "kind": "benchmark",
+  "url": "https://github.com/Intelligent-CAT-Lab/CodeMind",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2402.09664"
+   }
+  ],
+  "license": "NCSA",
+  "size": null,
+  "summary": "Framework for code reasoning tasks: predict the output of code on given inputs (Independent Execution Reasoning), use test data in a specification (Specification Reasoning), and infer semantics from one input/output pair (Dynamic Semantics Reasoning).",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "reasoning"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Run the task scripts (for example run_IER.sh) over the supported datasets. Compare execution reasoning scores with test-passing scores for the same model.",
+  "caveats": "The README calls it a work in progress. It reuses existing public benchmarks as program sources. Last commit 2026-02-18.",
+  "released": "2024-02",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API Intelligent-CAT-Lab/CodeMind (license NCSA, last commit 2026-02-18); README; arxiv.org/abs/2402.09664 abstract",
+  "levels": [
+   "languages",
+   "compilers"
+  ],
+  "layers": [
+   "execution"
+  ]
+ },
+ {
+  "id": "semcoder-pyx",
+  "name": "PyX (SemCoder training data)",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/semcoder/PyX",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2406.01006"
+   },
+   {
+    "label": "GitHub",
+    "url": "https://github.com/ARiSE-Lab/SemCoder"
+   }
+  ],
+  "license": "MIT",
+  "size": "93,456 rows (train)",
+  "summary": "Training data behind SemCoder (NeurIPS 2024), which teaches a model to describe program execution in words, forward and backward, an approach the authors call monologue reasoning.",
+  "stages": [
+   "sft"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "reasoning",
+   "generation"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Fine-tune for execution reasoning, then test on CRUXEval or REval to see whether it transfers.",
+  "caveats": "The HF card has no description, only the license; read the paper and the GitHub README for the format. Explanations are model-written. Last modified 2024-11-05.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"semcoder/PyX\", split=\"train\")",
+  "released": "2024-11",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/semcoder/PyX (mit, created 2024-11-05); datasets-server size; GitHub API ARiSE-Lab/SemCoder (MIT, last commit 2024-11-19) and README; arxiv.org/abs/2406.01006 abstract",
+  "levels": [
+   "languages",
+   "compilers"
+  ],
+  "layers": [
+   "execution"
+  ]
+ },
+ {
+  "id": "commitbench",
+  "name": "CommitBench",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/Maxscha/commitbench",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2403.05188"
+   }
+  ],
+  "license": "CC-BY-NC-4.0",
+  "size": "1,165,213 train, 249,689 validation and 249,688 test rows",
+  "summary": "Commit message generation data: git diffs paired with their commit messages, from repositories whose licenses permit redistribution. Six languages: Java, Python, Go, JavaScript, PHP and Ruby.",
+  "stages": [
+   "sft",
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "review"
+  ],
+  "difficulty": "intro",
+  "how_to_use": "Train or evaluate diff-to-message generation. The filtering steps described on the card are also a useful recipe for cleaning your own commit data.",
+  "caveats": "Non-commercial license. Scored by text overlap with the human message, which is a weak signal of quality. Last modified 2024-02-14.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"Maxscha/commitbench\", split=\"test\")",
+  "released": "2024-01",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/Maxscha/commitbench (cc-by-nc-4.0, created 2024-01-15); card README; datasets-server sizes; arxiv.org/abs/2403.05188 abstract",
+  "levels": [
+   "languages"
+  ],
+  "layers": [
+   "change",
+   "text"
+  ]
+ },
+ {
+  "id": "commit-chronicle",
+  "name": "CommitChronicle",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/JetBrains-Research/commit-chronicle",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2308.07655"
+   }
+  ],
+  "license": "other (HF card): commits come from repositories under Apache, BSD 3-clause and MIT licenses, and the license is recorded per row",
+  "size": "10.7M commits across 20 programming languages (paper abstract); 7,659,458 train, 1,554,042 validation and 1,486,267 test rows",
+  "summary": "Commits with diffs, messages, author ids and dates, collected by JetBrains Research so that models can use a repository's history when writing a commit message.",
+  "stages": [
+   "pretrain",
+   "sft",
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "review"
+  ],
+  "difficulty": "intro",
+  "how_to_use": "Use the default config for training on commit history. The subset_llm config (4,025 test rows) is a small evaluation set sized for LLM runs.",
+  "caveats": "Follow the per-row license and attribution terms. About 42 GB uncompressed per the card metadata. Last modified 2023-10-05.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"JetBrains-Research/commit-chronicle\", \"subset_llm\", split=\"test\")",
+  "released": "2023-08",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/JetBrains-Research/commit-chronicle (license other, created 2023-08-08); card README and dataset_info; arxiv.org/abs/2308.07655 abstract",
+  "levels": [
+   "languages"
+  ],
+  "layers": [
+   "change",
+   "text"
+  ]
+ },
+ {
+  "id": "codereviewer-data",
+  "name": "CodeReviewer dataset",
+  "kind": "dataset",
+  "url": "https://zenodo.org/records/6900648",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2203.09095"
+   },
+   {
+    "label": "Code",
+    "url": "https://github.com/microsoft/CodeBERT"
+   }
+  ],
+  "license": "CC-BY-4.0",
+  "size": "Three archives: Diff_Quality_Estimation (2.8 GB), Code_Refinement (1.2 GB) and Comment_Generation (0.8 GB)",
+  "summary": "Code review data from Microsoft for three tasks: judge whether a diff needs a review comment, write the review comment, and revise the code to address a comment.",
+  "stages": [
+   "sft",
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "review",
+   "repair"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Download the archive for the task you need from Zenodo. The model and training code are in the CodeReviewer folder of the microsoft/CodeBERT repository.",
+  "caveats": "Published 2022, mined from public pull requests, so contamination is likely and many review comments are noisy. Scoring is by text match. The code repository was last committed to on 2023-07-09.",
+  "released": "2022-03",
+  "checked": "2026-11-24",
+  "evidence": "zenodo.org/api/records/6900648 (cc-by-4.0, publication date 2022-03-15, file list); CodeReviewer README in github.com/microsoft/CodeBERT (MIT, last commit 2023-07-09); arxiv.org/abs/2203.09095",
+  "levels": [
+   "languages"
+  ],
+  "layers": [
+   "change",
+   "text"
+  ]
+ },
+ {
+  "id": "codereviewqa",
+  "name": "CodeReviewQA",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/Tomo-Melb/CodeReviewQA",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2503.16167"
+   }
+  ],
+  "license": "MIT",
+  "size": null,
+  "summary": "Benchmark that checks whether a model understands a code review comment, by breaking the job of revising code after review into three reasoning steps that are tested separately.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "review",
+   "reasoning"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Accept the access conditions on Hugging Face, then use it to find where a model fails between reading a review comment and producing the fix.",
+  "caveats": "Gated (automatic approval). This pass could not read the card or count the rows without logging in; details here come from the paper abstract and HF metadata. Last modified 2026-02-28.",
+  "released": "2025-03",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/Tomo-Melb/CodeReviewQA (mit, gated auto, created 2025-05-23); arxiv.org/abs/2503.16167 abstract",
+  "levels": [
+   "languages"
+  ],
+  "layers": [
+   "change",
+   "text"
+  ]
+ },
+ {
+  "id": "congra",
+  "name": "ConGra",
+  "kind": "benchmark",
+  "url": "https://github.com/HKU-System-Security-Lab/ConGra",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2409.14121"
+   }
+  ],
+  "license": null,
+  "size": "44,948 merge conflicts from 34 real-world projects (paper abstract)",
+  "summary": "Merge conflict resolution benchmark in C, C++, Java and Python, with conflicts graded by the kind of code operations involved.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "c",
+   "cpp",
+   "java",
+   "python"
+  ],
+  "tasks": [
+   "repair",
+   "review"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Download the dataset archive linked in the README (hosted on figshare) and follow the reproduction steps there.",
+  "caveats": "No license file in the repository. Last commit 2024-06-13.",
+  "released": "2024-06",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API HKU-System-Security-Lab/ConGra (no license, last commit 2024-06-13); README; arxiv.org/abs/2409.14121 abstract",
+  "levels": [
+   "languages"
+  ],
+  "layers": [
+   "change",
+   "text"
+  ]
+ },
+ {
+  "id": "refactorbench",
+  "name": "RefactorBench",
+  "kind": "benchmark",
+  "url": "https://github.com/microsoft/RefactorBench",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2503.07832"
+   }
+  ],
+  "license": "Mixed: the LICENSE file lists the licenses of the bundled open-source projects (for example Django BSD, Salt Apache-2.0); GitHub reports NOASSERTION",
+  "size": "100 hand-written multi-file refactoring tasks, each with 3 instructions of varying specificity",
+  "summary": "Multi-file refactoring tasks in popular open-source repositories, built to test whether an agent keeps track of its own earlier edits. From ICLR 2025.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "agentic",
+   "repo-level",
+   "review"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Run an agent in a Docker copy of each repository, as the README suggests, and check the result with the task's tests.",
+  "caveats": "The repository is archived; last commit 2025-07-11. The paper abstract reports agents solving 22% of tasks with base instructions at release.",
+  "released": "2025-03",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API microsoft/RefactorBench (archived, last commit 2025-07-11) and LICENSE file; README; arxiv.org/abs/2503.07832 abstract",
+  "levels": [
+   "languages"
+  ],
+  "layers": [
+   "change",
+   "tree",
+   "tests"
+  ]
+ },
+ {
+  "id": "migrationbench",
+  "name": "MigrationBench",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/AmazonScience/migration-bench-java-full",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2505.09569"
+   },
+   {
+    "label": "Selected subset",
+    "url": "https://huggingface.co/datasets/AmazonScience/migration-bench-java-selected"
+   },
+   {
+    "label": "GitHub",
+    "url": "https://github.com/amazon-science/MigrationBench"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "5,102 repositories (full); 300 in the selected subset; a separate unit-test-generation set of 4,814",
+  "summary": "Repository-level migration from Java 8 to the long-term support versions 17 and 21. The GitHub repository provides the evaluation framework that judges a migration.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "java"
+  ],
+  "tasks": [
+   "repo-level",
+   "agentic"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Start with the 300-repository selected subset.",
+  "caveats": "The listed repositories are under MIT or Apache-2.0 per the README; the dataset rows hold repository names and commits, not the code. Evaluation needs Maven builds for every repository. GitHub last commit 2026-10-15.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"AmazonScience/migration-bench-java-selected\", split=\"test\")",
+  "released": "2025-05",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/AmazonScience/migration-bench-java-full and -selected (apache-2.0, test 5102 and 300); GitHub API amazon-science/MigrationBench (Apache-2.0, last commit 2026-10-15) and README; arxiv.org/abs/2505.09569 abstract",
+  "levels": [
+   "languages",
+   "compilers"
+  ],
+  "layers": [
+   "change",
+   "tests"
+  ]
+ },
+ {
+  "id": "lca-ci-builds-repair",
+  "name": "Long Code Arena: CI builds repair",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/JetBrains-Research/lca-ci-builds-repair",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2406.11612"
+   },
+   {
+    "label": "Baselines",
+    "url": "https://github.com/JetBrains-Research/lca-baselines"
+   }
+  ],
+  "license": null,
+  "size": "68 test rows in the default config; 144 in the config named old",
+  "summary": "Each item is a failing GitHub Actions run with its logs, the workflow file and the commit that later fixed it. The task is to repair the build. One of six Long Code Arena benchmarks from JetBrains Research.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "repair",
+   "repo-level",
+   "agentic"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Give the model the failing logs and repository, apply its patch, and re-run the workflow. The baselines repository shows the intended setup.",
+  "caveats": "No license in the HF metadata. Small. Re-running real CI is slow and can break as dependencies move. All 68 rows of the default config have language Python. Baselines repository last commit 2025-03-30.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"JetBrains-Research/lca-ci-builds-repair\", split=\"test\")",
+  "released": "2023-12",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/JetBrains-Research/lca-ci-builds-repair (no license, created 2023-12-20, modified 2025-01-24, dataset_info); GitHub API JetBrains-Research/lca-baselines (MIT) and README; arxiv.org/abs/2406.11612 abstract",
+  "levels": [
+   "languages",
+   "networks"
+  ],
+  "layers": [
+   "change",
+   "tests",
+   "execution"
+  ]
+ },
+ {
+  "id": "iac-eval",
+  "name": "IaC-Eval",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/autoiac-project/iac-eval",
+  "extra_links": [
+   {
+    "label": "GitHub",
+    "url": "https://github.com/autoiac-project/iac-eval"
+   },
+   {
+    "label": "Paper",
+    "url": "https://proceedings.neurips.cc/paper_files/paper/2024/file/f26b29298ae8acd94bd7e839688e329b-Paper-Datasets_and_Benchmarks_Track.pdf"
+   }
+  ],
+  "license": "CC-BY-4.0 for the dataset; MIT for the code",
+  "size": "458 human-curated questions (test)",
+  "summary": "Infrastructure-as-code generation benchmark from NeurIPS 2024: write Terraform programs for AWS from a natural-language request, graded against policy checks.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "hcl"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Install Terraform and Open Policy Agent as the README describes, generate a Terraform program per question, and run the framework's checks.",
+  "caveats": "AWS only for now, per the README. Setup needs AWS credentials. GitHub last commit 2024-12-12.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"autoiac-project/iac-eval\", split=\"test\")",
+  "released": "2024-06",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/autoiac-project/iac-eval (cc-by-4.0, created 2024-06-04, test 458); GitHub API autoiac-project/iac-eval (MIT, last commit 2024-12-12) and README",
+  "levels": [
+   "networks"
+  ],
+  "layers": [
+   "text",
+   "tests"
+  ]
+ },
+ {
+  "id": "cloudeval-yaml",
+  "name": "CloudEval-YAML",
+  "kind": "benchmark",
+  "url": "https://github.com/alibaba/CloudEval-YAML",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2401.06786"
+   }
+  ],
+  "license": "MIT",
+  "size": "1,011 problems",
+  "summary": "Benchmark for generating cloud-native configuration in YAML for Kubernetes, Envoy and Istio, with original, simplified and translated versions of each problem.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Run the benchmark script against your model. The README shows per-problem output and a summary table.",
+  "caveats": "Last commit 2026-09-10. Languages is set to multi because the catalog has no id for YAML.",
+  "released": "2023-11",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API alibaba/CloudEval-YAML (MIT, created 2023-11-08, last commit 2026-09-10); README; arxiv.org/abs/2401.06786 abstract",
+  "levels": [
+   "networks"
+  ],
+  "layers": [
+   "text",
+   "tests"
+  ]
+ },
+ {
+  "id": "netconfeval",
+  "name": "NetConfEval",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/NetConfEval/NetConfEval",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://doi.org/10.1145/3656296"
+   }
+  ],
+  "license": "MIT",
+  "size": "Four configs: Formal Specification Translation (1,665 rows), Translation Conflict Detection (1,680), Routing Code Generation (8), Configuration Generation (5)",
+  "summary": "Network configuration tasks for LLMs: translate operator requirements into a formal specification, detect conflicting requirements, write routing functions, and generate device configuration.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation",
+   "reasoning"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use the pre-generated datasets on Hugging Face one config at a time. The two code and configuration configs are tiny and work better as case studies than as metrics.",
+  "caveats": "Very uneven sizes across the four tasks. Last modified 2024-05-14.",
+  "released": "2024-04",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/NetConfEval/NetConfEval (mit, created 2024-04-22); card README; datasets-server sizes",
+  "levels": [
+   "networks"
+  ],
+  "layers": [
+   "text",
+   "execution"
+  ]
+ },
+ {
+  "id": "aiopslab",
+  "name": "AIOpsLab",
+  "kind": "environment",
+  "url": "https://github.com/microsoft/AIOpsLab",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2501.06706"
+   },
+   {
+    "label": "Paper (vision)",
+    "url": "https://arxiv.org/abs/2407.12165"
+   }
+  ],
+  "license": "MIT",
+  "size": null,
+  "summary": "Microsoft framework that deploys microservice applications, injects faults, generates workloads and exports telemetry, so that an agent can be evaluated on operations tasks such as fault detection and localization in a live system.",
+  "stages": [
+   "eval",
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "terminal",
+   "tool-use"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Deploy it as the README describes, pick a problem from the built-in registry (for example a misconfiguration detection problem), and connect your agent through the orchestrator.",
+  "caveats": "Needs a deployed microservice environment and real compute per episode. Results depend on the agent's tools as much as on the model. Actively maintained (last commit 2026-10-20).",
+  "released": "2024-10",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API microsoft/AIOpsLab (MIT, created 2024-10-11, last commit 2026-10-20); README; arxiv.org/abs/2501.06706 abstract",
+  "levels": [
+   "networks",
+   "os"
+  ],
+  "layers": [
+   "execution"
+  ]
+ },
+ {
+  "id": "itbench",
+  "name": "ITBench",
+  "kind": "benchmark",
+  "url": "https://github.com/itbench-hub/ITBench",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2502.05352"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "94 scenarios at first release (paper abstract)",
+  "summary": "IBM-led benchmark of IT automation tasks for agents in three areas: site reliability engineering, compliance and security operations (CISO), and cloud cost management (FinOps).",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "terminal",
+   "tool-use"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Self-host the scenarios with the repository tooling, or use the hosted scenario environments and leaderboard described in the README.",
+  "caveats": "The paper abstract reports agents resolving 13.8% of SRE, 25.2% of CISO and 0% of FinOps scenarios at release. The README notes that ITBench-AA, launched 2026-05-27 with Artificial Analysis, starts with 59 SRE tasks. Actively maintained (last commit 2026-11-24).",
+  "released": "2025-02",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API itbench-hub/ITBench (Apache-2.0, created 2025-02-05, last commit 2026-11-24); README announcements; arxiv.org/abs/2502.05352 abstract",
+  "levels": [
+   "networks",
+   "os"
+  ],
+  "layers": [
+   "execution"
+  ]
+ },
+ {
+  "id": "primevul",
+  "name": "PrimeVul",
+  "kind": "dataset",
+  "url": "https://github.com/DLVulDet/PrimeVul",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2403.18624"
+   }
+  ],
+  "license": "MIT",
+  "size": "About 7k vulnerable and 229k benign functions from real C/C++ projects, covering 140+ CWEs (README)",
+  "summary": "Vulnerability detection dataset with stricter labeling, de-duplication and chronological splits than earlier sets, plus paired vulnerable and patched functions.",
+  "stages": [
+   "sft",
+   "eval"
+  ],
+  "languages": [
+   "c",
+   "cpp"
+  ],
+  "tasks": [
+   "reasoning",
+   "review"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use the paired setting (tell a vulnerable function from its patch) as the main evaluation. Download links are in the README.",
+  "caveats": "The data is on Google Drive, not a versioned host. The paper abstract reports a model scoring 68.26% F1 on BigVul but 3.09% F1 on PrimeVul, a warning about older vulnerability datasets. Function-level only. Last commit 2024-09-07.",
+  "released": "2024-03",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API DLVulDet/PrimeVul (MIT, last commit 2024-09-07); README; arxiv.org/abs/2403.18624 abstract",
+  "levels": [
+   "languages",
+   "os"
+  ],
+  "layers": [
+   "text",
+   "change"
+  ]
+ },
+ {
+  "id": "cvefixes",
+  "name": "CVEfixes",
+  "kind": "dataset",
+  "url": "https://github.com/secureIT-project/CVEfixes",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2107.08760"
+   }
+  ],
+  "license": "MIT for the collection code (LICENSE file); CC BY 4.0 badge for the dataset in the README",
+  "size": "Initial release: 5,365 CVE records for 1,754 open-source projects, fixed in 5,495 commits (paper abstract)",
+  "summary": "Vulnerabilities and their fixes collected automatically from the U.S. National Vulnerability Database, linked at the commit, file and method level.",
+  "stages": [
+   "sft",
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "repair",
+   "review",
+   "reasoning"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use the collection tool to rebuild the database up to a recent date, then build detection or repair tasks from the before and after methods.",
+  "caveats": "Labels are derived from fix commits, so unrelated changes in the same commit become noise. The code in each sample keeps its project license. Last commit 2024-07-29.",
+  "released": "2021-07",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API secureIT-project/CVEfixes (last commit 2024-07-29) and LICENSE file; README; arxiv.org/abs/2107.08760 abstract",
+  "levels": [
+   "languages"
+  ],
+  "layers": [
+   "change",
+   "text"
+  ]
+ },
+ {
+  "id": "cybergym",
+  "name": "CyberGym",
+  "kind": "benchmark",
+  "url": "https://github.com/sunblaze-ucb/cybergym",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2506.02548"
+   },
+   {
+    "label": "Hugging Face",
+    "url": "https://huggingface.co/datasets/sunblaze-ucb/cybergym"
+   },
+   {
+    "label": "Site",
+    "url": "https://cybergym.io"
+   }
+  ],
+  "license": "Apache-2.0 for the repository; no license field on the HF dataset",
+  "size": "1,507 real-world vulnerabilities across 188 software projects",
+  "summary": "Evaluation of agents on real-world vulnerability analysis. Each task gives the vulnerable repository and, at higher difficulty levels, more hints such as a description, an error trace or the fixed code.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "c",
+   "cpp"
+  ],
+  "tasks": [
+   "agentic",
+   "testing",
+   "reasoning"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "For evaluation and defensive research. Download the server data and run agents in the provided containers.",
+  "caveats": "Heavy: the README gives about 240 GB for the full data and about 130 GB for binary-only mode. The paper abstract reports about 20% success for the best setups at release. Languages were set from the project_language field of sampled rows, not a full count. Dual-use content; keep runs sandboxed. Last commit 2026-08-28.",
+  "released": "2025-06",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API sunblaze-ucb/cybergym (Apache-2.0, last commit 2026-08-28); README; huggingface.co/api/datasets/sunblaze-ucb/cybergym (tasks 1507, no license); arxiv.org/abs/2506.02548 abstract",
+  "levels": [
+   "os",
+   "machine",
+   "languages"
+  ],
+  "layers": [
+   "execution",
+   "tests"
+  ]
+ },
+ {
+  "id": "baxbench",
+  "name": "BaxBench",
+  "kind": "benchmark",
+  "url": "https://github.com/logic-star-ai/baxbench",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2502.11844"
+   }
+  ],
+  "license": "MIT",
+  "size": "392 tasks",
+  "summary": "Secure backend generation: each task pairs a scenario (an API to implement) with a framework (a language and backend library). Solutions are checked by functional tests and by running security exploits against them.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Report both numbers: functionally correct, and correct and secure. Use the v1.0.0 release (2025-09-13), which matches the latest paper.",
+  "caveats": "The paper abstract reports 62% correctness for the best model at release, with exploits succeeding on about half of the correct programs. Last commit 2025-10-22.",
+  "released": "2025-02",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API logic-star-ai/baxbench (MIT, last commit 2025-10-22); README; arxiv.org/abs/2502.11844 abstract",
+  "levels": [
+   "apps",
+   "networks"
+  ],
+  "layers": [
+   "execution",
+   "tests"
+  ]
+ },
+ {
+  "id": "sec-bench",
+  "name": "SEC-bench",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/SEC-bench/SEC-bench",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2506.11791"
+   },
+   {
+    "label": "GitHub",
+    "url": "https://github.com/SEC-bench/SEC-bench"
+   },
+   {
+    "label": "Site",
+    "url": "https://sec-bench.github.io"
+   }
+  ],
+  "license": "MIT",
+  "size": "300 instances in the eval split (200 in cve, 100 in oss)",
+  "summary": "Real software vulnerabilities packaged as reproducible Docker instances, with two tasks: write a proof-of-concept input that triggers the bug, and write a patch that fixes it. From NeurIPS 2025.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "c",
+   "cpp"
+  ],
+  "tasks": [
+   "agentic",
+   "repair",
+   "testing"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "For evaluation and defensive research. Use the patching task for a defensive measure and keep proof-of-concept runs inside the containers.",
+  "caveats": "The README recommends more than 200 GB of disk for Docker images. The paper abstract reports at most 18.0% on proof-of-concept generation and 34.0% on patching at release. The lang column reads c++ for all 300 eval rows. GitHub last commit 2026-01-27.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"SEC-bench/SEC-bench\", split=\"eval\")",
+  "released": "2025-06",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/SEC-bench/SEC-bench (mit, modified 2025-11-24, splits eval 300, cve 200, oss 100); GitHub API SEC-bench/SEC-bench (MIT, last commit 2026-01-27) and README; arxiv.org/abs/2506.11791 abstract",
+  "levels": [
+   "os",
+   "languages"
+  ],
+  "layers": [
+   "execution",
+   "tests",
+   "change"
+  ]
+ },
+ {
+  "id": "cybench",
+  "name": "Cybench",
+  "kind": "benchmark",
+  "url": "https://github.com/andyzorigin/cybench",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2408.08926"
+   },
+   {
+    "label": "Site",
+    "url": "https://cybench.github.io"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "40 professional-level capture-the-flag tasks from 4 competitions",
+  "summary": "Capture-the-flag tasks used to measure the cybersecurity capability and risk of agents.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "terminal",
+   "tool-use"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "For evaluation only. Run each task in its container with network isolation and report solve rate.",
+  "caveats": "Small (40 tasks) and public since 2024, so write-ups exist online. Dual-use content. Last commit 2026-09-24.",
+  "released": "2024-08",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API andyzorigin/cybench (Apache-2.0, last commit 2026-09-24); README; arxiv.org/abs/2408.08926 abstract",
+  "levels": [
+   "os",
+   "machine",
+   "networks"
+  ],
+  "layers": [
+   "execution"
+  ]
+ },
+ {
+  "id": "nyu-ctf-bench",
+  "name": "NYU CTF Bench",
+  "kind": "benchmark",
+  "url": "https://github.com/NYU-LLM-CTF/NYU_CTF_Bench",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2406.05590"
+   }
+  ],
+  "license": "GPL-2.0",
+  "size": "200 test challenges and a 55-challenge development set",
+  "summary": "Dockerized capture-the-flag challenges from the CSAW competitions in six categories: web, binary exploitation, forensics, reverse engineering, cryptography and miscellaneous.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "terminal",
+   "tool-use"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "For evaluation only. Use the development set to tune the agent and report on the test set.",
+  "caveats": "Past competition challenges with public write-ups, so contamination is likely. Dual-use content. Last commit 2025-09-22.",
+  "released": "2024-06",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API NYU-LLM-CTF/NYU_CTF_Bench (GPL-2.0, last commit 2025-09-22); README; arxiv.org/abs/2406.05590",
+  "levels": [
+   "os",
+   "machine",
+   "networks"
+  ],
+  "layers": [
+   "execution"
+  ]
+ },
+ {
+  "id": "design2code",
+  "name": "Design2Code",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/SALT-NLP/Design2Code",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2403.03163"
+   },
+   {
+    "label": "HF format",
+    "url": "https://huggingface.co/datasets/SALT-NLP/Design2Code-hf"
+   },
+   {
+    "label": "GitHub",
+    "url": "https://github.com/NoviScl/Design2Code"
+   }
+  ],
+  "license": "ODC-BY (dataset); MIT (code repository)",
+  "size": "484 real webpages, each a screenshot and its source HTML",
+  "summary": "Design-to-code benchmark: given a screenshot of a real webpage, write HTML and CSS that renders to match it.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "html-css"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Needs a multimodal model. Render the output and score with the automatic metrics in the GitHub repository.",
+  "caveats": "Pages come from the C4 validation set, which is public web data. Scored by visual similarity, not by interaction. GitHub last commit 2024-11-02.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"SALT-NLP/Design2Code-hf\", split=\"train\")",
+  "released": "2024-03",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/SALT-NLP/Design2Code and Design2Code-hf (odc-by, 484 examples); card README; GitHub API NoviScl/Design2Code (MIT, last commit 2024-11-02); arxiv.org/abs/2403.03163 abstract",
+  "levels": [
+   "apps"
+  ],
+  "layers": [
+   "text",
+   "execution"
+  ]
+ },
+ {
+  "id": "websight",
+  "name": "WebSight",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/HuggingFaceM4/WebSight",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2403.09029"
+   }
+  ],
+  "license": "CC-BY-4.0, with a card request to disclose use of the dataset when releasing a model trained on it",
+  "size": "v0.2: 1,922,671 pairs (HTML with Tailwind CSS). v0.1: 822,987 pairs (HTML and CSS)",
+  "summary": "Synthetic pairs of webpage screenshots and the HTML that produced them, generated by language models, for training screenshot-to-code models.",
+  "stages": [
+   "sft"
+  ],
+  "languages": [
+   "html-css"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": "intro",
+  "how_to_use": "Fine-tune a vision-language model on v0.2, then evaluate on Design2Code, which uses real pages.",
+  "caveats": "Fully synthetic and simpler than real sites. v0.2 is about 145 GB to download per the card metadata. Last modified 2024-03-26.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"HuggingFaceM4/WebSight\", \"v0.2\", split=\"train\")",
+  "released": "2024-01",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/HuggingFaceM4/WebSight (cc-by-4.0, created 2024-01-04, dataset_info); card README; arxiv.org/abs/2403.09029 abstract",
+  "levels": [
+   "apps"
+  ],
+  "layers": [
+   "text"
+  ]
+ },
+ {
+  "id": "web-bench",
+  "name": "Web-Bench",
+  "kind": "benchmark",
+  "url": "https://github.com/bytedance/web-bench",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2505.07473"
+   },
+   {
+    "label": "Leaderboard",
+    "url": "https://huggingface.co/spaces/bytedance-research/Web-Bench-Leaderboard"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "50 projects, each with 20 sequentially dependent tasks",
+  "summary": "Web development benchmark from ByteDance built around web standards and frameworks. Tasks in a project build on each other, the way features accumulate in real work.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "javascript",
+   "typescript",
+   "html-css"
+  ],
+  "tasks": [
+   "generation",
+   "repo-level",
+   "agentic"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Run a project end to end and report how many tasks pass in sequence. A failure early in a project blocks the tasks after it.",
+  "caveats": "The paper abstract says a project takes a senior engineer 4 to 8 hours. Sequential dependence makes scores sensitive to early mistakes. Last commit 2026-04-30.",
+  "released": "2025-05",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API bytedance/web-bench (Apache-2.0, created 2025-05-03, last commit 2026-04-30); README; arxiv.org/abs/2505.07473 abstract",
+  "levels": [
+   "apps"
+  ],
+  "layers": [
+   "text",
+   "tests",
+   "execution"
+  ]
+ },
+ {
+  "id": "spreadsheetbench",
+  "name": "SpreadsheetBench",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/KAKA22/SpreadsheetBench",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2406.14991"
+   },
+   {
+    "label": "GitHub",
+    "url": "https://github.com/RUCKBReasoning/SpreadsheetBench"
+   },
+   {
+    "label": "Site",
+    "url": "https://spreadsheetbench.github.io/"
+   }
+  ],
+  "license": "CC-BY-SA-4.0 (HF card); the GitHub repository has no license file",
+  "size": "912 questions with 2,729 test cases; SpreadsheetBench Verified is an expert-annotated subset of 400",
+  "summary": "Spreadsheet manipulation tasks taken from real questions on online Excel forums, with real spreadsheet files and several test cases per question, graded like an online judge. From NeurIPS 2024.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation",
+   "agentic"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Have the model write code that edits the spreadsheet, run it in the provided Docker executor, and compare the result cells across all test cases. Prefer the Verified subset.",
+  "caveats": "Files are archives, not a tabular HF dataset, so the viewer shows no splits. Languages is set to Python because solutions are usually code that edits the workbook; the task itself is not tied to one language. GitHub last commit 2026-03-12.",
+  "released": "2024-06",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/KAKA22/SpreadsheetBench (cc-by-sa-4.0, created 2025-08-04, modified 2025-12-03); GitHub API RUCKBReasoning/SpreadsheetBench (no license, last commit 2026-03-12) and README; arxiv.org/abs/2406.14991 abstract",
+  "levels": [
+   "apps"
+  ],
+  "layers": [
+   "execution",
+   "tests"
+  ]
+ },
+ {
+  "id": "arcade-nl2code",
+  "name": "ARCADE",
+  "kind": "benchmark",
+  "url": "https://github.com/google-research/arcade-nl2code",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2212.09248"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "1,082 problems",
+  "summary": "Natural language to code problems inside data science notebooks, using pandas. Each problem comes with the notebook cells before it, so the model must use the existing state.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Build the dataset with the repository scripts (a Kaggle account is needed to fetch the source data), then evaluate with the repository scripts.",
+  "caveats": "The repository is archived; last commit 2023-08-25. The dataset must be reconstructed, not downloaded ready-made. Public since 2022.",
+  "released": "2022-12",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API google-research/arcade-nl2code (Apache-2.0, archived, last commit 2023-08-25); README; arxiv.org/abs/2212.09248 abstract",
+  "levels": [
+   "apps"
+  ],
+  "layers": [
+   "execution"
+  ]
+ },
+ {
+  "id": "da-code",
+  "name": "DA-Code",
+  "kind": "benchmark",
+  "url": "https://github.com/yiyihum/da-code",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2410.07331"
+   }
+  ],
+  "license": "MIT",
+  "size": null,
+  "summary": "Agentic data science benchmark from EMNLP 2024: data wrangling and analytics tasks over real data, solved by writing and running code in a Docker sandbox.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "agentic",
+   "generation"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Run the provided agent harness in Docker and score with the task evaluation suite.",
+  "caveats": "The paper abstract reports 30.5% accuracy for the best model at release. This pass did not verify the task count. Languages is set to Python as the main language; the paper speaks of data science programming languages in general. Last commit 2026-01-12.",
+  "released": "2024-10",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API yiyihum/da-code (MIT, last commit 2026-01-12); README; arxiv.org/abs/2410.07331 abstract",
+  "levels": [
+   "apps"
+  ],
+  "layers": [
+   "execution"
+  ]
+ },
+ {
+  "id": "dabstep",
+  "name": "DABstep",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/adyen/DABstep",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2506.23719"
+   }
+  ],
+  "license": "CC-BY-4.0",
+  "size": "450 tasks in the default split and 10 in the dev split",
+  "summary": "Multi-step data analysis tasks from Adyen, drawn from a financial analytics platform. The agent must combine code over data files with reading the accompanying documentation.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "agentic",
+   "reasoning"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Develop on the dev split and report on the default split.",
+  "caveats": "The paper abstract reports 14.55% accuracy on the hardest tasks for the best agent at release. The dataset repository also stores leaderboard submissions. Actively updated (last modified 2026-11-22).",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"adyen/DABstep\", \"tasks\", split=\"dev\")",
+  "released": "2024-12",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/adyen/DABstep (cc-by-4.0, created 2024-12-21, modified 2026-11-22); datasets-server sizes; arxiv.org/abs/2506.23719 abstract",
+  "levels": [
+   "apps"
+  ],
+  "layers": [
+   "execution"
+  ]
+ },
+ {
+  "id": "elt-bench",
+  "name": "ELT-Bench",
+  "kind": "benchmark",
+  "url": "https://github.com/uiuc-kang-lab/ELT-Bench",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2504.04808"
+   }
+  ],
+  "license": "CC BY-SA 4.0 per the README badge; no LICENSE file in the repository",
+  "size": "100 pipelines with 835 source tables and 203 data models (paper abstract)",
+  "summary": "End-to-end benchmark on building ELT (extract, load, transform) data pipelines with agents, graded on the data models the pipeline produces.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "sql",
+   "python"
+  ],
+  "tasks": [
+   "agentic",
+   "sql",
+   "tool-use"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Follow REPRODUCE.md. You need a data warehouse account (the evaluation supports Snowflake, Databricks and Redshift naming) and the Docker setup in the repository.",
+  "caveats": "The paper abstract reports 3.9% of data models correct for the best agent at release, at an average of $4.30 per pipeline. The default branch is now an extended version called ELT-Bench++. Needs a data warehouse account. Last commit 2026-11-17.",
+  "released": "2025-04",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API uiuc-kang-lab/ELT-Bench (no license detected, default branch elt_bench++, last commit 2026-11-17); README; arxiv.org/abs/2504.04808 abstract",
+  "levels": [
+   "apps",
+   "networks"
+  ],
+  "layers": [
+   "execution"
+  ]
+ },
+ {
+  "id": "mlagentbench",
+  "name": "MLAgentBench",
+  "kind": "benchmark",
+  "url": "https://github.com/snap-stanford/MLAgentBench",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2310.03302"
+   }
+  ],
+  "license": "MIT",
+  "size": "13 tasks",
+  "summary": "Machine learning experimentation tasks for agents, from improving a CIFAR-10 model to research problems such as BabyLM. The agent gets a dataset and a task description and must build or improve a model.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "agentic"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Run each task in its interactive environment with the repository's runner.",
+  "caveats": "Small, and from 2023. Last commit 2024-04-28. MLE-bench (already in the catalog) covers the same ground with more tasks.",
+  "released": "2023-10",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API snap-stanford/MLAgentBench (MIT, last commit 2024-04-28); README; arxiv.org/abs/2310.03302 abstract",
+  "levels": [
+   "learned"
+  ],
+  "layers": [
+   "execution"
+  ]
+ },
+ {
+  "id": "mlgym",
+  "name": "MLGym",
+  "kind": "environment",
+  "url": "https://github.com/facebookresearch/MLGym",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2502.14499"
+   }
+  ],
+  "license": "CC-BY-NC-4.0 (LICENSE file; GitHub reports NOASSERTION)",
+  "size": "13 open-ended AI research tasks (MLGym-Bench)",
+  "summary": "Gym environment from Meta for machine learning research tasks in computer vision, language, reinforcement learning and game theory, designed so that agents can also be trained with RL.",
+  "stages": [
+   "eval",
+   "rl"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "agentic"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Run tasks in Docker or Podman containers. The gym interface makes it one of the few ML-research environments shaped for RL training and not only evaluation.",
+  "caveats": "The repository is archived; last commit 2025-08-10. Non-commercial license.",
+  "released": "2025-02",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API facebookresearch/MLGym (archived, last commit 2025-08-10) and LICENSE file; README; arxiv.org/abs/2502.14499 abstract",
+  "levels": [
+   "learned"
+  ],
+  "layers": [
+   "execution"
+  ]
+ },
+ {
+  "id": "re-bench",
+  "name": "RE-Bench",
+  "kind": "benchmark",
+  "url": "https://github.com/METR/RE-Bench",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2411.15114"
+   }
+  ],
+  "license": "MIT (LICENSE file; GitHub reports NOASSERTION)",
+  "size": "7 open-ended ML research engineering environments",
+  "summary": "METR's research engineering benchmark, with human baselines from 71 eight-hour attempts by 61 experts, so that agent scores can be compared with people given the same time.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "agentic"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Use for comparison with the published human baselines.",
+  "caveats": "The README marks the tasks as deprecated and the repository is archived; METR no longer accepts contributions or bug reports. Last commit 2026-10-20.",
+  "released": "2024-11",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API METR/RE-Bench (archived, last commit 2026-10-20) and LICENSE file; README; arxiv.org/abs/2411.15114 abstract",
+  "levels": [
+   "learned"
+  ],
+  "layers": [
+   "execution"
+  ]
+ },
+ {
+  "id": "ml-bench",
+  "name": "ML-Bench",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/super-dainiu/ml-bench",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2311.09835"
+   },
+   {
+    "label": "GitHub",
+    "url": "https://github.com/gersteinlab/ML-Bench"
+   },
+   {
+    "label": "Site",
+    "url": "https://ml-bench.github.io/"
+   }
+  ],
+  "license": "MIT",
+  "size": "9,641 examples from 18 GitHub machine learning repositories; HF splits: full 260, quarter 68, id_train 6,551, ood_train 3,564",
+  "summary": "Tests whether a model can use existing machine learning repositories: read the documentation and code, then produce the right script or command with the right arguments.",
+  "stages": [
+   "eval",
+   "sft"
+  ],
+  "languages": [
+   "python",
+   "bash"
+  ],
+  "tasks": [
+   "repo-level",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use the quarter split for a quick check and full for reporting. The train splits allow fine-tuning for in-distribution and out-of-distribution comparison.",
+  "caveats": "Tied to 18 specific repositories at fixed versions. GitHub last commit 2025-07-31.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"super-dainiu/ml-bench\", split=\"quarter\")",
+  "released": "2023-11",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/super-dainiu/ml-bench (mit, dataset_info splits); card README; GitHub API gersteinlab/ML-Bench (MIT, last commit 2025-07-31); arxiv.org/abs/2311.09835 abstract",
+  "levels": [
+   "learned"
+  ],
+  "layers": [
+   "execution",
+   "text"
+  ]
+ },
+ {
+  "id": "core-bench",
+  "name": "CORE-Bench",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/siegelz/core-bench",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2409.11363"
+   },
+   {
+    "label": "GitHub",
+    "url": "https://github.com/siegelz/core-bench"
+   },
+   {
+    "label": "HAL harness",
+    "url": "https://github.com/princeton-pli/hal-harness"
+   }
+  ],
+  "license": "MIT",
+  "size": "270 tasks based on 90 scientific papers",
+  "summary": "Computational reproducibility benchmark from Princeton: given the code and data of a published paper in computer science, social science or medicine (Python or R), run it and answer questions about the results.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python",
+   "r"
+  ],
+  "tasks": [
+   "agentic",
+   "terminal"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Run through the Holistic Agent Leaderboard harness, which the README now recommends. Task files hold prompts and questions; the harness downloads each paper's code capsule.",
+  "caveats": "The original harness is no longer actively maintained (README); last commit 2025-11-23. The paper abstract reports 21% on the hardest level for the best agent at release.",
+  "released": "2024-09",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/siegelz/core-bench (mit, created 2024-09-13); card README; GitHub API siegelz/core-bench (MIT, last commit 2025-11-23) and README; arxiv.org/abs/2409.11363 abstract",
+  "levels": [
+   "learned",
+   "apps"
+  ],
+  "layers": [
+   "execution"
+  ]
+ },
+ {
+  "id": "super-benchmark",
+  "name": "SUPER",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/allenai/super",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2409.07440"
+   },
+   {
+    "label": "GitHub",
+    "url": "https://github.com/allenai/super-benchmark"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "Expert: 45 end-to-end problems. Masked: 152 sub-problems. Auto: 604 generated problems",
+  "summary": "Allen Institute benchmark on setting up and running tasks from machine learning and NLP research repositories found on GitHub, including installing dependencies and fixing configuration problems.",
+  "stages": [
+   "eval",
+   "sft"
+  ],
+  "languages": [
+   "python",
+   "bash"
+  ],
+  "tasks": [
+   "agentic",
+   "terminal",
+   "repo-level"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Report on the Expert set. Use Masked to locate which sub-skill fails, and Auto as development or training data.",
+  "caveats": "The paper abstract gives 602 automatically generated problems while HF shows 604. Research repositories rot, so some tasks may break over time. GitHub last commit 2025-04-04.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"allenai/super\", \"Expert\", split=\"all_examples\")",
+  "released": "2024-09",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/allenai/super (apache-2.0, created 2024-08-29, config sizes); GitHub API allenai/super-benchmark (Apache-2.0, last commit 2025-04-04); arxiv.org/abs/2409.07440 abstract",
+  "levels": [
+   "learned"
+  ],
+  "layers": [
+   "execution"
+  ]
+ },
+ {
+  "id": "kernelbench",
+  "name": "KernelBench",
+  "kind": "benchmark",
+  "url": "https://github.com/ScalingIntelligence/KernelBench",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2502.10517"
+   },
+   {
+    "label": "Hugging Face",
+    "url": "https://huggingface.co/datasets/ScalingIntelligence/KernelBench"
+   }
+  ],
+  "license": "MIT (LICENSE file; GitHub reports NOASSERTION); no license field on the HF dataset",
+  "size": "250 PyTorch workloads in the paper; HF splits: level_1 100, level_2 100, level_3 50, level_4 20",
+  "summary": "Stanford benchmark on writing fast and correct GPU kernels: translate PyTorch operators and models into CUDA (or other DSL) code that matches the reference output and runs faster. From ICML 2025.",
+  "stages": [
+   "eval",
+   "rl"
+  ],
+  "languages": [
+   "python",
+   "cpp"
+  ],
+  "tasks": [
+   "generation",
+   "reasoning"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Score both correctness and speedup over the PyTorch baseline on a fixed GPU. The speedup gives a continuous reward, which suits RL.",
+  "caveats": "The kernels here are GPU compute kernels, not operating system kernels. Timing depends on the GPU, so results are not comparable across hardware. The paper abstract reports models beating the PyTorch baseline in under 20% of cases at release. Last commit 2026-03-05.",
+  "released": "2025-02",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API ScalingIntelligence/KernelBench (last commit 2026-03-05) and LICENSE file; README; huggingface.co/api/datasets/ScalingIntelligence/KernelBench (dataset_info splits, no license); arxiv.org/abs/2502.10517 abstract",
+  "levels": [
+   "learned",
+   "machine"
+  ],
+  "layers": [
+   "execution",
+   "tests"
+  ]
+ },
+ {
+  "id": "researchcodebench",
+  "name": "ResearchCodeBench",
+  "kind": "benchmark",
+  "url": "https://github.com/PatrickHua/ResearchCodeBench",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2506.02314"
+   }
+  ],
+  "license": null,
+  "size": "212 coding challenges",
+  "summary": "Tests whether a model can implement the core contribution of recent machine learning papers (2024 to 2025) as code that passes unit tests, given the paper and the surrounding repository.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation",
+   "repo-level"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Run the sanity check first to confirm each codebase's tests pass in your environment, then evaluate.",
+  "caveats": "No license file in the repository. The paper abstract reports the best model at 37.3% at release. Last commit 2025-06-04. The papers are from 2024 to 2025, so newer models may have seen them.",
+  "released": "2025-06",
+  "checked": "2026-11-24",
+  "evidence": "GitHub API PatrickHua/ResearchCodeBench (no license, last commit 2025-06-04); README; arxiv.org/abs/2506.02314 abstract",
+  "levels": [
+   "learned"
+  ],
+  "layers": [
+   "tests",
+   "text"
+  ]
+ }
+]

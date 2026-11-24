@@ -1,4 +1,26 @@
 {
- "checked": 488,
- "bad": []
+ "checked": 647,
+ "bad": [
+  {
+   "url": "https://dl.acm.org/doi/abs/10.1145/3520312.3534867",
+   "status": 403,
+   "used_by": [
+    "exebench"
+   ]
+  },
+  {
+   "url": "https://openreview.net/pdf?id=xl9sv9vEDy",
+   "status": 403,
+   "used_by": [
+    "typybench"
+   ]
+  },
+  {
+   "url": "https://doi.org/10.1145/3656296",
+   "status": 403,
+   "used_by": [
+    "netconfeval"
+   ]
+  }
+ ]
 }

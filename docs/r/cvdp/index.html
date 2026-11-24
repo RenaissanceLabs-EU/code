@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CVDP (Comprehensive Verilog Design Problems): Benchmark | Renaissance Labs Code</title>
+<meta name="description" content="NVIDIA benchmark for RTL design and verification, with both single-turn and agentic problems written by hardware engineers. Covers RTL generation, verification, debugging, specification alig">
+<link rel="canonical" href="https://code.renaissancelabs.eu/r/cvdp/">
+<meta property="og:title" content="CVDP (Comprehensive Verilog Design Problems): Benchmark | Renaissance Labs Code"><meta property="og:description" content="NVIDIA benchmark for RTL design and verification, with both single-turn and agentic problems written by hardware engineers. Covers RTL generation, verification, debugging, specification alig"><meta property="og:url" content="https://code.renaissancelabs.eu/r/cvdp/"><meta property="og:type" content="website">
+<meta property="og:image" content="https://code.renaissancelabs.eu/assets/og/r-cvdp.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="CVDP (Comprehensive Verilog Design Problems): Benchmark | Renaissance Labs Code"><meta property="og:site_name" content="Renaissance Labs Code">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://code.renaissancelabs.eu/assets/og/r-cvdp.jpg"><meta name="twitter:title" content="CVDP (Comprehensive Verilog Design Problems): Benchmark | Renaissance Labs Code"><meta name="twitter:description" content="NVIDIA benchmark for RTL design and verification, with both single-turn and agentic problems written by hardware engineers. Covers RTL generation, verification, debugging, specification alig"><meta name="theme-color" content="#121311">
+<link rel="icon" href="/assets/favicon.png">
+<link rel="stylesheet" href="/styles.css?v=33e4a37a">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+  <a class="brand" href="/"><img src="/assets/mark.png" alt=""><span>Renaissance Labs &middot; Code</span></a>
+  <nav><a href="/program/">Program</a><a href="/stack/">Stack</a><a href="/languages/">Languages</a><a href="/world/">World</a><a href="/intelligence/">Intelligence</a><a href="/train/" aria-current="page">Train</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
+  <button class="theme" id="theme" type="button" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+</header>
+<main id="main">
+<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/train/">Train</a> / <a href="/catalog/">Catalog</a> / <a href="/stage/eval/">Eval</a></div>
+<span class="eyebrow">Benchmark &middot; 2025-06</span><h1>CVDP (Comprehensive Verilog Design Problems)</h1><p class="lede">NVIDIA benchmark for RTL design and verification, with both single-turn and agentic problems written by hardware engineers. Covers RTL generation, verification, debugging, specification alignment and technical Q&amp;A.</p></div>
+<div class="layout"><div class="prose">
+<h2>How to use it</h2><p>Pick a config (nonagentic, agentic, or agentic heavy code generation). Each exists in a commercial and a no_commercial variant; read the card to see which one your tool setup can run.</p>
+<h2>Caveats</h2><p>The paper abstract reports no more than 34% pass@1 on code generation for the best models at release. The license is not a single SPDX license; read LICENSE and NOTICE before training on it. Row counts on HF (68, 92, 25, 75, 187, 302) do not sum to the 783 in the paper.</p>
+<div class="callout warn"><b>License</b>This entry is not plainly permissive (family: gated or custom terms). Read the license on the source page before using it for training or for a product.</div><div class="codebox"><div class="lab"><span>load</span><button class="copy" type="button">Copy</button></div><pre><span class="k">from</span> datasets <span class="k">import</span> load_dataset
+ds = load_dataset(<span class="s">&quot;nvidia/cvdp-benchmark-dataset&quot;</span>, <span class="s">&quot;cvdp_nonagentic_code_generation_no_commercial&quot;</span>, split=<span class="s">&quot;eval&quot;</span>)</pre></div>
+<h2>Related</h2><ul><li><a href="/r/codescope/">CodeScope</a>: Execution-based multilingual, multitask benchmark covering code understanding and generation across many...</li><li><a href="/r/sec-bench/">SEC-bench</a>: Real software vulnerabilities packaged as reproducible Docker instances, with two tasks: write a...</li><li><a href="/r/aider-polyglot/">Aider Polyglot benchmark</a>: Hard Exercism exercises where the model must edit files in aider&#x27;s format and pass tests, measuring...</li><li><a href="/r/paper-reward-hack-audit/">Auditing Reward Hackability in Code RL Environments</a>: Abstract reports 22.4% of 49 SWE-bench Verified tasks accept a patch that differs from the gold patch (57.8%...</li><li><a href="/r/canitedit/">CanItEdit</a>: Hand-crafted instructional code editing problems with descriptive and lazy instruction variants, tested by...</li><li><a href="/r/commit0/">Commit0</a>: Agent must implement a library from its spec using interactive unit tests; measures long-form spec...</li></ul>
+</div><aside class="aside"><div class="panel"><h3>At a glance</h3><dl>
+<dt>Source</dt><dd><a href="https://huggingface.co/datasets/nvidia/cvdp-benchmark-dataset">huggingface.co/datasets/nvidia/cvdp-benchmark-da</a></dd>
+<dt>License</dt><dd>other (HF card). LICENSE file: multiple licenses, non-code content CC BY 4.0, code-derived datapoints under upstream terms; see LICENSE and NOTICE</dd><dt>Size</dt><dd>783 problems across 13 task categories (paper abstract); the v1.1.0 files on HF hold 749 rows in six configs</dd>
+<dt>Stage</dt><dd><a class="pill st st-eval" href="/stage/eval/">Eval</a></dd>
+<dt>Languages</dt><dd><a href="/languages/verilog/">Verilog</a></dd>
+<dt>Form</dt><dd><a class="pill" href="/program/text/">Text</a> <a class="pill" href="/program/execution/">Execution</a> <a class="pill" href="/program/tests/">Tests</a></dd><dt>Stack level</dt><dd><a class="pill" href="/stack/gates/">Logic gates</a></dd><dt>Tasks</dt><dd>Function generation, Bug fixing and repair, Agentic (multi-step, tools), Test writing</dd><dt>Difficulty</dt><dd>frontier</dd>
+<dt>Checked</dt><dd>2026-11-24</dd></dl></div>
+<div class="panel"><h3>More links</h3><ul><li><a href="https://arxiv.org/abs/2506.14074">Paper</a></li></ul></div>
+<div class="panel"><h3>Evidence</h3><p class="mono">huggingface.co/api/datasets/nvidia/cvdp-benchmark-dataset (license other, created 2025-06-18, modified 2026-07-21); LICENSE file head; datasets-server sizes; arxiv.org/abs/2506.14074 abstract</p></div></aside></div></div></div>
+</main>
+<footer class="wrap foot">
+  <a class="brand" href="https://renaissancelabs.eu"><img src="/assets/mark.png" alt="">Renaissance Labs</a>
+  <div class="foot-links"><a href="/catalog/">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
+</footer>
+<script src="/app.js?v=33e4a37a" defer></script>
+</body>
+</html>

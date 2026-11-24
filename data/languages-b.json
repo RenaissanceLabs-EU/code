@@ -1,0 +1,1344 @@
+[
+ {
+  "id": "r",
+  "name": "R",
+  "year": 1993,
+  "year_note": "Binary copies of R were placed on StatLib and announced on the s-news mailing list in August 1993",
+  "designers": [
+   "Ross Ihaka",
+   "Robert Gentleman"
+  ],
+  "org": "University of Auckland (Department of Statistics); now maintained by the R Core Team as a GNU project",
+  "family": "numeric",
+  "level": "languages",
+  "levels": [
+   "languages",
+   "apps"
+  ],
+  "paradigms": [
+   "functional",
+   "array (vectorized)",
+   "interactive"
+  ],
+  "typing": "dynamic",
+  "runs": "The R interpreter reads and evaluates source directly; most user-visible functions are themselves written in R, and they can call procedures written in C, C++ or Fortran.",
+  "influenced_by": [
+   "S",
+   "Scheme"
+  ],
+  "what": "R is a language and environment for statistical computing and graphics. It began as a free reimplementation of the S language from Bell Laboratories: it looks like S on the surface, while its implementation and semantics come from Scheme. Whole vectors and tables of data are the basic values, so a statistical analysis reads close to the mathematics.",
+  "used_for": [
+   "statistics and data analysis",
+   "plots and graphics",
+   "bioinformatics",
+   "teaching statistics"
+  ],
+  "notable": [
+   {
+    "name": "CRAN",
+    "text": "The Comprehensive R Archive Network held 25835 contributed packages when checked on 2026-11-24.",
+    "url": "https://cran.r-project.org/web/packages/"
+   },
+   {
+    "name": "Bioconductor",
+    "text": "An open source, open development software project that uses R; release 3.23 listed 2418 software packages when checked on 2026-11-24.",
+    "url": "https://www.bioconductor.org/"
+   },
+   {
+    "name": "ggplot2",
+    "text": "A widely used R system for declaratively creating graphics, based on The Grammar of Graphics.",
+    "url": "https://ggplot2.tidyverse.org/"
+   }
+  ],
+  "sample": {
+   "code": "gcd <- function(a, b) {\n  while (b != 0) {\n    t <- b\n    b <- a %% b\n    a <- t\n  }\n  a\n}\nprint(gcd(48, 18))",
+   "ran": false,
+   "how": "Not run: no R toolchain on this Mac. Expected output: [1] 6. Syntax checked against the R manuals (%% is the remainder operator)."
+  },
+  "official_url": "https://www.r-project.org/",
+  "spec_url": "https://cran.r-project.org/doc/manuals/r-release/R-lang.html",
+  "sources": [
+   "https://cran.r-project.org/doc/FAQ/R-FAQ.html",
+   "https://www.r-project.org/about.html",
+   "https://cran.r-project.org/doc/html/interface98-paper/paper_2.html",
+   "https://www.r-project.org/contributors.html"
+  ]
+ },
+ {
+  "id": "julia",
+  "name": "Julia",
+  "year": 2012,
+  "year_note": "Public announcement in the blog post \"Why We Created Julia\", 14 February 2012",
+  "designers": [
+   "Jeff Bezanson",
+   "Stefan Karpinski",
+   "Viral B. Shah",
+   "Alan Edelman"
+  ],
+  "org": null,
+  "family": "numeric",
+  "level": "languages",
+  "levels": [
+   "languages",
+   "compilers"
+  ],
+  "paradigms": [
+   "multiple dispatch",
+   "imperative",
+   "functional"
+  ],
+  "typing": "dynamic, with optional type annotations and type inference",
+  "runs": "Julia code is compiled to machine code just in time, function by function, using type inference and the LLVM compiler framework.",
+  "influenced_by": [
+   "matlab",
+   "lisp",
+   "python",
+   "ruby",
+   "perl",
+   "r",
+   "c"
+  ],
+  "what": "Julia is a dynamic language for scientific and numerical computing. Scientists had largely moved to slower dynamic languages for daily work; Julia's authors wanted one language that is as easy to use as those and as fast as C. Its central idea is multiple dispatch, where the function body that runs is chosen by the types of all the arguments.",
+  "used_for": [
+   "numerical simulation",
+   "differential equations and scientific modeling",
+   "data analysis",
+   "high performance computing"
+  ],
+  "notable": [
+   {
+    "name": "CliMA ClimaCore.jl",
+    "text": "The dynamical core of the CliMA Earth System Model, a climate model developed in Julia that can run on GPUs.",
+    "url": "https://github.com/CliMA/ClimaCore.jl"
+   },
+   {
+    "name": "DSGE.jl",
+    "text": "The Federal Reserve Bank of New York published its DSGE macroeconomic model code as the Julia package DSGE.jl.",
+    "url": "https://github.com/FRBNY-DSGE/DSGE.jl"
+   }
+  ],
+  "sample": {
+   "code": "function euclid(a, b)\n    while b != 0\n        a, b = b, a % b\n    end\n    return a\nend\n\nprintln(euclid(48, 18))",
+   "ran": false,
+   "how": "Not run: no Julia toolchain on this Mac. Expected output: 6. The function is named euclid because Julia already has a built-in gcd."
+  },
+  "official_url": "https://julialang.org/",
+  "spec_url": null,
+  "sources": [
+   "https://julialang.org/blog/2012/02/why-we-created-julia/",
+   "https://docs.julialang.org/en/v1/"
+  ]
+ },
+ {
+  "id": "matlab",
+  "name": "MATLAB",
+  "year": 1984,
+  "year_note": "PC-MATLAB, the first commercial version, debuted in December 1984; Cleve Moler's original Fortran MATLAB was written earlier, while he was teaching at the University of New Mexico in the 1970s and early 1980s (the source gives no exact year)",
+  "designers": [
+   "Cleve Moler (original Fortran MATLAB)",
+   "Jack Little (rewrite in C, with Steve Bangert)"
+  ],
+  "org": "MathWorks",
+  "family": "numeric",
+  "level": "languages",
+  "levels": [
+   "languages",
+   "apps"
+  ],
+  "paradigms": [
+   "array (matrix based)",
+   "imperative",
+   "interactive"
+  ],
+  "typing": "dynamic",
+  "runs": "MATLAB is a proprietary environment from MathWorks: commands and script files are executed interactively by the MATLAB program.",
+  "influenced_by": [
+   "fortran",
+   "LINPACK and EISPACK (the libraries it was written to give access to)"
+  ],
+  "what": "MATLAB, short for Matrix Laboratory, is a programming and numeric computation environment for engineers and scientists. Cleve Moler wrote the first version in Fortran so that his students could use the LINPACK and EISPACK matrix libraries without writing Fortran programs; in that version the matrix was the only data type. It is a commercial product, unlike most languages on this map.",
+  "used_for": [
+   "numerical computing with matrices",
+   "signal processing and control design",
+   "data analysis and plotting",
+   "engineering education"
+  ],
+  "notable": [
+   {
+    "name": "PC-MATLAB",
+    "text": "Jack Little's extended rewrite of MATLAB in C made its debut at the IEEE Conference on Decision and Control in Las Vegas in December 1984 and became the basis of the commercial product.",
+    "url": "https://www.mathworks.com/company/technical-articles/a-brief-history-of-matlab.html"
+   },
+   {
+    "name": "Simulink",
+    "text": "Simulink, the MathWorks product presented alongside MATLAB, is used to model systems and automatically generate production-ready embedded code.",
+    "url": "https://www.mathworks.com/products/matlab.html"
+   }
+  ],
+  "sample": {
+   "code": "disp(euclid(48, 18))\n\nfunction a = euclid(a, b)\n    while b ~= 0\n        t = b;\n        b = mod(a, b);\n        a = t;\n    end\nend",
+   "ran": false,
+   "how": "Not run: no MATLAB toolchain on this Mac. Expected output: 6. Written as a script file with a local function at the end of the file."
+  },
+  "official_url": "https://www.mathworks.com/products/matlab.html",
+  "spec_url": null,
+  "sources": [
+   "https://www.mathworks.com/company/technical-articles/a-brief-history-of-matlab.html",
+   "https://www.mathworks.com/products/matlab.html"
+  ]
+ },
+ {
+  "id": "lisp",
+  "name": "Lisp",
+  "year": 1960,
+  "year_note": "John McCarthy's paper \"Recursive Functions of Symbolic Expressions and Their Computation by Machine, Part I\" appeared in Communications of the ACM in April 1960; implementation at MIT began in fall 1958",
+  "designers": [
+   "John McCarthy"
+  ],
+  "org": "MIT",
+  "family": "functional",
+  "level": "languages",
+  "levels": [
+   "languages",
+   "compilers",
+   "apps"
+  ],
+  "paradigms": [
+   "functional",
+   "code as data (programs are lists)",
+   "garbage collected"
+  ],
+  "typing": "dynamic",
+  "runs": "Lisp expressions are read as lists and evaluated, by an interpreter or after compilation, usually inside an interactive session that keeps the running program open to change.",
+  "influenced_by": [
+   "fortran",
+   "IPL",
+   "Church's lambda notation"
+  ],
+  "what": "Lisp is a family of languages built on one idea: programs and data share a single form, the parenthesized list. McCarthy designed it for artificial intelligence work on symbolic expressions rather than numbers. Because code is data, a Lisp program can build and transform other programs, and garbage collection was devised for its first implementation. Common Lisp, Scheme and Emacs Lisp are among its living dialects.",
+  "used_for": [
+   "symbolic computation and AI research",
+   "extensible editors and tools",
+   "language experiments",
+   "teaching how languages work"
+  ],
+  "notable": [
+   {
+    "name": "GNU Emacs",
+    "text": "The Emacs editor has at its core an interpreter for Emacs Lisp, a Lisp dialect in which most of the editor is extended and customized.",
+    "url": "https://www.gnu.org/software/emacs/"
+   },
+   {
+    "name": "Remote Agent on Deep Space 1",
+    "text": "NASA JPL's Remote Agent, an autonomous spacecraft control system written in Common Lisp, controlled the Deep Space 1 probe for two days in May 1999.",
+    "url": "https://flownet.com/gat/jpl-lisp.html"
+   },
+   {
+    "name": "ITA Software fare search",
+    "text": "ITA Software built the airline fare search engine behind Orbitz in Common Lisp, as described by its engineer Carl de Marcken in 2001.",
+    "url": "https://www.paulgraham.com/carl.html"
+   }
+  ],
+  "sample": {
+   "code": "(defun euclid (a b)\n  (if (zerop b)\n      a\n      (euclid b (mod a b))))\n\n(print (euclid 48 18))",
+   "ran": false,
+   "how": "Not run: no Common Lisp toolchain on this Mac. Expected output: 6. Common Lisp dialect; named euclid because gcd is already a standard function."
+  },
+  "official_url": "https://common-lisp.net/",
+  "spec_url": "https://www.lispworks.com/documentation/HyperSpec/Front/index.htm",
+  "sources": [
+   "https://www-formal.stanford.edu/jmc/recursive.html",
+   "https://www-formal.stanford.edu/jmc/history/lisp/node2.html",
+   "https://www-formal.stanford.edu/jmc/history/lisp/node3.html"
+  ]
+ },
+ {
+  "id": "haskell",
+  "name": "Haskell",
+  "year": 1990,
+  "year_note": "The Haskell version 1.0 Report was published on 1 April 1990",
+  "designers": [
+   "a committee formed at the FPCA '87 conference; the 1.0 report was edited by Paul Hudak and Philip Wadler, and later editors include Simon Peyton Jones and John Hughes"
+  ],
+  "org": null,
+  "family": "functional",
+  "level": "languages",
+  "levels": [
+   "languages",
+   "compilers"
+  ],
+  "paradigms": [
+   "purely functional",
+   "lazy evaluation",
+   "type classes"
+  ],
+  "typing": "static, inferred, with type classes",
+  "runs": "The Glasgow Haskell Compiler (GHC) compiles Haskell to native machine code, directly or through LLVM, and also offers an interactive environment.",
+  "influenced_by": [
+   "lisp",
+   "Miranda",
+   "ML and Standard ML",
+   "ISWIM",
+   "APL",
+   "FP",
+   "Hope",
+   "Clean"
+  ],
+  "what": "Haskell is a purely functional language: functions have no hidden side effects, values never change, and expressions are evaluated only when their results are needed. A committee created it in the late 1980s because more than a dozen similar lazy functional languages existed and researchers wanted one common, open standard. Its type system, especially type classes, has shaped many later languages.",
+  "used_for": [
+   "compilers and language tools",
+   "programming language research",
+   "document and data transformation",
+   "backend services where correctness matters"
+  ],
+  "notable": [
+   {
+    "name": "GHC",
+    "text": "The Glasgow Haskell Compiler, an open source compiler and interactive environment for Haskell, is itself written mostly in Haskell.",
+    "url": "https://github.com/ghc/ghc"
+   },
+   {
+    "name": "Sigma at Meta",
+    "text": "Facebook rewrote the rule engine of Sigma, its system for detecting spam and malware, in Haskell during a two year redesign reported in 2015.",
+    "url": "https://engineering.fb.com/2015/06/26/security/fighting-spam-with-haskell/"
+   },
+   {
+    "name": "Pandoc",
+    "text": "The universal document converter Pandoc is a Haskell library and command line program.",
+    "url": "https://pandoc.org/"
+   }
+  ],
+  "sample": {
+   "code": "euclid :: Int -> Int -> Int\neuclid a 0 = a\neuclid a b = euclid b (a `mod` b)\n\nmain :: IO ()\nmain = print (euclid 48 18)",
+   "ran": false,
+   "how": "Not run: no Haskell (GHC) toolchain on this Mac. Expected output: 6. Named euclid because the Prelude already exports gcd."
+  },
+  "official_url": "https://www.haskell.org/",
+  "spec_url": "https://www.haskell.org/onlinereport/haskell2010/",
+  "sources": [
+   "https://www.microsoft.com/en-us/research/wp-content/uploads/2016/07/history.pdf",
+   "https://www.haskell.org/onlinereport/haskell2010/haskellli2.html",
+   "https://www.haskell.org/ghc/",
+   "https://www.haskell.org/"
+  ]
+ },
+ {
+  "id": "ocaml",
+  "name": "OCaml",
+  "year": 1996,
+  "year_note": "First release under the name Objective Caml in 1996; its ancestors Caml Light (1990) and Caml Special Light (1995) came earlier",
+  "designers": [
+   "Xavier Leroy",
+   "Jérôme Vouillon",
+   "Damien Doligez",
+   "Didier Rémy"
+  ],
+  "org": "Inria",
+  "family": "functional",
+  "level": "languages",
+  "levels": [
+   "languages",
+   "compilers",
+   "os"
+  ],
+  "paradigms": [
+   "functional",
+   "imperative",
+   "object-oriented",
+   "modules"
+  ],
+  "typing": "static, inferred (ML type system)",
+  "runs": "OCaml source is compiled either to bytecode for a small virtual machine or to native machine code by ocamlopt; a garbage collector manages memory.",
+  "influenced_by": [
+   "ML (Caml, Caml Light)",
+   "Standard ML (module system)"
+  ],
+  "what": "OCaml is a functional language from the ML family that also allows imperative and object-oriented code. It grew out of a long line of research on ML at Inria, and it pairs a strong type system that infers types for you with a fast native compiler. That mix makes it a favorite for programs that manipulate other programs: compilers, type checkers, verifiers.",
+  "used_for": [
+   "compilers and static analysis tools",
+   "proof assistants",
+   "financial trading systems",
+   "unikernels and systems software"
+  ],
+  "notable": [
+   {
+    "name": "The Rocq Prover",
+    "text": "The Rocq proof assistant (formerly Coq) is written in OCaml.",
+    "url": "https://rocq-prover.org/about"
+   },
+   {
+    "name": "Jane Street",
+    "text": "The trading firm Jane Street uses OCaml as its primary development platform.",
+    "url": "https://www.janestreet.com/technology/"
+   },
+   {
+    "name": "MirageOS",
+    "text": "A library operating system that builds unikernels, with applications and system libraries written in OCaml.",
+    "url": "https://mirage.io/"
+   }
+  ],
+  "sample": {
+   "code": "let rec gcd a b = if b = 0 then a else gcd b (a mod b)\n\nlet () = Printf.printf \"%d\\n\" (gcd 48 18)",
+   "ran": false,
+   "how": "Not run: no OCaml toolchain on this Mac. Expected output: 6."
+  },
+  "official_url": "https://ocaml.org/",
+  "spec_url": "https://ocaml.org/manual/",
+  "sources": [
+   "https://ocaml.org/about"
+  ]
+ },
+ {
+  "id": "erlang",
+  "name": "Erlang",
+  "year": 1986,
+  "year_note": "Joe Armstrong began work on the language at the Ericsson Computer Science Laboratory in 1986; it was used inside Ericsson for years before being released as open source",
+  "designers": [
+   "Joe Armstrong",
+   "Robert Virding",
+   "Mike Williams"
+  ],
+  "org": "Ericsson",
+  "family": "functional",
+  "level": "networks",
+  "levels": [
+   "networks",
+   "languages",
+   "compilers"
+  ],
+  "paradigms": [
+   "functional",
+   "concurrent (lightweight processes and message passing)",
+   "fault tolerant"
+  ],
+  "typing": "dynamic, strong",
+  "runs": "Erlang modules are compiled to bytecode that runs on the Erlang virtual machine, which schedules many lightweight processes and lets code be replaced while the system keeps running.",
+  "influenced_by": [
+   "prolog",
+   "CSP"
+  ],
+  "what": "Erlang was created at Ericsson to program telephone switches: systems that handle huge numbers of simultaneous calls and are never supposed to stop. A program is a crowd of small isolated processes that share nothing and talk only by sending messages, so one can crash and be restarted without taking the rest down. The language started life as a modified Prolog, which is where its syntax comes from.",
+  "used_for": [
+   "telecom switches",
+   "messaging systems and brokers",
+   "distributed databases",
+   "servers that must stay up"
+  ],
+  "notable": [
+   {
+    "name": "Ericsson AXD301",
+    "text": "An ATM switch built with Erlang/OTP; Armstrong's 2003 thesis reports over a million lines of Erlang in it and calls it one of the most reliable products Ericsson had made.",
+    "url": "https://erlang.org/download/armstrong_thesis_2003.pdf"
+   },
+   {
+    "name": "RabbitMQ",
+    "text": "The open source message broker RabbitMQ is an Erlang project and needs an Erlang runtime to run.",
+    "url": "https://github.com/rabbitmq/rabbitmq-server"
+   }
+  ],
+  "sample": {
+   "code": "-module(euclid).\n-export([main/0]).\n\ngcd(A, 0) -> A;\ngcd(A, B) -> gcd(B, A rem B).\n\nmain() -> io:format(\"~p~n\", [gcd(48, 18)]).",
+   "ran": false,
+   "how": "Not run: no Erlang toolchain on this Mac. Expected output when euclid:main() is called: 6."
+  },
+  "official_url": "https://www.erlang.org/",
+  "spec_url": null,
+  "sources": [
+   "https://erlang.org/download/armstrong_thesis_2003.pdf",
+   "https://www.erlang.org/faq/academic.html",
+   "https://www.erlang.org/faq/introduction.html",
+   "https://www.erlang.org/about"
+  ]
+ },
+ {
+  "id": "elixir",
+  "name": "Elixir",
+  "year": 2011,
+  "year_note": "The public source repository elixir-lang/elixir was created in January 2011; v0.5.0, the first release after the language was rewritten, came in May 2012 and v1.0 in September 2014",
+  "designers": [
+   "José Valim"
+  ],
+  "org": null,
+  "family": "functional",
+  "level": "networks",
+  "levels": [
+   "networks",
+   "languages",
+   "apps"
+  ],
+  "paradigms": [
+   "functional",
+   "concurrent (Erlang processes)",
+   "macros"
+  ],
+  "typing": "dynamic, strong",
+  "runs": "Elixir is compiled to bytecode for the Erlang virtual machine, so it runs on the same runtime as Erlang and can call Erlang modules directly.",
+  "influenced_by": [
+   "erlang",
+   "ruby"
+  ],
+  "what": "Elixir is a functional language that runs on the Erlang virtual machine. It keeps Erlang's model of many small isolated processes that survive each other's failures, and adds a friendlier syntax, macros and modern tooling. It is a way to get the reliability of a telephone switch in a language that feels closer to Ruby.",
+  "used_for": [
+   "web applications",
+   "real-time messaging and chat",
+   "distributed and embedded systems",
+   "data pipelines"
+  ],
+  "notable": [
+   {
+    "name": "Discord",
+    "text": "Discord has used Elixir from its beginning and described in 2017 how it scaled the language to five million concurrent users.",
+    "url": "https://discord.com/blog/how-discord-scaled-elixir-to-5-000-000-concurrent-users"
+   },
+   {
+    "name": "Phoenix",
+    "text": "The main Elixir web framework, which runs on the Erlang VM and is designed to hold very large numbers of WebSocket connections.",
+    "url": "https://www.phoenixframework.org/"
+   }
+  ],
+  "sample": {
+   "code": "defmodule Euclid do\n  def gcd(a, 0), do: a\n  def gcd(a, b), do: gcd(b, rem(a, b))\nend\n\nIO.puts(Euclid.gcd(48, 18))",
+   "ran": false,
+   "how": "Not run: no Elixir toolchain on this Mac. Expected output: 6."
+  },
+  "official_url": "https://elixir-lang.org/",
+  "spec_url": null,
+  "sources": [
+   "https://api.github.com/repos/elixir-lang/elixir",
+   "https://elixir-lang.org/blog/2012/05/25/elixir-v0-5-0-released/",
+   "https://elixir-lang.org/blog/2014/09/18/elixir-v1-0-0-released/",
+   "https://elixir-lang.org/blog/2013/08/08/elixir-design-goals/",
+   "https://elixir-lang.org/"
+  ]
+ },
+ {
+  "id": "fortran",
+  "name": "Fortran",
+  "year": 1957,
+  "year_note": "IBM released the Mathematical Formula Translating System and its first compiler, for the IBM 704, in 1957; work began in 1954",
+  "designers": [
+   "John Backus and his team at IBM"
+  ],
+  "org": "IBM",
+  "family": "numeric",
+  "level": "languages",
+  "levels": [
+   "languages",
+   "compilers"
+  ],
+  "paradigms": [
+   "imperative",
+   "array oriented",
+   "parallel (modern standards)"
+  ],
+  "typing": "static",
+  "runs": "A Fortran compiler such as GFortran translates the source ahead of time into machine code.",
+  "influenced_by": [],
+  "what": "Fortran, short for formula translation, is one of the earliest high-level languages and became the first computer language standard. Before it, programs were hand-coded as rows of zeros and ones; Backus wanted a language that captured the human intent of a program and left it to a compiler to recast that for the machine. It is still revised (the current standard is Fortran 2023) and still carries much of the world's numerical computing.",
+  "used_for": [
+   "weather and climate models",
+   "linear algebra libraries",
+   "physics and engineering simulation",
+   "supercomputing"
+  ],
+  "notable": [
+   {
+    "name": "LAPACK",
+    "text": "The standard library for dense linear algebra, used underneath many scientific tools, is written in Fortran 90.",
+    "url": "https://www.netlib.org/lapack/"
+   },
+   {
+    "name": "WRF",
+    "text": "The Weather Research and Forecasting model is written mostly in Fortran (by share of code in its official repository).",
+    "url": "https://github.com/wrf-model/WRF"
+   }
+  ],
+  "sample": {
+   "code": "program euclid\n  implicit none\n  integer :: a = 48, b = 18, t\n  do while (b /= 0)\n    t = b\n    b = mod(a, b)\n    a = t\n  end do\n  print *, a\nend program euclid",
+   "ran": false,
+   "how": "Not run: no Fortran toolchain on this Mac. Expected output: 6 (list-directed output pads it with leading spaces). Free-form Fortran 90 or later."
+  },
+  "official_url": "https://fortran-lang.org/",
+  "spec_url": "https://wg5-fortran.org/f2023.html",
+  "sources": [
+   "https://www.ibm.com/history/fortran",
+   "https://wg5-fortran.org/f2023.html",
+   "https://gcc.gnu.org/fortran/",
+   "https://fortran-lang.org/"
+  ]
+ },
+ {
+  "id": "cobol",
+  "name": "COBOL",
+  "year": 1960,
+  "year_note": "The first version of COBOL was released in 1960, a year after the CODASYL consortium formed",
+  "designers": [
+   "the CODASYL committee (Conference on Data Systems Languages), drawing on Grace Hopper's FLOW-MATIC"
+  ],
+  "org": "CODASYL, in a US Department of Defense initiative",
+  "family": "managed",
+  "level": "apps",
+  "levels": [
+   "apps",
+   "languages"
+  ],
+  "paradigms": [
+   "imperative",
+   "procedural",
+   "record oriented"
+  ],
+  "typing": "static (fixed-size fields declared with PICTURE clauses)",
+  "runs": "A COBOL compiler translates the source into an executable, typically run as batch jobs or transaction programs on mainframes; GnuCOBOL produces native executables on ordinary systems.",
+  "influenced_by": [
+   "FLOW-MATIC"
+  ],
+  "what": "COBOL, the common business-oriented language, was designed so that business data processing programs would read like English and run on computers from different makers. Its programs are organized around records with exactly declared fields, which suits payroll, accounts and ledgers. It is old and verbose, and a large amount of banking and government processing still depends on it.",
+  "used_for": [
+   "banking and payment processing",
+   "government benefit and tax systems",
+   "insurance and payroll",
+   "mainframe batch jobs"
+  ],
+  "notable": [
+   {
+    "name": "US federal legacy systems",
+    "text": "A 2019 US Government Accountability Office review of critical legacy systems (GAO-19-471) found that the selected system at the Department of Education runs on COBOL.",
+    "url": "https://www.gao.gov/products/gao-19-471"
+   },
+   {
+    "name": "GnuCOBOL",
+    "text": "A free COBOL compiler from the GNU project that produces native executables on Linux, BSD, macOS and Windows.",
+    "url": "https://www.gnu.org/software/gnucobol/"
+   }
+  ],
+  "sample": {
+   "code": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. EUCLID.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 A PIC 9(4) VALUE 48.\n       01 B PIC 9(4) VALUE 18.\n       01 T PIC 9(4).\n       PROCEDURE DIVISION.\n           PERFORM UNTIL B = 0\n               MOVE B TO T\n               COMPUTE B = FUNCTION MOD(A, B)\n               MOVE T TO A\n           END-PERFORM\n           DISPLAY A\n           STOP RUN.",
+   "ran": false,
+   "how": "Not run: no COBOL toolchain on this Mac. Expected output: 0006 (a four digit field). Fixed-format source; a full program needs its divisions, so it is 15 lines rather than under 12."
+  },
+  "official_url": "https://www.gnu.org/software/gnucobol/",
+  "spec_url": null,
+  "sources": [
+   "https://www.ibm.com/think/topics/cobol",
+   "https://www.gnu.org/software/gnucobol/"
+  ]
+ },
+ {
+  "id": "sql",
+  "name": "SQL",
+  "year": 1974,
+  "year_note": "Chamberlin and Boyce presented \"SEQUEL: A Structured English Query Language\" at the ACM SIGFIDET workshop in May 1974; ANSI standardized SQL in 1986 and ISO in 1987",
+  "designers": [
+   "Donald Chamberlin",
+   "Raymond Boyce"
+  ],
+  "org": "IBM",
+  "family": "query-logic",
+  "level": "apps",
+  "levels": [
+   "apps"
+  ],
+  "paradigms": [
+   "declarative",
+   "relational (set based)"
+  ],
+  "typing": "static column types declared in a schema (strictness varies by database)",
+  "runs": "A database engine parses the query, plans how to answer it, and executes that plan against stored tables; you state what rows you want, not how to find them.",
+  "influenced_by": [
+   "SQUARE (the authors' earlier query language)",
+   "Codd's relational model"
+  ],
+  "what": "SQL is the language for asking questions of relational databases, where data lives in tables. It was created at IBM, first under the name SEQUEL, to make Edgar Codd's relational model usable through English-like keywords. A query describes the result wanted and the database decides how to compute it, which is why the same query works on a phone and on a data warehouse.",
+  "used_for": [
+   "querying and updating databases",
+   "reporting and analytics",
+   "defining schemas and constraints",
+   "application data storage"
+  ],
+  "notable": [
+   {
+    "name": "SQLite",
+    "text": "An in-process SQL database engine found in phones, browsers and countless applications; its authors describe it as the most widely deployed database in the world.",
+    "url": "https://www.sqlite.org/about.html"
+   },
+   {
+    "name": "PostgreSQL",
+    "text": "A major open source object-relational database system that uses and extends the SQL language.",
+    "url": "https://www.postgresql.org/about/"
+   }
+  ],
+  "sample": {
+   "code": "WITH RECURSIVE gcd(a, b) AS (\n  SELECT 48, 18\n  UNION ALL\n  SELECT b, a % b FROM gcd WHERE b <> 0\n)\nSELECT a FROM gcd WHERE b = 0;",
+   "ran": true,
+   "how": "sqlite3 3.51.0, printed 6. SQL has no functions or loops in its core, so Euclid's algorithm is written as a recursive common table expression that produces one row per step."
+  },
+  "official_url": null,
+  "spec_url": null,
+  "sources": [
+   "https://research.ibm.com/publications/sequel-a-struciured-english-query-language",
+   "https://bibtex.github.io/SIGFIDET-1974-ChamberlinB.html",
+   "https://www.ibm.com/think/topics/structured-query-language",
+   "https://www.ibm.com/history/relational-database",
+   "https://www.sqlite.org/lang_with.html"
+  ]
+ },
+ {
+  "id": "prolog",
+  "name": "Prolog",
+  "year": 1972,
+  "year_note": "A preliminary version existed at the end of 1971 and a more definitive version, with the name Prolog, at the end of 1972 in Marseille",
+  "designers": [
+   "Alain Colmerauer",
+   "Philippe Roussel",
+   "with ideas from Robert Kowalski"
+  ],
+  "org": "Colmerauer's research group in Marseille",
+  "family": "query-logic",
+  "level": "languages",
+  "levels": [
+   "languages",
+   "apps"
+  ],
+  "paradigms": [
+   "logic programming",
+   "declarative",
+   "backtracking search"
+  ],
+  "typing": "dynamic",
+  "runs": "A Prolog system loads facts and rules, then answers a query by searching for values that make it true, using unification and backtracking (SLD resolution).",
+  "influenced_by": [
+   "resolution theorem proving (Kowalski's SL-resolution)"
+  ],
+  "what": "Prolog is a logic programming language: a program is a set of facts and rules, and running it means asking a question that the system tries to prove. It came out of a project in Marseille to process natural language, and its name abbreviates the French for programming in logic. The same predicate can often be run in several directions, to check an answer or to search for one.",
+  "used_for": [
+   "natural language processing",
+   "rule-based and expert systems",
+   "symbolic reasoning and constraint solving",
+   "teaching logic programming"
+  ],
+  "notable": [
+   {
+    "name": "IBM Watson",
+    "text": "The Watson system that won Jeopardy! in 2011 used Prolog to express pattern-matching rules over parse trees in its question analysis.",
+    "url": "https://logicprogramming.org/2011/03/natural-language-processing-with-prolog-in-the-ibm-watson-system"
+   },
+   {
+    "name": "The first Erlang",
+    "text": "Erlang started life as a modified Prolog, and its syntax mostly comes from Prolog.",
+    "url": "https://www.erlang.org/faq/academic.html"
+   }
+  ],
+  "sample": {
+   "code": "gcd(A, 0, A) :- !.\ngcd(A, B, G) :- B > 0, R is A mod B, gcd(B, R, G).\n\n:- gcd(48, 18, G), write(G), nl.",
+   "ran": false,
+   "how": "Not run: no Prolog toolchain on this Mac. Expected output: 6. A gcd/3 predicate: the third argument is the result, and the last line is a directive that poses the query when the file is loaded."
+  },
+  "official_url": "https://www.swi-prolog.org/",
+  "spec_url": null,
+  "sources": [
+   "http://alain.colmerauer.free.fr/alcol/ArchivesPublications/PrologHistory/19november92.pdf",
+   "https://www.swi-prolog.org/pldoc/man?section=swiorother"
+  ]
+ },
+ {
+  "id": "bash",
+  "name": "Bash",
+  "year": 1989,
+  "year_note": "Brian Fox's beta release of BASH is reported in the GNU's Bulletin of June 1989",
+  "designers": [
+   "Brian Fox (original author)",
+   "Chet Ramey (current maintainer)"
+  ],
+  "org": "GNU Project (Free Software Foundation)",
+  "family": "shell",
+  "level": "os",
+  "levels": [
+   "os",
+   "networks"
+  ],
+  "paradigms": [
+   "command language",
+   "imperative",
+   "text streams and pipelines"
+  ],
+  "typing": "untyped (values are strings, with integer arithmetic on request)",
+  "runs": "The bash program reads commands one at a time, from a terminal or a script file, expands them and runs them directly, starting other programs as processes and connecting them with pipes.",
+  "influenced_by": [
+   "Bourne shell (sh)",
+   "Korn shell (ksh)",
+   "C shell (csh)"
+  ],
+  "what": "Bash, the Bourne-Again SHell, is the command interpreter of the GNU operating system and both a way to type commands and a programming language. It is a free implementation of the Unix shell standardized by POSIX, with extensions borrowed from the Korn and C shells. Its strength is gluing other programs together, so it is the language of install scripts, build steps and server administration.",
+  "used_for": [
+   "interactive command line",
+   "automation and glue scripts",
+   "build and deployment pipelines",
+   "system startup and administration"
+  ],
+  "notable": [
+   {
+    "name": "GitHub Actions",
+    "text": "In GitHub's CI service, bash is the default shell for run steps on non-Windows runners.",
+    "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax"
+   },
+   {
+    "name": "nvm",
+    "text": "The Node Version Manager, a common developer tool, is a POSIX-compliant bash script.",
+    "url": "https://github.com/nvm-sh/nvm"
+   }
+  ],
+  "sample": {
+   "code": "gcd() {\n  local a=$1 b=$2\n  while (( b != 0 )); do\n    (( t = b, b = a % b, a = t ))\n  done\n  echo \"$a\"\n}\ngcd 48 18",
+   "ran": true,
+   "how": "GNU bash 3.2.57 (the macOS system bash), printed 6."
+  },
+  "official_url": "https://www.gnu.org/software/bash/",
+  "spec_url": "https://www.gnu.org/software/bash/manual/bash.html",
+  "sources": [
+   "https://www.gnu.org/bulletins/bull7.html",
+   "https://www.gnu.org/software/bash/manual/bash.html",
+   "https://tiswww.case.edu/php/chet/bash/FAQ",
+   "https://tiswww.case.edu/php/chet/bash/bashtop.html"
+  ]
+ },
+ {
+  "id": "powershell",
+  "name": "PowerShell",
+  "year": 2006,
+  "year_note": "Windows PowerShell 1.0 was released in November 2006; Jeffrey Snover's Monad Manifesto describing the design is dated August 2002, and PowerShell 6.0 made it open source and cross-platform",
+  "designers": [
+   "Jeffrey Snover"
+  ],
+  "org": "Microsoft",
+  "family": "shell",
+  "level": "os",
+  "levels": [
+   "os",
+   "networks"
+  ],
+  "paradigms": [
+   "command language",
+   "object pipeline",
+   "imperative"
+  ],
+  "typing": "dynamic, with optional type annotations (.NET types)",
+  "runs": "The PowerShell engine interprets commands and scripts on top of the .NET runtime; commands pass .NET objects to each other rather than text.",
+  "influenced_by": [
+   "Unix shells (sh, csh, ksh, bash)"
+  ],
+  "what": "PowerShell is Microsoft's command-line shell and scripting language for automating system administration. Traditional shells pass plain text between commands, which each command must parse again; PowerShell passes structured .NET objects, so a script can read a property instead of cutting columns out of text. It began on Windows and now also runs on Linux and macOS.",
+  "used_for": [
+   "Windows and server administration",
+   "cloud resource management",
+   "build, test and deployment automation",
+   "configuration management"
+  ],
+  "notable": [
+   {
+    "name": "Azure PowerShell",
+    "text": "Microsoft's official set of PowerShell modules for managing Azure resources.",
+    "url": "https://learn.microsoft.com/en-us/powershell/azure/what-is-azure-powershell"
+   },
+   {
+    "name": "Exchange Management Shell",
+    "text": "The command-line administration interface of Microsoft Exchange Server is built on Windows PowerShell.",
+    "url": "https://learn.microsoft.com/en-us/powershell/exchange/exchange-management-shell"
+   }
+  ],
+  "sample": {
+   "code": "function Get-Gcd([int]$a, [int]$b) {\n    while ($b -ne 0) {\n        $a, $b = $b, ($a % $b)\n    }\n    $a\n}\n\nGet-Gcd 48 18",
+   "ran": false,
+   "how": "Not run: no PowerShell toolchain on this Mac. Expected output: 6."
+  },
+  "official_url": "https://learn.microsoft.com/en-us/powershell/",
+  "spec_url": null,
+  "sources": [
+   "https://learn.microsoft.com/en-us/powershell/scripting/install/powershell-support-lifecycle",
+   "https://www.jsnover.com/Docs/MonadManifesto.pdf",
+   "https://learn.microsoft.com/en-us/powershell/scripting/overview",
+   "https://learn.microsoft.com/en-us/powershell/scripting/whats-new/differences-from-windows-powershell"
+  ]
+ },
+ {
+  "id": "html-css",
+  "name": "HTML and CSS",
+  "year": 1990,
+  "year_note": "The WHATWG standard dates HTML's first years to 1990 to 1995, and Tim Berners-Lee began writing the first browser and editor at CERN in October 1990; the CSS story starts in 1994 and CSS level 1 became a W3C Recommendation in December 1996",
+  "designers": [
+   "Tim Berners-Lee (HTML)",
+   "Håkon Wium Lie and Bert Bos (CSS)"
+  ],
+  "org": "CERN originally; now WHATWG (HTML) and W3C (CSS)",
+  "family": "markup-config",
+  "level": "apps",
+  "levels": [
+   "apps",
+   "networks"
+  ],
+  "paradigms": [
+   "markup (HTML)",
+   "declarative style rules (CSS)"
+  ],
+  "typing": "none (not a programming language)",
+  "runs": "A web browser parses the HTML into a tree of elements, applies the CSS rules that match each element, and renders the result as a page.",
+  "influenced_by": [
+   "SGML"
+  ],
+  "what": "HTML and CSS are the two languages every web page is written in. HTML marks up the structure of a document (headings, paragraphs, links, forms) and CSS describes how that structure should look. Neither computes anything by itself: they describe, and the browser does the work. The early HTML was an SGML format, and CSS was added a few years later so that authors could style pages without bending the markup.",
+  "used_for": [
+   "web pages and web applications",
+   "user interface layout and styling",
+   "documents and e-books",
+   "email formatting"
+  ],
+  "notable": [
+   {
+    "name": "The first website",
+    "text": "The first web server and page ran at CERN at the address info.cern.ch, which still hosts a copy of the first website.",
+    "url": "https://info.cern.ch/"
+   },
+   {
+    "name": "EPUB",
+    "text": "The EPUB e-book format, a W3C standard, packages HTML, CSS and SVG content into a single file.",
+    "url": "https://www.w3.org/TR/epub-33/"
+   }
+  ],
+  "sample": {
+   "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>gcd</title>\n<style>\n  p { font-family: monospace; color: darkgreen; }\n</style>\n</head>\n<body><p>gcd(48, 18) = 6</p></body>\n</html>",
+   "ran": false,
+   "how": "Not run: there is nothing to run. HTML and CSS perform no computation, so this minimal page only states the answer and styles it; a browser would display the text gcd(48, 18) = 6 in green monospace type."
+  },
+  "official_url": "https://html.spec.whatwg.org/",
+  "spec_url": "https://html.spec.whatwg.org/",
+  "sources": [
+   "https://html.spec.whatwg.org/multipage/introduction.html",
+   "https://www.w3.org/History.html",
+   "https://www.w3.org/History/19921103-hypertext/hypertext/WWW/MarkUp/MarkUp.html",
+   "https://www.w3.org/Style/CSS20/history.html",
+   "https://www.w3.org/Style/CSS/"
+  ]
+ },
+ {
+  "id": "hcl",
+  "name": "HCL (Terraform)",
+  "year": 2014,
+  "year_note": "Terraform, whose configuration language HCL comes from, was announced on 28 July 2014; the hashicorp/hcl repository was created on 31 July 2014",
+  "designers": [
+   "Mitchell Hashimoto (original parsers)"
+  ],
+  "org": "HashiCorp",
+  "family": "markup-config",
+  "level": "networks",
+  "levels": [
+   "networks",
+   "apps"
+  ],
+  "paradigms": [
+   "declarative",
+   "configuration"
+  ],
+  "typing": "dynamic values checked against a schema supplied by the host application",
+  "runs": "A host tool such as Terraform parses the HCL files, builds a dependency graph of the declared resources, and calls cloud provider APIs to make real infrastructure match the description.",
+  "influenced_by": [
+   "libucl",
+   "nginx configuration"
+  ],
+  "what": "HCL, the HashiCorp configuration language, is a syntax for configuration files that is easier for people to read and write than JSON. Its best known use is Terraform, where blocks declare the servers, networks and databases you want and the tool works out the steps to create them. It is declarative: the file describes an intended end state, not a sequence of actions.",
+  "used_for": [
+   "infrastructure as code",
+   "cloud resource provisioning",
+   "machine image and job definitions",
+   "tool configuration"
+  ],
+  "notable": [
+   {
+    "name": "Terraform",
+    "text": "HashiCorp's infrastructure as code tool, written in Go, whose language is defined in terms of HCL syntax.",
+    "url": "https://developer.hashicorp.com/terraform/language/syntax/configuration"
+   },
+   {
+    "name": "OpenTofu",
+    "text": "A community fork of Terraform under the Linux Foundation, a drop-in replacement that keeps existing HCL configurations working.",
+    "url": "https://opentofu.org/"
+   },
+   {
+    "name": "Nomad",
+    "text": "HashiCorp's workload orchestrator takes its job specifications in HCL.",
+    "url": "https://developer.hashicorp.com/nomad/docs/job-specification"
+   }
+  ],
+  "sample": {
+   "code": "locals {\n  a = 48\n  b = 18\n}\n\noutput \"first_remainder\" {\n  value = local.a % local.b\n}",
+   "ran": false,
+   "how": "Not run: no Terraform on this Mac. HCL declares rather than computes: it has no loops or recursive functions, so Euclid's algorithm cannot be written in it. This Terraform-style block only declares the first step, 48 % 18, which Terraform would report as 12."
+  },
+  "official_url": "https://github.com/hashicorp/hcl",
+  "spec_url": "https://github.com/hashicorp/hcl/blob/main/hclsyntax/spec.md",
+  "sources": [
+   "https://github.com/hashicorp/hcl",
+   "https://api.github.com/repos/hashicorp/hcl",
+   "https://www.hashicorp.com/blog/terraform-announcement",
+   "https://developer.hashicorp.com/terraform/language",
+   "https://developer.hashicorp.com/terraform/language/expressions/operators"
+  ]
+ },
+ {
+  "id": "lean",
+  "name": "Lean",
+  "year": 2013,
+  "year_note": "Leonardo de Moura launched the Lean project at Microsoft Research in 2013; Lean 0.1 was released on 16 June 2014 and Lean 4.0 on 8 September 2023",
+  "designers": [
+   "Leonardo de Moura"
+  ],
+  "org": "Microsoft Research originally; now the Lean Focused Research Organization",
+  "family": "proof",
+  "level": "languages",
+  "levels": [
+   "languages",
+   "compilers"
+  ],
+  "paradigms": [
+   "dependently typed",
+   "functional",
+   "interactive theorem proving (tactics)"
+  ],
+  "typing": "static, dependent types",
+  "runs": "Lean elaborates each definition and proof into terms of its core type theory, which a small kernel checks; ordinary programs are also compiled to efficient code and can be run.",
+  "influenced_by": [],
+  "what": "Lean is both a functional programming language and an interactive theorem prover based on dependent type theory. You can write a program, state a theorem about it and prove the theorem in the same file, and a small trusted kernel checks every proof. Since version 4 Lean is mostly written in Lean itself, and its large community library Mathlib has made it a main vehicle for formalizing modern mathematics.",
+  "used_for": [
+   "formalizing mathematics",
+   "verifying software and algorithms",
+   "proof-carrying programs",
+   "training and testing AI theorem provers"
+  ],
+  "notable": [
+   {
+    "name": "Mathlib",
+    "text": "The community mathematics library of Lean 4, a single repository of formalized mathematics from algebra to analysis.",
+    "url": "https://github.com/leanprover-community/mathlib4"
+   },
+   {
+    "name": "Liquid Tensor Experiment",
+    "text": "In July 2022 the Lean community finished a formal verification of the main theorem of liquid vector spaces by Clausen and Scholze, a challenge Peter Scholze had posed a year and a half earlier.",
+    "url": "https://leanprover-community.github.io/blog/posts/lte-final/"
+   },
+   {
+    "name": "Cedar",
+    "text": "Amazon's open source authorization policy language has a Lean formalization with proofs about its behavior.",
+    "url": "https://github.com/cedar-policy/cedar-spec"
+   }
+  ],
+  "sample": {
+   "code": "def gcd (a b : Nat) : Nat :=\n  if b = 0 then a else gcd b (a % b)\ntermination_by b\ndecreasing_by exact Nat.mod_lt _ (by omega)\n\ntheorem gcd_zero (a : Nat) : gcd a 0 = a := by\n  unfold gcd; simp\n\n#eval gcd 48 18",
+   "ran": true,
+   "how": "Lean 4.36.0 without Mathlib, #eval printed 6 and the theorem was accepted. The termination_by lines prove that the recursion stops, which Lean requires."
+  },
+  "official_url": "https://lean-lang.org/",
+  "spec_url": "https://lean-lang.org/doc/reference/latest/",
+  "sources": [
+   "https://lean-lang.org/doc/reference/latest/Introduction/",
+   "https://lean-lang.org/doc/reference/latest/",
+   "https://lean-lang.org/fro/about/"
+  ]
+ },
+ {
+  "id": "rocq",
+  "name": "Rocq (Coq)",
+  "year": 1989,
+  "year_note": "Version 4.10, the first released system with an extensible set of tactics, came out in 1989; the first implementation of the Calculus of Constructions was started in 1984. The Coq Proof Assistant was renamed the Rocq Prover",
+  "designers": [
+   "Thierry Coquand",
+   "Gérard Huet",
+   "Christine Paulin (inductive types)"
+  ],
+  "org": "Inria",
+  "family": "proof",
+  "level": "languages",
+  "levels": [
+   "languages",
+   "compilers"
+  ],
+  "paradigms": [
+   "dependently typed",
+   "functional",
+   "interactive theorem proving (tactics)"
+  ],
+  "typing": "static, dependent types (Calculus of Inductive Constructions)",
+  "runs": "The Rocq Prover checks definitions and proofs with a relatively small kernel, and can extract certified programs to OCaml, Haskell or Scheme.",
+  "influenced_by": [
+   "Automath",
+   "LCF",
+   "ML (Caml)"
+  ],
+  "what": "Rocq, known as Coq until its recent renaming, is a proof assistant: a language for writing mathematical definitions, programs and proofs that the machine checks step by step. It is built on the Calculus of Inductive Constructions, in which a proof is a program and a theorem is its type. Programs proved correct in it can be extracted to run as ordinary OCaml or Haskell code.",
+  "used_for": [
+   "machine-checked mathematics",
+   "verified compilers and systems software",
+   "programming language theory",
+   "teaching logic and proofs"
+  ],
+  "notable": [
+   {
+    "name": "CompCert",
+    "text": "A C compiler with a machine-checked proof, done in Rocq, that the generated code behaves as the source program's semantics prescribe.",
+    "url": "https://compcert.org/"
+   },
+   {
+    "name": "Four Color Theorem",
+    "text": "The full formal proof of the Four Color Theorem is a Rocq development.",
+    "url": "https://github.com/rocq-community/fourcolor"
+   },
+   {
+    "name": "Odd Order Theorem",
+    "text": "The Feit-Thompson Odd Order Theorem of group theory has a complete formal proof in Rocq.",
+    "url": "https://github.com/math-comp/odd-order"
+   }
+  ],
+  "sample": {
+   "code": "Fixpoint gcd (a b : nat) : nat :=\n  match a with\n  | O => b\n  | S a' => gcd (Nat.modulo b (S a')) (S a')\n  end.\n\nCompute gcd 48 18.\n\nExample gcd_48_18 : gcd 48 18 = 6.\nProof. reflexivity. Qed.",
+   "ran": false,
+   "how": "Not run: no Rocq toolchain on this Mac. Expected: Compute prints 6 and the example is proved by computation. The definition follows the one in Rocq's own core library (Corelib/Init/Nat.v), which recurses on the first argument so that the termination checker accepts it."
+  },
+  "official_url": "https://rocq-prover.org/",
+  "spec_url": "https://rocq-prover.org/doc/V9.0.0/refman/",
+  "sources": [
+   "https://rocq-prover.org/about",
+   "https://rocq-prover.org/doc/V9.0.0/refman/history.html",
+   "https://raw.githubusercontent.com/rocq-prover/rocq/master/theories/Corelib/Init/Nat.v"
+  ]
+ },
+ {
+  "id": "isabelle",
+  "name": "Isabelle",
+  "year": 1986,
+  "year_note": "Lawrence Paulson's paper \"Natural Deduction as Higher-Order Resolution\", which describes Isabelle as under development, appeared in the Journal of Logic Programming in 1986",
+  "designers": [
+   "Lawrence C. Paulson",
+   "Tobias Nipkow",
+   "Makarius Wenzel"
+  ],
+  "org": "University of Cambridge and Technische Universität München",
+  "family": "proof",
+  "level": "languages",
+  "levels": [
+   "languages"
+  ],
+  "paradigms": [
+   "higher-order logic",
+   "interactive theorem proving",
+   "structured proofs (Isar)"
+  ],
+  "typing": "static (the types of higher-order logic, in Isabelle/HOL)",
+  "runs": "Isabelle checks theory files interactively: every proof step is reduced to inferences of a small trusted core in the LCF tradition, and Isabelle/HOL can export executable definitions as SML, OCaml, Haskell or Scala code.",
+  "influenced_by": [
+   "LCF"
+  ],
+  "what": "Isabelle is a generic proof assistant: a system in which mathematical statements are written in a formal language and proved with machine-checked steps. Its most used form, Isabelle/HOL, works in higher-order logic and offers strong automation plus a proof language meant to be read by people. It follows the LCF approach, where only a small core can create theorems, so extensions cannot break soundness.",
+  "used_for": [
+   "verifying operating systems and protocols",
+   "formalized mathematics",
+   "programming language semantics",
+   "generating verified code"
+  ],
+  "notable": [
+   {
+    "name": "seL4",
+    "text": "The seL4 microkernel has a machine-checked proof that it behaves as specified, and those proofs are carried out in Isabelle/HOL.",
+    "url": "https://sel4.systems/Verification/proofs.html"
+   },
+   {
+    "name": "Archive of Formal Proofs",
+    "text": "A refereed, journal-style collection of proof libraries and larger developments, all mechanically checked in Isabelle.",
+    "url": "https://www.isa-afp.org/"
+   }
+  ],
+  "sample": {
+   "code": "theory Euclid imports Main begin\n\nfun euclid :: \"nat \\<Rightarrow> nat \\<Rightarrow> nat\" where\n  \"euclid a b = (if b = 0 then a else euclid b (a mod b))\"\n\nvalue \"euclid 48 18\"\n\nend",
+   "ran": false,
+   "how": "Not run: no Isabelle toolchain on this Mac. Expected: value reports 6. Isabelle/HOL, definition only with no lemma; the fun command must prove termination automatically. Named euclid because Main already defines gcd. \\<Rightarrow> is Isabelle's ASCII spelling of the function arrow."
+  },
+  "official_url": "https://isabelle.in.tum.de/",
+  "spec_url": null,
+  "sources": [
+   "https://arxiv.org/abs/cs/9301104",
+   "https://arxiv.org/abs/1907.02836",
+   "https://isabelle.in.tum.de/",
+   "https://isabelle.in.tum.de/overview.html"
+  ]
+ },
+ {
+  "id": "tlaplus",
+  "name": "TLA+",
+  "year": 1999,
+  "year_note": "Lamport's \"Specifying Concurrent Systems with TLA+\" was published in 1999",
+  "designers": [
+   "Leslie Lamport"
+  ],
+  "org": null,
+  "family": "proof",
+  "level": "networks",
+  "levels": [
+   "networks",
+   "languages"
+  ],
+  "paradigms": [
+   "formal specification",
+   "temporal logic of actions",
+   "set theory"
+  ],
+  "typing": "untyped (ordinary mathematics)",
+  "runs": "A TLA+ specification is not executed: the TLC model checker explores every reachable state of a small instance to look for violations, and the TLAPS proof system checks hand-written proofs.",
+  "influenced_by": [
+   "TLA (Lamport's temporal logic of actions)"
+  ],
+  "what": "TLA+ is a language for describing what a system should do before, or beside, writing its code. A specification is plain mathematics: a formula for the possible starting states and a formula for the allowed steps. It was made for concurrent and distributed systems, where bugs come from rare interleavings of events that testing misses but an exhaustive model checker finds.",
+  "used_for": [
+   "designing distributed protocols",
+   "finding concurrency bugs before coding",
+   "documenting system designs precisely",
+   "checking consensus algorithms"
+  ],
+  "notable": [
+   {
+    "name": "Amazon Web Services",
+    "text": "AWS has used TLA+ since 2011 and its engineers published an article in April 2015 on how it is used on their systems.",
+    "url": "https://lamport.azurewebsites.net/tla/industrial-use.html"
+   },
+   {
+    "name": "Azure Cosmos DB",
+    "text": "Microsoft's Cosmos DB team used TLA+ to specify and validate the core algorithms and the consistency levels of its globally distributed database.",
+    "url": "https://lamport.azurewebsites.net/tla/industrial-use.html"
+   }
+  ],
+  "sample": {
+   "code": "---- MODULE TheAlgorithmInTLA ----\nEXTENDS Integers\nCONSTANTS M, N\nVARIABLES x, y\nInit == (x = M) /\\ (y = N)\nNext == \\/ /\\ x < y\n           /\\ y' = y - x\n           /\\ x' = x\n        \\/ /\\ y < x\n           /\\ x' = x - y\n           /\\ y' = y\n====",
+   "ran": false,
+   "how": "Not run: no TLA+ tools on this Mac. This is Figure 2 of Leslie Lamport's paper \"Euclid Writes an Algorithm: A Fairytale\" (https://lamport.azurewebsites.net/pubs/euclid.pdf), typed in ASCII (12 lines, kept whole). It describes the subtraction form of Euclid's algorithm as an initial condition and a next-state relation; with M = 48 and N = 18 every behavior stops at x = y = 6."
+  },
+  "official_url": "https://lamport.azurewebsites.net/tla/tla.html",
+  "spec_url": "https://lamport.azurewebsites.net/tla/book.html",
+  "sources": [
+   "https://lamport.azurewebsites.net/pubs/pubs.html",
+   "https://lamport.azurewebsites.net/tla/tla.html",
+   "https://lamport.azurewebsites.net/tla/high-level-view.html",
+   "https://lamport.azurewebsites.net/pubs/euclid.pdf"
+  ]
+ },
+ {
+  "id": "dafny",
+  "name": "Dafny",
+  "year": 2008,
+  "year_note": "Microsoft Research lists the Dafny project as established in December 2008; the reference paper \"Dafny: An Automatic Program Verifier for Functional Correctness\" appeared at LPAR-16 in 2010",
+  "designers": [
+   "K. Rustan M. Leino"
+  ],
+  "org": "Microsoft Research originally; now developed as an open source project at dafny.org",
+  "family": "proof",
+  "level": "languages",
+  "levels": [
+   "languages",
+   "compilers"
+  ],
+  "paradigms": [
+   "imperative",
+   "functional",
+   "specifications (pre- and postconditions, invariants)"
+  ],
+  "typing": "static",
+  "runs": "The Dafny verifier translates the program and its specifications to the Boogie intermediate language and asks the Z3 solver to prove them; verified code is then compiled to C#, Java, JavaScript, Go or Python.",
+  "influenced_by": [],
+  "what": "Dafny is a programming language with verification built in. Next to ordinary code you write what each method requires and guarantees, and a static verifier tries to prove, automatically and while you type, that the code meets those promises. It aims to make proving a program correct feel like getting it to compile.",
+  "used_for": [
+   "verified algorithms and data structures",
+   "verified cryptographic and security libraries",
+   "verified distributed systems",
+   "teaching program verification"
+  ],
+  "notable": [
+   {
+    "name": "IronFleet",
+    "text": "Microsoft Research's Ironclad project used Dafny to verify the safety and liveness of practical distributed systems.",
+    "url": "https://www.microsoft.com/en-us/research/project/ironclad/"
+   },
+   {
+    "name": "AWS Encryption SDK for Dafny",
+    "text": "Amazon publishes an implementation of its client-side encryption library, the AWS Encryption SDK, in Dafny.",
+    "url": "https://github.com/aws/aws-encryption-sdk-dafny"
+   }
+  ],
+  "sample": {
+   "code": "function Gcd(a: nat, b: nat): nat\n  decreases b\n{\n  if b == 0 then a else Gcd(b, a % b)\n}\n\nlemma GcdZero(a: nat)\n  ensures Gcd(a, 0) == a\n{}\n\nmethod Main() { print Gcd(48, 18), \"\\n\"; }",
+   "ran": false,
+   "how": "Not run: no Dafny toolchain on this Mac. Expected output: 6. The decreases clause lets the verifier prove termination, and the small lemma is proved automatically by unfolding the definition once."
+  },
+  "official_url": "https://dafny.org/",
+  "spec_url": "https://dafny.org/latest/DafnyRef/DafnyRef",
+  "sources": [
+   "https://www.microsoft.com/en-us/research/project/dafny-a-language-and-program-verifier-for-functional-correctness/",
+   "https://dafny.org/",
+   "https://dafny.org/latest/DafnyRef/DafnyRef"
+  ]
+ },
+ {
+  "id": "solidity",
+  "name": "Solidity",
+  "year": 2014,
+  "year_note": "Solidity was publicly previewed for the first time in November 2014 at Devcon0; version numbering in the codebase began in July 2015",
+  "designers": [
+   "the Solidity team of the Ethereum project"
+  ],
+  "org": "Ethereum Foundation",
+  "family": "contract",
+  "level": "networks",
+  "levels": [
+   "networks",
+   "apps"
+  ],
+  "paradigms": [
+   "contract oriented",
+   "imperative",
+   "object-oriented (inheritance)"
+  ],
+  "typing": "static",
+  "runs": "The solc compiler turns Solidity into bytecode for the Ethereum Virtual Machine; the bytecode is stored on the blockchain and executed by every node of the network when the contract is called.",
+  "influenced_by": [
+   "cpp",
+   "python",
+   "javascript"
+  ],
+  "what": "Solidity is a statically typed, curly-bracket language for writing smart contracts: programs that live on the Ethereum blockchain and control accounts and assets there. Once deployed, a contract runs inside a peer-to-peer network where nobody has special authority over its execution.",
+  "used_for": [
+   "tokens and digital assets",
+   "decentralized exchanges and lending",
+   "voting and crowdfunding contracts",
+   "on-chain governance"
+  ],
+  "notable": [
+   {
+    "name": "Uniswap V2",
+    "text": "The core smart contracts of the Uniswap V2 decentralized exchange are written in Solidity.",
+    "url": "https://github.com/Uniswap/v2-core"
+   },
+   {
+    "name": "OpenZeppelin Contracts",
+    "text": "A widely used library of Solidity building blocks for secure smart contract development.",
+    "url": "https://github.com/OpenZeppelin/openzeppelin-contracts"
+   }
+  ],
+  "sample": {
+   "code": "pragma solidity ^0.8.0;\n\ncontract Euclid {\n    function gcd(uint256 a, uint256 b) public pure returns (uint256) {\n        while (b != 0) {\n            (a, b) = (b, a % b);\n        }\n        return a;\n    }\n}",
+   "ran": false,
+   "how": "Not run: no Solidity toolchain on this Mac. Calling gcd(48, 18) would return 6. A pure function reads and writes no blockchain state. Without the usual SPDX license comment the compiler prints a warning."
+  },
+  "official_url": "https://soliditylang.org/",
+  "spec_url": "https://docs.soliditylang.org/en/latest/",
+  "sources": [
+   "https://soliditylang.org/about/",
+   "https://docs.soliditylang.org/en/latest/",
+   "https://docs.soliditylang.org/en/latest/language-influences.html",
+   "https://github.com/ethereum/solidity",
+   "https://docs.soliditylang.org/en/latest/control-structures.html"
+  ]
+ }
+]

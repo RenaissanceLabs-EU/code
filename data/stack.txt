@@ -1,0 +1,431 @@
+@id learned
+@n 09
+@title Learned programs
+@full Learned programs: code that nobody wrote
+@short Neural networks: programs whose behavior was found by training instead of typed by a person.
+@question Is a neural network a program?
+@lede
+A neural network is a program in the strict sense. It is a fixed sequence of arithmetic, mostly multiplications and additions with a few simple curves between them, carried out by ordinary code on ordinary chips. What is different is where it came from.
+
+The structure of the network is written by people and is short: a few hundred lines. The behavior is not in those lines. It is in the weights, millions or billions of numbers that a training loop adjusted, a little at a time, until the outputs matched examples. Nobody chose any one of those numbers, and none of them comes with a comment.
+
+So there is now important software with no source code in the usual sense. It can be run and it can be tested, but it cannot simply be read. Interpretability research is the attempt to read it anyway.
+
+This level sits at the top of the stack because it runs on everything below. It is also reaching back down: models now write code at every level of this map. For a model that writes programs, the forms of a program are both the curriculum and the examiner. Text and tokens are what it reads. Types, tests and proofs are what judge its work.
+@example Seventeen numbers that compute XOR
+"Exclusive or" is 1 when exactly one of two inputs is 1. No single artificial neuron can compute it, because one neuron can only split its inputs with a straight line, and XOR needs two. A network with one hidden layer of four neurons can. It has 17 adjustable numbers: 8 weights and 4 offsets going in, 4 weights and 1 offset coming out.
+
+Nobody knows in advance which 17 numbers work. Training finds a set, and a different random start finds a different set that does the same job.
+@fig xor
+@figtitle Train a program instead of writing it
+@figcap Press Train. The square shows the network's answer for every pair of inputs between 0 and 1. Corners are the four cases that matter.
+@notice
+- Before training the answers are noise. After a few hundred steps the four corners come out right.
+- "New random start" ends in different numbers with the same behavior. The program is not unique, and no single number in it means anything by itself.
+- Compare this with the gates level, where XOR is built on purpose from a handful of gates and every wire has a reason.
+@ideas
+Weight :: One adjustable number in a network. Large language models have billions.
+Architecture :: The fixed arrangement of arithmetic that the weights plug into. This part is written by people.
+Training :: Repeatedly nudging the weights in the direction that reduces error on examples.
+Loss :: The number that measures how wrong the network currently is. Training pushes it down.
+Inference :: Running the finished network on new input.
+Generalization :: Working correctly on inputs that were not among the training examples.
+Interpretability :: The study of what computation a trained network actually performs inside.
+@rests Compilers, operating systems and chips: training and running a network is ordinary numeric code on GPUs.
+@gives Programs for tasks nobody knows how to write by hand, including the task of writing programs.
+@langs python, cpp, julia
+@models
+Machine learning code is itself code, and teaching models to write it is an active area: benchmarks ask a model to train a network for a given task, reproduce a result from a paper, or speed up a training script. The checks are execution-based (did the score improve), which makes them slow and noisy next to unit tests.
+
+Everything in the [Train](/train/) section of this site belongs to this level: the trainers, the published recipes and the open models themselves. For how models are trained in general, see [Learn](https://learn.renaissancelabs.eu/).
+
+@@@
+@id networks
+@n 08
+@title Networks
+@full Networks and distributed systems: programs that talk
+@short Protocols let machines that share nothing but a wire act as one system.
+@question How do computers that cannot trust the wire, or each other, act as one system?
+@lede
+Almost no program runs alone. It asks other programs on other machines for data, time, names and payments, over networks that can lose, delay, reorder and duplicate anything sent.
+
+What holds this together is the protocol: a precise, published agreement about what bytes mean when they travel between machines. The internet is a stack of them. IP moves a packet toward an address. TCP turns unreliable packets into a reliable stream. DNS turns names into addresses. TLS encrypts. HTTP asks for a page. Each protocol solves one problem and treats everything above it as cargo, so a layer can be replaced with little change to the others, though not none.
+
+Systems spread over many machines face problems a single machine does not have. There is no shared clock, machines fail partway, sometimes many at once, without warning, and a silent machine is indistinguishable from a slow one. Things one computer gets for free, such as a single order of events or a single version of the truth, have to be constructed with algorithms for agreement, and some combinations of guarantees are provably impossible.
+
+At this scale the arrangement of machines is also written down as code. Infrastructure-as-code tools describe servers, networks and permissions in text files, so that a data center can be reviewed, versioned and rebuilt like a program.
+@example What happens when you open a web page
+Typing an address and pressing Enter usually sets off four conversations, each in its own protocol (with HTTP/3, QUIC does the TCP and TLS steps together):
+
+- DNS: ask which numeric address the name belongs to.
+- TCP: open a connection to that address and agree on how to number the bytes.
+- TLS: prove the server is who it claims to be, and agree on encryption keys.
+- HTTP: ask for the page, and receive it.
+
+Each of these travels as packets. Each packet carries the layers nested inside one another, as the figure shows.
+@fig packet
+@figtitle One message, wrapped four times
+@figcap Drag to change the size of the message. Sizes are for the smallest headers on Ethernet with IPv4.
+@notice
+- A one-byte message still costs 58 bytes of headers and trailer, and Ethernet pads a frame that small up to 64 bytes. A large file pays about 4%.
+- On a standard 1,500-byte link, past 1,460 bytes the data no longer fits in one packet and is split. The receiving end reassembles it, and asks again for any piece that went missing.
+- Routers along the way forward using only the IP layer. They neither know nor care that the cargo is a web page.
+@ideas
+Protocol :: A published agreement on the format and order of messages between machines.
+Packet :: A small block of data with a header saying where it is from and where it is going.
+Encapsulation :: Wrapping one protocol's message inside another's, layer by layer.
+Address and name :: Machines are found by number (IP address). People use names, which DNS translates.
+Reliability :: Getting correct, ordered delivery out of a network that promises neither, by numbering, acknowledging and resending.
+Consensus :: Getting several machines to agree on one value even though some may fail. Paxos and Raft are the standard algorithms.
+Replication :: Keeping copies of the same data on several machines, and keeping them consistent.
+Infrastructure as code :: Describing machines, networks and their settings in text files that tools turn into running systems.
+@rests Operating systems, which provide the network stack, and applications, which are the things that talk.
+@gives One global machine: any program can reach any other, and a service can outlive the failure of any computer it runs on.
+@langs go, erlang, elixir, hcl, java, rust, c
+@models
+This level is thin in open training data. Code that configures infrastructure is hard to check without the infrastructure: a correct answer creates real machines, which is slow and costs money. Benchmarks here either compare a model's configuration with a reference, check it with a policy tool, or run it against a simulated cloud.
+
+Protocol and distributed-systems reasoning is thinner still. The bugs depend on timing and failure, which unit tests do not exercise. The methods that do find them, model checking and randomized fault injection, have, to our knowledge, not yet been turned into training environments at scale.
+
+@@@
+@id apps
+@n 07
+@title Applications
+@full Applications and data: the programs people use
+@short Where code meets a human need: state, rules for changing it, and a way for people to reach it.
+@question What is all this machinery for?
+@lede
+An application is where code meets a human need: a browser, a payroll system, a game, a medical record, a spreadsheet. Much of the world's code lives at this level, and most of it is ordinary. It is forms, records, reports and the rules of some organization, written down exactly.
+
+Structurally, an application is state plus rules for changing it. The state has to outlive the program, so it goes in a database. The relational model, proposed by Edgar Codd in 1970, treats data as tables. SQL, developed a few years later, lets questions be asked in a declarative language: you say what you want and the database works out how to fetch it. Transactions guarantee that a change happens completely or not at all, which is why a transfer between two bank accounts cannot lose money halfway.
+
+Above the state sits the interface. The web browser turned into a universal one: a program on any server can show itself on any screen through three languages, HTML for structure, CSS for appearance and JavaScript for behavior.
+
+Not all programming here looks like programming. A spreadsheet formula is a program, and for many people it is the first one they ever write.
+@example Saying what, not how
+A question to a database, in SQL:
+
+```sql
+SELECT item, price * count AS total
+FROM orders
+WHERE price > 3
+ORDER BY total DESC;
+```
+
+Nothing here says how to find the rows, in what order to read the disk, or which index to use. The same query runs unchanged on ten rows or ten billion, and the database chooses a different plan for each. This is declarative code: a description of the result, with the procedure left to the system.
+@fig sheet
+@figtitle A spreadsheet is a program
+@figcap Change a number, or click a tinted cell to see its formula. Formulas support + - * / parentheses and SUM over a range.
+@notice
+- You never say in which order to compute. Each formula names what it depends on, and the sheet derives the order.
+- Make D2 refer to D5 and the sheet reports a loop: a definition that depends on itself has no value.
+- This is the same idea as the SQL query above. State what each thing is, and let the system work out how.
+@ideas
+State :: The data an application has to remember: accounts, documents, orders.
+Database :: A program whose job is to store state safely and answer questions about it.
+Transaction :: A group of changes that takes effect completely or not at all.
+Declarative code :: Code that describes the result wanted and leaves the method to the system.
+Client and server :: The split between the program a person touches and the program that holds the shared state.
+User interface :: The part of a program a person sees and acts on.
+Framework :: A large reusable skeleton that an application fills in, instead of starting from nothing.
+API :: The set of requests one program agrees to answer for others.
+@rests Languages and libraries for the logic, operating systems for files and processes, networks for reaching users.
+@gives The things people actually use computers for, and the records that organizations run on.
+@langs sql, javascript, typescript, html-css, java, csharp, python, php, ruby, swift, kotlin, cobol
+@models
+Most benchmark tasks that involve a whole repository are application code: web frameworks, data libraries, command-line tools. Their tests come with the project, which is what makes them usable as verifiers.
+
+SQL has its own line of work. A model translates a question into a query, and the check is whether the query returns the same rows as a reference query on a real database. Interface code is harder to verify, because "looks right" is not a test, so those benchmarks compare screenshots or drive the page with a script. Data analysis tasks sit between the two: there is an answer to check, but many correct routes to it.
+
+@@@
+@id languages
+@n 06
+@title Languages
+@full Languages and libraries: where programmers work
+@short Notations for computation, each a different bargain between control, safety and ease.
+@question Why are there thousands of programming languages?
+@lede
+A programming language is a notation for computation together with a set of promises about what the notation means. All general-purpose languages can compute the same functions, given enough memory, a fact known as Turing completeness, so the differences between them are not about what is possible. They are about people: what is easy to say, which mistakes are impossible to make, and how much of the machine is hidden.
+
+Every language is a position on a few trade-offs. Control over the machine against safety from your own errors. Speed of the running program against speed of writing it. Checking before the program runs against flexibility while it does. C chooses control. Python chooses ease. Rust tries to have control and safety together and pays in difficulty. SQL gives up convenience at general programming to make one kind of question effortless.
+
+Languages come with libraries: code somebody else already wrote. A modern program is a thin layer of new code over a deep pile of existing packages, and choosing a language mostly means choosing its ecosystem. This is the level where nearly all programmers spend nearly all their time.
+@example One algorithm, forty-four notations
+Euclid's algorithm is the same idea in every language: replace the pair with the smaller number and the remainder, until the remainder is zero. What changes is how much has to be said and what the language checks. In C you declare that the numbers are unsigned integers and manage the loop yourself. In Haskell the function is two equations. In SQL it is a recursive query. In Lean it comes with a proof that it terminates.
+
+Each language page on this site shows the same program, so they can be compared directly.
+@fig langs
+@figtitle The same program in two languages
+@figcap Pick any two of the languages on this site. Each sample was run, or checked against the language's documentation, as recorded on its page.
+@notice
+- Compare C with Python: the types disappear and so does the separate compile step.
+- Compare Python with Haskell or OCaml: the loop disappears, replaced by a function that refers to itself.
+- Compare anything with Verilog or SQL to see languages that do not describe a sequence of steps at all.
+@ideas
+Syntax :: The form of a language: what you are allowed to write.
+Semantics :: The meaning of a language: what happens when what you wrote is run.
+Paradigm :: A style of organizing programs: as steps, as objects, as functions, as rules, as queries.
+Abstraction :: Hiding detail behind a name, so that the user of a thing does not need to know how it works.
+Turing completeness :: The property of being able to express any computation at all. Nearly every general-purpose language has it.
+Standard library :: The code that ships with a language: text, files, collections, networking.
+Package :: A unit of reusable code published for others, with a name and a version.
+Memory safety :: The guarantee that a program cannot read or write memory it does not own. Some languages enforce it and some leave it to the programmer.
+@rests Compilers and runtimes, which make each language real.
+@gives A way for people to state computations in terms of their problem instead of in terms of the machine.
+@langs python, javascript, typescript, java, csharp, cpp, c, go, rust, kotlin, swift, ruby, php, scala, haskell, ocaml, lisp, r, julia, matlab, lua, perl, fortran
+@models
+This is where almost all open training data sits, and it is very uneven. A handful of languages, led by Python, JavaScript, TypeScript and Java, account for most public code and most benchmarks. For many others there is little data and few ways to measure progress. The [languages map](/languages/) shows the count for each.
+
+Two problems are specific to this level. Models trained mostly on one language carry its habits into others. And libraries change faster than models are retrained, so a model will confidently call a function that was removed two versions ago. Benchmarks that are refreshed with new problems, and tasks pinned to specific library versions, are the current defenses.
+
+@@@
+@id compilers
+@n 05
+@title Compilers
+@full Compilers and runtimes: translation between languages
+@short Programs that turn readable code into machine instructions, and the machinery that keeps it running.
+@question How does text a person can read become instructions a machine can run?
+@lede
+Almost nobody writes machine code by hand. A compiler is a program that translates a program: it reads source in a language people can work in and writes out the same computation in the language of a machine. The forms described on the program map (tokens, tree, types) are its first stages. The later stages choose instructions, decide which values live in which registers, and rearrange the code to run faster without changing what it means.
+
+There are other ways to make a language run. An interpreter reads the program and carries it out directly. A virtual machine defines an imaginary processor with its own instruction set, so the same compiled program runs on any real one, which is how Java, Python and WebAssembly work. A just-in-time compiler translates the parts of a program that turn out to be used most, while it is running.
+
+A runtime also provides services the language promises, above all memory management. A garbage collector finds memory the program can no longer reach and takes it back, which removes a whole class of errors at some cost in speed and predictability.
+
+One fact here is easy to pass over. A compiler is itself a program, often written in the language it compiles, and compiled by an earlier version of itself. Every program you run was shaped by a chain of such tools that you have to trust.
+@example One line, two translations
+The function `add(a, b)` that returns `a + b`, compiled from C by Clang for a 64-bit ARM processor, becomes one machine instruction and a return:
+
+```asm
+add  w0, w1, w0
+ret
+```
+
+The same function in Python is compiled to instructions for Python's virtual machine (shown here for Python 3.9):
+
+```bytecode
+LOAD_FAST   a
+LOAD_FAST   b
+BINARY_ADD
+RETURN_VALUE
+```
+
+The C version knows at compile time that both values are 32-bit integers and emits the processor's own add. The Python version cannot know what `a` and `b` will be, so `BINARY_ADD` looks at them every time it runs and decides then whether to add numbers, join text or call something else. That decision, made over and over, is one of the main reasons for the speed difference between the two languages.
+@fig compile
+@figtitle The compiler does the arithmetic so the machine does not have to
+@figcap Edit the program. Left: translated instruction by instruction. Right: after constant folding, the simplest optimization.
+@notice
+- `60 * 60 * 24` becomes a single `PUSH 86400`. The multiplication happened once, at compile time.
+- `seconds * 7` is not folded, because this simple pass does not track what a variable holds. Production compilers do, and would fold the entire program down to one print.
+- Both versions print the same thing. An optimization that changed the output would be a compiler bug, and such bugs do exist.
+@ideas
+Compiler :: A program that translates source code into another language, usually machine code, before it runs.
+Interpreter :: A program that carries out source code directly, without producing a separate translation.
+Intermediate representation :: The compiler's internal form of a program, between the source tree and machine code, where most optimization happens.
+Optimization :: Rewriting a program to use less time or memory while preserving its meaning.
+Virtual machine :: An imaginary processor implemented in software, with its own instruction set (bytecode).
+Just-in-time compilation :: Compiling parts of a program to machine code while it is already running.
+Garbage collection :: Automatic recovery of memory that the program can no longer reach.
+Linker :: The tool that joins separately compiled pieces, and libraries, into one runnable program.
+Bootstrapping :: Building a compiler with an earlier version of itself.
+@rests Machine code, which is what compilers produce, and operating systems, which load and run the result.
+@gives Every language above. Without translation there would be only machine code.
+@langs c, cpp, rust, zig, java, ocaml, haskell, wasm, go
+@models
+The compiler is the most used verifier in practice. "Does it build" is a faster and stricter check than most tests, and its error messages are the richest feedback a model gets during a coding session.
+
+Translation between languages is a long-standing benchmark task, usually judged by running the translated program against tests. Work inside the compiler, such as choosing optimizations or generating intermediate code, has datasets too, though far fewer. It also has one unusual property: the output can sometimes be checked for equivalence with the input, which is a guarantee that a test suite cannot give.
+
+@@@
+@id os
+@n 04
+@title Operating systems
+@full Operating systems: many programs, one machine
+@short The program in charge once the machine has booted, giving every other program its own share of it.
+@question How do a hundred programs share one processor without knowing about each other?
+@lede
+A bare machine runs one program, and that program controls everything. An operating system is the program that takes charge once the machine has booted, and stays in charge. It gives each other program a slice of processor time, a private region of memory, and access to files, screens and networks, but only through requests the system can check. Those requests are called system calls.
+
+The result is that every program gets the illusion of having a machine to itself. The core of the system, the kernel, enforces the boundaries using features built into the processor, so that one program cannot read another's memory by ordinary means.
+
+The abstractions an operating system provides are the ones every programmer thinks in: process, file, user, permission, socket. The shell is a language for working with them: start programs, connect the output of one to the input of another, automate the lot.
+
+The same machinery now does a new job. Containers and sandboxes are operating system features that give a program a restricted view of the machine. They are one of the ways code written by a model is run without trusting it, often together with virtual machines.
+@example Printing is something a program asks for
+A program that prints "hello" does not write to the screen. It cannot: the screen belongs to the system. At the bottom, what it does is make two requests:
+
+```syscalls
+write(1, "hello\n", 6)     ask the system to send 6 bytes to output number 1
+exit_group(0)               ask the system to end this process (the C library's exit(0) ends up here)
+```
+
+Output number 1 is "standard output". Whether that is a terminal window, a file or the input of another program is decided outside the program, which never needs to know. Much of the power of Unix-like systems comes from that one decision.
+@fig sched
+@figtitle One processor, three programs
+@figcap Drag the time slice. The system runs each program for that long, then switches to the next one in line.
+@notice
+- With a slice of 1 or 2 units, all three programs start almost at once and the short one finishes early.
+- With a long slice the system runs one program to the end before it starts the next. Music, which needs only 3 units, waits behind the download and the editor for 15.
+- Every switch has a cost that this figure does not draw. Real systems choose slices from a few milliseconds to a few tens of milliseconds as a compromise.
+@ideas
+Kernel :: The core of an operating system: the one program with full control of the hardware.
+Process :: A running program, with its own memory and its own share of processor time.
+System call :: A request from a program to the kernel: open this file, send these bytes, start this process.
+Virtual memory :: The arrangement that gives each process its own private address space, mapped onto real memory by the kernel.
+File :: A named sequence of bytes that outlives the program that wrote it.
+Scheduler :: The part of the kernel that decides which process runs next, and for how long.
+Privilege :: The processor's distinction between kernel code, which may do anything, and ordinary code, which may not.
+Shell :: A program that reads commands and runs other programs. Also the language those commands are written in.
+Container :: A process, or group of them, given a restricted and private view of the system.
+@rests Machine code and the processor's privilege features.
+@gives Processes, files, permissions and isolation: the environment every other program assumes.
+@langs c, rust, assembly, bash, powershell, zig
+@models
+A coding agent works at this level whether or not its task is about operating systems. It runs commands, reads files, installs packages and starts processes. Terminal benchmarks test this directly: a task is described, the model works in a shell inside a container, and a script inspects the final state of the system.
+
+The sandboxes used for all execution-based training are filed here too, because isolation is an operating system feature. Their settings (no network, limited memory, limited processes, tests out of reach) decide whether a reward can be trusted. Work on kernels themselves is rarer in open data, though kernel history is one of the largest and best documented records of change in existence.
+
+@@@
+@id machine
+@n 03
+@title Machine code
+@full Machine code: the instructions a processor understands
+@short A processor fetches a number, treats it as an instruction, executes it, and moves to the next.
+@question What does a processor actually do?
+@lede
+A processor is a circuit that does one thing for as long as it has power: fetch the next instruction from memory, work out what it says, carry it out, move on. Instructions are numbers. The list of numbers a given processor understands, and what each one does, is its instruction set. Three families cover most of the world's machines: x86-64 in desktops and servers, ARM in phones and a growing share of everything else, and the open RISC-V.
+
+Individual instructions are tiny. Add two registers. Copy a value from memory. Compare two numbers. Jump to another address if the comparison came out a certain way. Everything any software does is built from steps of that size.
+
+The idea that organizes all of it is the stored program. In most computers instructions are kept in the same memory as data, in the same form. A program is therefore data: it can be loaded, copied, sent, and written by another program. That is what lets one machine change jobs by loading a new program, and it is what makes compilers possible. It is also what makes some attacks possible, when data supplied by a stranger ends up being run as instructions.
+
+Assembly language is machine code with names in place of numbers, one line per instruction.
+@example Euclid's algorithm in ARM machine code
+The C version of `gcd`, compiled by Clang for a 64-bit ARM processor. On the left, the 32-bit word that encodes each instruction (in memory its lowest byte comes first). On the right, the same thing in assembly:
+
+```asm
+340000e1    cbz   w1, done        if b is zero, skip to the end
+aa0103e8    mov   x8, x1          keep a copy of b
+1ac10809    udiv  w9, w0, w1      q = a / b
+1b018121    msub  w1, w9, w1, w0  b = a - q * b   (the remainder)
+aa0803e0    mov   x0, x8          a = old b
+35ffff81    cbnz  w1, loop        if b is not zero, go around again
+```
+
+This processor has no instruction for remainder. The compiler builds `a % b` from a division, a multiplication and a subtraction. The loop itself is five instructions, 20 bytes, plus the test before it.
+@fig cpu
+@figtitle Fetch, decode, execute
+@figcap A made-up processor with two registers and six kinds of instruction, small enough to watch. Set the starting values and step.
+@notice
+- The program is the 16 bytes in the left column. The names beside them are for you. The processor sees only the numbers.
+- "pc" is the program counter: the address of the next instruction. A jump is nothing more than writing a new number into it.
+- This version finds the greatest common divisor by repeated subtraction, because the machine is too simple to divide. Simpler hardware means longer programs.
+@ideas
+Instruction set :: The complete list of instructions a processor understands. The contract between hardware and software.
+Register :: One of a few very fast storage slots inside the processor.
+Memory address :: The number that identifies one byte of memory.
+Program counter :: The register that holds the address of the next instruction.
+Fetch, decode, execute :: The cycle a processor repeats: read an instruction, interpret it, carry it out.
+Stored program :: Keeping instructions in the same memory as data, so programs can be handled like any other data.
+Assembly language :: A readable notation for machine code, one line per instruction.
+Executable :: A file of machine code in the format an operating system knows how to load.
+@rests Logic gates: registers, adders and the circuits that decode instructions.
+@gives A fixed, documented set of instructions that all software can be translated into.
+@langs assembly, wasm, c
+@models
+Open training data thins out sharply here. Assembly is a small share of public code, and what exists is scattered across processor families. The best-developed task is decompilation: given machine code, recover readable source. It has a natural check, since the recovered source can be recompiled and run against the original.
+
+Binary analysis for security is the other main use: finding vulnerabilities in programs for which no source is available. Models that read and write machine code well would matter a great deal, in both directions, which is one reason careful evaluation at this level is worth having.
+
+@@@
+@id gates
+@n 02
+@title Logic gates
+@full Logic: from switches to arithmetic
+@short A few switches make a gate. Gates make adders and memory. This is where computation first appears.
+@question How do switches add two numbers?
+@lede
+Wire a few transistors together and you get a gate: a circuit that computes one tiny logical function. AND gives 1 when both inputs are 1. OR gives 1 when either is. NOT flips its input.
+
+In his 1937 master's thesis Claude Shannon showed that the algebra George Boole had devised for reasoning about true and false describes circuits of switches exactly. From then on, designing a circuit was a problem in logic. Any function from bits to bits can be built out of gates, and in fact out of a single kind, NAND, used over and over.
+
+Two more ingredients make a computer. Feed two gates' outputs back into each other's inputs and the circuit can hold a bit: memory. Add a clock that ticks, and the circuit can step from one state to the next. Arithmetic, memory and sequence are then all present, and nothing above this level adds a new capability. Everything above is organization.
+
+Hardware is itself designed in code. A hardware description language such as Verilog or VHDL describes a circuit as text, which tools turn into gates. It differs from software in one deep way: it describes things that all happen at once, not a list of steps.
+@example Adding in binary
+Adding 100 and 58 by hand in binary works like addition in decimal: add each column, write the low digit, carry the rest.
+
+```binary
+    0110 0100     100
+  + 0011 1010      58
+  -----------
+    1001 1110     158
+```
+
+One column needs a circuit with three inputs (two digits and the carry in) and two outputs (the sum digit and the carry out). That circuit is called a full adder, and it can be built from nine NAND gates. Eight of them in a row add two 8-bit numbers.
+@fig adder
+@figtitle An eight-bit adder, carry by carry
+@figcap Click any bit of A or B to flip it. Each column is one full adder, and the carry passes from right to left.
+@notice
+- Set A to 255 and B to 1. The carry ripples through all eight stages, and the answer has to wait for it. Fast processors use cleverer adders for exactly this reason.
+- Push the sum past 255. The ninth bit has nowhere to go, and the result wraps around. Integer overflow, a source of real software bugs, begins here.
+- Nothing in the circuit knows what a number is. It combines bits by fixed rules, and we read the result as arithmetic.
+@ideas
+Logic gate :: A small circuit computing a logical function of one or two bits.
+Boolean algebra :: The algebra of true and false, with operations AND, OR and NOT.
+Truth table :: A list of a circuit's output for every combination of inputs.
+Universality :: The fact that every logical function can be built from NAND gates alone.
+Combinational logic :: Circuits whose output depends only on the current inputs, such as an adder.
+Sequential logic :: Circuits with memory, whose output also depends on what happened before.
+Flip-flop :: A circuit that stores one bit and changes it only on a clock tick.
+Hardware description language :: A language for describing circuits as text. Verilog and VHDL are the main ones.
+Synthesis :: Automatic translation of a hardware description into gates.
+@rests Transistors, which are the switches gates are made of.
+@gives Arithmetic, memory and timed steps: the raw material of a processor.
+@langs verilog, vhdl
+@models
+Hardware description is a real and growing target for models, with its own benchmarks. A model is asked to write a Verilog module, and the result is simulated against a testbench, the hardware equivalent of a unit test.
+
+Open training data is scarce next to software. Most serious chip designs are proprietary, and the public Verilog on code hosts is far smaller than what exists for Python. Mistakes are also far more expensive: a bug in software is patched, while a bug in a manufactured chip can be fixed only by a new design, or worked around. Formal verification is routine in hardware for that reason, and it gives models at this level an unusually strong checker to learn against.
+
+@@@
+@id physics
+@n 01
+@title Transistors
+@full Transistors: switches made of matter
+@short At the bottom there is no code, only physics arranged so that it can hold a yes or a no.
+@question How can a piece of sand hold a yes or a no?
+@lede
+At the bottom of the stack there is no code. There is a transistor: a switch with no moving parts, in which a voltage on one terminal decides whether current may flow between the other two. On and off, 1 and 0. A current processor holds tens of billions of them, and the largest chips hundreds of billions on a piece of silicon the size of a fingernail.
+
+Everything above this level is an arrangement of these switches and a pattern of charge held in them. When a program runs, charge moves. That is the whole physical story of software.
+
+The important idea at this level is the digital abstraction. Real voltages are never exactly high or exactly low, but each circuit pushes whatever it receives firmly to one side or the other before passing it on. Small errors are erased at every step instead of piling up. This is why a bit can be copied a trillion times and still be exactly the same bit, why software can be duplicated without loss, and why a computation can run for billions of steps and stay exact. Analog machines cannot do this, and it is the property the rest of the stack depends on.
+
+The costs are physical too. Every switch uses energy and gives off heat, and transistors are now so small that the atomic structure of the material sets limits.
+@example Four transistors make a decision
+The most common kind of chip pairs two types of transistor. One type conducts when its control input is 1, and the other conducts when its input is 0. Connect two of the first kind in a chain to ground, and two of the second kind side by side to the supply, and the output is 0 only when both inputs are 1.
+
+That circuit is a NAND gate: "not both". It takes four transistors, and the next level up shows that everything else can be built from it.
+@fig nand
+@figtitle A NAND gate as four switches
+@figcap Click A and B. The upper switches close when their input is 0, the lower ones when it is 1.
+@notice
+- For every combination of inputs, the output is connected to the supply or to ground, never both and never neither. That is what keeps the signal clean.
+- Only with A and B both at 1 is there a path to ground.
+- Almost no current flows from supply to ground once the output has settled, only a small leak. That is why this design, called CMOS, can pack billions of switches together.
+@ideas
+Transistor :: A switch controlled by a voltage, with no moving parts.
+Bit :: One binary choice, 0 or 1. In a chip it is a voltage or a stored charge.
+CMOS :: The standard chip technology, which pairs two complementary kinds of transistor so that one is off whenever the other is on.
+Digital abstraction :: Treating a range of voltages as simply 0 or 1, and restoring the signal at every stage so errors do not build up.
+Clock :: A signal that ticks at a steady rate and keeps all parts of a chip in step.
+Moore's law :: Gordon Moore's 1965 observation that the number of components on a chip was doubling at a regular rate.
+Lithography :: The process of printing circuit patterns onto silicon with light.
+@rests Semiconductor physics and the manufacturing that shapes it.
+@gives Reliable switches: bits that can be set, kept, copied and combined.
+@langs
+@models
+No dataset in our catalog sits at this level, and none is filed here. It is on the map because it is where the capacity to train comes from. The size of the models that can be trained, and the cost of running them, are limited by how many transistors fit on a chip and how much energy each one uses, along with memory bandwidth and how chips are connected.
+
+For how chips shape what models can be built, see the films on hardware and frontier training at [Learn](https://learn.renaissancelabs.eu/).

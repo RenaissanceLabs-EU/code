@@ -10,20 +10,31 @@
 <meta property="og:image" content="https://code.renaissancelabs.eu/assets/og/about.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="About and method | Renaissance Labs Code"><meta property="og:site_name" content="Renaissance Labs Code">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://code.renaissancelabs.eu/assets/og/about.jpg"><meta name="twitter:title" content="About and method | Renaissance Labs Code"><meta name="twitter:description" content="How this catalog was built and verified, what it does not cover, and how to contribute a correction."><meta name="theme-color" content="#121311">
 <link rel="icon" href="/assets/favicon.png">
-<link rel="stylesheet" href="/styles.css?v=a7072e73">
+<link rel="stylesheet" href="/styles.css?v=33e4a37a">
 <script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="bar">
   <a class="brand" href="/"><img src="/assets/mark.png" alt=""><span>Renaissance Labs &middot; Code</span></a>
-  <nav><a href="/catalog/">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/pitfalls/">Pitfalls</a><a href="/about/" aria-current="page">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
+  <nav><a href="/program/">Program</a><a href="/stack/">Stack</a><a href="/languages/">Languages</a><a href="/world/">World</a><a href="/intelligence/">Intelligence</a><a href="/train/">Train</a><a href="/about/" aria-current="page">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
   <button class="theme" id="theme" type="button" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
 </header>
 <main id="main">
-<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / About</div><span class="eyebrow">About</span><h1>About this <em>catalog</em></h1><p class="lede">How entries were verified, what is missing, and how to correct us.</p></div><div class="prose"><h2>What this is</h2>
-<p>Renaissance Labs Code is a catalog of the things you need to train and evaluate a coding model: pretraining corpora, instruction and reasoning data, preference data, environments with verifiable rewards, benchmarks, models, papers, and tools. It is built to be used, so each entry says what it is for, which stage it fits, and what can go wrong. The <a href="/recipe/">recipe builder</a> and the <a href="/guide/">guide</a> turn the catalog into a plan.</p>
-<h2>How entries were verified</h2>
+<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / About</div><span class="eyebrow">About</span><h1>About this <em>site</em></h1><p class="lede">How the maps were made, how every fact and entry was verified, what is missing, and how to correct us.</p></div><div class="prose"><h2>What this is</h2>
+<p>Renaissance Labs Code is a map of what code is, with working resources attached. It has four maps and one practical section. <a href="/program/">What a program is</a> follows one small program through the eight forms it takes, from text to proof. <a href="/stack/">The stack</a> covers the nine levels a computer is built in, from transistors to trained models. <a href="/languages/">The languages</a> places 44 programming languages on that stack. <a href="/world/">Code in the world</a> collects sourced facts about the software society depends on. The <a href="/train/">Train</a> section is a verified catalog of datasets, benchmarks, environments and tools for teaching models to write code, with a <a href="/recipe/">recipe builder</a> and a <a href="/guide/">guide</a>.</p>
+<p>The idea is that the two halves need each other. You cannot train a model well on something you do not understand, and the checks that make code trainable (parsing, types, tests, proofs) are the same things that explain what code is.</p>
+<h2>How the figures work</h2>
+<p>The interactive figures are not animations. The program figures run on a small language implemented for this site: a lexer, a parser, a type checker with inference, a compiler to bytecode and a stack machine, about 300 lines of JavaScript that you can read at <a href="/lang.js">/lang.js</a>. What a figure shows is computed from what you type. The neural network on the learned programs page is trained in your browser, and the adder, the processor and the cellular automaton are simulated, not drawn.</p>
+<h2>How the maps were verified</h2>
+<ul>
+<li><b>Languages</b>: years, designers, influences and the systems said to be written in each language were read from official sites, specifications, the designers' own pages and repository statistics on the date shown. Each language page lists its sources. The sample program on each page was run on a real toolchain where one was installed, and the page says whether it was.</li>
+<li><b>Landmarks</b>: each dated landmark links to the paper, standard or archive it was checked against.</li>
+<li><b>Code in the world</b>: every fact links to its source with a date. Widely repeated numbers that we could not trace to a readable primary source were left out, and the page lists them.</li>
+<li><b>Code samples in the text</b>: the machine code and bytecode shown were produced on the day by the real compilers named beside them. The Lean proof was accepted by Lean 4.</li>
+<li><b>Filing</b>: catalog entries are placed under forms and levels by written rules plus hand corrections. Language coverage counts only languages that a resource's own documentation lists. Where the documentation is silent, the resource is not counted for any language.</li>
+</ul>
+<h2>How catalog entries were verified</h2>
 <p>Every entry was checked against a primary source on the date shown on its page. Licenses, sizes and activity come from the Hugging Face API, dataset and model cards, the GitHub API, papers and official documentation. When a field could not be confirmed, it is left empty and the caveats say so. Nothing in the catalog was filled in from memory.</p>
 <ul>
 <li><b>Links</b>: every external link in the data files was requested before release. The result is recorded in the repository (<code>notes/link-report.json</code>).</li>
@@ -38,7 +49,7 @@
 <li>Safety: running model-written code is dangerous. The sandbox snippets reduce risk and are not a substitute for a reviewed isolation setup.</li>
 </ul>
 <h2>Data and reuse</h2>
-<p>The catalog is available as <a href="/data/resources.json">JSON</a>, <a href="/data/resources.csv">CSV</a>, <a href="/data/taxonomy.json">taxonomy</a> and <a href="/data/snippets.json">snippets</a>, and as <a href="/llms.txt">llms.txt</a> for language models. The schema is documented in the repository under <code>data/SCHEMA.md</code>. Site text and data are released under CC BY 4.0, and the generator code under MIT. Linked resources keep their own licenses.</p>
+<p>The catalog is available as <a href="/data/resources.json">JSON</a>, <a href="/data/resources.csv">CSV</a>, <a href="/data/taxonomy.json">taxonomy</a> and <a href="/data/snippets.json">snippets</a>. The maps are available too: <a href="/data/program.json">program</a>, <a href="/data/stack.json">stack</a>, <a href="/data/languages.json">languages</a>, <a href="/data/landmarks.json">landmarks</a> and <a href="/data/world.json">world</a>. Everything is also listed and as <a href="/llms.txt">llms.txt</a> for language models. The schema is documented in the repository under <code>data/SCHEMA.md</code>. Site text and data are released under CC BY 4.0, and the generator code under MIT. Linked resources keep their own licenses.</p>
 <h2>Corrections</h2>
 <p>If an entry is wrong, stale or missing, open an issue or pull request on the repository. Include the primary source. Entries are re-checked from time to time and each shows its check date.</p>
 <h2>Who</h2>
@@ -47,8 +58,8 @@
 </main>
 <footer class="wrap foot">
   <a class="brand" href="https://renaissancelabs.eu"><img src="/assets/mark.png" alt="">Renaissance Labs</a>
-  <div class="foot-links"><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
+  <div class="foot-links"><a href="/catalog/">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
 </footer>
-<script src="/app.js?v=a7072e73" defer></script>
+<script src="/app.js?v=33e4a37a" defer></script>
 </body>
 </html>

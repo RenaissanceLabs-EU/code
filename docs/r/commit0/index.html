@@ -10,37 +10,38 @@
 <meta property="og:image" content="https://code.renaissancelabs.eu/assets/og/r-commit0.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Commit0: Benchmark | Renaissance Labs Code"><meta property="og:site_name" content="Renaissance Labs Code">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://code.renaissancelabs.eu/assets/og/r-commit0.jpg"><meta name="twitter:title" content="Commit0: Benchmark | Renaissance Labs Code"><meta name="twitter:description" content="Agent must implement a library from its spec using interactive unit tests; measures long-form spec following."><meta name="theme-color" content="#121311">
 <link rel="icon" href="/assets/favicon.png">
-<link rel="stylesheet" href="/styles.css?v=a7072e73">
+<link rel="stylesheet" href="/styles.css?v=33e4a37a">
 <script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="bar">
   <a class="brand" href="/"><img src="/assets/mark.png" alt=""><span>Renaissance Labs &middot; Code</span></a>
-  <nav><a href="/catalog/" aria-current="page">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/pitfalls/">Pitfalls</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
+  <nav><a href="/program/">Program</a><a href="/stack/">Stack</a><a href="/languages/">Languages</a><a href="/world/">World</a><a href="/intelligence/">Intelligence</a><a href="/train/" aria-current="page">Train</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
   <button class="theme" id="theme" type="button" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
 </header>
 <main id="main">
-<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/catalog/">Catalog</a> / <a href="/stage/eval/">Eval</a></div>
+<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/train/">Train</a> / <a href="/catalog/">Catalog</a> / <a href="/stage/eval/">Eval</a></div>
 <span class="eyebrow">Benchmark &middot; 2024-12</span><h1>Commit0</h1><p class="lede">Agent must implement a library from its spec using interactive unit tests; measures long-form spec following.</p></div>
 <div class="layout"><div class="prose">
 <h2>How to use it</h2><p>Use as an expensive stress test for from-scratch library generation.</p>
 <h2>Caveats</h2><p>Execution-based (unit tests). Small (54 libraries). Repo last pushed 2026-02. Libraries are public so leakage is possible. HF dataset metadata has no license field.</p>
 
-<h2>Related</h2><ul><li><a href="/r/projecteval/">ProjectEval</a>: Project-level generation benchmark with three input levels, evaluated by simulated user interaction plus code...</li><li><a href="/r/swe-bench/">SWE-bench (full)</a>: Real GitHub issue plus repository; the agent must produce a patch that passes the repo&#x27;s own tests...</li><li><a href="/r/swe-bench-train/">SWE-bench (full, train/test splits)</a>: The original 2,294-issue benchmark, now with eval_script, image and log_parser columns. A SWE-bench-Train...</li><li><a href="/r/swe-bench-lite/">SWE-bench Lite</a>: A cheaper filtered subset of SWE-bench for faster...</li><li><a href="/r/swe-bench-verified/">SWE-bench Verified</a>: 500-task subset screened by human annotators for solvable, well-specified problems; long the headline agentic...</li><li><a href="/r/swe-bench-live/">SWE-bench-Live</a>: Continuously updated issue-resolution benchmark with docker_image, test_cmds and rebuild_cmds per task,...</li></ul>
+<h2>Related</h2><ul><li><a href="/r/projecteval/">ProjectEval</a>: Project-level generation benchmark with three input levels, evaluated by simulated user interaction plus code...</li><li><a href="/r/web-bench/">Web-Bench</a>: Web development benchmark from ByteDance built around web standards and frameworks. Tasks in a project build...</li><li><a href="/r/da-code/">DA-Code</a>: Agentic data science benchmark from EMNLP 2024: data wrangling and analytics tasks over real data, solved by...</li><li><a href="/r/lca-ci-builds-repair/">Long Code Arena: CI builds repair</a>: Each item is a failing GitHub Actions run with its logs, the workflow file and the commit that later fixed...</li><li><a href="/r/ml-bench/">ML-Bench</a>: Tests whether a model can use existing machine learning repositories: read the documentation and code, then...</li><li><a href="/r/refactorbench/">RefactorBench</a>: Multi-file refactoring tasks in popular open-source repositories, built to test whether an agent keeps track...</li></ul>
 </div><aside class="aside"><div class="panel"><h3>At a glance</h3><dl>
 <dt>Source</dt><dd><a href="https://huggingface.co/datasets/commit0/commit0">huggingface.co/datasets/commit0/commit0</a></dd>
 <dt>License</dt><dd>MIT (GitHub repo)</dd><dt>Size</dt><dd>54 library-from-scratch tasks (HF test split)</dd>
 <dt>Stage</dt><dd><a class="pill st st-eval" href="/stage/eval/">Eval</a></dd>
-<dt>Languages</dt><dd>python</dd><dt>Tasks</dt><dd>Agentic (multi-step, tools), Repository-level, Function generation</dd><dt>Difficulty</dt><dd>frontier</dd>
+<dt>Languages</dt><dd><a href="/languages/python/">Python</a> <small>(source lists 1 in all)</small></dd>
+<dt>Form</dt><dd><a class="pill" href="/program/tests/">Tests</a> <a class="pill" href="/program/change/">Change</a></dd><dt>Stack level</dt><dd><a class="pill" href="/stack/apps/">Applications</a> <a class="pill" href="/stack/languages/">Languages</a></dd><dt>Tasks</dt><dd>Agentic (multi-step, tools), Repository-level, Function generation</dd><dt>Difficulty</dt><dd>frontier</dd>
 <dt>Checked</dt><dd>2026-11-24</dd></dl></div>
 <div class="panel"><h3>More links</h3><ul><li><a href="https://arxiv.org/abs/2412.01769">Paper</a></li><li><a href="https://github.com/commit-0/commit0">GitHub</a></li></ul></div>
 <div class="panel"><h3>Evidence</h3><p class="mono">huggingface.co/api/datasets/commit0/commit0 test=54; github.com/commit-0/commit0 MIT; arxiv.org/abs/2412.01769</p></div></aside></div></div></div>
 </main>
 <footer class="wrap foot">
   <a class="brand" href="https://renaissancelabs.eu"><img src="/assets/mark.png" alt="">Renaissance Labs</a>
-  <div class="foot-links"><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
+  <div class="foot-links"><a href="/catalog/">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
 </footer>
-<script src="/app.js?v=a7072e73" defer></script>
+<script src="/app.js?v=33e4a37a" defer></script>
 </body>
 </html>

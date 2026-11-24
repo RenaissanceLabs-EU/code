@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CommitChronicle: Dataset | Renaissance Labs Code</title>
+<meta name="description" content="Commits with diffs, messages, author ids and dates, collected by JetBrains Research so that models can use a repository&#x27;s history when writing a commit message.">
+<link rel="canonical" href="https://code.renaissancelabs.eu/r/commit-chronicle/">
+<meta property="og:title" content="CommitChronicle: Dataset | Renaissance Labs Code"><meta property="og:description" content="Commits with diffs, messages, author ids and dates, collected by JetBrains Research so that models can use a repository&#x27;s history when writing a commit message."><meta property="og:url" content="https://code.renaissancelabs.eu/r/commit-chronicle/"><meta property="og:type" content="website">
+<meta property="og:image" content="https://code.renaissancelabs.eu/assets/og/r-commit-chronicle.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="CommitChronicle: Dataset | Renaissance Labs Code"><meta property="og:site_name" content="Renaissance Labs Code">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://code.renaissancelabs.eu/assets/og/r-commit-chronicle.jpg"><meta name="twitter:title" content="CommitChronicle: Dataset | Renaissance Labs Code"><meta name="twitter:description" content="Commits with diffs, messages, author ids and dates, collected by JetBrains Research so that models can use a repository&#x27;s history when writing a commit message."><meta name="theme-color" content="#121311">
+<link rel="icon" href="/assets/favicon.png">
+<link rel="stylesheet" href="/styles.css?v=33e4a37a">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+  <a class="brand" href="/"><img src="/assets/mark.png" alt=""><span>Renaissance Labs &middot; Code</span></a>
+  <nav><a href="/program/">Program</a><a href="/stack/">Stack</a><a href="/languages/">Languages</a><a href="/world/">World</a><a href="/intelligence/">Intelligence</a><a href="/train/" aria-current="page">Train</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
+  <button class="theme" id="theme" type="button" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+</header>
+<main id="main">
+<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/train/">Train</a> / <a href="/catalog/">Catalog</a> / <a href="/stage/pretrain/">Data</a></div>
+<span class="eyebrow">Dataset &middot; 2023-08</span><h1>CommitChronicle</h1><p class="lede">Commits with diffs, messages, author ids and dates, collected by JetBrains Research so that models can use a repository&#x27;s history when writing a commit message.</p></div>
+<div class="layout"><div class="prose">
+<h2>How to use it</h2><p>Use the default config for training on commit history. The subset_llm config (4,025 test rows) is a small evaluation set sized for LLM runs.</p>
+<h2>Caveats</h2><p>Follow the per-row license and attribution terms. About 42 GB uncompressed per the card metadata. Last modified 2023-10-05.</p>
+<div class="codebox"><div class="lab"><span>load</span><button class="copy" type="button">Copy</button></div><pre><span class="k">from</span> datasets <span class="k">import</span> load_dataset
+ds = load_dataset(<span class="s">&quot;JetBrains-Research/commit-chronicle&quot;</span>, <span class="s">&quot;subset_llm&quot;</span>, split=<span class="s">&quot;test&quot;</span>)</pre></div>
+<h2>Related</h2><ul><li><a href="/r/cvefixes/">CVEfixes</a>: Vulnerabilities and their fixes collected automatically from the U.S. National Vulnerability Database, linked...</li><li><a href="/r/codereviewqa/">CodeReviewQA</a>: Benchmark that checks whether a model understands a code review comment, by breaking the job of revising code...</li><li><a href="/r/codereviewer-data/">CodeReviewer dataset</a>: Code review data from Microsoft for three tasks: judge whether a diff needs a review comment, write the...</li><li><a href="/r/commitbench/">CommitBench</a>: Commit message generation data: git diffs paired with their commit messages, from repositories whose licenses...</li><li><a href="/r/commitpack/">CommitPack</a>: Raw commit corpus (code before/after plus message) from which CommitPackFT was...</li><li><a href="/r/commitpackft/">CommitPackFT</a>: Filtered subset of CommitPack where commit messages resemble natural-language instructions; basis of...</li></ul>
+</div><aside class="aside"><div class="panel"><h3>At a glance</h3><dl>
+<dt>Source</dt><dd><a href="https://huggingface.co/datasets/JetBrains-Research/commit-chronicle">huggingface.co/datasets/JetBrains-Research/commi</a></dd>
+<dt>License</dt><dd>other (HF card): commits come from repositories under Apache, BSD 3-clause and MIT licenses, and the license is recorded per row</dd><dt>Size</dt><dd>10.7M commits across 20 programming languages (paper abstract); 7,659,458 train, 1,554,042 validation and 1,486,267 test rows</dd>
+<dt>Stage</dt><dd><a class="pill st st-pretrain" href="/stage/pretrain/">Data</a> <a class="pill st st-sft" href="/stage/sft/">SFT</a> <a class="pill st st-eval" href="/stage/eval/">Eval</a></dd>
+<dt>Languages</dt><dd>multi</dd>
+<dt>Form</dt><dd><a class="pill" href="/program/text/">Text</a> <a class="pill" href="/program/change/">Change</a></dd><dt>Stack level</dt><dd><a class="pill" href="/stack/languages/">Languages</a></dd><dt>Tasks</dt><dd>Code review and edit</dd><dt>Difficulty</dt><dd>intro</dd>
+<dt>Checked</dt><dd>2026-11-24</dd></dl></div>
+<div class="panel"><h3>More links</h3><ul><li><a href="https://arxiv.org/abs/2308.07655">Paper</a></li></ul></div>
+<div class="panel"><h3>Evidence</h3><p class="mono">huggingface.co/api/datasets/JetBrains-Research/commit-chronicle (license other, created 2023-08-08); card README and dataset_info; arxiv.org/abs/2308.07655 abstract</p></div></aside></div></div></div>
+</main>
+<footer class="wrap foot">
+  <a class="brand" href="https://renaissancelabs.eu"><img src="/assets/mark.png" alt="">Renaissance Labs</a>
+  <div class="foot-links"><a href="/catalog/">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
+</footer>
+<script src="/app.js?v=33e4a37a" defer></script>
+</body>
+</html>

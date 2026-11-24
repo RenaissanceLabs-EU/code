@@ -1,0 +1,2889 @@
+[
+ {
+  "id": "verilog",
+  "name": "Verilog",
+  "year": 1984,
+  "year_note": "First appeared in 1984 at Gateway Design Automation (date from Wikipedia, used as a pointer; the primary history paper at ACM could not be fetched). First IEEE standard: IEEE 1364-1995.",
+  "designers": [
+   "Phil Moorby",
+   "Prabhu Goel",
+   "Chi-Lai Huang"
+  ],
+  "org": "Gateway Design Automation, later Cadence; standardized by IEEE (1364), now merged into SystemVerilog (IEEE 1800)",
+  "family": "hardware",
+  "level": "gates",
+  "levels": [
+   "gates"
+  ],
+  "paradigms": [
+   "hardware description",
+   "event-driven",
+   "structural"
+  ],
+  "typing": "static, weak; values are bits and bit vectors with four states",
+  "runs": "A simulator runs the description as events over time, or a synthesis tool turns it into a network of logic gates for a chip or FPGA.",
+  "influenced_by": [
+   "c",
+   "ada",
+   "Pascal"
+  ],
+  "what": "Verilog is a hardware description language: instead of listing steps for a processor to follow, it describes the circuit itself, with wires, registers and logic that all act at the same time. Engineers use it to design and test digital chips before they are built. Its syntax borrows from C. The standard has since been merged into its successor, SystemVerilog.",
+  "used_for": [
+   "Designing processors and other digital chips",
+   "Programming FPGAs",
+   "Simulating and testing circuits before manufacture"
+  ],
+  "notable": [
+   {
+    "name": "PicoRV32",
+    "text": "A small RISC-V processor core written in Verilog that can be placed on an FPGA or in a chip.",
+    "url": "https://github.com/YosysHQ/picorv32"
+   },
+   {
+    "name": "NVDLA",
+    "text": "NVIDIA's open deep learning accelerator is published as a Verilog model that can be simulated and synthesized.",
+    "url": "https://nvdla.org/primer.html"
+   },
+   {
+    "name": "Ibex",
+    "text": "A small 32-bit RISC-V processor core from lowRISC, written in SystemVerilog, the successor to Verilog.",
+    "url": "https://github.com/lowRISC/ibex"
+   }
+  ],
+  "sample": {
+   "code": "module main;\n  function automatic integer gcd(input integer a, input integer b);\n    integer x, y, t;\n    begin\n      x = a; y = b;\n      while (y != 0) begin t = x % y; x = y; y = t; end\n      gcd = x;\n    end\n  endfunction\n  initial $display(\"%0d\", gcd(48, 18));\nendmodule",
+   "ran": false,
+   "how": "Not run: no Verilog simulator on this Mac. Simulation-only module (Verilog-2001 function syntax); with a simulator such as Icarus Verilog it should print 6."
+  },
+  "official_url": "https://standards.ieee.org/ieee/1364/3641/",
+  "spec_url": "https://standards.ieee.org/ieee/1364/3641/",
+  "sources": [
+   "https://en.wikipedia.org/wiki/Verilog",
+   "https://standards.ieee.org/ieee/1364/3641/",
+   "https://nvdla.org/primer.html"
+  ],
+  "influenced": []
+ },
+ {
+  "id": "vhdl",
+  "name": "VHDL",
+  "year": 1987,
+  "year_note": "First IEEE standard, IEEE 1076-1987. Development began in 1983 under a US Air Force contract in the Department of Defense VHSIC program (dates from Wikipedia, used as a pointer).",
+  "designers": [
+   "Team from Intermetrics, IBM and Texas Instruments"
+  ],
+  "org": "US Department of Defense VHSIC program; standardized by IEEE (1076)",
+  "family": "hardware",
+  "level": "gates",
+  "levels": [
+   "gates"
+  ],
+  "paradigms": [
+   "hardware description",
+   "concurrent",
+   "structural"
+  ],
+  "typing": "static, strong",
+  "runs": "A simulator runs the description as concurrent processes over time, or a synthesis tool turns it into a network of logic gates for a chip or FPGA.",
+  "influenced_by": [
+   "ada",
+   "Pascal"
+  ],
+  "what": "VHDL is a hardware description language. A VHDL file describes a digital circuit, its inputs, outputs and behavior, and tools either simulate that circuit or build it. It was created so that suppliers to the US military could document exactly how their chips behave. It takes most of its syntax and semantics from Ada.",
+  "used_for": [
+   "Designing digital chips",
+   "Programming FPGAs",
+   "Simulating and verifying circuits"
+  ],
+  "notable": [
+   {
+    "name": "NEORV32",
+    "text": "A RISC-V processor and microcontroller-style system on chip written in platform-independent VHDL.",
+    "url": "https://github.com/stnolting/neorv32"
+   },
+   {
+    "name": "GRLIB",
+    "text": "A library of reusable chip building blocks from Gaisler, a maker of radiation-hardened processors; its open source edition is distributed as VHDL models.",
+    "url": "https://www.gaisler.com/grlib-ip-library"
+   }
+  ],
+  "sample": {
+   "code": "entity main is end;\narchitecture sim of main is\n  function gcd(a, b : natural) return natural is\n    variable x : natural := a; variable y : natural := b; variable t : natural;\n  begin\n    while y /= 0 loop t := x mod y; x := y; y := t; end loop;\n    return x;\n  end;\nbegin\n  process begin report integer'image(gcd(48, 18)); wait; end process;\nend;",
+   "ran": false,
+   "how": "Not run: no VHDL simulator on this Mac. Simulation-only design; with a simulator such as GHDL it should report the value 6 as a note."
+  },
+  "official_url": "https://standards.ieee.org/ieee/1076/5179/",
+  "spec_url": "https://standards.ieee.org/ieee/1076/5179/",
+  "sources": [
+   "https://en.wikipedia.org/wiki/VHDL",
+   "https://standards.ieee.org/ieee/1076/5179/",
+   "https://ghdl.github.io/ghdl/about.html"
+  ],
+  "influenced": []
+ },
+ {
+  "id": "assembly",
+  "name": "Assembly language",
+  "year": 1947,
+  "year_note": "Earliest known assembly-style notation: 'Coding for A.R.C.' by Andrew Booth and Kathleen Britten, 1947 (via Wikipedia, used as a pointer). Every processor family has its own assembly language.",
+  "designers": [
+   "Kathleen Booth (Kathleen Britten)",
+   "Andrew Booth"
+  ],
+  "org": "None; each processor maker defines its own",
+  "family": "machine",
+  "level": "machine",
+  "levels": [
+   "machine",
+   "os",
+   "compilers"
+  ],
+  "paradigms": [
+   "imperative",
+   "unstructured"
+  ],
+  "typing": "none; everything is bits in registers and memory",
+  "runs": "An assembler translates each line more or less one for one into a machine instruction, and the processor executes those instructions directly.",
+  "influenced_by": [],
+  "what": "Assembly language is a human-readable way of writing the instructions a processor actually executes. Each line names one small step, such as moving a number into a register or adding two registers. It is not one language but a family, one per processor design, such as x86-64 or AArch64. Almost nobody writes whole programs in it today, but compilers produce it and the fastest inner loops are still written by hand.",
+  "used_for": [
+   "Boot code and the lowest layers of operating systems",
+   "Hand-tuned inner loops in video and cryptography code",
+   "Reading what a compiler produced",
+   "Small embedded devices"
+  ],
+  "notable": [
+   {
+    "name": "Apollo 11 guidance computer software",
+    "text": "The flight software of the Apollo 11 command and lunar modules was written in the assembly language of the Apollo Guidance Computer.",
+    "url": "https://github.com/chrislgarry/Apollo-11"
+   },
+   {
+    "name": "RollerCoaster Tycoon",
+    "text": "According to its author Chris Sawyer, the 1999 game is 99% written in x86 assembler, with a little C to talk to Windows.",
+    "url": "https://www.chrissawyergames.com/faq3.htm"
+   },
+   {
+    "name": "dav1d",
+    "text": "VideoLAN's AV1 video decoder gets its speed from hand-written assembly, which makes up 77.5% of its repository (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/videolan/dav1d"
+   }
+  ],
+  "sample": {
+   "code": ".global _main\n_main:\n    mov   x0, #48\n    mov   x1, #18\ngcd: cbz   x1, done\n    udiv  x2, x0, x1\n    msub  x2, x2, x1, x0\n    mov   x0, x1\n    mov   x1, x2\n    b     gcd\ndone: ret",
+   "ran": true,
+   "how": "AArch64 (Arm 64-bit), macOS symbol naming. Assembled with Apple clang 17.0.0 on an Apple silicon Mac. It prints nothing: main loads 48 and 18, falls into the gcd loop and returns the result as the exit status, which was 6."
+  },
+  "official_url": "https://developer.arm.com/documentation/ddi0602/latest/",
+  "spec_url": null,
+  "sources": [
+   "https://en.wikipedia.org/wiki/Assembly_language",
+   "https://raw.githubusercontent.com/FFmpeg/asm-lessons/main/lesson_01/index.md"
+  ],
+  "influenced": []
+ },
+ {
+  "id": "wasm",
+  "name": "WebAssembly",
+  "year": 2017,
+  "year_note": "Browser vendors reached consensus on the first version on February 28, 2017; it became a W3C Recommendation on December 5, 2019.",
+  "designers": [
+   "W3C WebAssembly Community Group"
+  ],
+  "org": "W3C WebAssembly Community Group and Working Group",
+  "family": "machine",
+  "level": "machine",
+  "levels": [
+   "machine",
+   "compilers",
+   "apps"
+  ],
+  "paradigms": [
+   "stack machine",
+   "structured control flow"
+  ],
+  "typing": "static; every instruction and function has a checked type built from a few number types",
+  "runs": "A compiler for another language produces a compact binary module, which a browser or other host validates and then compiles to the real processor's instructions inside a sandbox.",
+  "influenced_by": [],
+  "what": "WebAssembly is an instruction set for a machine that does not physically exist: a virtual processor that every major browser implements. Programs in C, C++, Rust and other languages are compiled to it, so they can run on a web page at close to native speed and inside the browser's safety sandbox. It has a binary format for machines and a text format, shown here, for people. It is rarely written by hand.",
+  "used_for": [
+   "Running C, C++ and Rust code in web browsers",
+   "Bringing large desktop applications to the web",
+   "Sandboxed plugins and server-side modules"
+  ],
+  "notable": [
+   {
+    "name": "Figma",
+    "text": "The design tool's editor is C++ compiled to WebAssembly; Figma reported in June 2017 that the switch cut load time by a factor of three.",
+    "url": "https://www.figma.com/blog/webassembly-cut-figmas-load-time-by-3x/"
+   },
+   {
+    "name": "Pyodide",
+    "text": "A port of the CPython interpreter to WebAssembly, so Python and its packages run inside a browser.",
+    "url": "https://pyodide.org/en/stable/"
+   },
+   {
+    "name": "Photoshop on the web",
+    "text": "Adobe brought Photoshop's C++ code to the browser by compiling it to WebAssembly with Emscripten.",
+    "url": "https://web.dev/articles/ps-on-the-web"
+   }
+  ],
+  "sample": {
+   "code": "(module\n  (func $gcd (export \"gcd\") (param $a i32) (param $b i32) (result i32)\n    (local $t i32)\n    (block $done\n      (loop $next\n        (br_if $done (i32.eqz (local.get $b)))\n        (local.set $t (i32.rem_u (local.get $a) (local.get $b)))\n        (local.set $a (local.get $b))\n        (local.set $b (local.get $t))\n        (br $next)))\n    (local.get $a)))",
+   "ran": false,
+   "how": "Text format not assembled: no WebAssembly text tool on this Mac. A hand-encoded binary of the same instructions was run in Node.js 22.22.0, where gcd(48, 18) returned 6. WebAssembly has no print; the host calls the exported function."
+  },
+  "official_url": "https://webassembly.org/",
+  "spec_url": "https://webassembly.github.io/spec/core/",
+  "sources": [
+   "https://webassembly.org/",
+   "https://lists.w3.org/Archives/Public/public-webassembly/2017Feb/0002.html",
+   "https://www.w3.org/press-releases/2019/wasm/",
+   "https://webassembly.github.io/spec/core/intro/introduction.html"
+  ],
+  "influenced": []
+ },
+ {
+  "id": "c",
+  "name": "C",
+  "year": 1972,
+  "year_note": "Developed by Dennis Ritchie at Bell Labs between 1972 and 1973 as a successor to B (dates from Wikipedia, which cites Ritchie's own history paper; the Bell Labs copy of the paper refused automated fetches).",
+  "designers": [
+   "Dennis Ritchie"
+  ],
+  "org": "Bell Labs; standardized by ISO/IEC JTC 1/SC 22/WG 14",
+  "family": "systems",
+  "level": "os",
+  "levels": [
+   "os",
+   "compilers",
+   "languages",
+   "apps"
+  ],
+  "paradigms": [
+   "imperative",
+   "procedural",
+   "structured"
+  ],
+  "typing": "static, weak; the programmer manages memory by hand",
+  "runs": "A compiler translates the source ahead of time into machine code for one kind of processor; there is no garbage collector and almost no runtime.",
+  "influenced_by": [
+   "B",
+   "BCPL",
+   "ALGOL 68"
+  ],
+  "what": "C is a small language that sits just above the machine. It was created at Bell Labs to build the Unix system and its utilities, and it gives the programmer direct access to memory through pointers while staying portable across processors. That mix of control and portability is why operating system kernels, databases and the interpreters of other languages are still written in it. The price is that memory mistakes are easy to make and the language does not catch them.",
+  "used_for": [
+   "Operating system kernels and drivers",
+   "Embedded and microcontroller software",
+   "Databases and language interpreters",
+   "Libraries that other languages call"
+  ],
+  "notable": [
+   {
+    "name": "Linux kernel",
+    "text": "The Linux operating system kernel is 97.8% C (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/torvalds/linux"
+   },
+   {
+    "name": "SQLite",
+    "text": "The most widely deployed database engine is written in C, and its authors explain why they keep it that way.",
+    "url": "https://www.sqlite.org/whyc.html"
+   },
+   {
+    "name": "CPython",
+    "text": "The original and most used implementation of Python is written in C.",
+    "url": "https://docs.python.org/3/reference/introduction.html"
+   }
+  ],
+  "sample": {
+   "code": "#include <stdio.h>\n\nunsigned gcd(unsigned a, unsigned b) {\n    while (b != 0) {\n        unsigned t = a % b;\n        a = b;\n        b = t;\n    }\n    return a;\n}\nint main(void) { printf(\"%u\\n\", gcd(48, 18)); }",
+   "ran": true,
+   "how": "Apple clang 17.0.0 (-std=c17 -Wall -Wextra) on macOS arm64, printed 6"
+  },
+  "official_url": "https://www.open-std.org/jtc1/sc22/wg14/",
+  "spec_url": null,
+  "sources": [
+   "https://en.wikipedia.org/wiki/C_(programming_language)",
+   "https://www.sqlite.org/whyc.html"
+  ],
+  "influenced": [
+   "verilog",
+   "cpp",
+   "zig",
+   "go",
+   "java",
+   "csharp",
+   "python",
+   "php",
+   "perl",
+   "julia"
+  ]
+ },
+ {
+  "id": "cpp",
+  "name": "C++",
+  "year": 1985,
+  "year_note": "First commercial release, October 1985. Bjarne Stroustrup began the work in 1979 as 'C with Classes'; the name C++ dates from 1983.",
+  "designers": [
+   "Bjarne Stroustrup"
+  ],
+  "org": "AT&T Bell Labs; standardized by ISO/IEC JTC 1/SC 22/WG 21",
+  "family": "systems",
+  "level": "os",
+  "levels": [
+   "os",
+   "compilers",
+   "apps"
+  ],
+  "paradigms": [
+   "imperative",
+   "object-oriented",
+   "generic",
+   "functional"
+  ],
+  "typing": "static; templates are checked and expanded at compile time",
+  "runs": "A compiler translates the source ahead of time into machine code; there is no garbage collector, and objects clean up after themselves when they go out of scope.",
+  "influenced_by": [
+   "c",
+   "Simula"
+  ],
+  "what": "C++ started as C with classes added, an attempt to combine the speed of C with the program-organizing ideas of Simula. It lets programmers build high-level abstractions that compile down to code as fast as hand-written C. Browser engines, game engines and compilers are typical C++ programs.",
+  "used_for": [
+   "Web browsers and JavaScript engines",
+   "Game engines",
+   "Compilers and databases",
+   "High-performance and financial computing"
+  ],
+  "notable": [
+   {
+    "name": "V8",
+    "text": "Google's JavaScript and WebAssembly engine, used in Chrome and Node.js, is written in C++.",
+    "url": "https://v8.dev/docs"
+   },
+   {
+    "name": "LLVM",
+    "text": "The compiler infrastructure behind Clang, Rust and Swift is written in standard C++.",
+    "url": "https://llvm.org/docs/CodingStandards.html"
+   },
+   {
+    "name": "Godot Engine",
+    "text": "The open source 2D and 3D game engine is 86.9% C++ (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/godotengine/godot"
+   }
+  ],
+  "sample": {
+   "code": "#include <iostream>\n\nunsigned gcd(unsigned a, unsigned b) {\n    while (b != 0) {\n        unsigned t = a % b;\n        a = b;\n        b = t;\n    }\n    return a;\n}\nint main() { std::cout << gcd(48, 18) << '\\n'; }",
+   "ran": true,
+   "how": "Apple clang 17.0.0 (clang++ -std=c++20 -Wall -Wextra) on macOS arm64, printed 6"
+  },
+  "official_url": "https://isocpp.org/",
+  "spec_url": "https://isocpp.org/std/the-standard",
+  "sources": [
+   "https://www.stroustrup.com/bs_faq.html"
+  ],
+  "influenced": [
+   "rust",
+   "java",
+   "csharp",
+   "lua",
+   "solidity"
+  ]
+ },
+ {
+  "id": "rust",
+  "name": "Rust",
+  "year": 2015,
+  "year_note": "1.0 released May 15, 2015. The language began within Mozilla, and the independent Rust Foundation was formed in February 2021.",
+  "designers": [
+   "Graydon Hoare"
+  ],
+  "org": "Mozilla, now the Rust Foundation",
+  "family": "systems",
+  "level": "os",
+  "levels": [
+   "os",
+   "compilers",
+   "apps",
+   "networks"
+  ],
+  "paradigms": [
+   "imperative",
+   "functional",
+   "generic",
+   "concurrent"
+  ],
+  "typing": "static, inferred; ownership and borrowing are checked at compile time",
+  "runs": "Compiled ahead of time to machine code, usually through LLVM; there is no garbage collector.",
+  "influenced_by": [
+   "cpp",
+   "ocaml",
+   "haskell",
+   "erlang",
+   "swift",
+   "csharp",
+   "ruby",
+   "SML",
+   "Cyclone",
+   "Scheme"
+  ],
+  "what": "Rust is a systems language that aims for the speed and control of C and C++ without their memory bugs. Its compiler tracks who owns each piece of memory and rejects programs that could use memory after freeing it or share it unsafely between threads. That checking happens before the program runs, so there is no garbage collector slowing it down.",
+  "used_for": [
+   "Operating system components and drivers",
+   "Browser engines",
+   "Command-line tools and developer tooling",
+   "Network services",
+   "WebAssembly modules"
+  ],
+  "notable": [
+   {
+    "name": "The Rust compiler",
+    "text": "rustc, the Rust compiler, is itself written in Rust (90.7% of its repository, GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/rust-lang/rust"
+   },
+   {
+    "name": "Firefox CSS engine (Stylo)",
+    "text": "Firefox's parallel CSS engine came from the Servo research browser and is written in Rust.",
+    "url": "https://hacks.mozilla.org/2017/08/inside-a-super-fast-css-engine-quantum-css-aka-stylo/"
+   },
+   {
+    "name": "Deno",
+    "text": "A runtime for JavaScript and TypeScript whose repository is 62.1% Rust (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/denoland/deno"
+   }
+  ],
+  "sample": {
+   "code": "fn gcd(mut a: u64, mut b: u64) -> u64 {\n    while b != 0 {\n        (a, b) = (b, a % b);\n    }\n    a\n}\n\nfn main() {\n    println!(\"{}\", gcd(48, 18));\n}",
+   "ran": true,
+   "how": "rustc 1.94.0 on macOS arm64, printed 6"
+  },
+  "official_url": "https://www.rust-lang.org/",
+  "spec_url": "https://doc.rust-lang.org/reference/",
+  "sources": [
+   "https://blog.rust-lang.org/2015/05/15/Rust-1.0/",
+   "https://doc.rust-lang.org/reference/influences.html",
+   "https://blog.mozilla.org/en/mozilla/mozilla-welcomes-the-rust-foundation/",
+   "https://rustc-dev-guide.rust-lang.org/backend/codegen.html",
+   "https://docs.kernel.org/rust/index.html"
+  ],
+  "influenced": [
+   "swift"
+  ]
+ },
+ {
+  "id": "zig",
+  "name": "Zig",
+  "year": 2016,
+  "year_note": "First public introduction by Andrew Kelley on February 8, 2016. There is no 1.0 yet; the latest release on ziglang.org is 0.17.1 (November 2, 2026).",
+  "designers": [
+   "Andrew Kelley"
+  ],
+  "org": "Zig Software Foundation (founded 2020)",
+  "family": "systems",
+  "level": "os",
+  "levels": [
+   "os",
+   "compilers",
+   "apps"
+  ],
+  "paradigms": [
+   "imperative",
+   "procedural",
+   "generic through compile-time execution"
+  ],
+  "typing": "static; types are values that ordinary code can compute at compile time",
+  "runs": "Compiled ahead of time to machine code; there is no garbage collector, and any function that allocates memory is handed an allocator explicitly.",
+  "influenced_by": [
+   "c"
+  ],
+  "what": "Zig is a small systems language meant to do the jobs C does, in a more careful way. Its rule is that nothing is hidden: no hidden control flow, no hidden memory allocation, no preprocessor or macros. Code that must run at compile time is written in Zig itself. The Zig toolchain can also compile C and C++ and cross-compile to other systems out of the box.",
+  "used_for": [
+   "Systems software where C would otherwise be used",
+   "Databases and terminal software",
+   "Cross-compiling C and C++ projects"
+  ],
+  "notable": [
+   {
+    "name": "The Zig compiler",
+    "text": "Zig's own compiler is written in Zig (98.3% of its repository, GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/ziglang/zig"
+   },
+   {
+    "name": "TigerBeetle",
+    "text": "A financial transactions database built for safety and speed, 68.2% Zig (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/tigerbeetle/tigerbeetle"
+   },
+   {
+    "name": "Ghostty",
+    "text": "A fast terminal emulator whose core is written in Zig (78.9% of its repository, GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/ghostty-org/ghostty"
+   }
+  ],
+  "sample": {
+   "code": "const std = @import(\"std\");\n\nfn gcd(a: u64, b: u64) u64 {\n    var x = a;\n    var y = b;\n    while (y != 0) {\n        const t = x % y;\n        x = y;\n        y = t;\n    }\n    return x;\n}\npub fn main() void {\n    std.debug.print(\"{d}\\n\", .{gcd(48, 18)});\n}",
+   "ran": false,
+   "how": "Not run: no Zig compiler on this Mac. Uses only std.debug.print and basic syntax shown in the current overview on ziglang.org; expected output 6."
+  },
+  "official_url": "https://ziglang.org/",
+  "spec_url": null,
+  "sources": [
+   "https://andrewkelley.me/post/intro-to-zig.html",
+   "https://ziglang.org/",
+   "https://ziglang.org/learn/overview/",
+   "https://ziglang.org/download/index.json"
+  ],
+  "influenced": []
+ },
+ {
+  "id": "go",
+  "name": "Go",
+  "year": 2009,
+  "year_note": "Became a public open source project on November 10, 2009; design began at Google on September 21, 2007; version 1 released March 28, 2012.",
+  "designers": [
+   "Robert Griesemer",
+   "Rob Pike",
+   "Ken Thompson"
+  ],
+  "org": "Google",
+  "family": "systems",
+  "level": "networks",
+  "levels": [
+   "networks",
+   "apps",
+   "compilers"
+  ],
+  "paradigms": [
+   "imperative",
+   "concurrent",
+   "structural interfaces"
+  ],
+  "typing": "static, with some inference; interfaces are satisfied implicitly",
+  "runs": "Compiled ahead of time to machine code, with a runtime library in every program that provides garbage collection and lightweight concurrent goroutines.",
+  "influenced_by": [
+   "c",
+   "Pascal",
+   "Modula",
+   "Oberon",
+   "Newsqueak",
+   "Limbo"
+  ],
+  "what": "Go was designed at Google for writing large server programs with large teams. It keeps the language deliberately small, compiles quickly, collects garbage automatically and builds concurrency in through goroutines and channels. The result is a single self-contained executable that is easy to deploy. Kubernetes, Docker's engine and Terraform are written in it.",
+  "used_for": [
+   "Network servers and web services",
+   "Cloud and container infrastructure",
+   "Command-line tools"
+  ],
+  "notable": [
+   {
+    "name": "Kubernetes",
+    "text": "The standard system for running containers across many machines is 98.0% Go (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/kubernetes/kubernetes"
+   },
+   {
+    "name": "Docker Engine (Moby)",
+    "text": "The Moby project, the open source base of Docker's container engine, is 97.5% Go (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/moby/moby"
+   },
+   {
+    "name": "Terraform",
+    "text": "HashiCorp's tool for describing infrastructure as code is 99.7% Go (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/hashicorp/terraform"
+   }
+  ],
+  "sample": {
+   "code": "package main\n\nimport \"fmt\"\n\nfunc gcd(a, b int) int {\n\tfor b != 0 {\n\t\ta, b = b, a%b\n\t}\n\treturn a\n}\nfunc main() { fmt.Println(gcd(48, 18)) }",
+   "ran": false,
+   "how": "Not run: no Go toolchain on this Mac. Written against the Go specification; expected output 6."
+  },
+  "official_url": "https://go.dev/",
+  "spec_url": "https://go.dev/ref/spec",
+  "sources": [
+   "https://go.dev/doc/faq",
+   "https://go.dev/blog/go1",
+   "https://opensource.googleblog.com/2009/11/hey-ho-lets-go.html"
+  ],
+  "influenced": []
+ },
+ {
+  "id": "ada",
+  "name": "Ada",
+  "year": 1983,
+  "year_note": "Ada 83, the first standard. Designed from 1977 to 1983 under contract to the US Department of Defense (dates from Wikipedia, used as a pointer; the design team is named in the Ada Reference Manual).",
+  "designers": [
+   "Jean Ichbiah (team lead)"
+  ],
+  "org": "CII Honeywell Bull for the US Department of Defense; now an ISO standard",
+  "family": "systems",
+  "level": "os",
+  "levels": [
+   "os",
+   "compilers",
+   "apps"
+  ],
+  "paradigms": [
+   "imperative",
+   "structured",
+   "object-oriented",
+   "concurrent",
+   "generic",
+   "contract-based"
+  ],
+  "typing": "static, strong; ranges and other constraints on values are part of the type",
+  "runs": "Compiled ahead of time to machine code, with run-time checks for things like out-of-range values and no garbage collector required.",
+  "influenced_by": [
+   "Pascal",
+   "ALGOL 68",
+   "Simula"
+  ],
+  "what": "Ada was commissioned by the US Department of Defense to replace the hundreds of languages its projects were using with one language for large, long-lived, real-time systems. It is strict on purpose: the compiler checks types, ranges and task interactions so that errors show up before the software is in the field. A subset called SPARK goes further and lets tools prove mathematically that a program has no run-time errors.",
+  "used_for": [
+   "Safety-critical and real-time embedded software",
+   "Avionics, rail and space systems",
+   "High-assurance security software"
+  ],
+  "notable": [
+   {
+    "name": "GNAT",
+    "text": "The Ada compiler in GCC is itself written in Ada, so building it requires an existing Ada compiler.",
+    "url": "https://gcc.gnu.org/install/prerequisites.html"
+   },
+   {
+    "name": "Muen separation kernel",
+    "text": "A small kernel for x86-64 written in SPARK 2014, with a proof that it has no run-time errors.",
+    "url": "https://muen.sk/"
+   },
+   {
+    "name": "SPARK toolset",
+    "text": "The SPARK 2014 verification tools for high-reliability software are 97.9% Ada (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/AdaCore/spark2014"
+   }
+  ],
+  "sample": {
+   "code": "with Ada.Text_IO;\nprocedure Main is\n   function GCD (A, B : Natural) return Natural is\n      X : Natural := A; Y : Natural := B; T : Natural;\n   begin\n      while Y /= 0 loop T := X mod Y; X := Y; Y := T; end loop;\n      return X;\n   end GCD;\nbegin\n   Ada.Text_IO.Put_Line (Natural'Image (GCD (48, 18)));\nend Main;",
+   "ran": false,
+   "how": "Not run: no Ada compiler on this Mac. Written against the Ada Reference Manual; Natural'Image puts a leading space, so the expected output is ' 6'."
+  },
+  "official_url": "http://www.ada-auth.org/",
+  "spec_url": "http://www.ada-auth.org/standards/22rm/html/RM-TOC.html",
+  "sources": [
+   "http://www.ada-auth.org/standards/22rm/html/RM-0-2.html",
+   "https://en.wikipedia.org/wiki/Ada_(programming_language)"
+  ],
+  "influenced": [
+   "verilog",
+   "vhdl",
+   "ruby"
+  ]
+ },
+ {
+  "id": "java",
+  "name": "Java",
+  "year": 1995,
+  "year_note": "Released by Sun Microsystems in May 1995 (date from Wikipedia, used as a pointer; Oracle's own history pages refused automated fetches).",
+  "designers": [
+   "James Gosling"
+  ],
+  "org": "Sun Microsystems, now Oracle",
+  "family": "managed",
+  "level": "apps",
+  "levels": [
+   "apps",
+   "networks",
+   "compilers"
+  ],
+  "paradigms": [
+   "object-oriented",
+   "imperative",
+   "generic",
+   "functional"
+  ],
+  "typing": "static, strong, class-based",
+  "runs": "Compiled to bytecode in class files, which a Java Virtual Machine loads and runs, with garbage collection.",
+  "influenced_by": [
+   "c",
+   "cpp"
+  ],
+  "what": "Java is a general-purpose, class-based, object-oriented language related to C and C++ but with their unsafe features left out. Source code is compiled once to bytecode for the Java Virtual Machine, so the same compiled program runs on any system that has a JVM. Memory is managed automatically by a garbage collector. Large server and data systems such as Elasticsearch, Kafka and Hadoop are written in it.",
+  "used_for": [
+   "Server-side business applications",
+   "Android apps",
+   "Large data systems and search engines"
+  ],
+  "notable": [
+   {
+    "name": "Elasticsearch",
+    "text": "The distributed search engine is 96.1% Java (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/elastic/elasticsearch"
+   },
+   {
+    "name": "Apache Kafka",
+    "text": "The distributed event streaming platform is 90.4% Java, with the rest mostly Scala (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/apache/kafka"
+   },
+   {
+    "name": "Apache Hadoop",
+    "text": "The framework that popularized large-scale data processing on clusters of ordinary machines is 91.4% Java (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/apache/hadoop"
+   }
+  ],
+  "sample": {
+   "code": "public class Gcd {\n    static int gcd(int a, int b) {\n        while (b != 0) {\n            int t = a % b;\n            a = b;\n            b = t;\n        }\n        return a;\n    }\n    public static void main(String[] args) { System.out.println(gcd(48, 18)); }\n}",
+   "ran": false,
+   "how": "Not run: this Mac has the java launcher stub but no Java runtime installed. Written against the Java Language Specification; expected output 6."
+  },
+  "official_url": "https://dev.java/",
+  "spec_url": "https://docs.oracle.com/javase/specs/",
+  "sources": [
+   "https://docs.oracle.com/javase/specs/jls/se25/html/jls-1.html",
+   "https://docs.oracle.com/javase/specs/jvms/se25/html/jvms-1.html",
+   "https://en.wikipedia.org/wiki/Java_(programming_language)"
+  ],
+  "influenced": [
+   "csharp",
+   "kotlin",
+   "scala",
+   "javascript"
+  ]
+ },
+ {
+  "id": "csharp",
+  "name": "C#",
+  "year": 2000,
+  "year_note": "First widely distributed implementation released by Microsoft in July 2000; C# 1.0 shipped in January 2002 with Visual Studio .NET.",
+  "designers": [
+   "Anders Hejlsberg",
+   "Scott Wiltamuth",
+   "Peter Golde"
+  ],
+  "org": "Microsoft; standardized as ECMA-334",
+  "family": "managed",
+  "level": "apps",
+  "levels": [
+   "apps",
+   "compilers",
+   "languages"
+  ],
+  "paradigms": [
+   "object-oriented",
+   "imperative",
+   "functional",
+   "generic"
+  ],
+  "typing": "static, strong, with inference; optional dynamic typing",
+  "runs": "Compiled to Intermediate Language, which the .NET runtime compiles to machine code just in time as the program runs, with garbage collection.",
+  "influenced_by": [
+   "java",
+   "c",
+   "cpp"
+  ],
+  "what": "C# is Microsoft's general-purpose language for the .NET platform. Its first version looked a lot like Java: object-oriented, garbage-collected and compiled to an intermediate code that a runtime executes. It has since grown many features of its own. .NET is now open source and cross-platform, and C# is also the scripting language of the Unity game engine.",
+  "used_for": [
+   "Windows and cross-platform applications",
+   "Web services",
+   "Games, through Unity",
+   "Developer tools"
+  ],
+  "notable": [
+   {
+    "name": "Roslyn",
+    "text": "The compiler for C# and Visual Basic is itself written in C# (76.6% of its repository, GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/dotnet/roslyn"
+   },
+   {
+    "name": ".NET runtime and libraries",
+    "text": "Microsoft's documentation states that most of the .NET runtime and libraries are written in C#.",
+    "url": "https://learn.microsoft.com/en-us/dotnet/csharp/tour-of-csharp/overview"
+   },
+   {
+    "name": "PowerShell",
+    "text": "Microsoft's cross-platform shell and scripting language is implemented mostly in C# (82.3%, GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/PowerShell/PowerShell"
+   }
+  ],
+  "sample": {
+   "code": "using System;\n\nstatic int Gcd(int a, int b)\n{\n    while (b != 0)\n        (a, b) = (b, a % b);\n    return a;\n}\n\nConsole.WriteLine(Gcd(48, 18));",
+   "ran": false,
+   "how": "Not run: no .NET SDK on this Mac. Uses top-level statements with a local function (C# 9 or later); expected output 6."
+  },
+  "official_url": "https://learn.microsoft.com/en-us/dotnet/csharp/",
+  "spec_url": "https://ecma-international.org/publications-and-standards/standards/ecma-334/",
+  "sources": [
+   "https://raw.githubusercontent.com/dotnet/csharpstandard/standard-v7/standard/introduction.md",
+   "https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-version-history",
+   "https://learn.microsoft.com/en-us/dotnet/standard/managed-code",
+   "https://learn.microsoft.com/en-us/dotnet/csharp/tour-of-csharp/overview",
+   "https://docs.unity3d.com/Manual/scripting.html"
+  ],
+  "influenced": [
+   "rust",
+   "kotlin",
+   "swift"
+  ]
+ },
+ {
+  "id": "kotlin",
+  "name": "Kotlin",
+  "year": 2011,
+  "year_note": "Unveiled by JetBrains at the JVM Language Summit in July 2011; the project started in 2010; 1.0 released February 2016.",
+  "designers": [
+   "JetBrains"
+  ],
+  "org": "JetBrains",
+  "family": "managed",
+  "level": "apps",
+  "levels": [
+   "apps",
+   "languages",
+   "compilers"
+  ],
+  "paradigms": [
+   "object-oriented",
+   "functional",
+   "imperative"
+  ],
+  "typing": "static, inferred; types say whether a value may be null",
+  "runs": "Usually compiled to Java bytecode and run on a Java Virtual Machine; it can also be compiled to JavaScript, WebAssembly or native code.",
+  "influenced_by": [
+   "java",
+   "scala",
+   "csharp",
+   "Groovy"
+  ],
+  "what": "Kotlin is a language from JetBrains that runs on the Java Virtual Machine and mixes freely with existing Java code. It was made to be a more concise and safer everyday alternative to Java, for example by making the compiler track which values can be null. Google has taken a Kotlin-first approach to Android development.",
+  "used_for": [
+   "Android apps",
+   "Server-side software on the JVM",
+   "Sharing code across platforms with Kotlin Multiplatform"
+  ],
+  "notable": [
+   {
+    "name": "The Kotlin compiler",
+    "text": "Kotlin's compiler and tooling are written in Kotlin (92.5% of the repository, GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/JetBrains/kotlin"
+   },
+   {
+    "name": "Android Jetpack",
+    "text": "Google's AndroidX libraries, which most Android apps build on, are 71.5% Kotlin (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/androidx/androidx"
+   },
+   {
+    "name": "OkHttp",
+    "text": "A widely used HTTP client for the JVM and Android, 99.4% Kotlin (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/square/okhttp"
+   }
+  ],
+  "sample": {
+   "code": "fun gcd(a: Int, b: Int): Int {\n    var x = a\n    var y = b\n    while (y != 0) {\n        val t = x % y\n        x = y\n        y = t\n    }\n    return x\n}\nfun main() = println(gcd(48, 18))",
+   "ran": false,
+   "how": "Not run: no Kotlin compiler on this Mac. Written against the Kotlin documentation; expected output 6."
+  },
+  "official_url": "https://kotlinlang.org/",
+  "spec_url": "https://kotlinlang.org/spec/introduction.html",
+  "sources": [
+   "https://blog.jetbrains.com/kotlin/2011/07/hello-world-2/",
+   "https://kotlinlang.org/docs/faq.html",
+   "https://blog.jetbrains.com/kotlin/2016/02/kotlin-1-0-released-pragmatic-language-for-jvm-and-android/",
+   "https://kotlinlang.org/spec/introduction.html",
+   "https://developer.android.com/kotlin/first"
+  ],
+  "influenced": []
+ },
+ {
+  "id": "swift",
+  "name": "Swift",
+  "year": 2014,
+  "year_note": "Launched publicly at Apple's WWDC in 2014; Chris Lattner began work on it in July 2010; open sourced December 3, 2015.",
+  "designers": [
+   "Chris Lattner"
+  ],
+  "org": "Apple; developed in the open at swift.org",
+  "family": "managed",
+  "level": "apps",
+  "levels": [
+   "apps",
+   "languages",
+   "os"
+  ],
+  "paradigms": [
+   "object-oriented",
+   "protocol-oriented",
+   "functional",
+   "imperative"
+  ],
+  "typing": "static, strong, inferred; optional types make missing values explicit",
+  "runs": "Compiled ahead of time to machine code through LLVM; memory is managed by automatic reference counting rather than a tracing garbage collector.",
+  "influenced_by": [
+   "rust",
+   "haskell",
+   "ruby",
+   "python",
+   "csharp",
+   "Objective-C",
+   "CLU"
+  ],
+  "what": "Swift is Apple's language for apps on the iPhone, Mac and its other devices, designed to be safe, fast and easy to read while working directly with existing C and Objective-C code. It compiles to native code but rules out many common mistakes, such as using a value that is not there. It is open source and also runs on Linux and Windows. It is filed here with the managed languages because memory is handled automatically, although it has no virtual machine.",
+  "used_for": [
+   "iPhone, iPad and Mac apps",
+   "Apple system frameworks",
+   "Server-side software"
+  ],
+  "notable": [
+   {
+    "name": "Foundation",
+    "text": "Apple's core library of basic types and services has been reimplemented in Swift (announced April 2023).",
+    "url": "https://www.swift.org/blog/foundation-preview-now-available/"
+   },
+   {
+    "name": "Signal for iOS",
+    "text": "The iPhone app of the Signal private messenger is 97.8% Swift (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/signalapp/Signal-iOS"
+   },
+   {
+    "name": "SwiftNIO",
+    "text": "Apple's framework for high-performance network servers and clients is 91.9% Swift (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/apple/swift-nio"
+   }
+  ],
+  "sample": {
+   "code": "func gcd(_ a: Int, _ b: Int) -> Int {\n    var (a, b) = (a, b)\n    while b != 0 {\n        (a, b) = (b, a % b)\n    }\n    return a\n}\n\nprint(gcd(48, 18))",
+   "ran": true,
+   "how": "Apple Swift 6.2.1 on macOS arm64, printed 6"
+  },
+  "official_url": "https://www.swift.org/",
+  "spec_url": "https://docs.swift.org/swift-book/documentation/the-swift-programming-language/",
+  "sources": [
+   "https://nondot.org/sabre/",
+   "https://nondot.org/sabre/Resume.html",
+   "https://www.swift.org/blog/welcome/",
+   "https://www.swift.org/documentation/swift-compiler/",
+   "https://www.swift.org/about/"
+  ],
+  "influenced": [
+   "rust"
+  ]
+ },
+ {
+  "id": "scala",
+  "name": "Scala",
+  "year": 2003,
+  "year_note": "First released in 2003; design began in 2001 at EPFL, according to Martin Odersky.",
+  "designers": [
+   "Martin Odersky"
+  ],
+  "org": "EPFL (Ecole Polytechnique Federale de Lausanne); now maintained with the Scala Center",
+  "family": "managed",
+  "level": "apps",
+  "levels": [
+   "apps",
+   "networks",
+   "languages"
+  ],
+  "paradigms": [
+   "functional",
+   "object-oriented"
+  ],
+  "typing": "static, strong, inferred",
+  "runs": "Compiled to Java bytecode and run on a Java Virtual Machine; it can also be compiled to JavaScript or native code.",
+  "influenced_by": [
+   "java",
+   "Pizza",
+   "Funnel"
+  ],
+  "what": "Scala combines object-oriented and functional programming in one statically typed language on the Java Virtual Machine. Martin Odersky, who had worked on the Java compiler, designed it to go beyond what Java's constraints allowed while staying fully interoperable with Java libraries. Apache Spark, a widely used engine for large-scale data processing, is written mostly in Scala.",
+  "used_for": [
+   "Large-scale data processing",
+   "Concurrent and distributed services",
+   "Functional programming on the JVM"
+  ],
+  "notable": [
+   {
+    "name": "Apache Spark",
+    "text": "The analytics engine for large-scale data processing is 71.0% Scala (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/apache/spark"
+   },
+   {
+    "name": "The Scala 3 compiler",
+    "text": "Scala's compiler is written in Scala (97.7% of its repository, GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/scala/scala3"
+   },
+   {
+    "name": "Apache Pekko",
+    "text": "A toolkit for concurrent, distributed, message-driven applications, 68.4% Scala (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/apache/pekko"
+   }
+  ],
+  "sample": {
+   "code": "import scala.annotation.tailrec\n\n@tailrec\ndef gcd(a: Int, b: Int): Int =\n  if b == 0 then a else gcd(b, a % b)\n\n@main def run(): Unit = println(gcd(48, 18))",
+   "ran": false,
+   "how": "Not run: no Scala compiler on this Mac. Scala 3 syntax, written recursively because that is the idiom; @tailrec makes the compiler turn it into a loop. Expected output 6."
+  },
+  "official_url": "https://www.scala-lang.org/",
+  "spec_url": "https://docs.scala-lang.org/scala3/reference/",
+  "sources": [
+   "https://www.artima.com/weblogs/viewpost.jsp?thread=163733",
+   "https://www.artima.com/articles/the-origins-of-scala",
+   "https://www.scala-lang.org/"
+  ],
+  "influenced": [
+   "kotlin"
+  ]
+ },
+ {
+  "id": "python",
+  "name": "Python",
+  "year": 1991,
+  "year_note": "First posted publicly to USENET in February 1991; Guido van Rossum began writing it over the 1989 Christmas holidays at CWI in Amsterdam.",
+  "designers": [
+   "Guido van Rossum"
+  ],
+  "org": "CWI originally; now the Python Software Foundation",
+  "family": "scripting",
+  "level": "apps",
+  "levels": [
+   "apps",
+   "languages",
+   "learned",
+   "os"
+  ],
+  "paradigms": [
+   "imperative",
+   "object-oriented",
+   "functional"
+  ],
+  "typing": "dynamic, strong; optional type hints are checked by separate tools",
+  "runs": "The standard implementation, CPython, compiles source to bytecode and runs it on a virtual machine, with automatic memory management.",
+  "influenced_by": [
+   "c",
+   "ABC",
+   "Modula-3"
+  ],
+  "what": "Python is a general-purpose language built to be easy to read and quick to write. It grew out of ABC, a teaching language, and uses indentation instead of braces to group code. The standard implementation is an interpreter written in C, and Python programs can be extended with modules written in C, which is why it works well as a glue language on top of fast libraries.",
+  "used_for": [
+   "Data analysis and machine learning",
+   "Web back ends",
+   "Automation and scripting",
+   "Teaching programming"
+  ],
+  "notable": [
+   {
+    "name": "Django",
+    "text": "A web framework used to build database-backed websites, 97.2% Python (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/django/django"
+   },
+   {
+    "name": "Home Assistant",
+    "text": "The open source home automation platform is written in Python.",
+    "url": "https://github.com/home-assistant/core"
+   },
+   {
+    "name": "Ansible",
+    "text": "A tool for automating the setup and management of servers, 86.3% Python (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/ansible/ansible"
+   }
+  ],
+  "sample": {
+   "code": "def gcd(a, b):\n    while b != 0:\n        a, b = b, a % b\n    return a\n\nprint(gcd(48, 18))",
+   "ran": true,
+   "how": "Python 3.9.6 on macOS, printed 6"
+  },
+  "official_url": "https://www.python.org/",
+  "spec_url": "https://docs.python.org/3/reference/",
+  "sources": [
+   "https://docs.python.org/3/faq/general.html",
+   "https://docs.python.org/3/license.html",
+   "https://docs.python.org/3/glossary.html",
+   "https://docs.python.org/3/reference/introduction.html",
+   "https://docs.python.org/3/extending/index.html"
+  ],
+  "influenced": [
+   "swift",
+   "julia",
+   "solidity"
+  ]
+ },
+ {
+  "id": "javascript",
+  "name": "JavaScript",
+  "year": 1995,
+  "year_note": "Prototyped by Brendan Eich at Netscape in May 1995 under the name Mocha; first appeared in the Netscape Navigator 2.0 browser. Standardized as ECMAScript (ECMA-262).",
+  "designers": [
+   "Brendan Eich"
+  ],
+  "org": "Netscape; now standardized by Ecma International TC39",
+  "family": "scripting",
+  "level": "apps",
+  "levels": [
+   "apps",
+   "networks",
+   "languages"
+  ],
+  "paradigms": [
+   "imperative",
+   "functional",
+   "prototype-based objects",
+   "event-driven"
+  ],
+  "typing": "dynamic, weak",
+  "runs": "A JavaScript engine in the browser or in a runtime such as Node.js takes the source text and compiles it as it runs.",
+  "influenced_by": [
+   "java",
+   "Scheme",
+   "Self"
+  ],
+  "what": "JavaScript is the programming language of web pages, built into every web browser, and one of the most widely used languages in the world. Brendan Eich prototyped it quickly at Netscape in 1995, under orders to make it look like Java, and gave it first-class functions from Scheme and prototype-based objects from Self. With Node.js it also runs on servers.",
+  "used_for": [
+   "Interactive web pages",
+   "Web servers with Node.js",
+   "Mobile and desktop apps built with web technology"
+  ],
+  "notable": [
+   {
+    "name": "Node.js",
+    "text": "The runtime that brought JavaScript to servers has its library layer written in JavaScript on top of C++ (66.8% JavaScript, GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/nodejs/node"
+   },
+   {
+    "name": "npm",
+    "text": "The package manager for JavaScript is 99.7% JavaScript (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/npm/cli"
+   },
+   {
+    "name": "PDF.js",
+    "text": "Mozilla's PDF reader, written in JavaScript so that it runs inside the browser.",
+    "url": "https://github.com/mozilla/pdf.js"
+   }
+  ],
+  "sample": {
+   "code": "function gcd(a, b) {\n  while (b !== 0) {\n    [a, b] = [b, a % b];\n  }\n  return a;\n}\n\nconsole.log(gcd(48, 18));",
+   "ran": true,
+   "how": "Node.js 22.22.0 on macOS, printed 6"
+  },
+  "official_url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+  "spec_url": "https://tc39.es/ecma262/",
+  "sources": [
+   "https://brendaneich.com/2008/04/popularity/",
+   "https://tc39.es/ecma262/",
+   "https://v8.dev/docs"
+  ],
+  "influenced": [
+   "typescript",
+   "solidity"
+  ]
+ },
+ {
+  "id": "typescript",
+  "name": "TypeScript",
+  "year": 2012,
+  "year_note": "Unveiled publicly on October 1, 2012 (version 0.8); 1.0 released April 2, 2014.",
+  "designers": [
+   "Anders Hejlsberg"
+  ],
+  "org": "Microsoft",
+  "family": "scripting",
+  "level": "apps",
+  "levels": [
+   "apps",
+   "languages",
+   "compilers"
+  ],
+  "paradigms": [
+   "imperative",
+   "functional",
+   "object-oriented"
+  ],
+  "typing": "static and optional, structural; the types are checked and then erased",
+  "runs": "A compiler checks the types and converts the code to plain JavaScript, which then runs anywhere JavaScript runs.",
+  "influenced_by": [
+   "javascript"
+  ],
+  "what": "TypeScript is JavaScript with syntax for types. It was made for large JavaScript programs, where it is easy to pass the wrong kind of value and only find out when the program is running. The type checker catches those mistakes while you write, and powers editor features such as completion. The types are then removed and ordinary JavaScript is what runs. In March 2025 Microsoft announced that it was porting the TypeScript compiler itself to Go to make it faster.",
+  "used_for": [
+   "Large web applications",
+   "Server code on Node.js, Deno and Bun",
+   "Editors and developer tools"
+  ],
+  "notable": [
+   {
+    "name": "Visual Studio Code",
+    "text": "Microsoft's code editor is 96.6% TypeScript (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/microsoft/vscode"
+   },
+   {
+    "name": "Angular",
+    "text": "Google's web application framework is 77.3% TypeScript (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/angular/angular"
+   },
+   {
+    "name": "Playwright",
+    "text": "Microsoft's framework for testing and automating web browsers is 91.8% TypeScript (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/microsoft/playwright"
+   }
+  ],
+  "sample": {
+   "code": "function gcd(a: number, b: number): number {\n  while (b !== 0) {\n    [a, b] = [b, a % b];\n  }\n  return a;\n}\n\nconsole.log(gcd(48, 18));",
+   "ran": true,
+   "how": "Type-checked and run with Deno 2.6.3 (deno check, deno run) and also run with Bun 1.3.6 on macOS, printed 6"
+  },
+  "official_url": "https://www.typescriptlang.org/",
+  "spec_url": null,
+  "sources": [
+   "https://devblogs.microsoft.com/typescript/ten-years-of-typescript/",
+   "https://devblogs.microsoft.com/typescript/announcing-typescript-1-0/",
+   "https://www.typescriptlang.org/",
+   "https://devblogs.microsoft.com/typescript/typescript-native-port/"
+  ],
+  "influenced": []
+ },
+ {
+  "id": "ruby",
+  "name": "Ruby",
+  "year": 1995,
+  "year_note": "Public release in 1995, per ruby-lang.org.",
+  "designers": [
+   "Yukihiro Matsumoto"
+  ],
+  "org": "Ruby core team, led by Yukihiro Matsumoto",
+  "family": "scripting",
+  "level": "apps",
+  "levels": [
+   "apps",
+   "languages"
+  ],
+  "paradigms": [
+   "object-oriented",
+   "imperative",
+   "functional"
+  ],
+  "typing": "dynamic, strong; everything is an object",
+  "runs": "The reference implementation, written in C, compiles source to instructions for its own virtual machine (YARV) and runs them, with garbage collection.",
+  "influenced_by": [
+   "perl",
+   "lisp",
+   "ada",
+   "Smalltalk",
+   "Eiffel"
+  ],
+  "what": "Ruby is a scripting language designed by Yukihiro Matsumoto, who blended parts of his favorite languages into one meant to feel natural to the programmer. Everything in it is an object, and the syntax is flexible enough that libraries can read almost like small languages of their own. Its best known use is the Ruby on Rails web framework.",
+  "used_for": [
+   "Web applications with Ruby on Rails",
+   "Developer tools and automation",
+   "Scripting"
+  ],
+  "notable": [
+   {
+    "name": "Ruby on Rails",
+    "text": "The web framework that made Ruby famous is 97.4% Ruby (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/rails/rails"
+   },
+   {
+    "name": "Homebrew",
+    "text": "The package manager used on most developers' Macs is 95.1% Ruby (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/Homebrew/brew"
+   },
+   {
+    "name": "Discourse",
+    "text": "A widely used platform for community discussion forums, 60.7% Ruby with a JavaScript front end (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/discourse/discourse"
+   }
+  ],
+  "sample": {
+   "code": "def gcd(a, b)\n  a, b = b, a % b while b != 0\n  a\nend\n\nputs gcd(48, 18)",
+   "ran": true,
+   "how": "ruby 2.6.10 (the system Ruby on macOS), printed 6"
+  },
+  "official_url": "https://www.ruby-lang.org/",
+  "spec_url": null,
+  "sources": [
+   "https://www.ruby-lang.org/en/about/",
+   "https://docs.ruby-lang.org/en/master/RubyVM/InstructionSequence.html"
+  ],
+  "influenced": [
+   "rust",
+   "swift",
+   "julia",
+   "elixir"
+  ]
+ },
+ {
+  "id": "php",
+  "name": "PHP",
+  "year": 1995,
+  "year_note": "Rasmus Lerdorf released the source of 'PHP Tools' to the public in June 1995; he had created the first version in 1994.",
+  "designers": [
+   "Rasmus Lerdorf"
+  ],
+  "org": "Open source project at php.net",
+  "family": "scripting",
+  "level": "apps",
+  "levels": [
+   "apps",
+   "languages"
+  ],
+  "paradigms": [
+   "imperative",
+   "object-oriented",
+   "functional"
+  ],
+  "typing": "dynamic, with optional type declarations checked at run time",
+  "runs": "The code is executed on the server by the PHP interpreter, generating HTML that is then sent to the browser.",
+  "influenced_by": [
+   "c",
+   "perl"
+  ],
+  "what": "PHP is a scripting language made for web pages. It began as a set of small C programs that Rasmus Lerdorf wrote to track visits to his online resume, and grew into a language whose code can be embedded directly in HTML and run on the server for each request. WordPress and the software behind Wikipedia are written in it.",
+  "used_for": [
+   "Server-side web pages",
+   "Content management systems",
+   "Web application back ends"
+  ],
+  "notable": [
+   {
+    "name": "WordPress",
+    "text": "The most widely used website publishing system is 64.0% PHP, with the rest front-end JavaScript and CSS (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/WordPress/WordPress"
+   },
+   {
+    "name": "MediaWiki",
+    "text": "The collaborative editing software that runs Wikipedia is 79.5% PHP (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/wikimedia/mediawiki"
+   },
+   {
+    "name": "Laravel",
+    "text": "A popular web application framework, 99.3% PHP (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/laravel/framework"
+   }
+  ],
+  "sample": {
+   "code": "<?php\nfunction gcd(int $a, int $b): int {\n    while ($b !== 0) {\n        [$a, $b] = [$b, $a % $b];\n    }\n    return $a;\n}\n\necho gcd(48, 18), \"\\n\";",
+   "ran": false,
+   "how": "Not run: no PHP on this Mac. Written against the PHP manual (requires PHP 7.1 or later); expected output 6."
+  },
+  "official_url": "https://www.php.net/",
+  "spec_url": null,
+  "sources": [
+   "https://www.php.net/manual/en/history.php.php",
+   "https://www.php.net/manual/en/introduction.php"
+  ],
+  "influenced": []
+ },
+ {
+  "id": "perl",
+  "name": "Perl",
+  "year": 1987,
+  "year_note": "Perl 1.000 released by Larry Wall on December 18, 1987.",
+  "designers": [
+   "Larry Wall"
+  ],
+  "org": "Maintained by the Perl 5 Porters volunteer group",
+  "family": "scripting",
+  "level": "os",
+  "levels": [
+   "os",
+   "apps",
+   "languages"
+  ],
+  "paradigms": [
+   "imperative",
+   "procedural",
+   "functional",
+   "object-oriented"
+  ],
+  "typing": "dynamic; a value is converted between number and text as needed",
+  "runs": "The perl interpreter first compiles the whole script into an internal tree of operations and then executes it.",
+  "influenced_by": [
+   "c",
+   "sh",
+   "sed",
+   "awk"
+  ],
+  "what": "Perl was created as a language for scanning text files, pulling information out of them and printing reports. It combines features of the Unix tools sed, awk and the shell with the programming constructs of C, and has pattern matching on text built into the syntax. It aims to be practical rather than beautiful. It quickly became a common tool for system administration and later grew into a general-purpose language.",
+  "used_for": [
+   "Text processing and report generation",
+   "System administration scripts",
+   "Build tools and glue code",
+   "Older web applications"
+  ],
+  "notable": [
+   {
+    "name": "ExifTool",
+    "text": "The standard tool for reading and writing metadata in photos and other files is written in Perl.",
+    "url": "https://github.com/exiftool/exiftool"
+   },
+   {
+    "name": "Bugzilla",
+    "text": "The bug tracking system created for Mozilla is 70.1% Perl (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/bugzilla/bugzilla"
+   }
+  ],
+  "sample": {
+   "code": "use strict;\nuse warnings;\n\nsub gcd {\n    my ($a, $b) = @_;\n    ($a, $b) = ($b, $a % $b) while $b != 0;\n    return $a;\n}\n\nprint gcd(48, 18), \"\\n\";",
+   "ran": true,
+   "how": "perl 5.34.1 on macOS, printed 6"
+  },
+  "official_url": "https://www.perl.org/",
+  "spec_url": null,
+  "sources": [
+   "https://perldoc.perl.org/perlhist",
+   "https://perldoc.perl.org/perl",
+   "https://perldoc.perl.org/perlinterp"
+  ],
+  "influenced": [
+   "ruby",
+   "php",
+   "julia"
+  ]
+ },
+ {
+  "id": "lua",
+  "name": "Lua",
+  "year": 1993,
+  "year_note": "Created in 1993 at Tecgraf, PUC-Rio (the Pontifical Catholic University of Rio de Janeiro), Brazil.",
+  "designers": [
+   "Roberto Ierusalimschy",
+   "Luiz Henrique de Figueiredo",
+   "Waldemar Celes"
+  ],
+  "org": "PUC-Rio",
+  "family": "scripting",
+  "level": "apps",
+  "levels": [
+   "apps",
+   "languages"
+  ],
+  "paradigms": [
+   "imperative",
+   "procedural",
+   "functional",
+   "prototype-style objects through tables"
+  ],
+  "typing": "dynamic",
+  "runs": "Source is compiled to bytecode that runs on a small register-based virtual machine, with incremental garbage collection.",
+  "influenced_by": [
+   "cpp",
+   "Modula",
+   "CLU",
+   "SOL"
+  ],
+  "what": "Lua is a small, fast scripting language designed to be embedded inside other programs. The whole implementation is about 32,000 lines of C, so an application can include it and let users script and configure the application without touching its core. It has one data structure, the table, which serves as array, dictionary and object. It has been used inside games such as World of Warcraft and Angry Birds and in applications such as Adobe Photoshop Lightroom.",
+  "used_for": [
+   "Scripting inside games and game engines",
+   "Configuration and plugins for editors and tools",
+   "Extending databases and network servers"
+  ],
+  "notable": [
+   {
+    "name": "Neovim",
+    "text": "The text editor has a Lua 5.1 engine built in, and its configuration and plugins are written in Lua.",
+    "url": "https://neovim.io/doc/user/lua/"
+   },
+   {
+    "name": "Kong Gateway",
+    "text": "A widely used API gateway, 89.3% Lua (GitHub language statistics, fetched 2026-11-24).",
+    "url": "https://github.com/Kong/kong"
+   },
+   {
+    "name": "Redis scripting",
+    "text": "The Redis database lets clients run Lua scripts inside the server.",
+    "url": "https://redis.io/docs/latest/develop/programmability/eval-intro/"
+   }
+  ],
+  "sample": {
+   "code": "local function gcd(a, b)\n  while b ~= 0 do\n    a, b = b, a % b\n  end\n  return a\nend\n\nprint(gcd(48, 18))",
+   "ran": false,
+   "how": "Not run: no Lua interpreter on this Mac. Written against the Lua reference manual; expected output 6."
+  },
+  "official_url": "https://www.lua.org/",
+  "spec_url": "https://www.lua.org/manual/5.4/",
+  "sources": [
+   "https://www.lua.org/about.html",
+   "https://www.lua.org/history.html",
+   "https://luau.org/"
+  ],
+  "influenced": []
+ },
+ {
+  "id": "r",
+  "name": "R",
+  "year": 1993,
+  "year_note": "Binary copies of R were placed on StatLib and announced on the s-news mailing list in August 1993",
+  "designers": [
+   "Ross Ihaka",
+   "Robert Gentleman"
+  ],
+  "org": "University of Auckland (Department of Statistics); now maintained by the R Core Team as a GNU project",
+  "family": "numeric",
+  "level": "languages",
+  "levels": [
+   "languages",
+   "apps"
+  ],
+  "paradigms": [
+   "functional",
+   "array (vectorized)",
+   "interactive"
+  ],
+  "typing": "dynamic",
+  "runs": "The R interpreter reads and evaluates source directly; most user-visible functions are themselves written in R, and they can call procedures written in C, C++ or Fortran.",
+  "influenced_by": [
+   "S",
+   "Scheme"
+  ],
+  "what": "R is a language and environment for statistical computing and graphics. It began as a free reimplementation of the S language from Bell Laboratories: it looks like S on the surface, while its implementation and semantics come from Scheme. Whole vectors and tables of data are the basic values, so a statistical analysis reads close to the mathematics.",
+  "used_for": [
+   "statistics and data analysis",
+   "plots and graphics",
+   "bioinformatics",
+   "teaching statistics"
+  ],
+  "notable": [
+   {
+    "name": "CRAN",
+    "text": "The Comprehensive R Archive Network held 25835 contributed packages when checked on 2026-11-24.",
+    "url": "https://cran.r-project.org/web/packages/"
+   },
+   {
+    "name": "Bioconductor",
+    "text": "An open source, open development software project that uses R; release 3.23 listed 2418 software packages when checked on 2026-11-24.",
+    "url": "https://www.bioconductor.org/"
+   },
+   {
+    "name": "ggplot2",
+    "text": "A widely used R system for declaratively creating graphics, based on The Grammar of Graphics.",
+    "url": "https://ggplot2.tidyverse.org/"
+   }
+  ],
+  "sample": {
+   "code": "gcd <- function(a, b) {\n  while (b != 0) {\n    t <- b\n    b <- a %% b\n    a <- t\n  }\n  a\n}\nprint(gcd(48, 18))",
+   "ran": false,
+   "how": "Not run: no R toolchain on this Mac. Expected output: [1] 6. Syntax checked against the R manuals (%% is the remainder operator)."
+  },
+  "official_url": "https://www.r-project.org/",
+  "spec_url": "https://cran.r-project.org/doc/manuals/r-release/R-lang.html",
+  "sources": [
+   "https://cran.r-project.org/doc/FAQ/R-FAQ.html",
+   "https://www.r-project.org/about.html",
+   "https://cran.r-project.org/doc/html/interface98-paper/paper_2.html",
+   "https://www.r-project.org/contributors.html"
+  ],
+  "influenced": [
+   "julia"
+  ]
+ },
+ {
+  "id": "julia",
+  "name": "Julia",
+  "year": 2012,
+  "year_note": "Public announcement in the blog post \"Why We Created Julia\", 14 February 2012",
+  "designers": [
+   "Jeff Bezanson",
+   "Stefan Karpinski",
+   "Viral B. Shah",
+   "Alan Edelman"
+  ],
+  "org": null,
+  "family": "numeric",
+  "level": "languages",
+  "levels": [
+   "languages",
+   "compilers"
+  ],
+  "paradigms": [
+   "multiple dispatch",
+   "imperative",
+   "functional"
+  ],
+  "typing": "dynamic, with optional type annotations and type inference",
+  "runs": "Julia code is compiled to machine code just in time, function by function, using type inference and the LLVM compiler framework.",
+  "influenced_by": [
+   "matlab",
+   "lisp",
+   "python",
+   "ruby",
+   "perl",
+   "r",
+   "c"
+  ],
+  "what": "Julia is a dynamic language for scientific and numerical computing. Scientists had largely moved to slower dynamic languages for daily work; Julia's authors wanted one language that is as easy to use as those and as fast as C. Its central idea is multiple dispatch, where the function body that runs is chosen by the types of all the arguments.",
+  "used_for": [
+   "numerical simulation",
+   "differential equations and scientific modeling",
+   "data analysis",
+   "high performance computing"
+  ],
+  "notable": [
+   {
+    "name": "CliMA ClimaCore.jl",
+    "text": "The dynamical core of the CliMA Earth System Model, a climate model developed in Julia that can run on GPUs.",
+    "url": "https://github.com/CliMA/ClimaCore.jl"
+   },
+   {
+    "name": "DSGE.jl",
+    "text": "The Federal Reserve Bank of New York published its DSGE macroeconomic model code as the Julia package DSGE.jl.",
+    "url": "https://github.com/FRBNY-DSGE/DSGE.jl"
+   }
+  ],
+  "sample": {
+   "code": "function euclid(a, b)\n    while b != 0\n        a, b = b, a % b\n    end\n    return a\nend\n\nprintln(euclid(48, 18))",
+   "ran": false,
+   "how": "Not run: no Julia toolchain on this Mac. Expected output: 6. The function is named euclid because Julia already has a built-in gcd."
+  },
+  "official_url": "https://julialang.org/",
+  "spec_url": null,
+  "sources": [
+   "https://julialang.org/blog/2012/02/why-we-created-julia/",
+   "https://docs.julialang.org/en/v1/"
+  ],
+  "influenced": []
+ },
+ {
+  "id": "matlab",
+  "name": "MATLAB",
+  "year": 1984,
+  "year_note": "PC-MATLAB, the first commercial version, debuted in December 1984; Cleve Moler's original Fortran MATLAB was written earlier, while he was teaching at the University of New Mexico in the 1970s and early 1980s (the source gives no exact year)",
+  "designers": [
+   "Cleve Moler (original Fortran MATLAB)",
+   "Jack Little (rewrite in C, with Steve Bangert)"
+  ],
+  "org": "MathWorks",
+  "family": "numeric",
+  "level": "languages",
+  "levels": [
+   "languages",
+   "apps"
+  ],
+  "paradigms": [
+   "array (matrix based)",
+   "imperative",
+   "interactive"
+  ],
+  "typing": "dynamic",
+  "runs": "MATLAB is a proprietary environment from MathWorks: commands and script files are executed interactively by the MATLAB program.",
+  "influenced_by": [
+   "fortran",
+   "LINPACK and EISPACK (the libraries it was written to give access to)"
+  ],
+  "what": "MATLAB, short for Matrix Laboratory, is a programming and numeric computation environment for engineers and scientists. Cleve Moler wrote the first version in Fortran so that his students could use the LINPACK and EISPACK matrix libraries without writing Fortran programs; in that version the matrix was the only data type. It is a commercial product, unlike most languages on this map.",
+  "used_for": [
+   "numerical computing with matrices",
+   "signal processing and control design",
+   "data analysis and plotting",
+   "engineering education"
+  ],
+  "notable": [
+   {
+    "name": "PC-MATLAB",
+    "text": "Jack Little's extended rewrite of MATLAB in C made its debut at the IEEE Conference on Decision and Control in Las Vegas in December 1984 and became the basis of the commercial product.",
+    "url": "https://www.mathworks.com/company/technical-articles/a-brief-history-of-matlab.html"
+   },
+   {
+    "name": "Simulink",
+    "text": "Simulink, the MathWorks product presented alongside MATLAB, is used to model systems and automatically generate production-ready embedded code.",
+    "url": "https://www.mathworks.com/products/matlab.html"
+   }
+  ],
+  "sample": {
+   "code": "disp(euclid(48, 18))\n\nfunction a = euclid(a, b)\n    while b ~= 0\n        t = b;\n        b = mod(a, b);\n        a = t;\n    end\nend",
+   "ran": false,
+   "how": "Not run: no MATLAB toolchain on this Mac. Expected output: 6. Written as a script file with a local function at the end of the file."
+  },
+  "official_url": "https://www.mathworks.com/products/matlab.html",
+  "spec_url": null,
+  "sources": [
+   "https://www.mathworks.com/company/technical-articles/a-brief-history-of-matlab.html",
+   "https://www.mathworks.com/products/matlab.html"
+  ],
+  "influenced": [
+   "julia"
+  ]
+ },
+ {
+  "id": "lisp",
+  "name": "Lisp",
+  "year": 1960,
+  "year_note": "John McCarthy's paper \"Recursive Functions of Symbolic Expressions and Their Computation by Machine, Part I\" appeared in Communications of the ACM in April 1960; implementation at MIT began in fall 1958",
+  "designers": [
+   "John McCarthy"
+  ],
+  "org": "MIT",
+  "family": "functional",
+  "level": "languages",
+  "levels": [
+   "languages",
+   "compilers",
+   "apps"
+  ],
+  "paradigms": [
+   "functional",
+   "code as data (programs are lists)",
+   "garbage collected"
+  ],
+  "typing": "dynamic",
+  "runs": "Lisp expressions are read as lists and evaluated, by an interpreter or after compilation, usually inside an interactive session that keeps the running program open to change.",
+  "influenced_by": [
+   "fortran",
+   "IPL",
+   "Church's lambda notation"
+  ],
+  "what": "Lisp is a family of languages built on one idea: programs and data share a single form, the parenthesized list. McCarthy designed it for artificial intelligence work on symbolic expressions rather than numbers. Because code is data, a Lisp program can build and transform other programs, and garbage collection was devised for its first implementation. Common Lisp, Scheme and Emacs Lisp are among its living dialects.",
+  "used_for": [
+   "symbolic computation and AI research",
+   "extensible editors and tools",
+   "language experiments",
+   "teaching how languages work"
+  ],
+  "notable": [
+   {
+    "name": "GNU Emacs",
+    "text": "The Emacs editor has at its core an interpreter for Emacs Lisp, a Lisp dialect in which most of the editor is extended and customized.",
+    "url": "https://www.gnu.org/software/emacs/"
+   },
+   {
+    "name": "Remote Agent on Deep Space 1",
+    "text": "NASA JPL's Remote Agent, an autonomous spacecraft control system written in Common Lisp, controlled the Deep Space 1 probe for two days in May 1999.",
+    "url": "https://flownet.com/gat/jpl-lisp.html"
+   },
+   {
+    "name": "ITA Software fare search",
+    "text": "ITA Software built the airline fare search engine behind Orbitz in Common Lisp, as described by its engineer Carl de Marcken in 2001.",
+    "url": "https://www.paulgraham.com/carl.html"
+   }
+  ],
+  "sample": {
+   "code": "(defun euclid (a b)\n  (if (zerop b)\n      a\n      (euclid b (mod a b))))\n\n(print (euclid 48 18))",
+   "ran": false,
+   "how": "Not run: no Common Lisp toolchain on this Mac. Expected output: 6. Common Lisp dialect; named euclid because gcd is already a standard function."
+  },
+  "official_url": "https://common-lisp.net/",
+  "spec_url": "https://www.lispworks.com/documentation/HyperSpec/Front/index.htm",
+  "sources": [
+   "https://www-formal.stanford.edu/jmc/recursive.html",
+   "https://www-formal.stanford.edu/jmc/history/lisp/node2.html",
+   "https://www-formal.stanford.edu/jmc/history/lisp/node3.html"
+  ],
+  "influenced": [
+   "ruby",
+   "julia",
+   "haskell"
+  ]
+ },
+ {
+  "id": "haskell",
+  "name": "Haskell",
+  "year": 1990,
+  "year_note": "The Haskell version 1.0 Report was published on 1 April 1990",
+  "designers": [
+   "a committee formed at the FPCA '87 conference; the 1.0 report was edited by Paul Hudak and Philip Wadler, and later editors include Simon Peyton Jones and John Hughes"
+  ],
+  "org": null,
+  "family": "functional",
+  "level": "languages",
+  "levels": [
+   "languages",
+   "compilers"
+  ],
+  "paradigms": [
+   "purely functional",
+   "lazy evaluation",
+   "type classes"
+  ],
+  "typing": "static, inferred, with type classes",
+  "runs": "The Glasgow Haskell Compiler (GHC) compiles Haskell to native machine code, directly or through LLVM, and also offers an interactive environment.",
+  "influenced_by": [
+   "lisp",
+   "Miranda",
+   "ML and Standard ML",
+   "ISWIM",
+   "APL",
+   "FP",
+   "Hope",
+   "Clean"
+  ],
+  "what": "Haskell is a purely functional language: functions have no hidden side effects, values never change, and expressions are evaluated only when their results are needed. A committee created it in the late 1980s because more than a dozen similar lazy functional languages existed and researchers wanted one common, open standard. Its type system, especially type classes, has shaped many later languages.",
+  "used_for": [
+   "compilers and language tools",
+   "programming language research",
+   "document and data transformation",
+   "backend services where correctness matters"
+  ],
+  "notable": [
+   {
+    "name": "GHC",
+    "text": "The Glasgow Haskell Compiler, an open source compiler and interactive environment for Haskell, is itself written mostly in Haskell.",
+    "url": "https://github.com/ghc/ghc"
+   },
+   {
+    "name": "Sigma at Meta",
+    "text": "Facebook rewrote the rule engine of Sigma, its system for detecting spam and malware, in Haskell during a two year redesign reported in 2015.",
+    "url": "https://engineering.fb.com/2015/06/26/security/fighting-spam-with-haskell/"
+   },
+   {
+    "name": "Pandoc",
+    "text": "The universal document converter Pandoc is a Haskell library and command line program.",
+    "url": "https://pandoc.org/"
+   }
+  ],
+  "sample": {
+   "code": "euclid :: Int -> Int -> Int\neuclid a 0 = a\neuclid a b = euclid b (a `mod` b)\n\nmain :: IO ()\nmain = print (euclid 48 18)",
+   "ran": false,
+   "how": "Not run: no Haskell (GHC) toolchain on this Mac. Expected output: 6. Named euclid because the Prelude already exports gcd."
+  },
+  "official_url": "https://www.haskell.org/",
+  "spec_url": "https://www.haskell.org/onlinereport/haskell2010/",
+  "sources": [
+   "https://www.microsoft.com/en-us/research/wp-content/uploads/2016/07/history.pdf",
+   "https://www.haskell.org/onlinereport/haskell2010/haskellli2.html",
+   "https://www.haskell.org/ghc/",
+   "https://www.haskell.org/"
+  ],
+  "influenced": [
+   "rust",
+   "swift"
+  ]
+ },
+ {
+  "id": "ocaml",
+  "name": "OCaml",
+  "year": 1996,
+  "year_note": "First release under the name Objective Caml in 1996; its ancestors Caml Light (1990) and Caml Special Light (1995) came earlier",
+  "designers": [
+   "Xavier Leroy",
+   "Jérôme Vouillon",
+   "Damien Doligez",
+   "Didier Rémy"
+  ],
+  "org": "Inria",
+  "family": "functional",
+  "level": "languages",
+  "levels": [
+   "languages",
+   "compilers",
+   "os"
+  ],
+  "paradigms": [
+   "functional",
+   "imperative",
+   "object-oriented",
+   "modules"
+  ],
+  "typing": "static, inferred (ML type system)",
+  "runs": "OCaml source is compiled either to bytecode for a small virtual machine or to native machine code by ocamlopt; a garbage collector manages memory.",
+  "influenced_by": [
+   "ML (Caml, Caml Light)",
+   "Standard ML (module system)"
+  ],
+  "what": "OCaml is a functional language from the ML family that also allows imperative and object-oriented code. It grew out of a long line of research on ML at Inria, and it pairs a strong type system that infers types for you with a fast native compiler. That mix makes it a favorite for programs that manipulate other programs: compilers, type checkers, verifiers.",
+  "used_for": [
+   "compilers and static analysis tools",
+   "proof assistants",
+   "financial trading systems",
+   "unikernels and systems software"
+  ],
+  "notable": [
+   {
+    "name": "The Rocq Prover",
+    "text": "The Rocq proof assistant (formerly Coq) is written in OCaml.",
+    "url": "https://rocq-prover.org/about"
+   },
+   {
+    "name": "Jane Street",
+    "text": "The trading firm Jane Street uses OCaml as its primary development platform.",
+    "url": "https://www.janestreet.com/technology/"
+   },
+   {
+    "name": "MirageOS",
+    "text": "A library operating system that builds unikernels, with applications and system libraries written in OCaml.",
+    "url": "https://mirage.io/"
+   }
+  ],
+  "sample": {
+   "code": "let rec gcd a b = if b = 0 then a else gcd b (a mod b)\n\nlet () = Printf.printf \"%d\\n\" (gcd 48 18)",
+   "ran": false,
+   "how": "Not run: no OCaml toolchain on this Mac. Expected output: 6."
+  },
+  "official_url": "https://ocaml.org/",
+  "spec_url": "https://ocaml.org/manual/",
+  "sources": [
+   "https://ocaml.org/about"
+  ],
+  "influenced": [
+   "rust"
+  ]
+ },
+ {
+  "id": "erlang",
+  "name": "Erlang",
+  "year": 1986,
+  "year_note": "Joe Armstrong began work on the language at the Ericsson Computer Science Laboratory in 1986; it was used inside Ericsson for years before being released as open source",
+  "designers": [
+   "Joe Armstrong",
+   "Robert Virding",
+   "Mike Williams"
+  ],
+  "org": "Ericsson",
+  "family": "functional",
+  "level": "networks",
+  "levels": [
+   "networks",
+   "languages",
+   "compilers"
+  ],
+  "paradigms": [
+   "functional",
+   "concurrent (lightweight processes and message passing)",
+   "fault tolerant"
+  ],
+  "typing": "dynamic, strong",
+  "runs": "Erlang modules are compiled to bytecode that runs on the Erlang virtual machine, which schedules many lightweight processes and lets code be replaced while the system keeps running.",
+  "influenced_by": [
+   "prolog",
+   "CSP"
+  ],
+  "what": "Erlang was created at Ericsson to program telephone switches: systems that handle huge numbers of simultaneous calls and are never supposed to stop. A program is a crowd of small isolated processes that share nothing and talk only by sending messages, so one can crash and be restarted without taking the rest down. The language started life as a modified Prolog, which is where its syntax comes from.",
+  "used_for": [
+   "telecom switches",
+   "messaging systems and brokers",
+   "distributed databases",
+   "servers that must stay up"
+  ],
+  "notable": [
+   {
+    "name": "Ericsson AXD301",
+    "text": "An ATM switch built with Erlang/OTP; Armstrong's 2003 thesis reports over a million lines of Erlang in it and calls it one of the most reliable products Ericsson had made.",
+    "url": "https://erlang.org/download/armstrong_thesis_2003.pdf"
+   },
+   {
+    "name": "RabbitMQ",
+    "text": "The open source message broker RabbitMQ is an Erlang project and needs an Erlang runtime to run.",
+    "url": "https://github.com/rabbitmq/rabbitmq-server"
+   }
+  ],
+  "sample": {
+   "code": "-module(euclid).\n-export([main/0]).\n\ngcd(A, 0) -> A;\ngcd(A, B) -> gcd(B, A rem B).\n\nmain() -> io:format(\"~p~n\", [gcd(48, 18)]).",
+   "ran": false,
+   "how": "Not run: no Erlang toolchain on this Mac. Expected output when euclid:main() is called: 6."
+  },
+  "official_url": "https://www.erlang.org/",
+  "spec_url": null,
+  "sources": [
+   "https://erlang.org/download/armstrong_thesis_2003.pdf",
+   "https://www.erlang.org/faq/academic.html",
+   "https://www.erlang.org/faq/introduction.html",
+   "https://www.erlang.org/about"
+  ],
+  "influenced": [
+   "rust",
+   "elixir"
+  ]
+ },
+ {
+  "id": "elixir",
+  "name": "Elixir",
+  "year": 2011,
+  "year_note": "The public source repository elixir-lang/elixir was created in January 2011; v0.5.0, the first release after the language was rewritten, came in May 2012 and v1.0 in September 2014",
+  "designers": [
+   "José Valim"
+  ],
+  "org": null,
+  "family": "functional",
+  "level": "networks",
+  "levels": [
+   "networks",
+   "languages",
+   "apps"
+  ],
+  "paradigms": [
+   "functional",
+   "concurrent (Erlang processes)",
+   "macros"
+  ],
+  "typing": "dynamic, strong",
+  "runs": "Elixir is compiled to bytecode for the Erlang virtual machine, so it runs on the same runtime as Erlang and can call Erlang modules directly.",
+  "influenced_by": [
+   "erlang",
+   "ruby"
+  ],
+  "what": "Elixir is a functional language that runs on the Erlang virtual machine. It keeps Erlang's model of many small isolated processes that survive each other's failures, and adds a friendlier syntax, macros and modern tooling. It is a way to get the reliability of a telephone switch in a language that feels closer to Ruby.",
+  "used_for": [
+   "web applications",
+   "real-time messaging and chat",
+   "distributed and embedded systems",
+   "data pipelines"
+  ],
+  "notable": [
+   {
+    "name": "Discord",
+    "text": "Discord has used Elixir from its beginning and described in 2017 how it scaled the language to five million concurrent users.",
+    "url": "https://discord.com/blog/how-discord-scaled-elixir-to-5-000-000-concurrent-users"
+   },
+   {
+    "name": "Phoenix",
+    "text": "The main Elixir web framework, which runs on the Erlang VM and is designed to hold very large numbers of WebSocket connections.",
+    "url": "https://www.phoenixframework.org/"
+   }
+  ],
+  "sample": {
+   "code": "defmodule Euclid do\n  def gcd(a, 0), do: a\n  def gcd(a, b), do: gcd(b, rem(a, b))\nend\n\nIO.puts(Euclid.gcd(48, 18))",
+   "ran": false,
+   "how": "Not run: no Elixir toolchain on this Mac. Expected output: 6."
+  },
+  "official_url": "https://elixir-lang.org/",
+  "spec_url": null,
+  "sources": [
+   "https://api.github.com/repos/elixir-lang/elixir",
+   "https://elixir-lang.org/blog/2012/05/25/elixir-v0-5-0-released/",
+   "https://elixir-lang.org/blog/2014/09/18/elixir-v1-0-0-released/",
+   "https://elixir-lang.org/blog/2013/08/08/elixir-design-goals/",
+   "https://elixir-lang.org/"
+  ],
+  "influenced": []
+ },
+ {
+  "id": "fortran",
+  "name": "Fortran",
+  "year": 1957,
+  "year_note": "IBM released the Mathematical Formula Translating System and its first compiler, for the IBM 704, in 1957; work began in 1954",
+  "designers": [
+   "John Backus and his team at IBM"
+  ],
+  "org": "IBM",
+  "family": "numeric",
+  "level": "languages",
+  "levels": [
+   "languages",
+   "compilers"
+  ],
+  "paradigms": [
+   "imperative",
+   "array oriented",
+   "parallel (modern standards)"
+  ],
+  "typing": "static",
+  "runs": "A Fortran compiler such as GFortran translates the source ahead of time into machine code.",
+  "influenced_by": [],
+  "what": "Fortran, short for formula translation, is one of the earliest high-level languages and became the first computer language standard. Before it, programs were hand-coded as rows of zeros and ones; Backus wanted a language that captured the human intent of a program and left it to a compiler to recast that for the machine. It is still revised (the current standard is Fortran 2023) and still carries much of the world's numerical computing.",
+  "used_for": [
+   "weather and climate models",
+   "linear algebra libraries",
+   "physics and engineering simulation",
+   "supercomputing"
+  ],
+  "notable": [
+   {
+    "name": "LAPACK",
+    "text": "The standard library for dense linear algebra, used underneath many scientific tools, is written in Fortran 90.",
+    "url": "https://www.netlib.org/lapack/"
+   },
+   {
+    "name": "WRF",
+    "text": "The Weather Research and Forecasting model is written mostly in Fortran (by share of code in its official repository).",
+    "url": "https://github.com/wrf-model/WRF"
+   }
+  ],
+  "sample": {
+   "code": "program euclid\n  implicit none\n  integer :: a = 48, b = 18, t\n  do while (b /= 0)\n    t = b\n    b = mod(a, b)\n    a = t\n  end do\n  print *, a\nend program euclid",
+   "ran": false,
+   "how": "Not run: no Fortran toolchain on this Mac. Expected output: 6 (list-directed output pads it with leading spaces). Free-form Fortran 90 or later."
+  },
+  "official_url": "https://fortran-lang.org/",
+  "spec_url": "https://wg5-fortran.org/f2023.html",
+  "sources": [
+   "https://www.ibm.com/history/fortran",
+   "https://wg5-fortran.org/f2023.html",
+   "https://gcc.gnu.org/fortran/",
+   "https://fortran-lang.org/"
+  ],
+  "influenced": [
+   "matlab",
+   "lisp"
+  ]
+ },
+ {
+  "id": "cobol",
+  "name": "COBOL",
+  "year": 1960,
+  "year_note": "The first version of COBOL was released in 1960, a year after the CODASYL consortium formed",
+  "designers": [
+   "the CODASYL committee (Conference on Data Systems Languages), drawing on Grace Hopper's FLOW-MATIC"
+  ],
+  "org": "CODASYL, in a US Department of Defense initiative",
+  "family": "managed",
+  "level": "apps",
+  "levels": [
+   "apps",
+   "languages"
+  ],
+  "paradigms": [
+   "imperative",
+   "procedural",
+   "record oriented"
+  ],
+  "typing": "static (fixed-size fields declared with PICTURE clauses)",
+  "runs": "A COBOL compiler translates the source into an executable, typically run as batch jobs or transaction programs on mainframes; GnuCOBOL produces native executables on ordinary systems.",
+  "influenced_by": [
+   "FLOW-MATIC"
+  ],
+  "what": "COBOL, the common business-oriented language, was designed so that business data processing programs would read like English and run on computers from different makers. Its programs are organized around records with exactly declared fields, which suits payroll, accounts and ledgers. It is old and verbose, and a large amount of banking and government processing still depends on it.",
+  "used_for": [
+   "banking and payment processing",
+   "government benefit and tax systems",
+   "insurance and payroll",
+   "mainframe batch jobs"
+  ],
+  "notable": [
+   {
+    "name": "US federal legacy systems",
+    "text": "A 2019 US Government Accountability Office review of critical legacy systems (GAO-19-471) found that the selected system at the Department of Education runs on COBOL.",
+    "url": "https://www.gao.gov/products/gao-19-471"
+   },
+   {
+    "name": "GnuCOBOL",
+    "text": "A free COBOL compiler from the GNU project that produces native executables on Linux, BSD, macOS and Windows.",
+    "url": "https://www.gnu.org/software/gnucobol/"
+   }
+  ],
+  "sample": {
+   "code": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. EUCLID.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 A PIC 9(4) VALUE 48.\n       01 B PIC 9(4) VALUE 18.\n       01 T PIC 9(4).\n       PROCEDURE DIVISION.\n           PERFORM UNTIL B = 0\n               MOVE B TO T\n               COMPUTE B = FUNCTION MOD(A, B)\n               MOVE T TO A\n           END-PERFORM\n           DISPLAY A\n           STOP RUN.",
+   "ran": false,
+   "how": "Not run: no COBOL toolchain on this Mac. Expected output: 0006 (a four digit field). Fixed-format source; a full program needs its divisions, so it is 15 lines rather than under 12."
+  },
+  "official_url": "https://www.gnu.org/software/gnucobol/",
+  "spec_url": null,
+  "sources": [
+   "https://www.ibm.com/think/topics/cobol",
+   "https://www.gnu.org/software/gnucobol/"
+  ],
+  "influenced": []
+ },
+ {
+  "id": "sql",
+  "name": "SQL",
+  "year": 1974,
+  "year_note": "Chamberlin and Boyce presented \"SEQUEL: A Structured English Query Language\" at the ACM SIGFIDET workshop in May 1974; ANSI standardized SQL in 1986 and ISO in 1987",
+  "designers": [
+   "Donald Chamberlin",
+   "Raymond Boyce"
+  ],
+  "org": "IBM",
+  "family": "query-logic",
+  "level": "apps",
+  "levels": [
+   "apps"
+  ],
+  "paradigms": [
+   "declarative",
+   "relational (set based)"
+  ],
+  "typing": "static column types declared in a schema (strictness varies by database)",
+  "runs": "A database engine parses the query, plans how to answer it, and executes that plan against stored tables; you state what rows you want, not how to find them.",
+  "influenced_by": [
+   "SQUARE (the authors' earlier query language)",
+   "Codd's relational model"
+  ],
+  "what": "SQL is the language for asking questions of relational databases, where data lives in tables. It was created at IBM, first under the name SEQUEL, to make Edgar Codd's relational model usable through English-like keywords. A query describes the result wanted and the database decides how to compute it, which is why the same query works on a phone and on a data warehouse.",
+  "used_for": [
+   "querying and updating databases",
+   "reporting and analytics",
+   "defining schemas and constraints",
+   "application data storage"
+  ],
+  "notable": [
+   {
+    "name": "SQLite",
+    "text": "An in-process SQL database engine found in phones, browsers and countless applications; its authors describe it as the most widely deployed database in the world.",
+    "url": "https://www.sqlite.org/about.html"
+   },
+   {
+    "name": "PostgreSQL",
+    "text": "A major open source object-relational database system that uses and extends the SQL language.",
+    "url": "https://www.postgresql.org/about/"
+   }
+  ],
+  "sample": {
+   "code": "WITH RECURSIVE gcd(a, b) AS (\n  SELECT 48, 18\n  UNION ALL\n  SELECT b, a % b FROM gcd WHERE b <> 0\n)\nSELECT a FROM gcd WHERE b = 0;",
+   "ran": true,
+   "how": "sqlite3 3.51.0, printed 6. SQL has no functions or loops in its core, so Euclid's algorithm is written as a recursive common table expression that produces one row per step."
+  },
+  "official_url": null,
+  "spec_url": null,
+  "sources": [
+   "https://research.ibm.com/publications/sequel-a-struciured-english-query-language",
+   "https://bibtex.github.io/SIGFIDET-1974-ChamberlinB.html",
+   "https://www.ibm.com/think/topics/structured-query-language",
+   "https://www.ibm.com/history/relational-database",
+   "https://www.sqlite.org/lang_with.html"
+  ],
+  "influenced": []
+ },
+ {
+  "id": "prolog",
+  "name": "Prolog",
+  "year": 1972,
+  "year_note": "A preliminary version existed at the end of 1971 and a more definitive version, with the name Prolog, at the end of 1972 in Marseille",
+  "designers": [
+   "Alain Colmerauer",
+   "Philippe Roussel",
+   "with ideas from Robert Kowalski"
+  ],
+  "org": "Colmerauer's research group in Marseille",
+  "family": "query-logic",
+  "level": "languages",
+  "levels": [
+   "languages",
+   "apps"
+  ],
+  "paradigms": [
+   "logic programming",
+   "declarative",
+   "backtracking search"
+  ],
+  "typing": "dynamic",
+  "runs": "A Prolog system loads facts and rules, then answers a query by searching for values that make it true, using unification and backtracking (SLD resolution).",
+  "influenced_by": [
+   "resolution theorem proving (Kowalski's SL-resolution)"
+  ],
+  "what": "Prolog is a logic programming language: a program is a set of facts and rules, and running it means asking a question that the system tries to prove. It came out of a project in Marseille to process natural language, and its name abbreviates the French for programming in logic. The same predicate can often be run in several directions, to check an answer or to search for one.",
+  "used_for": [
+   "natural language processing",
+   "rule-based and expert systems",
+   "symbolic reasoning and constraint solving",
+   "teaching logic programming"
+  ],
+  "notable": [
+   {
+    "name": "IBM Watson",
+    "text": "The Watson system that won Jeopardy! in 2011 used Prolog to express pattern-matching rules over parse trees in its question analysis.",
+    "url": "https://logicprogramming.org/2011/03/natural-language-processing-with-prolog-in-the-ibm-watson-system"
+   },
+   {
+    "name": "The first Erlang",
+    "text": "Erlang started life as a modified Prolog, and its syntax mostly comes from Prolog.",
+    "url": "https://www.erlang.org/faq/academic.html"
+   }
+  ],
+  "sample": {
+   "code": "gcd(A, 0, A) :- !.\ngcd(A, B, G) :- B > 0, R is A mod B, gcd(B, R, G).\n\n:- gcd(48, 18, G), write(G), nl.",
+   "ran": false,
+   "how": "Not run: no Prolog toolchain on this Mac. Expected output: 6. A gcd/3 predicate: the third argument is the result, and the last line is a directive that poses the query when the file is loaded."
+  },
+  "official_url": "https://www.swi-prolog.org/",
+  "spec_url": null,
+  "sources": [
+   "http://alain.colmerauer.free.fr/alcol/ArchivesPublications/PrologHistory/19november92.pdf",
+   "https://www.swi-prolog.org/pldoc/man?section=swiorother"
+  ],
+  "influenced": [
+   "erlang"
+  ]
+ },
+ {
+  "id": "bash",
+  "name": "Bash",
+  "year": 1989,
+  "year_note": "Brian Fox's beta release of BASH is reported in the GNU's Bulletin of June 1989",
+  "designers": [
+   "Brian Fox (original author)",
+   "Chet Ramey (current maintainer)"
+  ],
+  "org": "GNU Project (Free Software Foundation)",
+  "family": "shell",
+  "level": "os",
+  "levels": [
+   "os",
+   "networks"
+  ],
+  "paradigms": [
+   "command language",
+   "imperative",
+   "text streams and pipelines"
+  ],
+  "typing": "untyped (values are strings, with integer arithmetic on request)",
+  "runs": "The bash program reads commands one at a time, from a terminal or a script file, expands them and runs them directly, starting other programs as processes and connecting them with pipes.",
+  "influenced_by": [
+   "Bourne shell (sh)",
+   "Korn shell (ksh)",
+   "C shell (csh)"
+  ],
+  "what": "Bash, the Bourne-Again SHell, is the command interpreter of the GNU operating system and both a way to type commands and a programming language. It is a free implementation of the Unix shell standardized by POSIX, with extensions borrowed from the Korn and C shells. Its strength is gluing other programs together, so it is the language of install scripts, build steps and server administration.",
+  "used_for": [
+   "interactive command line",
+   "automation and glue scripts",
+   "build and deployment pipelines",
+   "system startup and administration"
+  ],
+  "notable": [
+   {
+    "name": "GitHub Actions",
+    "text": "In GitHub's CI service, bash is the default shell for run steps on non-Windows runners.",
+    "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax"
+   },
+   {
+    "name": "nvm",
+    "text": "The Node Version Manager, a common developer tool, is a POSIX-compliant bash script.",
+    "url": "https://github.com/nvm-sh/nvm"
+   }
+  ],
+  "sample": {
+   "code": "gcd() {\n  local a=$1 b=$2\n  while (( b != 0 )); do\n    (( t = b, b = a % b, a = t ))\n  done\n  echo \"$a\"\n}\ngcd 48 18",
+   "ran": true,
+   "how": "GNU bash 3.2.57 (the macOS system bash), printed 6."
+  },
+  "official_url": "https://www.gnu.org/software/bash/",
+  "spec_url": "https://www.gnu.org/software/bash/manual/bash.html",
+  "sources": [
+   "https://www.gnu.org/bulletins/bull7.html",
+   "https://www.gnu.org/software/bash/manual/bash.html",
+   "https://tiswww.case.edu/php/chet/bash/FAQ",
+   "https://tiswww.case.edu/php/chet/bash/bashtop.html"
+  ],
+  "influenced": []
+ },
+ {
+  "id": "powershell",
+  "name": "PowerShell",
+  "year": 2006,
+  "year_note": "Windows PowerShell 1.0 was released in November 2006; Jeffrey Snover's Monad Manifesto describing the design is dated August 2002, and PowerShell 6.0 made it open source and cross-platform",
+  "designers": [
+   "Jeffrey Snover"
+  ],
+  "org": "Microsoft",
+  "family": "shell",
+  "level": "os",
+  "levels": [
+   "os",
+   "networks"
+  ],
+  "paradigms": [
+   "command language",
+   "object pipeline",
+   "imperative"
+  ],
+  "typing": "dynamic, with optional type annotations (.NET types)",
+  "runs": "The PowerShell engine interprets commands and scripts on top of the .NET runtime; commands pass .NET objects to each other rather than text.",
+  "influenced_by": [
+   "Unix shells (sh, csh, ksh, bash)"
+  ],
+  "what": "PowerShell is Microsoft's command-line shell and scripting language for automating system administration. Traditional shells pass plain text between commands, which each command must parse again; PowerShell passes structured .NET objects, so a script can read a property instead of cutting columns out of text. It began on Windows and now also runs on Linux and macOS.",
+  "used_for": [
+   "Windows and server administration",
+   "cloud resource management",
+   "build, test and deployment automation",
+   "configuration management"
+  ],
+  "notable": [
+   {
+    "name": "Azure PowerShell",
+    "text": "Microsoft's official set of PowerShell modules for managing Azure resources.",
+    "url": "https://learn.microsoft.com/en-us/powershell/azure/what-is-azure-powershell"
+   },
+   {
+    "name": "Exchange Management Shell",
+    "text": "The command-line administration interface of Microsoft Exchange Server is built on Windows PowerShell.",
+    "url": "https://learn.microsoft.com/en-us/powershell/exchange/exchange-management-shell"
+   }
+  ],
+  "sample": {
+   "code": "function Get-Gcd([int]$a, [int]$b) {\n    while ($b -ne 0) {\n        $a, $b = $b, ($a % $b)\n    }\n    $a\n}\n\nGet-Gcd 48 18",
+   "ran": false,
+   "how": "Not run: no PowerShell toolchain on this Mac. Expected output: 6."
+  },
+  "official_url": "https://learn.microsoft.com/en-us/powershell/",
+  "spec_url": null,
+  "sources": [
+   "https://learn.microsoft.com/en-us/powershell/scripting/install/powershell-support-lifecycle",
+   "https://www.jsnover.com/Docs/MonadManifesto.pdf",
+   "https://learn.microsoft.com/en-us/powershell/scripting/overview",
+   "https://learn.microsoft.com/en-us/powershell/scripting/whats-new/differences-from-windows-powershell"
+  ],
+  "influenced": []
+ },
+ {
+  "id": "html-css",
+  "name": "HTML and CSS",
+  "year": 1990,
+  "year_note": "The WHATWG standard dates HTML's first years to 1990 to 1995, and Tim Berners-Lee began writing the first browser and editor at CERN in October 1990; the CSS story starts in 1994 and CSS level 1 became a W3C Recommendation in December 1996",
+  "designers": [
+   "Tim Berners-Lee (HTML)",
+   "Håkon Wium Lie and Bert Bos (CSS)"
+  ],
+  "org": "CERN originally; now WHATWG (HTML) and W3C (CSS)",
+  "family": "markup-config",
+  "level": "apps",
+  "levels": [
+   "apps",
+   "networks"
+  ],
+  "paradigms": [
+   "markup (HTML)",
+   "declarative style rules (CSS)"
+  ],
+  "typing": "none (not a programming language)",
+  "runs": "A web browser parses the HTML into a tree of elements, applies the CSS rules that match each element, and renders the result as a page.",
+  "influenced_by": [
+   "SGML"
+  ],
+  "what": "HTML and CSS are the two languages every web page is written in. HTML marks up the structure of a document (headings, paragraphs, links, forms) and CSS describes how that structure should look. Neither computes anything by itself: they describe, and the browser does the work. The early HTML was an SGML format, and CSS was added a few years later so that authors could style pages without bending the markup.",
+  "used_for": [
+   "web pages and web applications",
+   "user interface layout and styling",
+   "documents and e-books",
+   "email formatting"
+  ],
+  "notable": [
+   {
+    "name": "The first website",
+    "text": "The first web server and page ran at CERN at the address info.cern.ch, which still hosts a copy of the first website.",
+    "url": "https://info.cern.ch/"
+   },
+   {
+    "name": "EPUB",
+    "text": "The EPUB e-book format, a W3C standard, packages HTML, CSS and SVG content into a single file.",
+    "url": "https://www.w3.org/TR/epub-33/"
+   }
+  ],
+  "sample": {
+   "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>gcd</title>\n<style>\n  p { font-family: monospace; color: darkgreen; }\n</style>\n</head>\n<body><p>gcd(48, 18) = 6</p></body>\n</html>",
+   "ran": false,
+   "how": "Not run: there is nothing to run. HTML and CSS perform no computation, so this minimal page only states the answer and styles it; a browser would display the text gcd(48, 18) = 6 in green monospace type."
+  },
+  "official_url": "https://html.spec.whatwg.org/",
+  "spec_url": "https://html.spec.whatwg.org/",
+  "sources": [
+   "https://html.spec.whatwg.org/multipage/introduction.html",
+   "https://www.w3.org/History.html",
+   "https://www.w3.org/History/19921103-hypertext/hypertext/WWW/MarkUp/MarkUp.html",
+   "https://www.w3.org/Style/CSS20/history.html",
+   "https://www.w3.org/Style/CSS/"
+  ],
+  "influenced": []
+ },
+ {
+  "id": "hcl",
+  "name": "HCL (Terraform)",
+  "year": 2014,
+  "year_note": "Terraform, whose configuration language HCL comes from, was announced on 28 July 2014; the hashicorp/hcl repository was created on 31 July 2014",
+  "designers": [
+   "Mitchell Hashimoto (original parsers)"
+  ],
+  "org": "HashiCorp",
+  "family": "markup-config",
+  "level": "networks",
+  "levels": [
+   "networks",
+   "apps"
+  ],
+  "paradigms": [
+   "declarative",
+   "configuration"
+  ],
+  "typing": "dynamic values checked against a schema supplied by the host application",
+  "runs": "A host tool such as Terraform parses the HCL files, builds a dependency graph of the declared resources, and calls cloud provider APIs to make real infrastructure match the description.",
+  "influenced_by": [
+   "libucl",
+   "nginx configuration"
+  ],
+  "what": "HCL, the HashiCorp configuration language, is a syntax for configuration files that is easier for people to read and write than JSON. Its best known use is Terraform, where blocks declare the servers, networks and databases you want and the tool works out the steps to create them. It is declarative: the file describes an intended end state, not a sequence of actions.",
+  "used_for": [
+   "infrastructure as code",
+   "cloud resource provisioning",
+   "machine image and job definitions",
+   "tool configuration"
+  ],
+  "notable": [
+   {
+    "name": "Terraform",
+    "text": "HashiCorp's infrastructure as code tool, written in Go, whose language is defined in terms of HCL syntax.",
+    "url": "https://developer.hashicorp.com/terraform/language/syntax/configuration"
+   },
+   {
+    "name": "OpenTofu",
+    "text": "A community fork of Terraform under the Linux Foundation, a drop-in replacement that keeps existing HCL configurations working.",
+    "url": "https://opentofu.org/"
+   },
+   {
+    "name": "Nomad",
+    "text": "HashiCorp's workload orchestrator takes its job specifications in HCL.",
+    "url": "https://developer.hashicorp.com/nomad/docs/job-specification"
+   }
+  ],
+  "sample": {
+   "code": "locals {\n  a = 48\n  b = 18\n}\n\noutput \"first_remainder\" {\n  value = local.a % local.b\n}",
+   "ran": false,
+   "how": "Not run: no Terraform on this Mac. HCL declares rather than computes: it has no loops or recursive functions, so Euclid's algorithm cannot be written in it. This Terraform-style block only declares the first step, 48 % 18, which Terraform would report as 12."
+  },
+  "official_url": "https://github.com/hashicorp/hcl",
+  "spec_url": "https://github.com/hashicorp/hcl/blob/main/hclsyntax/spec.md",
+  "sources": [
+   "https://github.com/hashicorp/hcl",
+   "https://api.github.com/repos/hashicorp/hcl",
+   "https://www.hashicorp.com/blog/terraform-announcement",
+   "https://developer.hashicorp.com/terraform/language",
+   "https://developer.hashicorp.com/terraform/language/expressions/operators"
+  ],
+  "influenced": []
+ },
+ {
+  "id": "lean",
+  "name": "Lean",
+  "year": 2013,
+  "year_note": "Leonardo de Moura launched the Lean project at Microsoft Research in 2013; Lean 0.1 was released on 16 June 2014 and Lean 4.0 on 8 September 2023",
+  "designers": [
+   "Leonardo de Moura"
+  ],
+  "org": "Microsoft Research originally; now the Lean Focused Research Organization",
+  "family": "proof",
+  "level": "languages",
+  "levels": [
+   "languages",
+   "compilers"
+  ],
+  "paradigms": [
+   "dependently typed",
+   "functional",
+   "interactive theorem proving (tactics)"
+  ],
+  "typing": "static, dependent types",
+  "runs": "Lean elaborates each definition and proof into terms of its core type theory, which a small kernel checks; ordinary programs are also compiled to efficient code and can be run.",
+  "influenced_by": [],
+  "what": "Lean is both a functional programming language and an interactive theorem prover based on dependent type theory. You can write a program, state a theorem about it and prove the theorem in the same file, and a small trusted kernel checks every proof. Since version 4 Lean is mostly written in Lean itself, and its large community library Mathlib has made it a main vehicle for formalizing modern mathematics.",
+  "used_for": [
+   "formalizing mathematics",
+   "verifying software and algorithms",
+   "proof-carrying programs",
+   "training and testing AI theorem provers"
+  ],
+  "notable": [
+   {
+    "name": "Mathlib",
+    "text": "The community mathematics library of Lean 4, a single repository of formalized mathematics from algebra to analysis.",
+    "url": "https://github.com/leanprover-community/mathlib4"
+   },
+   {
+    "name": "Liquid Tensor Experiment",
+    "text": "In July 2022 the Lean community finished a formal verification of the main theorem of liquid vector spaces by Clausen and Scholze, a challenge Peter Scholze had posed a year and a half earlier.",
+    "url": "https://leanprover-community.github.io/blog/posts/lte-final/"
+   },
+   {
+    "name": "Cedar",
+    "text": "Amazon's open source authorization policy language has a Lean formalization with proofs about its behavior.",
+    "url": "https://github.com/cedar-policy/cedar-spec"
+   }
+  ],
+  "sample": {
+   "code": "def gcd (a b : Nat) : Nat :=\n  if b = 0 then a else gcd b (a % b)\ntermination_by b\ndecreasing_by exact Nat.mod_lt _ (by omega)\n\ntheorem gcd_zero (a : Nat) : gcd a 0 = a := by\n  unfold gcd; simp\n\n#eval gcd 48 18",
+   "ran": true,
+   "how": "Lean 4.36.0 without Mathlib, #eval printed 6 and the theorem was accepted. The termination_by lines prove that the recursion stops, which Lean requires."
+  },
+  "official_url": "https://lean-lang.org/",
+  "spec_url": "https://lean-lang.org/doc/reference/latest/",
+  "sources": [
+   "https://lean-lang.org/doc/reference/latest/Introduction/",
+   "https://lean-lang.org/doc/reference/latest/",
+   "https://lean-lang.org/fro/about/"
+  ],
+  "influenced": []
+ },
+ {
+  "id": "rocq",
+  "name": "Rocq (Coq)",
+  "year": 1989,
+  "year_note": "Version 4.10, the first released system with an extensible set of tactics, came out in 1989; the first implementation of the Calculus of Constructions was started in 1984. The Coq Proof Assistant was renamed the Rocq Prover",
+  "designers": [
+   "Thierry Coquand",
+   "Gérard Huet",
+   "Christine Paulin (inductive types)"
+  ],
+  "org": "Inria",
+  "family": "proof",
+  "level": "languages",
+  "levels": [
+   "languages",
+   "compilers"
+  ],
+  "paradigms": [
+   "dependently typed",
+   "functional",
+   "interactive theorem proving (tactics)"
+  ],
+  "typing": "static, dependent types (Calculus of Inductive Constructions)",
+  "runs": "The Rocq Prover checks definitions and proofs with a relatively small kernel, and can extract certified programs to OCaml, Haskell or Scheme.",
+  "influenced_by": [
+   "Automath",
+   "LCF",
+   "ML (Caml)"
+  ],
+  "what": "Rocq, known as Coq until its recent renaming, is a proof assistant: a language for writing mathematical definitions, programs and proofs that the machine checks step by step. It is built on the Calculus of Inductive Constructions, in which a proof is a program and a theorem is its type. Programs proved correct in it can be extracted to run as ordinary OCaml or Haskell code.",
+  "used_for": [
+   "machine-checked mathematics",
+   "verified compilers and systems software",
+   "programming language theory",
+   "teaching logic and proofs"
+  ],
+  "notable": [
+   {
+    "name": "CompCert",
+    "text": "A C compiler with a machine-checked proof, done in Rocq, that the generated code behaves as the source program's semantics prescribe.",
+    "url": "https://compcert.org/"
+   },
+   {
+    "name": "Four Color Theorem",
+    "text": "The full formal proof of the Four Color Theorem is a Rocq development.",
+    "url": "https://github.com/rocq-community/fourcolor"
+   },
+   {
+    "name": "Odd Order Theorem",
+    "text": "The Feit-Thompson Odd Order Theorem of group theory has a complete formal proof in Rocq.",
+    "url": "https://github.com/math-comp/odd-order"
+   }
+  ],
+  "sample": {
+   "code": "Fixpoint gcd (a b : nat) : nat :=\n  match a with\n  | O => b\n  | S a' => gcd (Nat.modulo b (S a')) (S a')\n  end.\n\nCompute gcd 48 18.\n\nExample gcd_48_18 : gcd 48 18 = 6.\nProof. reflexivity. Qed.",
+   "ran": false,
+   "how": "Not run: no Rocq toolchain on this Mac. Expected: Compute prints 6 and the example is proved by computation. The definition follows the one in Rocq's own core library (Corelib/Init/Nat.v), which recurses on the first argument so that the termination checker accepts it."
+  },
+  "official_url": "https://rocq-prover.org/",
+  "spec_url": "https://rocq-prover.org/doc/V9.0.0/refman/",
+  "sources": [
+   "https://rocq-prover.org/about",
+   "https://rocq-prover.org/doc/V9.0.0/refman/history.html",
+   "https://raw.githubusercontent.com/rocq-prover/rocq/master/theories/Corelib/Init/Nat.v"
+  ],
+  "influenced": []
+ },
+ {
+  "id": "isabelle",
+  "name": "Isabelle",
+  "year": 1986,
+  "year_note": "Lawrence Paulson's paper \"Natural Deduction as Higher-Order Resolution\", which describes Isabelle as under development, appeared in the Journal of Logic Programming in 1986",
+  "designers": [
+   "Lawrence C. Paulson",
+   "Tobias Nipkow",
+   "Makarius Wenzel"
+  ],
+  "org": "University of Cambridge and Technische Universität München",
+  "family": "proof",
+  "level": "languages",
+  "levels": [
+   "languages"
+  ],
+  "paradigms": [
+   "higher-order logic",
+   "interactive theorem proving",
+   "structured proofs (Isar)"
+  ],
+  "typing": "static (the types of higher-order logic, in Isabelle/HOL)",
+  "runs": "Isabelle checks theory files interactively: every proof step is reduced to inferences of a small trusted core in the LCF tradition, and Isabelle/HOL can export executable definitions as SML, OCaml, Haskell or Scala code.",
+  "influenced_by": [
+   "LCF"
+  ],
+  "what": "Isabelle is a generic proof assistant: a system in which mathematical statements are written in a formal language and proved with machine-checked steps. Its most used form, Isabelle/HOL, works in higher-order logic and offers strong automation plus a proof language meant to be read by people. It follows the LCF approach, where only a small core can create theorems, so extensions cannot break soundness.",
+  "used_for": [
+   "verifying operating systems and protocols",
+   "formalized mathematics",
+   "programming language semantics",
+   "generating verified code"
+  ],
+  "notable": [
+   {
+    "name": "seL4",
+    "text": "The seL4 microkernel has a machine-checked proof that it behaves as specified, and those proofs are carried out in Isabelle/HOL.",
+    "url": "https://sel4.systems/Verification/proofs.html"
+   },
+   {
+    "name": "Archive of Formal Proofs",
+    "text": "A refereed, journal-style collection of proof libraries and larger developments, all mechanically checked in Isabelle.",
+    "url": "https://www.isa-afp.org/"
+   }
+  ],
+  "sample": {
+   "code": "theory Euclid imports Main begin\n\nfun euclid :: \"nat \\<Rightarrow> nat \\<Rightarrow> nat\" where\n  \"euclid a b = (if b = 0 then a else euclid b (a mod b))\"\n\nvalue \"euclid 48 18\"\n\nend",
+   "ran": false,
+   "how": "Not run: no Isabelle toolchain on this Mac. Expected: value reports 6. Isabelle/HOL, definition only with no lemma; the fun command must prove termination automatically. Named euclid because Main already defines gcd. \\<Rightarrow> is Isabelle's ASCII spelling of the function arrow."
+  },
+  "official_url": "https://isabelle.in.tum.de/",
+  "spec_url": null,
+  "sources": [
+   "https://arxiv.org/abs/cs/9301104",
+   "https://arxiv.org/abs/1907.02836",
+   "https://isabelle.in.tum.de/",
+   "https://isabelle.in.tum.de/overview.html"
+  ],
+  "influenced": []
+ },
+ {
+  "id": "tlaplus",
+  "name": "TLA+",
+  "year": 1999,
+  "year_note": "Lamport's \"Specifying Concurrent Systems with TLA+\" was published in 1999",
+  "designers": [
+   "Leslie Lamport"
+  ],
+  "org": null,
+  "family": "proof",
+  "level": "networks",
+  "levels": [
+   "networks",
+   "languages"
+  ],
+  "paradigms": [
+   "formal specification",
+   "temporal logic of actions",
+   "set theory"
+  ],
+  "typing": "untyped (ordinary mathematics)",
+  "runs": "A TLA+ specification is not executed: the TLC model checker explores every reachable state of a small instance to look for violations, and the TLAPS proof system checks hand-written proofs.",
+  "influenced_by": [
+   "TLA (Lamport's temporal logic of actions)"
+  ],
+  "what": "TLA+ is a language for describing what a system should do before, or beside, writing its code. A specification is plain mathematics: a formula for the possible starting states and a formula for the allowed steps. It was made for concurrent and distributed systems, where bugs come from rare interleavings of events that testing misses but an exhaustive model checker finds.",
+  "used_for": [
+   "designing distributed protocols",
+   "finding concurrency bugs before coding",
+   "documenting system designs precisely",
+   "checking consensus algorithms"
+  ],
+  "notable": [
+   {
+    "name": "Amazon Web Services",
+    "text": "AWS has used TLA+ since 2011 and its engineers published an article in April 2015 on how it is used on their systems.",
+    "url": "https://lamport.azurewebsites.net/tla/industrial-use.html"
+   },
+   {
+    "name": "Azure Cosmos DB",
+    "text": "Microsoft's Cosmos DB team used TLA+ to specify and validate the core algorithms and the consistency levels of its globally distributed database.",
+    "url": "https://lamport.azurewebsites.net/tla/industrial-use.html"
+   }
+  ],
+  "sample": {
+   "code": "---- MODULE TheAlgorithmInTLA ----\nEXTENDS Integers\nCONSTANTS M, N\nVARIABLES x, y\nInit == (x = M) /\\ (y = N)\nNext == \\/ /\\ x < y\n           /\\ y' = y - x\n           /\\ x' = x\n        \\/ /\\ y < x\n           /\\ x' = x - y\n           /\\ y' = y\n====",
+   "ran": false,
+   "how": "Not run: no TLA+ tools on this Mac. This is Figure 2 of Leslie Lamport's paper \"Euclid Writes an Algorithm: A Fairytale\" (https://lamport.azurewebsites.net/pubs/euclid.pdf), typed in ASCII (12 lines, kept whole). It describes the subtraction form of Euclid's algorithm as an initial condition and a next-state relation; with M = 48 and N = 18 every behavior stops at x = y = 6."
+  },
+  "official_url": "https://lamport.azurewebsites.net/tla/tla.html",
+  "spec_url": "https://lamport.azurewebsites.net/tla/book.html",
+  "sources": [
+   "https://lamport.azurewebsites.net/pubs/pubs.html",
+   "https://lamport.azurewebsites.net/tla/tla.html",
+   "https://lamport.azurewebsites.net/tla/high-level-view.html",
+   "https://lamport.azurewebsites.net/pubs/euclid.pdf"
+  ],
+  "influenced": []
+ },
+ {
+  "id": "dafny",
+  "name": "Dafny",
+  "year": 2008,
+  "year_note": "Microsoft Research lists the Dafny project as established in December 2008; the reference paper \"Dafny: An Automatic Program Verifier for Functional Correctness\" appeared at LPAR-16 in 2010",
+  "designers": [
+   "K. Rustan M. Leino"
+  ],
+  "org": "Microsoft Research originally; now developed as an open source project at dafny.org",
+  "family": "proof",
+  "level": "languages",
+  "levels": [
+   "languages",
+   "compilers"
+  ],
+  "paradigms": [
+   "imperative",
+   "functional",
+   "specifications (pre- and postconditions, invariants)"
+  ],
+  "typing": "static",
+  "runs": "The Dafny verifier translates the program and its specifications to the Boogie intermediate language and asks the Z3 solver to prove them; verified code is then compiled to C#, Java, JavaScript, Go or Python.",
+  "influenced_by": [],
+  "what": "Dafny is a programming language with verification built in. Next to ordinary code you write what each method requires and guarantees, and a static verifier tries to prove, automatically and while you type, that the code meets those promises. It aims to make proving a program correct feel like getting it to compile.",
+  "used_for": [
+   "verified algorithms and data structures",
+   "verified cryptographic and security libraries",
+   "verified distributed systems",
+   "teaching program verification"
+  ],
+  "notable": [
+   {
+    "name": "IronFleet",
+    "text": "Microsoft Research's Ironclad project used Dafny to verify the safety and liveness of practical distributed systems.",
+    "url": "https://www.microsoft.com/en-us/research/project/ironclad/"
+   },
+   {
+    "name": "AWS Encryption SDK for Dafny",
+    "text": "Amazon publishes an implementation of its client-side encryption library, the AWS Encryption SDK, in Dafny.",
+    "url": "https://github.com/aws/aws-encryption-sdk-dafny"
+   }
+  ],
+  "sample": {
+   "code": "function Gcd(a: nat, b: nat): nat\n  decreases b\n{\n  if b == 0 then a else Gcd(b, a % b)\n}\n\nlemma GcdZero(a: nat)\n  ensures Gcd(a, 0) == a\n{}\n\nmethod Main() { print Gcd(48, 18), \"\\n\"; }",
+   "ran": false,
+   "how": "Not run: no Dafny toolchain on this Mac. Expected output: 6. The decreases clause lets the verifier prove termination, and the small lemma is proved automatically by unfolding the definition once."
+  },
+  "official_url": "https://dafny.org/",
+  "spec_url": "https://dafny.org/latest/DafnyRef/DafnyRef",
+  "sources": [
+   "https://www.microsoft.com/en-us/research/project/dafny-a-language-and-program-verifier-for-functional-correctness/",
+   "https://dafny.org/",
+   "https://dafny.org/latest/DafnyRef/DafnyRef"
+  ],
+  "influenced": []
+ },
+ {
+  "id": "solidity",
+  "name": "Solidity",
+  "year": 2014,
+  "year_note": "Solidity was publicly previewed for the first time in November 2014 at Devcon0; version numbering in the codebase began in July 2015",
+  "designers": [
+   "the Solidity team of the Ethereum project"
+  ],
+  "org": "Ethereum Foundation",
+  "family": "contract",
+  "level": "networks",
+  "levels": [
+   "networks",
+   "apps"
+  ],
+  "paradigms": [
+   "contract oriented",
+   "imperative",
+   "object-oriented (inheritance)"
+  ],
+  "typing": "static",
+  "runs": "The solc compiler turns Solidity into bytecode for the Ethereum Virtual Machine; the bytecode is stored on the blockchain and executed by every node of the network when the contract is called.",
+  "influenced_by": [
+   "cpp",
+   "python",
+   "javascript"
+  ],
+  "what": "Solidity is a statically typed, curly-bracket language for writing smart contracts: programs that live on the Ethereum blockchain and control accounts and assets there. Once deployed, a contract runs inside a peer-to-peer network where nobody has special authority over its execution.",
+  "used_for": [
+   "tokens and digital assets",
+   "decentralized exchanges and lending",
+   "voting and crowdfunding contracts",
+   "on-chain governance"
+  ],
+  "notable": [
+   {
+    "name": "Uniswap V2",
+    "text": "The core smart contracts of the Uniswap V2 decentralized exchange are written in Solidity.",
+    "url": "https://github.com/Uniswap/v2-core"
+   },
+   {
+    "name": "OpenZeppelin Contracts",
+    "text": "A widely used library of Solidity building blocks for secure smart contract development.",
+    "url": "https://github.com/OpenZeppelin/openzeppelin-contracts"
+   }
+  ],
+  "sample": {
+   "code": "pragma solidity ^0.8.0;\n\ncontract Euclid {\n    function gcd(uint256 a, uint256 b) public pure returns (uint256) {\n        while (b != 0) {\n            (a, b) = (b, a % b);\n        }\n        return a;\n    }\n}",
+   "ran": false,
+   "how": "Not run: no Solidity toolchain on this Mac. Calling gcd(48, 18) would return 6. A pure function reads and writes no blockchain state. Without the usual SPDX license comment the compiler prints a warning."
+  },
+  "official_url": "https://soliditylang.org/",
+  "spec_url": "https://docs.soliditylang.org/en/latest/",
+  "sources": [
+   "https://soliditylang.org/about/",
+   "https://docs.soliditylang.org/en/latest/",
+   "https://docs.soliditylang.org/en/latest/language-influences.html",
+   "https://github.com/ethereum/solidity",
+   "https://docs.soliditylang.org/en/latest/control-structures.html"
+  ],
+  "influenced": []
+ }
+]

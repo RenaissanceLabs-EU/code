@@ -1,0 +1,1660 @@
+{
+ "checked": "2026-11-24",
+ "resources": {
+  "swe-smith": {
+   "langs": [
+    "cpp",
+    "rust",
+    "go",
+    "java",
+    "python",
+    "javascript",
+    "typescript",
+    "php"
+   ],
+   "all_langs_count": 8,
+   "evidence": "huggingface.co/api/datasets?author=SWE-bench&search=SWE-smith lists per-language sets SWE-smith-py, -go, -php, -java, -js, -rs, -ts, -cpp; SWE-smith card says to use the SWE-bench/SWE-smith-[lang] datasets",
+   "note": "The original mono-repo dataset and the paper (arXiv 2504.21798) are Python-centered; other languages live in the per-language datasets."
+  },
+  "swe-rebench-v2": {
+   "langs": [
+    "c",
+    "cpp",
+    "rust",
+    "go",
+    "java",
+    "csharp",
+    "kotlin",
+    "swift",
+    "scala",
+    "python",
+    "javascript",
+    "typescript",
+    "php",
+    "lua",
+    "r",
+    "julia",
+    "lisp",
+    "ocaml",
+    "elixir"
+   ],
+   "all_langs_count": 20,
+   "evidence": "huggingface.co/datasets/nebius/SWE-rebench-V2 README (raw/main/README.md): \"covering Python, Go, TypeScript, JavaScript, Rust, Java, PHP, Kotlin, Julia, Elixir, Scala, Swift, Dart, C, C++, C#, R, Clojure, OCaml, and Lua\"; arXiv 2602.23866 abstract says 20 languages",
+   "note": "Dart is not in the 44 ids. Clojure is counted under lisp."
+  },
+  "swe-bench-live": {
+   "langs": [
+    "c",
+    "cpp",
+    "rust",
+    "go",
+    "java",
+    "csharp",
+    "python",
+    "javascript",
+    "typescript"
+   ],
+   "all_langs_count": null,
+   "evidence": "github.com/microsoft/SWE-bench-Live README (main set is Python tasks; MultiLang supports C/C++, C#, Java, TS/JS, Go, Rust); huggingface.co/api/datasets/SWE-bench-Live/MultiLang splits c, cpp, go, js, rust, java, ts, cs",
+   "note": "The dataset at the catalog URL (SWE-bench-Live/SWE-bench-Live) is Python only; the other languages are in the sibling MultiLang dataset. A Windows set with PowerShell actions also exists and is not counted."
+  },
+  "multi-swe-rl": {
+   "langs": [
+    "c",
+    "cpp",
+    "rust",
+    "go",
+    "java",
+    "javascript",
+    "typescript"
+   ],
+   "all_langs_count": 7,
+   "evidence": "huggingface.co/datasets/ByteDance-Seed/Multi-SWE-RL README (raw/main/README.md) repo table (C, C++, Go, JS, Java, Rust, TS); arXiv 2504.02605 abstract \"seven programming languages\""
+  },
+  "multi-swe-bench": {
+   "langs": [
+    "c",
+    "cpp",
+    "rust",
+    "go",
+    "java",
+    "javascript",
+    "typescript"
+   ],
+   "all_langs_count": 7,
+   "evidence": "huggingface.co/datasets/ByteDance-Seed/Multi-SWE-bench README (raw/main/README.md): \"spans 7 languages (Java, TypeScript, JavaScript, Go, Rust, C, and C++)\"; arXiv 2504.02605 abstract"
+  },
+  "lego-rl-2699": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "huggingface.co/datasets/Lego-X/Lego-RL-2699 README (raw/main/README.md): \"Repositories: 1,650 unique (all Python)\""
+  },
+  "nemotron-swe-trajectories": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "Derived: SWE-Hero card lists sources SWE-Gym, R2E-Gym-Subset and SWE-rebench; SWE-Gym card says \"11 Python repos\", SWE-rebench abstract (arXiv 2505.20411) says \"Python-based SWE tasks\", R2E-Gym paper (arxiv.org/html/2504.07164) says it selects Python repositories",
+   "note": "The SWE-Hero and SWE-Zero cards do not name a language themselves. SWE-Zero also draws on SWE-Fixer-Train-110K, which was not checked."
+  },
+  "open-r1-codeforces": {
+   "langs": [
+    "cpp",
+    "python"
+   ],
+   "all_langs_count": 2,
+   "evidence": "huggingface.co/datasets/open-r1/codeforces README (raw/main/README.md): verifiable-prompts config, column language is \"python or cpp\"",
+   "note": "Problems themselves are language neutral; prompts and checkers target Python and C++."
+  },
+  "codeforces-cots": {
+   "langs": [
+    "cpp",
+    "python"
+   ],
+   "all_langs_count": 2,
+   "evidence": "huggingface.co/datasets/open-r1/codeforces-cots README (raw/main/README.md): subsets hold C++ solutions, except _py subsets with Python solutions"
+  },
+  "mixture-of-thoughts": {
+   "langs": [
+    "cpp",
+    "python"
+   ],
+   "all_langs_count": 2,
+   "evidence": "huggingface.co/datasets/open-r1/Mixture-of-Thoughts README (raw/main/README.md): code config is \"competitive programming problems in Python and C++\""
+  },
+  "code-contests": {
+   "langs": [
+    "cpp",
+    "java",
+    "python"
+   ],
+   "all_langs_count": 3,
+   "evidence": "huggingface.co/datasets/deepmind/code_contests README (raw/main/README.md): solution language values PYTHON (Python 2), CPP, PYTHON3, JAVA"
+  },
+  "synthetic-1": {
+   "langs": [
+    "cpp",
+    "rust",
+    "python",
+    "javascript"
+   ],
+   "all_langs_count": 4,
+   "evidence": "huggingface.co/datasets/PrimeIntellect/SYNTHETIC-1 README (raw/main/README.md): \"translate Python problems into Javascript, Rust and C++ problems\""
+  },
+  "opencodereasoning-2": {
+   "langs": [
+    "cpp",
+    "python"
+   ],
+   "all_langs_count": 2,
+   "evidence": "huggingface.co/datasets/nvidia/OpenCodeReasoning-2 README (raw/main/README.md): \"1.4M samples in Python and 1.1M samples in C++\"; splits python and cpp"
+  },
+  "nemotron-competitive-programming-v2": {
+   "langs": [
+    "cpp",
+    "python",
+    "sql"
+   ],
+   "all_langs_count": null,
+   "evidence": "huggingface.co/datasets/nvidia/Nemotron-SFT-Competitive-Programming-v2 README (raw/main/README.md): Python and C++ competitive programming samples, Python Exercism subset, Text-to-SQL subset (MySQL, PostgreSQL, SQLite)"
+  },
+  "qwen3-coder-next-opencode-preference": {
+   "langs": [
+    "cpp",
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "catalog tag sanity-checked: fetched card names Python and C++ and no other language"
+  },
+  "magicoder-oss-instruct-75k": {
+   "langs": [
+    "cpp",
+    "rust",
+    "java",
+    "csharp",
+    "swift",
+    "python",
+    "typescript",
+    "php",
+    "bash"
+   ],
+   "all_langs_count": 9,
+   "evidence": "Magicoder paper, arxiv.org/html/2312.02120: \"80K initial seed snippets ... 40K from Python, and 5K from each of C++, Java, TypeScript, Shell, C#, Rust, PHP, and Swift\"",
+   "note": "These are the languages of the seed snippets. The HF card does not list languages."
+  },
+  "commitpackft": {
+   "langs": [
+    "verilog",
+    "vhdl",
+    "assembly",
+    "c",
+    "cpp",
+    "rust",
+    "zig",
+    "go",
+    "ada",
+    "java",
+    "csharp",
+    "kotlin",
+    "swift",
+    "scala",
+    "python",
+    "javascript",
+    "typescript",
+    "ruby",
+    "php",
+    "perl",
+    "lua",
+    "r",
+    "julia",
+    "lisp",
+    "haskell",
+    "ocaml",
+    "erlang",
+    "elixir",
+    "fortran",
+    "sql",
+    "bash",
+    "powershell",
+    "html-css",
+    "hcl",
+    "lean",
+    "isabelle",
+    "solidity"
+   ],
+   "all_langs_count": 277,
+   "evidence": "huggingface.co/datasets/bigcode/commitpackft README (raw/main/README.md) per-language table (lang, MB, samples); card says 277 languages"
+  },
+  "commitpack": {
+   "langs": [
+    "verilog",
+    "vhdl",
+    "assembly",
+    "wasm",
+    "c",
+    "cpp",
+    "rust",
+    "zig",
+    "go",
+    "ada",
+    "java",
+    "csharp",
+    "kotlin",
+    "swift",
+    "scala",
+    "python",
+    "javascript",
+    "typescript",
+    "ruby",
+    "php",
+    "perl",
+    "lua",
+    "r",
+    "julia",
+    "matlab",
+    "lisp",
+    "haskell",
+    "ocaml",
+    "erlang",
+    "elixir",
+    "fortran",
+    "cobol",
+    "sql",
+    "prolog",
+    "bash",
+    "powershell",
+    "html-css",
+    "hcl",
+    "lean",
+    "rocq",
+    "isabelle",
+    "solidity"
+   ],
+   "all_langs_count": 350,
+   "evidence": "huggingface.co/datasets/bigcode/commitpack README (raw/main/README.md) per-language table; card and arXiv 2308.07124 abstract say 350 languages"
+  },
+  "opc-sft-stage2": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "huggingface.co/datasets/OpenCoder-LLM/opc-sft-stage2 README (raw/main/README.md): educational_instruct \"validated through a Python compiler\"; package_instruct \"Python package-related questions\"",
+   "note": "mceval_instruct (McEval-Instruct) and evol_instruct cover more languages, but the card does not list them."
+  },
+  "nemotron-sft-opencode-v1": {
+   "langs": [
+    "bash"
+   ],
+   "all_langs_count": null,
+   "evidence": "huggingface.co/datasets/nvidia/Nemotron-SFT-OpenCode-v1 README (raw/main/README.md): OpenCode CLI traces; subsets restrict tools to bash and describe tools as bash commands",
+   "note": "Bash is the tool language of the agent traces. The languages of the code being edited are not listed on the card."
+  },
+  "openthoughts-agent-v1-sft": {
+   "langs": [
+    "java",
+    "csharp",
+    "bash"
+   ],
+   "all_langs_count": null,
+   "evidence": "huggingface.co/datasets/open-thoughts/OpenThoughts-Agent-v1-SFT README (raw/main/README.md): sources are nl2bash (shell commands) and InferredBugs (\"bugs in C# and Java\")"
+  },
+  "tulu-3-sft-mixture": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "huggingface.co/datasets/allenai/tulu-3-sft-mixture README (raw/main/README.md): includes \"Tulu 3 Persona Python\" (34,999 prompts)",
+   "note": "General chat mixture. Other parts (for example evol-codealpaca) contain code in languages the card does not list."
+  },
+  "the-stack-v3-train": {
+   "langs": [
+    "verilog",
+    "vhdl",
+    "assembly",
+    "wasm",
+    "c",
+    "cpp",
+    "rust",
+    "zig",
+    "go",
+    "ada",
+    "java",
+    "csharp",
+    "kotlin",
+    "swift",
+    "scala",
+    "python",
+    "javascript",
+    "typescript",
+    "ruby",
+    "php",
+    "perl",
+    "lua",
+    "r",
+    "julia",
+    "matlab",
+    "lisp",
+    "haskell",
+    "ocaml",
+    "erlang",
+    "elixir",
+    "fortran",
+    "cobol",
+    "sql",
+    "prolog",
+    "bash",
+    "powershell",
+    "html-css",
+    "hcl",
+    "lean",
+    "rocq",
+    "isabelle",
+    "tlaplus",
+    "dafny",
+    "solidity"
+   ],
+   "all_langs_count": 713,
+   "evidence": "huggingface.co/datasets/HuggingFaceCode/stack-v3-train stats/train/stats_by_language.json (713 language entries) and README"
+  },
+  "the-stack-v2": {
+   "langs": [
+    "verilog",
+    "vhdl",
+    "assembly",
+    "wasm",
+    "c",
+    "cpp",
+    "rust",
+    "zig",
+    "go",
+    "ada",
+    "java",
+    "csharp",
+    "kotlin",
+    "swift",
+    "scala",
+    "python",
+    "javascript",
+    "typescript",
+    "ruby",
+    "php",
+    "perl",
+    "lua",
+    "r",
+    "julia",
+    "matlab",
+    "lisp",
+    "haskell",
+    "ocaml",
+    "erlang",
+    "elixir",
+    "fortran",
+    "cobol",
+    "sql",
+    "prolog",
+    "bash",
+    "powershell",
+    "html-css",
+    "hcl",
+    "lean",
+    "rocq",
+    "isabelle",
+    "tlaplus",
+    "dafny",
+    "solidity"
+   ],
+   "all_langs_count": 619,
+   "evidence": "huggingface.co/api/datasets/bigcode/the-stack-v2 cardData.configs (one config per language, 658 configs); arXiv 2402.19173 abstract says 619 programming languages",
+   "note": "README is gated; the list was read from the API config names. TLA config counted as tlaplus, Coq as rocq."
+  },
+  "the-stack-v2-dedup": {
+   "langs": [
+    "verilog",
+    "vhdl",
+    "assembly",
+    "wasm",
+    "c",
+    "cpp",
+    "rust",
+    "zig",
+    "go",
+    "ada",
+    "java",
+    "csharp",
+    "kotlin",
+    "swift",
+    "scala",
+    "python",
+    "javascript",
+    "typescript",
+    "ruby",
+    "php",
+    "perl",
+    "lua",
+    "r",
+    "julia",
+    "matlab",
+    "lisp",
+    "haskell",
+    "ocaml",
+    "erlang",
+    "elixir",
+    "fortran",
+    "cobol",
+    "sql",
+    "prolog",
+    "bash",
+    "powershell",
+    "html-css",
+    "hcl",
+    "lean",
+    "rocq",
+    "isabelle",
+    "tlaplus",
+    "dafny",
+    "solidity"
+   ],
+   "all_langs_count": 619,
+   "evidence": "huggingface.co/api/datasets/bigcode/the-stack-v2-dedup cardData.configs (identical config list to the-stack-v2, 658 configs)",
+   "note": "README is gated; list read from API config names. The 619 figure is the paper count for The Stack v2."
+  },
+  "the-stack-v2-train-smol-ids": {
+   "langs": [
+    "c",
+    "cpp",
+    "rust",
+    "go",
+    "java",
+    "csharp",
+    "kotlin",
+    "swift",
+    "python",
+    "javascript",
+    "typescript",
+    "ruby",
+    "php",
+    "lua",
+    "r",
+    "sql",
+    "bash",
+    "html-css"
+   ],
+   "all_langs_count": 17,
+   "evidence": "StarCoder2 paper, arxiv.org/html/2402.19173, section The-stack-v2-train-smol: 17 programming languages (C, C#, C++, Go, Java, JavaScript, Kotlin, Lua, PHP, Python, R, Ruby, Rust, SQL, Shell, Swift, TypeScript) plus documentation languages including HTML",
+   "note": "HF card is gated. html-css is included because HTML is in the documentation-language list; the paper also adds some configuration languages."
+  },
+  "the-stack-v1": {
+   "langs": [
+    "assembly",
+    "c",
+    "cpp",
+    "rust",
+    "go",
+    "java",
+    "csharp",
+    "scala",
+    "python",
+    "javascript",
+    "typescript",
+    "ruby",
+    "php",
+    "perl",
+    "lua",
+    "julia",
+    "haskell",
+    "fortran",
+    "sql",
+    "bash",
+    "powershell",
+    "html-css"
+   ],
+   "all_langs_count": 358,
+   "evidence": "The Stack paper (arXiv 2211.15533, read at ar5iv.labs.arxiv.org/html/2211.15533) Table 3, the 30 languages of the permissive-license release; 358 total per StarCoder paper (arXiv 2305.06161)",
+   "note": "Only the 30 languages in the paper table were confirmed. The full 358-language list is on the gated HF card and was not read, so languages outside the 30 are missing here."
+  },
+  "starcoderdata": {
+   "langs": [
+    "verilog",
+    "vhdl",
+    "assembly",
+    "c",
+    "cpp",
+    "rust",
+    "zig",
+    "go",
+    "ada",
+    "java",
+    "csharp",
+    "kotlin",
+    "scala",
+    "python",
+    "javascript",
+    "typescript",
+    "ruby",
+    "php",
+    "perl",
+    "lua",
+    "r",
+    "julia",
+    "matlab",
+    "lisp",
+    "haskell",
+    "ocaml",
+    "erlang",
+    "elixir",
+    "fortran",
+    "sql",
+    "prolog",
+    "bash",
+    "powershell",
+    "html-css",
+    "lean",
+    "isabelle",
+    "solidity"
+   ],
+   "all_langs_count": 86,
+   "evidence": "StarCoder paper (arXiv 2305.06161, read at ar5iv.labs.arxiv.org/html/2305.06161) Tables 1 and 2: 86 languages selected from The Stack",
+   "note": "HF card is gated. The paper states Swift was left out by mistake."
+  },
+  "starcoder2data-extras": {
+   "langs": [
+    "cpp",
+    "rust",
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "huggingface.co/datasets/bigcode/starcoder2data-extras README (raw/main/README.md): configs ir_cpp, ir_python, ir_rust (\"intermediate representations of Python, Rust, C++ and other low resource languages\")",
+   "note": "Other configs are issues, Kaggle notebooks, documentation, Stack Overflow, arXiv and Wikipedia text; their languages are not listed."
+  },
+  "stack-edu": {
+   "langs": [
+    "c",
+    "cpp",
+    "rust",
+    "go",
+    "java",
+    "csharp",
+    "swift",
+    "python",
+    "javascript",
+    "typescript",
+    "ruby",
+    "php",
+    "sql",
+    "bash"
+   ],
+   "all_langs_count": 15,
+   "evidence": "huggingface.co/api/datasets/HuggingFaceTB/stack-edu cardData.configs: C, CSharp, Cpp, Go, Java, JavaScript, Markdown, PHP, Python, Ruby, Rust, SQL, Shell, Swift, TypeScript",
+   "note": "Markdown is the 15th config and is not in the 44 ids."
+  },
+  "refinecode-meta": {
+   "langs": [
+    "verilog",
+    "vhdl",
+    "assembly",
+    "wasm",
+    "c",
+    "cpp",
+    "rust",
+    "zig",
+    "go",
+    "ada",
+    "java",
+    "csharp",
+    "kotlin",
+    "swift",
+    "scala",
+    "python",
+    "javascript",
+    "typescript",
+    "ruby",
+    "php",
+    "perl",
+    "lua",
+    "r",
+    "julia",
+    "matlab",
+    "lisp",
+    "haskell",
+    "ocaml",
+    "erlang",
+    "elixir",
+    "fortran",
+    "cobol",
+    "sql",
+    "prolog",
+    "bash",
+    "powershell",
+    "html-css",
+    "hcl",
+    "lean",
+    "rocq",
+    "isabelle",
+    "tlaplus",
+    "dafny"
+   ],
+   "all_langs_count": 607,
+   "evidence": "OpenCoder paper, arxiv.org/html/2411.04905, appendix \"Included Programming Languages\" (Code 470 types, Data 115 types, Text 22 types); card says 607 programming languages"
+  },
+  "dolma3-dolmino-mix-100b": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "huggingface.co/datasets/allenai/dolma3_dolmino_mix-100B-1025 README (raw/main/README.md): table row \"CraneCode | Python (synth)\"",
+   "note": "The stack_edu_fim config is built from Stack-Edu (see stack-edu for its languages); this card does not list them."
+  },
+  "github-code": {
+   "langs": [
+    "assembly",
+    "c",
+    "cpp",
+    "rust",
+    "go",
+    "java",
+    "csharp",
+    "scala",
+    "python",
+    "javascript",
+    "typescript",
+    "ruby",
+    "php",
+    "perl",
+    "lua",
+    "julia",
+    "haskell",
+    "fortran",
+    "sql",
+    "bash",
+    "powershell",
+    "html-css"
+   ],
+   "all_langs_count": 32,
+   "evidence": "huggingface.co/datasets/codeparrot/github-code README (raw/main/README.md) language table (30 rows); card text says 32 programming languages",
+   "note": "The card says 32 languages in the summary but lists 30."
+  },
+  "multipl-e": {
+   "langs": [
+    "cpp",
+    "rust",
+    "go",
+    "ada",
+    "java",
+    "csharp",
+    "swift",
+    "scala",
+    "javascript",
+    "typescript",
+    "ruby",
+    "php",
+    "perl",
+    "lua",
+    "r",
+    "julia",
+    "lisp",
+    "haskell",
+    "ocaml",
+    "elixir",
+    "bash"
+   ],
+   "all_langs_count": 24,
+   "evidence": "huggingface.co/api/datasets/nuprl/MultiPL-E cardData.configs: humaneval-* and mbpp-* for adb, clj, cpp, cs, d, dart, elixir, go, hs, java, jl, js, lua, ml, php, pl, r, rb, rkt, rs, scala, sh, swift, ts",
+   "note": "Python is the source language and has no config. D and Dart are not in the 44 ids. Clojure and Racket are counted under lisp."
+  },
+  "humaneval-x": {
+   "langs": [
+    "cpp",
+    "go",
+    "java",
+    "python",
+    "javascript"
+   ],
+   "all_langs_count": 5,
+   "evidence": "huggingface.co/datasets/THUDM/humaneval-x README (raw/main/README.md): \"5 programming languages: Python, C++, Java, JavaScript, and Go\""
+  },
+  "humanevalpack": {
+   "langs": [
+    "cpp",
+    "rust",
+    "go",
+    "java",
+    "python",
+    "javascript"
+   ],
+   "all_langs_count": 6,
+   "evidence": "huggingface.co/api/datasets/bigcode/humanevalpack cardData.configs: cpp, go, java, js, python, rust"
+  },
+  "livecodebench-pro": {
+   "langs": [
+    "cpp"
+   ],
+   "all_langs_count": null,
+   "evidence": "LiveCodeBench Pro paper, arxiv.org/html/2506.11928, evaluation prompt: \"please implement the solution in C++\"; github.com/GavinZhengOI/LiveCodeBench-Pro README extracts C++ code from responses",
+   "note": "HF card is gated. Problems are language neutral; the official evaluation is in C++."
+  },
+  "liveoibench": {
+   "langs": [
+    "cpp"
+   ],
+   "all_langs_count": null,
+   "evidence": "LiveOIBench paper, arxiv.org/html/2510.09595: \"we sample 8 candidate solutions per model in C++\"",
+   "note": "A side study compares Python and Java on USACO contests only."
+  },
+  "codeelo": {
+   "langs": [
+    "cpp",
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "arXiv 2501.01257 abstract: \"comparisons between using C++ and Python\"",
+   "note": "Problems are Codeforces statements; the card does not restrict the answer language."
+  },
+  "usaco": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "github.com/princeton-nlp/USACO README: \"307 USACO problems with python solutions\"; Python judged locally"
+  },
+  "codescope": {
+   "langs": [
+    "c",
+    "cpp",
+    "rust",
+    "go",
+    "java",
+    "csharp",
+    "kotlin",
+    "python",
+    "javascript",
+    "ruby",
+    "php",
+    "perl"
+   ],
+   "all_langs_count": 43,
+   "evidence": "CodeScope paper, arxiv.org/html/2311.08588: \"covers 43 programming languages\"; appendix names 14 for program synthesis (C++, Java, Python, C, C#, Ruby, Delphi, Go, JavaScript, Kotlin, PHP, D, Perl, Rust)",
+   "note": "Only the languages the paper names in its task descriptions are listed. The full 43-language list was not found in the text read; the HF card is empty."
+  },
+  "swe-bench-multimodal": {
+   "langs": [
+    "javascript",
+    "typescript"
+   ],
+   "all_langs_count": 2,
+   "evidence": "huggingface.co/datasets/SWE-bench/SWE-bench_Multimodal README (raw/main/README.md): \"Source code is JavaScript and TypeScript\""
+  },
+  "swe-bench-multilingual": {
+   "langs": [
+    "c",
+    "cpp",
+    "rust",
+    "go",
+    "java",
+    "javascript",
+    "typescript",
+    "ruby",
+    "php"
+   ],
+   "all_langs_count": 9,
+   "evidence": "huggingface.co/datasets/SWE-bench/SWE-bench_Multilingual README (raw/main/README.md) language table: Ruby, Rust, PHP, Java, Go, C, JavaScript, TypeScript, C++"
+  },
+  "swe-bench-pro": {
+   "langs": [
+    "go",
+    "python",
+    "javascript",
+    "typescript"
+   ],
+   "all_langs_count": 4,
+   "evidence": "huggingface.co/datasets/ScaleAI/SWE-bench_Pro README (raw/main/README.md): \"11 open-source repositories (Go, Python, JavaScript, TypeScript)\"; V2 default config go 256, python 237, js 145, ts 4"
+  },
+  "terminal-bench-2": {
+   "langs": [
+    "bash"
+   ],
+   "all_langs_count": null,
+   "evidence": "huggingface.co/datasets/harborframework/terminal-bench-2.0 README (raw/main/README.md) and arXiv 2601.11868 abstract: tasks \"in computer terminal environments\"; task directory names from huggingface.co/api/datasets/harborframework/terminal-bench-2.0/tree/main",
+   "note": "Tasks are solved through a shell in containers, so bash is the interface language. Individual tasks involve many other languages (task names include cobol-modernization, fix-ocaml-gc, polyglot-rust-c), but neither card gives a language list."
+  },
+  "terminal-bench-3": {
+   "langs": [
+    "bash"
+   ],
+   "all_langs_count": null,
+   "evidence": "huggingface.co/datasets/harborframework/terminal-bench-3.0 README (raw/main/README.md) and github.com/harbor-framework/terminal-bench README",
+   "note": "Tasks are solved through a shell in containers, so bash is the interface language. Individual tasks involve many other languages (task names include cobol-modernization, fix-ocaml-gc, polyglot-rust-c), but neither card gives a language list."
+  },
+  "aider-polyglot": {
+   "langs": [
+    "cpp",
+    "rust",
+    "go",
+    "java",
+    "python",
+    "javascript"
+   ],
+   "all_langs_count": 6,
+   "evidence": "github.com/Aider-AI/polyglot-benchmark README: Exercism tracks C++, Go, Java, JavaScript, Python, Rust"
+  },
+  "repobench": {
+   "langs": [
+    "java",
+    "python"
+   ],
+   "all_langs_count": 2,
+   "evidence": "arXiv 2306.03091 abstract: \"RepoBench supports both Python and Java\"; catalog URL is the Python v1.1 set"
+  },
+  "crosscodeeval": {
+   "langs": [
+    "java",
+    "csharp",
+    "python",
+    "typescript"
+   ],
+   "all_langs_count": 4,
+   "evidence": "arXiv 2310.11248 abstract: \"four popular programming languages: Python, Java, TypeScript, and C#\""
+  },
+  "safim": {
+   "langs": [
+    "cpp",
+    "java",
+    "csharp",
+    "python"
+   ],
+   "all_langs_count": 4,
+   "evidence": "SAFIM paper, arxiv.org/html/2403.04814: \"multilingual (Python, Java, C++, and C#)\" and per-language Table 6"
+  },
+  "deveval": {
+   "langs": [
+    "c",
+    "cpp",
+    "java",
+    "python",
+    "javascript"
+   ],
+   "all_langs_count": 4,
+   "evidence": "DevEval (DevBench) paper, arxiv.org/html/2403.08604: \"22 repositories across four programming languages (Python, C/C++, Java, JavaScript)\"",
+   "note": "The paper counts C/C++ as one language."
+  },
+  "projecteval": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "ProjectEval paper, arxiv.org/html/2503.07010, Table 2 row \"ProjectEval (ours) | Python\""
+  },
+  "swe-lancer": {
+   "langs": [
+    "javascript",
+    "typescript"
+   ],
+   "all_langs_count": null,
+   "evidence": "SWE-Lancer paper, arxiv.org/html/2502.12115, benchmark comparison table: \"SWE-Lancer | Javascript / Typescript\" (Expensify repository)"
+  },
+  "cyberseceval": {
+   "langs": [
+    "c",
+    "cpp",
+    "rust",
+    "java",
+    "csharp",
+    "python",
+    "javascript",
+    "php"
+   ],
+   "all_langs_count": 8,
+   "evidence": "CyberSecEval paper, arxiv.org/html/2312.04724: \"eight commonly used programming languages: C, C++, C#, Javascript, Rust, Python, Java, and PHP\"",
+   "note": "This is the insecure-code suite of the first CyberSecEval release. Later suites in the PurpleLlama repo were not checked."
+  },
+  "seccodeplt": {
+   "langs": [
+    "c",
+    "cpp",
+    "java",
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "arXiv 2410.11096 abstract: \"Applying this framework to Python, C/C++, and Java\"",
+   "note": "HF card is gated."
+  },
+  "cweval": {
+   "langs": [
+    "c",
+    "cpp",
+    "go",
+    "python",
+    "javascript"
+   ],
+   "all_langs_count": 5,
+   "evidence": "HF mirror purpcode/CWEval, language column over all 119 rows (datasets-server rows API): c 31, py 25, js 23, cpp 21, go 19; CWEval paper (arxiv.org/html/2501.08200) says 5 languages"
+  },
+  "minif2f": {
+   "langs": [
+    "lean",
+    "isabelle"
+   ],
+   "all_langs_count": 4,
+   "evidence": "github.com/facebookresearch/miniF2F README statistics table: Lean, Metamath, Isabelle, Hol Light",
+   "note": "Metamath and HOL Light are not in the 44 ids. The catalog tag listed lean only."
+  },
+  "putnambench": {
+   "langs": [
+    "lean",
+    "rocq",
+    "isabelle"
+   ],
+   "all_langs_count": 3,
+   "evidence": "github.com/trishullab/PutnamBench README: \"three formal languages: Lean 4, Isabelle, Coq\"",
+   "note": "The catalog tag listed lean only."
+  },
+  "r2e-gym": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "R2E-Gym paper, arxiv.org/html/2504.07164: repositories are found by searching for \"Python repositories with a large number of commits\"",
+   "note": "The HF card and GitHub README do not name the language in prose."
+  },
+  "qwen3-coder-next": {
+   "langs": [
+    "verilog",
+    "vhdl",
+    "assembly",
+    "wasm",
+    "c",
+    "cpp",
+    "rust",
+    "zig",
+    "go",
+    "ada",
+    "java",
+    "csharp",
+    "kotlin",
+    "swift",
+    "scala",
+    "python",
+    "javascript",
+    "typescript",
+    "ruby",
+    "php",
+    "perl",
+    "lua",
+    "r",
+    "julia",
+    "matlab",
+    "lisp",
+    "haskell",
+    "ocaml",
+    "erlang",
+    "elixir",
+    "fortran",
+    "cobol",
+    "sql",
+    "prolog",
+    "bash",
+    "powershell",
+    "html-css",
+    "hcl",
+    "lean",
+    "rocq",
+    "isabelle",
+    "solidity"
+   ],
+   "all_langs_count": 358,
+   "evidence": "github.com/QwenLM/Qwen3-Coder README: \"Supporting 358 coding languages\" with the full list",
+   "note": "This is the supported-language list of the Qwen3-Coder repo README, not a statement of training data."
+  },
+  "deepseek-coder-v2": {
+   "langs": [
+    "verilog",
+    "vhdl",
+    "assembly",
+    "wasm",
+    "c",
+    "cpp",
+    "rust",
+    "zig",
+    "go",
+    "ada",
+    "java",
+    "csharp",
+    "kotlin",
+    "swift",
+    "scala",
+    "python",
+    "javascript",
+    "typescript",
+    "ruby",
+    "php",
+    "perl",
+    "lua",
+    "r",
+    "julia",
+    "matlab",
+    "lisp",
+    "haskell",
+    "ocaml",
+    "erlang",
+    "elixir",
+    "fortran",
+    "cobol",
+    "sql",
+    "bash",
+    "powershell",
+    "html-css",
+    "hcl",
+    "lean",
+    "isabelle",
+    "solidity"
+   ],
+   "all_langs_count": 338,
+   "evidence": "github.com/deepseek-ai/DeepSeek-Coder-V2 supported_langs.txt (338 lines); card and arXiv 2406.11931 abstract: \"expands its support for programming languages from 86 to 338\""
+  },
+  "codestral-22b": {
+   "langs": [
+    "c",
+    "cpp",
+    "java",
+    "python",
+    "javascript",
+    "bash"
+   ],
+   "all_langs_count": 80,
+   "evidence": "huggingface.co/mistralai/Codestral-22B-v0.1 README: \"trained on a diverse dataset of 80+ programming languages, including the most popular ones, such as Python, Java, C, C++, JavaScript, and Bash\"",
+   "note": "Only the six languages named on the card are listed; the card says 80+."
+  },
+  "starcoder2-15b": {
+   "langs": [
+    "verilog",
+    "vhdl",
+    "assembly",
+    "wasm",
+    "c",
+    "cpp",
+    "rust",
+    "zig",
+    "go",
+    "ada",
+    "java",
+    "csharp",
+    "kotlin",
+    "swift",
+    "scala",
+    "python",
+    "javascript",
+    "typescript",
+    "ruby",
+    "php",
+    "perl",
+    "lua",
+    "r",
+    "julia",
+    "matlab",
+    "lisp",
+    "haskell",
+    "ocaml",
+    "erlang",
+    "elixir",
+    "fortran",
+    "cobol",
+    "sql",
+    "prolog",
+    "bash",
+    "powershell",
+    "html-css",
+    "hcl",
+    "lean",
+    "rocq",
+    "isabelle",
+    "tlaplus",
+    "dafny",
+    "solidity"
+   ],
+   "all_langs_count": 619,
+   "evidence": "huggingface.co/bigcode/starcoder2-15b README: \"trained on 600+ programming languages from The Stack v2\"; StarCoder2 paper (arxiv.org/html/2402.19173): the 15B model uses \"the full version with all 619 programming languages\"",
+   "note": "Language list taken from The Stack v2 config names (API), since the model card gives no list."
+  },
+  "opencodereasoning-nemotron-32b": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "huggingface.co/nvidia/OpenCodeReasoning-Nemotron-32B README prompt: \"Please use python programming language only\"; training set OpenCodeReasoning is Python (card: \"735,255 samples in Python\")"
+  },
+  "swe-gym": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in GitHub README, HF card fetched for https://huggingface.co/datasets/SWE-Gym/SWE-Gym; no other language indicated"
+  },
+  "swe-rebench": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in HF card, arXiv abstract fetched for https://huggingface.co/datasets/nebius/SWE-rebench; no other language indicated"
+  },
+  "swe-bench-extra": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in HF card fetched for https://huggingface.co/datasets/nebius/SWE-bench-extra; no other language indicated"
+  },
+  "swe-bench-train": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in GitHub README, HF card fetched for https://huggingface.co/datasets/SWE-bench/SWE-bench; no other language indicated"
+  },
+  "swe-dev": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in GitHub README, HF card fetched for https://huggingface.co/datasets/Dorothydu/SWE-Dev; no other language indicated"
+  },
+  "swe-synth": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "catalog tag (python) copied; the fetched card, README or abstract for https://huggingface.co/datasets/swesynth/SWE-Synth does not name the language in prose",
+   "note": "Weak confirmation: tag comes from the earlier catalog pass, not from a language statement read in this pass."
+  },
+  "swe-flow": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in GitHub README fetched for https://github.com/Hambaobao/SWE-Flow; no other language indicated"
+  },
+  "openswe": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in GitHub README fetched for https://huggingface.co/datasets/GAIR/OpenSWE; no other language indicated"
+  },
+  "nemotron-cascade-rl-swe": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "catalog tag (python) copied; the fetched card, README or abstract for https://huggingface.co/datasets/nvidia/Nemotron-Cascade-RL-SWE does not name the language in prose",
+   "note": "Weak confirmation: tag comes from the earlier catalog pass, not from a language statement read in this pass."
+  },
+  "deepcoder-preview": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in GitHub README fetched for https://huggingface.co/datasets/agentica-org/DeepCoder-Preview-Dataset; no other language indicated"
+  },
+  "taco": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in HF card fetched for https://huggingface.co/datasets/BAAI/TACO; no other language indicated"
+  },
+  "apps": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in HF card, arXiv abstract fetched for https://huggingface.co/datasets/codeparrot/apps; no other language indicated"
+  },
+  "skywork-or1-rl-data": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "catalog tag (python) copied; the fetched card, README or abstract for https://huggingface.co/datasets/Skywork/Skywork-OR1-RL-Data does not name the language in prose",
+   "note": "Weak confirmation: tag comes from the earlier catalog pass, not from a language statement read in this pass."
+  },
+  "eurus-2-rl-data": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in HF card fetched for https://huggingface.co/datasets/PRIME-RL/Eurus-2-RL-Data; no other language indicated"
+  },
+  "nemotron-rl-competitive-coding": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in GitHub README, HF card fetched for https://huggingface.co/datasets/nvidia/Nemotron-RL-coding-competitive_coding; no other language indicated"
+  },
+  "kodcode": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "catalog tag (python) copied; the fetched card, README or abstract for https://huggingface.co/datasets/KodCode/KodCode-V1 does not name the language in prose",
+   "note": "Weak confirmation: tag comes from the earlier catalog pass, not from a language statement read in this pass."
+  },
+  "opencodereasoning": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in HF card fetched for https://huggingface.co/datasets/nvidia/OpenCodeReasoning; no other language indicated"
+  },
+  "livecodebench": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "catalog tag (python) copied; the fetched card, README or abstract for https://github.com/LiveCodeBench/LiveCodeBench does not name the language in prose",
+   "note": "Weak confirmation: tag comes from the earlier catalog pass, not from a language statement read in this pass."
+  },
+  "spider": {
+   "langs": [
+    "sql"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (sql) sanity-checked on 2026-11-24: named in HF card, arXiv abstract fetched for https://huggingface.co/datasets/xlangai/spider; no other language indicated"
+  },
+  "bird-mini-dev": {
+   "langs": [
+    "sql"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (sql) sanity-checked on 2026-11-24: named in GitHub README, HF card, arXiv abstract fetched for https://huggingface.co/datasets/birdsql/bird_mini_dev; no other language indicated"
+  },
+  "lean-workbook": {
+   "langs": [
+    "lean"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (lean) sanity-checked on 2026-11-24: named in HF card fetched for https://huggingface.co/datasets/internlm/Lean-Workbook; no other language indicated"
+  },
+  "kimina-prover-promptset": {
+   "langs": [
+    "lean"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (lean) sanity-checked on 2026-11-24: named in GitHub README, HF card fetched for https://huggingface.co/datasets/project-numina/Kimina-Prover-Promptset; no other language indicated"
+  },
+  "numinamath-lean": {
+   "langs": [
+    "lean"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (lean) sanity-checked on 2026-11-24: named in HF card fetched for https://huggingface.co/datasets/AI-MO/NuminaMath-LEAN; no other language indicated"
+  },
+  "formalmath": {
+   "langs": [
+    "lean"
+   ],
+   "all_langs_count": null,
+   "evidence": "catalog tag (lean) copied; the fetched card, README or abstract for https://huggingface.co/datasets/SphereLab/FormalMATH-All does not name the language in prose",
+   "note": "Weak confirmation: tag comes from the earlier catalog pass, not from a language statement read in this pass."
+  },
+  "deepseek-proverbench": {
+   "langs": [
+    "lean"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (lean) sanity-checked on 2026-11-24: named in HF card fetched for https://huggingface.co/datasets/deepseek-ai/DeepSeek-ProverBench; no other language indicated"
+  },
+  "verina": {
+   "langs": [
+    "lean"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (lean) sanity-checked on 2026-11-24: named in GitHub README fetched for https://huggingface.co/datasets/sunblaze-ucb/verina; no other language indicated"
+  },
+  "clever": {
+   "langs": [
+    "lean"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (lean) sanity-checked on 2026-11-24: named in GitHub README fetched for https://github.com/trishullab/clever; no other language indicated"
+  },
+  "reasoning-gym": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in GitHub README fetched for https://github.com/open-thought/reasoning-gym; no other language indicated"
+  },
+  "humaneval": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in HF card, arXiv abstract fetched for https://huggingface.co/datasets/openai/openai_humaneval; no other language indicated"
+  },
+  "evalplus-humanevalplus": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "catalog tag (python) copied; the fetched card, README or abstract for https://huggingface.co/datasets/evalplus/humanevalplus does not name the language in prose",
+   "note": "Weak confirmation: tag comes from the earlier catalog pass, not from a language statement read in this pass."
+  },
+  "evalplus-mbppplus": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "catalog tag (python) copied; the fetched card, README or abstract for https://huggingface.co/datasets/evalplus/mbppplus does not name the language in prose",
+   "note": "Weak confirmation: tag comes from the earlier catalog pass, not from a language statement read in this pass."
+  },
+  "mbpp": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in HF card, arXiv abstract fetched for https://huggingface.co/datasets/google-research-datasets/mbpp; no other language indicated"
+  },
+  "cruxeval": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in HF card, arXiv abstract fetched for https://huggingface.co/datasets/cruxeval-org/cruxeval; no other language indicated"
+  },
+  "bigcodebench": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in HF card, arXiv abstract fetched for https://huggingface.co/datasets/bigcode/bigcodebench; no other language indicated"
+  },
+  "bigcodebench-hard": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "catalog tag (python) copied; the fetched card, README or abstract for https://huggingface.co/datasets/bigcode/bigcodebench-hard does not name the language in prose",
+   "note": "Weak confirmation: tag comes from the earlier catalog pass, not from a language statement read in this pass."
+  },
+  "evalperf": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "catalog tag (python) copied; the fetched card, README or abstract for https://huggingface.co/datasets/evalplus/evalperf does not name the language in prose",
+   "note": "Weak confirmation: tag comes from the earlier catalog pass, not from a language statement read in this pass."
+  },
+  "classeval": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in HF card, arXiv abstract fetched for https://huggingface.co/datasets/FudanSELab/ClassEval; no other language indicated"
+  },
+  "ds-1000": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in arXiv abstract fetched for https://huggingface.co/datasets/xlangai/DS-1000; no other language indicated"
+  },
+  "swe-bench": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in GitHub README, HF card, arXiv abstract fetched for https://huggingface.co/datasets/princeton-nlp/SWE-bench; no other language indicated"
+  },
+  "swe-bench-lite": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in HF card fetched for https://huggingface.co/datasets/princeton-nlp/SWE-bench_Lite; no other language indicated"
+  },
+  "swe-bench-verified": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in HF card fetched for https://huggingface.co/datasets/princeton-nlp/SWE-bench_Verified; no other language indicated"
+  },
+  "spider2": {
+   "langs": [
+    "sql"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (sql) sanity-checked on 2026-11-24: named in GitHub README, arXiv abstract fetched for https://github.com/xlang-ai/Spider2; no other language indicated"
+  },
+  "canitedit": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in GitHub README, HF card fetched for https://huggingface.co/datasets/nuprl/CanItEdit; no other language indicated"
+  },
+  "commit0": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in GitHub README, HF card fetched for https://huggingface.co/datasets/commit0/commit0; no other language indicated"
+  },
+  "mle-bench": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in GitHub README fetched for https://github.com/openai/mle-bench; no other language indicated"
+  },
+  "paperbench": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "catalog tag (python) copied; the fetched card, README or abstract for https://arxiv.org/abs/2504.01848 does not name the language in prose",
+   "note": "Weak confirmation: tag comes from the earlier catalog pass, not from a language statement read in this pass."
+  },
+  "testgeneval": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in arXiv abstract fetched for https://huggingface.co/datasets/kjain14/testgeneval; no other language indicated"
+  },
+  "swt-bench": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in GitHub README fetched for https://github.com/logic-star-ai/swt-bench; no other language indicated"
+  },
+  "defects4j": {
+   "langs": [
+    "java"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (java) sanity-checked on 2026-11-24: named in GitHub README fetched for https://github.com/rjust/defects4j; no other language indicated"
+  },
+  "self-oss-instruct-sc2-exec-filter-50k": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in HF card fetched for https://huggingface.co/datasets/bigcode/self-oss-instruct-sc2-exec-filter-50k; no other language indicated"
+  },
+  "opencodeinstruct": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "catalog tag (python) copied; the fetched card, README or abstract for https://huggingface.co/datasets/nvidia/OpenCodeInstruct does not name the language in prose",
+   "note": "Weak confirmation: tag comes from the earlier catalog pass, not from a language statement read in this pass."
+  },
+  "nemotron-sft-swe-v2": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "catalog tag (python) copied; the fetched card, README or abstract for https://huggingface.co/datasets/nvidia/Nemotron-SFT-SWE-v2 does not name the language in prose",
+   "note": "Weak confirmation: tag comes from the earlier catalog pass, not from a language statement read in this pass."
+  },
+  "nemotron-cascade-sft-swe": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "catalog tag (python) copied; the fetched card, README or abstract for https://huggingface.co/datasets/nvidia/Nemotron-Cascade-SFT-SWE does not name the language in prose",
+   "note": "Weak confirmation: tag comes from the earlier catalog pass, not from a language statement read in this pass."
+  },
+  "kodcode-v1-sft-r1": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "catalog tag (python) copied; the fetched card, README or abstract for https://huggingface.co/datasets/KodCode/KodCode-V1-SFT-R1 does not name the language in prose",
+   "note": "Weak confirmation: tag comes from the earlier catalog pass, not from a language statement read in this pass."
+  },
+  "kodcode-light-rl-10k": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "catalog tag (python) copied; the fetched card, README or abstract for https://huggingface.co/datasets/KodCode/KodCode-Light-RL-10K does not name the language in prose",
+   "note": "Weak confirmation: tag comes from the earlier catalog pass, not from a language statement read in this pass."
+  },
+  "swe-smith-trajectories": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in arXiv abstract fetched for https://huggingface.co/datasets/SWE-bench/SWE-smith-trajectories; no other language indicated"
+  },
+  "nebius-swe-agent-trajectories": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "catalog tag (python) copied; the fetched card, README or abstract for https://huggingface.co/datasets/nebius/SWE-agent-trajectories does not name the language in prose",
+   "note": "Weak confirmation: tag comes from the earlier catalog pass, not from a language statement read in this pass."
+  },
+  "nebius-swe-rebench-openhands-trajectories": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "catalog tag (python) copied; the fetched card, README or abstract for https://huggingface.co/datasets/nebius/SWE-rebench-openhands-trajectories does not name the language in prose",
+   "note": "Weak confirmation: tag comes from the earlier catalog pass, not from a language statement read in this pass."
+  },
+  "swe-gym-openhands-trajectories": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in HF card fetched for https://huggingface.co/datasets/SWE-Gym/OpenHands-Sampled-Trajectories; no other language indicated"
+  },
+  "gretel-synthetic-text-to-sql": {
+   "langs": [
+    "sql"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (sql) sanity-checked on 2026-11-24: named in HF card fetched for https://huggingface.co/datasets/gretelai/synthetic_text_to_sql; no other language indicated"
+  },
+  "synsql-2.5m": {
+   "langs": [
+    "sql"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (sql) sanity-checked on 2026-11-24: named in HF card, arXiv abstract fetched for https://huggingface.co/datasets/seeklhy/SynSQL-2.5M; no other language indicated"
+  },
+  "acecode-87k": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "catalog tag (python) copied; the fetched card, README or abstract for https://huggingface.co/datasets/TIGER-Lab/AceCode-87K does not name the language in prose",
+   "note": "Weak confirmation: tag comes from the earlier catalog pass, not from a language statement read in this pass."
+  },
+  "acecodepair-300k": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "catalog tag (python) copied; the fetched card, README or abstract for https://huggingface.co/datasets/TIGER-Lab/AceCodePair-300K does not name the language in prose",
+   "note": "Weak confirmation: tag comes from the earlier catalog pass, not from a language statement read in this pass."
+  },
+  "acecode-v2-122k": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in HF card fetched for https://huggingface.co/datasets/TIGER-Lab/AceCode-V2-122K; no other language indicated"
+  },
+  "smollm-corpus": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in HF card fetched for https://huggingface.co/datasets/HuggingFaceTB/smollm-corpus; no other language indicated"
+  },
+  "jupyter-code-text-pairs": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": null,
+   "evidence": "catalog tag (python) copied; the fetched card, README or abstract for https://huggingface.co/datasets/bigcode/jupyter-code-text-pairs does not name the language in prose",
+   "note": "Weak confirmation: tag comes from the earlier catalog pass, not from a language statement read in this pass."
+  },
+  "github-jupyter-parsed": {
+   "langs": [
+    "python"
+   ],
+   "all_langs_count": 1,
+   "evidence": "catalog tag (python) sanity-checked on 2026-11-24: named in HF card fetched for https://huggingface.co/datasets/codeparrot/github-jupyter-parsed; no other language indicated"
+  }
+ },
+ "unresolved": [
+  "bespoke-stratos-17k",
+  "code-alpaca-20k",
+  "code-contests-plus",
+  "code-feedback",
+  "codecontests-o",
+  "codefeedback-filtered-instruction",
+  "codeultrafeedback",
+  "common-pile-stackv2",
+  "common-pile-stackv2-edu",
+  "cosmopedia",
+  "editpackft",
+  "evol-codealpaca-v1",
+  "evol-instruct-code-80k",
+  "finemath",
+  "github-code-clean",
+  "glaive-code-assistant-v3",
+  "ling-coder-dpo",
+  "ling-coder-sft",
+  "llama-nemotron-post-training",
+  "magicoder-evol-instruct-110k",
+  "magpie-qwen25-coder-pro-300k",
+  "metr-time-horizon",
+  "nemotron-agentic-v1",
+  "nemotron-cc-code-v1",
+  "nemotron-post-training-v1",
+  "nemotron-pretraining-code-v1",
+  "nemotron-pretraining-code-v2",
+  "nemotron-pretraining-code-v3",
+  "opc-annealing-corpus",
+  "opc-fineweb-code-corpus",
+  "opc-fineweb-math-corpus",
+  "opc-sft-stage1",
+  "open-web-math",
+  "openthoughts-114k",
+  "openthoughts3-1.2m",
+  "rstar-coder",
+  "sky-t1-data-17k",
+  "smoltalk",
+  "stack-exchange-preferences",
+  "stack-github-issues",
+  "vezora-code-preference-pairs"
+ ]
+}

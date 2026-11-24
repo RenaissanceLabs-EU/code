@@ -24,9 +24,9 @@
   var grid = document.getElementById('grid');
   if (grid) {
     var cards = Array.prototype.slice.call(grid.querySelectorAll('.rc'));
-    var state = { q: '', stage: '', kind: '', lang: '', task: '', lic: '' };
+    var state = { q: '', stage: '', kind: '', lang: '', task: '', lic: '', layer: '', level: '' };
     var qi = document.getElementById('q'), cnt = document.getElementById('cnt'), none = document.getElementById('none');
-    var sels = { kind: document.getElementById('f-kind'), lang: document.getElementById('f-lang'), task: document.getElementById('f-task'), lic: document.getElementById('f-lic') };
+    var sels = { kind: document.getElementById('f-kind'), lang: document.getElementById('f-lang'), task: document.getElementById('f-task'), lic: document.getElementById('f-lic'), layer: document.getElementById('f-layer'), level: document.getElementById('f-level') };
     var stageBtns = Array.prototype.slice.call(document.querySelectorAll('.chipb[data-stage]'));
     function readHash() {
       var h = location.hash.replace(/^#/, '');
@@ -43,7 +43,7 @@
       cards.forEach(function (c) {
         var d = c.dataset;
         var ok = (!state.stage || has(d.stage, state.stage)) && (!state.kind || d.kind === state.kind) && (!state.lang || has(d.lang, state.lang)) &&
-          (!state.task || has(d.task, state.task)) && (!state.lic || d.lic === state.lic) && terms.every(function (t) { return d.s.indexOf(t) >= 0; });
+          (!state.task || has(d.task, state.task)) && (!state.lic || d.lic === state.lic) && (!state.layer || has(d.layer, state.layer)) && (!state.level || has(d.level, state.level)) && terms.every(function (t) { return d.s.indexOf(t) >= 0; });
         c.hidden = !ok; if (ok) n++;
       });
       cnt.textContent = n + (n === 1 ? ' resource' : ' resources');

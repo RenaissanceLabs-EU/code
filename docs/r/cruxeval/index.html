@@ -10,37 +10,38 @@
 <meta property="og:image" content="https://code.renaissancelabs.eu/assets/og/r-cruxeval.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="CRUXEval: Benchmark | Renaissance Labs Code"><meta property="og:site_name" content="Renaissance Labs Code">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://code.renaissancelabs.eu/assets/og/r-cruxeval.jpg"><meta name="twitter:title" content="CRUXEval: Benchmark | Renaissance Labs Code"><meta name="twitter:description" content="Tests code reasoning and execution understanding: predict the output for a given input, or an input for a given output."><meta name="theme-color" content="#121311">
 <link rel="icon" href="/assets/favicon.png">
-<link rel="stylesheet" href="/styles.css?v=a7072e73">
+<link rel="stylesheet" href="/styles.css?v=33e4a37a">
 <script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="bar">
   <a class="brand" href="/"><img src="/assets/mark.png" alt=""><span>Renaissance Labs &middot; Code</span></a>
-  <nav><a href="/catalog/" aria-current="page">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/pitfalls/">Pitfalls</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
+  <nav><a href="/program/">Program</a><a href="/stack/">Stack</a><a href="/languages/">Languages</a><a href="/world/">World</a><a href="/intelligence/">Intelligence</a><a href="/train/" aria-current="page">Train</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
   <button class="theme" id="theme" type="button" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
 </header>
 <main id="main">
-<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/catalog/">Catalog</a> / <a href="/stage/eval/">Eval</a></div>
+<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/train/">Train</a> / <a href="/catalog/">Catalog</a> / <a href="/stage/eval/">Eval</a></div>
 <span class="eyebrow">Benchmark &middot; 2024-01</span><h1>CRUXEval</h1><p class="lede">Tests code reasoning and execution understanding: predict the output for a given input, or an input for a given output.</p></div>
 <div class="layout"><div class="prose">
 <h2>How to use it</h2><p>Use as a reasoning-about-code probe complementary to generation benchmarks; cheap (800 items). Good for tracking the effect of execution-trace or CoT training data.</p>
 <h2>Caveats</h2><p>Not purely &#x27;run the model&#x27;s code&#x27;: graded by executing assertions on the model&#x27;s predicted input or output. The paper found many models with high HumanEval scores did not show the same gains on CRUXEval. Public since January 2024; model-generated functions, so leakage and saturation by reasoning models are plausible.</p>
 
-<h2>Related</h2><ul><li><a href="/r/livecodebench/">LiveCodeBench</a>: Contamination-aware benchmark from LeetCode, AtCoder and Codeforces with problem release dates; DeepCoder...</li><li><a href="/r/reasoning-gym/">Reasoning Gym</a>: Library of procedurally generated reasoning tasks with programmatic verifiers, including code and algorithm...</li><li><a href="/r/livecodebench-pro/">LiveCodeBench Pro</a>: Olympiad-medalist-annotated problems from Codeforces, ICPC and IOI, updated continually, with line-by-line...</li><li><a href="/r/metr-time-horizon/">METR time-horizon task suite (HCAST, RE-Bench)</a>: Measures the 50% task-completion time horizon: the human task length models complete at 50% success. Reported...</li><li><a href="/r/putnambench/">PutnamBench</a>: Hard undergraduate competition math formalizations for neural theorem...</li><li><a href="/r/minif2f/">miniF2F</a>: Formal Olympiad-level problems (AIME, AMC, IMO, coursework) in Lean and other systems for theorem...</li></ul>
+<h2>Related</h2><ul><li><a href="/r/codemind/">CodeMind</a>: Framework for code reasoning tasks: predict the output of code on given inputs (Independent Execution...</li><li><a href="/r/dabstep/">DABstep</a>: Multi-step data analysis tasks from Adyen, drawn from a financial analytics platform. The agent must combine...</li><li><a href="/r/kernelbench/">KernelBench</a>: Stanford benchmark on writing fast and correct GPU kernels: translate PyTorch operators and models into CUDA...</li><li><a href="/r/livecodebench/">LiveCodeBench</a>: Contamination-aware benchmark from LeetCode, AtCoder and Codeforces with problem release dates; DeepCoder...</li><li><a href="/r/manytypes4py/">ManyTypes4Py</a>: Python dataset for machine-learning-based type inference, built from repositories that use type...</li><li><a href="/r/reval/">REval</a>: Tests whether a model can reason about the runtime behavior of a program, and whether its answers stay...</li></ul>
 </div><aside class="aside"><div class="panel"><h3>At a glance</h3><dl>
 <dt>Source</dt><dd><a href="https://huggingface.co/datasets/cruxeval-org/cruxeval">huggingface.co/datasets/cruxeval-org/cruxeval</a></dd>
 <dt>License</dt><dd>MIT</dd><dt>Size</dt><dd>800 Python functions (3-13 lines) with input and output prediction tasks</dd>
 <dt>Stage</dt><dd><a class="pill st st-eval" href="/stage/eval/">Eval</a></dd>
-<dt>Languages</dt><dd>python</dd><dt>Tasks</dt><dd>Reasoning-heavy</dd><dt>Difficulty</dt><dd>intermediate</dd>
+<dt>Languages</dt><dd><a href="/languages/python/">Python</a> <small>(source lists 1 in all)</small></dd>
+<dt>Stack level</dt><dd><a class="pill" href="/stack/languages/">Languages</a></dd><dt>Tasks</dt><dd>Reasoning-heavy</dd><dt>Difficulty</dt><dd>intermediate</dd>
 <dt>Checked</dt><dd>2026-11-24</dd></dl></div>
 <div class="panel"><h3>More links</h3><ul><li><a href="https://arxiv.org/abs/2401.03065">Paper</a></li></ul></div>
 <div class="panel"><h3>Evidence</h3><p class="mono">huggingface.co/api/datasets/cruxeval-org/cruxeval cardData.license=mit; arxiv.org/abs/2401.03065 (800 functions)</p></div></aside></div></div></div>
 </main>
 <footer class="wrap foot">
   <a class="brand" href="https://renaissancelabs.eu"><img src="/assets/mark.png" alt="">Renaissance Labs</a>
-  <div class="foot-links"><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
+  <div class="foot-links"><a href="/catalog/">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
 </footer>
-<script src="/app.js?v=a7072e73" defer></script>
+<script src="/app.js?v=33e4a37a" defer></script>
 </body>
 </html>

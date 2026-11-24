@@ -1,0 +1,1252 @@
+{
+ "physics": {
+  "landmarks": [
+   {
+    "name": "Point-contact transistor",
+    "year": 1947,
+    "who": "John Bardeen and Walter Brattain, Bell Labs",
+    "text": "On December 16, 1947, Bardeen and Brattain got a germanium point-contact device to amplify a signal (demonstrated to lab officials on December 23), giving computing a solid-state amplifier; the year refers to these December 1947 events, and the junction transistor was conceived separately in 1948.",
+    "url": "https://www.computerhistory.org/siliconengine/invention-of-the-point-contact-transistor/"
+   },
+   {
+    "name": "All-semiconductor integrated circuit",
+    "year": 1958,
+    "who": "Jack Kilby (Texas Instruments, 1958) and Robert Noyce (Fairchild, 1959)",
+    "text": "Kilby built a working oscillator with all components formed in semiconductor material on September 12, 1958, still wired with fine gold flying wires, and Noyce conceived the monolithic version in 1959 (patent filed July 1959, issued 1961) with metal lines over the protective oxide, which made putting a whole circuit on one chip manufacturable.",
+    "url": "https://www.computerhistory.org/siliconengine/all-semiconductor-solid-circuit-is-demonstrated/",
+    "more_urls": [
+     "https://www.computerhistory.org/siliconengine/practical-monolithic-integrated-circuit-concept-patented/"
+    ]
+   },
+   {
+    "name": "Planar process",
+    "year": 1959,
+    "who": "Jean Hoerni, Fairchild Semiconductor",
+    "text": "Hoerni kept the oxide layer on the silicon wafer to protect the p-n junctions (idea recorded December 1957, patent disclosure January 1959, working planar transistor March 1959, the year used here), which cut leakage and let every part of a chip be built from one side of the wafer.",
+    "url": "https://www.computerhistory.org/siliconengine/invention-of-the-planar-manufacturing-process/"
+   },
+   {
+    "name": "MOS field-effect transistor",
+    "year": 1960,
+    "who": "Mohamed Atalla and Dawon Kahng, Bell Labs",
+    "text": "Atalla and Kahng built the first successful insulated-gate field-effect transistor in 1959 (the Computer History Museum milestone is dated 1960) by using thermally grown silicon dioxide to reduce surface states, the device structure that later chips are built from at enormous scale.",
+    "url": "https://www.computerhistory.org/siliconengine/metal-oxide-semiconductor-mos-transistor-demonstrated/"
+   },
+   {
+    "name": "Moore's 1965 projection",
+    "year": 1965,
+    "who": "Gordon Moore",
+    "text": "In the April 19, 1965 issue of Electronics, Moore projected that components per integrated circuit would double about every year, reaching roughly 65,000 by 1975, and at the 1975 IEEE International Electron Devices Meeting he revised the pace to a doubling every two years.",
+    "url": "https://www.computerhistory.org/siliconengine/moores-law-predicts-the-future-of-integrated-circuits/"
+   },
+   {
+    "name": "Dennard scaling rules",
+    "year": 1974,
+    "who": "Robert Dennard and colleagues, IBM",
+    "text": "The 1974 IBM paper showed that shrinking a MOS transistor's horizontal dimensions by a factor also raises its speed by that factor and linked the shrink to lower power(similar scaling principles appeared in 1972 papers by Hoeneisen and Mead and by Dennard's team).",
+    "url": "https://www.computerhistory.org/siliconengine/scaling-of-ic-process-design-rules-quantified/"
+   },
+   {
+    "name": "EUV lithography in volume production",
+    "year": 2019,
+    "who": "TSMC (N7+ process), using ASML EUV tools",
+    "text": "TSMC announced on October 7, 2019 that its N7+ process, in volume production since the second quarter of 2019, was delivering customer products using extreme ultraviolet lithography, which it called the industry's first commercially available EUV technology (TSMC's own claim).",
+    "url": "https://pr.tsmc.com/english/news/2010"
+   }
+  ],
+  "open": [
+   {
+    "name": "Quantum error correction at scale",
+    "text": "Google Quantum AI reported in 2024 a distance-7 surface code (101 qubits) whose logical error rate falls by a factor of 2.14 each time the code distance grows by two, with logical memory 2.4 times better than its best physical qubit; the open problem is the remaining limit, since repetition-code runs show errors limited by rare correlated events about once per hour.",
+    "url": "https://arxiv.org/abs/2408.13687"
+   },
+   {
+    "name": "Energy cost of erasing a bit",
+    "text": "The Landauer bound, the minimum heat needed to erase a classical bit, has been reached in a one-bit colloidal-particle memory only for long erasure cycles; how close fast, practical logic can come to that bound is open.",
+    "url": "https://arxiv.org/abs/1503.06537"
+   },
+   {
+    "name": "Patterning below today's EUV",
+    "text": "ASML describes its TWINSCAN EXE:5000 as the first High NA (0.55) EUV system, with 8 nm resolution aimed first at 2 nm-class logic; making single-exposure patterning at that resolution reliable and economical in volume is the current lithography frontier.",
+    "url": "https://www.asml.com/en/products/euv-lithography-systems/twinscan-exe-5000"
+   }
+  ]
+ },
+ "gates": {
+  "landmarks": [
+   {
+    "name": "The Laws of Thought",
+    "year": 1854,
+    "who": "George Boole",
+    "text": "Boole's An Investigation of the Laws of Thought (London, 1854) built an algebra of logic in which class symbols take only the values 0 and 1, the algebra that digital gates later implemented.",
+    "url": "https://plato.stanford.edu/entries/boole/"
+   },
+   {
+    "name": "Switching circuits as Boolean algebra",
+    "year": 1937,
+    "who": "Claude Shannon, MIT",
+    "text": "Shannon's master's thesis, written at MIT in 1937 (the MIT record lists the degree year as 1940) and published as a paper in Transactions of the AIEE, vol. 57, no. 12, 1938, showed that Boolean algebra can describe and simplify relay circuits and that relay circuits can solve Boolean problems.",
+    "url": "https://dspace.mit.edu/handle/1721.1/11173",
+    "more_urls": [
+     "https://en.wikipedia.org/wiki/A_Symbolic_Analysis_of_Relay_and_Switching_Circuits"
+    ]
+   },
+   {
+    "name": "Computer-aided design for chips",
+    "year": 1966,
+    "who": "James Koford and colleagues, IBM Fishkill",
+    "text": "In 1966 the IBM Fishkill group used graphical displays to capture circuit module designs, check them for errors and convert them automatically into mask patterns, the start of the design-automation tools that later hardware description languages and synthesis built on.",
+    "url": "https://www.computerhistory.org/siliconengine/computer-aided-design-tools-developed-for-ics/"
+   },
+   {
+    "name": "Introduction to VLSI Systems",
+    "year": 1979,
+    "who": "Carver Mead (Caltech) and Lynn Conway (Xerox PARC)",
+    "text": "Their textbook, which the Computer History Museum says demystified chip design for system designers, was published in 1979 (the museum's catalog record lists 1980), and made structured chip design teachable outside the semiconductor companies.",
+    "url": "https://www.computerhistory.org/revolution/digital-logic/12/287/1613",
+    "more_urls": [
+     "https://www.computerhistory.org/siliconengine/computer-aided-design-tools-developed-for-ics/"
+    ]
+   },
+   {
+    "name": "Verilog standardized",
+    "year": 1995,
+    "who": "IEEE",
+    "text": "IEEE Std 1364-1995, approved by the IEEE board on December 12, 1995, was the IEEE Standard Hardware Description Language Based on the Verilog Hardware Description Language, giving hardware designers a standard textual language for gates and registers (it was superseded by 1364-2001).",
+    "url": "https://standards.ieee.org/standard/1364-1995.html"
+   },
+   {
+    "name": "Field-programmable gate array",
+    "year": 1985,
+    "who": "Ross Freeman, Xilinx",
+    "text": "Freeman's patent (priority date March 12, 1984) described an integrated circuit with user-programmable logic functions and interconnects, and Xilinx introduced the first commercial FPGA, the XC2064 with 64 programmable 4-input logic functions, in 1985, so that logic could be configured after fabrication.",
+    "url": "https://ethw.org/Milestones:The_Field_Programmable_Gate_Array_(FPGA),_1984"
+   }
+  ],
+  "open": [
+   {
+    "name": "Minimum circuit size",
+    "text": "Whether it is NP-hard to find the smallest circuit for a given truth table (the Minimum Circuit Size Problem) is a long-standing open question; Hirahara proved NP-hardness in 2022 only for the partial-function variant and under randomized reductions.",
+    "url": "https://eccc.weizmann.ac.il/report/2022/119/"
+   },
+   {
+    "name": "Speculative execution as a hardware security hole",
+    "text": "The 2018 Spectre paper showed that speculative execution can be induced to leak secrets, affecting processors from Intel, AMD and ARM, and argued that lasting fixes need changes to processor designs and instruction set architectures.",
+    "url": "https://arxiv.org/abs/1801.01203"
+   },
+   {
+    "name": "Comprehensive verification of whole processors",
+    "text": "A 2025 paper presents what its authors call the first comprehensive formal verification of a RISC-V processor with CHERI capabilities (CHERIoT-Ibex) against its Sail specification; extending proofs of this kind to larger, more complex designs remains open.",
+    "url": "https://arxiv.org/abs/2502.04738"
+   }
+  ]
+ },
+ "machine": {
+  "landmarks": [
+   {
+    "name": "First Draft of a Report on the EDVAC",
+    "year": 1945,
+    "who": "John von Neumann",
+    "text": "The draft, dated June 30, 1945, is described by Brian Randell as the first documented discussion of the advantages of using one large internal memory for both instructions and data, which is the stored-program idea (credit for the ideas among the EDVAC team is disputed).",
+    "url": "https://www.computerhistory.org/tdih/june/30/"
+   },
+   {
+    "name": "IBM System/360",
+    "year": 1964,
+    "who": "IBM",
+    "text": "Announced on April 7, 1964, it replaced five incompatible product lines with one compatible family under a single architecture, so software written for one model ran on any other, and it pioneered the 8-bit byte.",
+    "url": "https://www.ibm.com/history/system-360"
+   },
+   {
+    "name": "The case for the reduced instruction set computer",
+    "year": 1980,
+    "who": "David Patterson and David Ditzel",
+    "text": "Their paper in ACM SIGARCH Computer Architecture News vol. 8, no. 6 (October 1980) argued for the reduced instruction set computer and began the RISC versus CISC debate over what an instruction set should contain.",
+    "url": "https://alastairreid.github.io/RelatedWork/papers/patterson:sigarch:1980"
+   },
+   {
+    "name": "Intel 8086",
+    "year": 1978,
+    "who": "Intel",
+    "text": "Introduced in June 1978 as Intel's first 16-bit microprocessor with about 29,000 transistors and the first chip of the x86 series, whose instruction set remains the basis of most desktop and server processors.",
+    "url": "https://www.intel.com/content/www/us/en/history/virtual-vault/articles/the-intel-8086.html"
+   },
+   {
+    "name": "ARM1",
+    "year": 1985,
+    "who": "Sophie Wilson (instruction set) and Steve Furber (chip design), Acorn Computers",
+    "text": "The first ARM chip was delivered to Acorn on April 26, 1985.",
+    "url": "https://developer.arm.com/community/arm-community-blogs/b/architectures-and-processors-blog/posts/a-brief-history-of-arm-part-1"
+   },
+   {
+    "name": "RISC-V",
+    "year": 2010,
+    "who": "Krste Asanovic, Yunsup Lee and Andrew Waterman, UC Berkeley",
+    "text": "The instruction set was started in May 2010 in Berkeley's Par Lab as a royalty-free open standard, so anyone can build compatible processors without licensing an instruction set.",
+    "url": "https://riscv.org/about/history/"
+   },
+   {
+    "name": "WebAssembly",
+    "year": 2017,
+    "who": "WebAssembly Community Group (Chrome, Edge, Firefox, WebKit)",
+    "text": "In November 2017 the browser vendors agreed the design of the initial WebAssembly binary format was complete, and it became a W3C Recommendation on December 5, 2019, a portable binary format.",
+    "url": "https://webassembly.org/features/",
+    "more_urls": [
+     "https://www.w3.org/press-releases/2019/wasm/"
+    ]
+   }
+  ],
+  "open": [
+   {
+    "name": "Side channels from speculation",
+    "text": "The Spectre authors argue that processor-specific workarounds help only in some cases and that lasting fixes need changes to processor designs and instruction set architectures, so which security guarantees an instruction set should promise about timing and speculation is open.",
+    "url": "https://arxiv.org/abs/1801.01203"
+   },
+   {
+    "name": "Memory safety in the instruction set",
+    "text": "CHERI extends instruction sets with hardware capabilities to protect against spatial, referential and temporal memory-safety flaws in C and C++; its main deployed prototype, Arm's Morello, is experimental, and bringing CHERI-RISC-V to market is under way as of 2024 projects.",
+    "url": "https://www.cl.cam.ac.uk/research/security/ctsrd/cheri/"
+   },
+   {
+    "name": "The hardware boundary of proofs",
+    "text": "seL4's machine-checked proofs run down to binary code but assume that assembly code, boot code, the machine interface, hardware and DMA behave as modeled, so connecting software proofs to verified hardware is an open frontier.",
+    "url": "https://sel4.systems/Verification/"
+   }
+  ]
+ },
+ "os": {
+  "landmarks": [
+   {
+    "name": "Atlas and virtual memory",
+    "year": 1962,
+    "who": "Tom Kilburn and a University of Manchester and Ferranti team",
+    "text": "The Atlas computer introduced virtual memory, originally called one-level storage (paper published 1962, first production machine inaugurated December 1962), letting memories of different speeds act as a single large fast memory with automatic paging.",
+    "url": "https://ethw.org/Milestones:Atlas_Computer_and_the_Invention_of_Virtual_Memory,_1957-1962"
+   },
+   {
+    "name": "Multics",
+    "year": 1965,
+    "who": "MIT Project MAC, Bell Labs and General Electric, led by Fernando Corbato",
+    "text": "After CTSS first demonstrated time-sharing in November 1961, the Multics design was presented at the 1965 Fall Joint Computer Conference (system self-hosting by the end of 1968), combining segmented virtual memory, ring protection, a hierarchical file system and an implementation mostly in PL/I.",
+    "url": "https://www.multicians.org/history.html"
+   },
+   {
+    "name": "Unix begins",
+    "year": 1969,
+    "who": "Ken Thompson, Dennis Ritchie and colleagues, Bell Labs",
+    "text": "Ritchie dates the birth of Unix to 1969(Bell Labs withdrew from Multics in April 1969), and the system moved to a PDP-11 acquired in 1970.",
+    "url": "https://pdos.csail.mit.edu/6.828/2009/readings/ritchie79evolution.html"
+   },
+   {
+    "name": "Unix rewritten in C",
+    "year": 1973,
+    "who": "Dennis Ritchie and Ken Thompson, Bell Labs",
+    "text": "Ritchie calls the 1973 rewriting of the Unix kernel in C perhaps the most important watershed in its evolution.",
+    "url": "https://pdos.csail.mit.edu/6.828/2009/readings/ritchie79evolution.html"
+   },
+   {
+    "name": "POSIX",
+    "year": 1988,
+    "who": "IEEE",
+    "text": "IEEE Std 1003.1-1988, approved August 22, 1988 and published September 30, 1988, standardized the operating system interface (replacing a 1986 trial-use version).",
+    "url": "https://standards.ieee.org/standard/1003_1-1988.html"
+   },
+   {
+    "name": "Linux",
+    "year": 1991,
+    "who": "Linus Torvalds",
+    "text": "On August 25, 1991 Torvalds announced on comp.os.minix a free operating system he described as a hobby, not portable, with no Minix code (version 0.01 followed in about mid-September 1991).",
+    "url": "https://www.cs.cmu.edu/~awb/linux.history.html"
+   },
+   {
+    "name": "seL4 verified",
+    "year": 2009,
+    "who": "Gerwin Klein, Kevin Elphinstone, Gernot Heiser and colleagues",
+    "text": "The SOSP 2009 paper reports the first formal proof of functional correctness of a complete general-purpose OS kernel, about 8,700 lines of C and 600 lines of assembler, machine-checked from specification to C (assuming compiler, assembly and hardware).",
+    "url": "https://trustworthy.systems/publications/papers/Klein_EHACDEEKNSTW_09.abstract"
+   }
+  ],
+  "open": [
+   {
+    "name": "Memory-safe kernels",
+    "text": "Microsoft reports about 70 percent of the vulnerabilities it assigns a CVE each year are memory safety issues, and CISA notes Rust is supported in the Linux kernel; how far existing C kernels can be moved to memory-safe languages or hardware checks is open.",
+    "url": "https://www.cisa.gov/news-events/news/urgent-need-memory-safety-software-products"
+   },
+   {
+    "name": "Verified operating systems at scale",
+    "text": "seL4 shows a complete kernel of about 8,700 lines of C can be proved correct, and its proofs still assume assembly, boot code, hardware and DMA are correct; proving a full general-purpose system of Linux size is open.",
+    "url": "https://sel4.systems/Verification/"
+   },
+   {
+    "name": "Supply chain attacks",
+    "text": "On March 29, 2024 Andres Freund reported that the upstream xz repository and release tarballs had been backdoored (CVE-2024-3094), hooking liblzma to affect sshd authentication, and it was found by chance through slow SSH logins; how to detect such compromises systematically is open.",
+    "url": "https://www.openwall.com/lists/oss-security/2024/03/29/4"
+   }
+  ]
+ },
+ "compilers": {
+  "landmarks": [
+   {
+    "name": "A-0 system",
+    "year": 1952,
+    "who": "Grace Hopper",
+    "text": "The A-0 converted symbolic mathematical code into machine code by retrieving subroutines stored on tape by call number, and the Computing History archive calls it her first compiler (whether it counts as a compiler or a linker-loader is debated).",
+    "url": "https://www.computinghistory.org.uk/det/5487/Grace-Hopper-completes-the-A-0-Compiler/"
+   },
+   {
+    "name": "FORTRAN compiler",
+    "year": 1957,
+    "who": "John Backus and the IBM team",
+    "text": "The IBM Mathematical Formula Translating System debuted in 1957 (work began in 1953 to 1954), and its optimizing compiler produced code that ran nearly as fast as hand-written code.",
+    "url": "https://www.ibm.com/history/fortran"
+   },
+   {
+    "name": "ALGOL 60 report",
+    "year": 1960,
+    "who": "Backus, Bauer, McCarthy, Naur, Perlis and others, editor Peter Naur",
+    "text": "The report that came out of the January 1960 Paris conference (revised 1962) defined syntax with a BNF-like metalanguage, a notation with angle-bracket names, ::= and |.",
+    "url": "https://www.masswerk.at/algol60/report.htm"
+   },
+   {
+    "name": "Static single assignment form",
+    "year": 1991,
+    "who": "Ron Cytron, Jeanne Ferrante, Barry Rosen, Mark Wegman and Ken Zadeck",
+    "text": "The paper (Brown technical report March 1991) gave efficient algorithms using dominance frontiers to build SSA form and the control dependence graph, the program representation most modern optimizers use.",
+    "url": "https://cs.brown.edu/research/pubs/techreports/reports/CS-91-21.html"
+   },
+   {
+    "name": "LLVM",
+    "year": 2004,
+    "who": "Chris Lattner and Vikram Adve",
+    "text": "The CGO 2004 paper presented a compilation framework built on a low-level SSA-based representation that enables analysis and transformation at compile time, link time and run time, and it became shared compiler infrastructure for many languages.",
+    "url": "https://llvm.org/pubs/2004-01-30-CGO-LLVM.html"
+   },
+   {
+    "name": "CompCert",
+    "year": 2009,
+    "who": "Xavier Leroy",
+    "text": "Leroy's July 2009 CACM article described CompCert, a compiler from a large subset of C to assembly whose correctness (the generated code behaves as its source) is proved in the Coq proof assistant.",
+    "url": "https://compcert.org/doc/"
+   },
+   {
+    "name": "Reflections on Trusting Trust",
+    "year": 1984,
+    "who": "Ken Thompson",
+    "text": "Thompson's Turing award lecture, published in CACM vol. 27, no. 8 (August 1984), showed a compiler can carry a Trojan horse that reinserts a login backdoor whenever it is recompiled, even after the source is cleaned, so inspecting source alone cannot establish trust.",
+    "url": "https://crysp.uwaterloo.ca/courses/cs458/F08-lectures/local/www.acm.org/classics/sep95/"
+   }
+  ],
+  "open": [
+   {
+    "name": "Automatically discovered optimizations",
+    "text": "Souper, a synthesizing superoptimizer for LLVM, produced a Clang binary about 4.4 percent smaller than LLVM's own and suggested optimizations later implemented by hand; making superoptimization cheap and general enough to run in production compilers is open.",
+    "url": "https://arxiv.org/abs/1711.04422"
+   },
+   {
+    "name": "Compiling for accelerators",
+    "text": "MLIR (2020) proposes a reusable, extensible infrastructure to reduce fragmentation and ease compilation for heterogeneous hardware and domain-specific compilers; how to share optimizations across the many accelerator targets is open.",
+    "url": "https://arxiv.org/abs/2002.11054"
+   },
+   {
+    "name": "Learned compiler heuristics",
+    "text": "MLGO replaced LLVM's inlining-for-size heuristics with learned models that cut code size by up to 7 percent and has been merged into LLVM; extending learned decisions to more passes while keeping results reliable and reproducible is open.",
+    "url": "https://arxiv.org/abs/2101.04808"
+   }
+  ]
+ },
+ "languages": {
+  "landmarks": [
+   {
+    "name": "FORTRAN",
+    "year": 1957,
+    "who": "John Backus and the IBM team",
+    "text": "Debuted in 1957, it let a task that took as many as a thousand hand-keyed instructions be written in 47, a high-level language compiled by IBM's 1957 system.",
+    "url": "https://www.ibm.com/history/fortran"
+   },
+   {
+    "name": "Lisp",
+    "year": 1960,
+    "who": "John McCarthy",
+    "text": "McCarthy's April 1960 CACM paper, the original paper on Lisp, defined a programming system through recursive functions of symbolic expressions and their computation by machine.",
+    "url": "https://www-formal.stanford.edu/jmc/recursive.html"
+   },
+   {
+    "name": "ALGOL 60",
+    "year": 1960,
+    "who": "An international committee including Backus, McCarthy, Naur and Perlis",
+    "text": "The report from the January 1960 Paris conference defined its syntax in a BNF-like metalinguistic notation, and it was reviewed and approved by IFIP TC 2 in August 1962 after a Rome meeting corrected errors.",
+    "url": "https://www.masswerk.at/algol60/report.htm"
+   },
+   {
+    "name": "Go To Statement Considered Harmful",
+    "year": 1968,
+    "who": "Edsger Dijkstra",
+    "text": "Dijkstra's letter in CACM, March 1968 (pp. 147 to 148), argued that program quality falls as the density of go to statements rises and that go to should be dropped from higher-level languages.",
+    "url": "https://www.cs.utexas.edu/~EWD/transcriptions/EWD02xx/EWD215.html"
+   },
+   {
+    "name": "Python",
+    "year": 1991,
+    "who": "Guido van Rossum",
+    "text": "Van Rossum began Python in the 1989 Christmas holidays and posted it to USENET in February 1991, drawing on ABC and, for exceptions, Modula-3.",
+    "url": "https://docs.python.org/3/faq/general.html"
+   },
+   {
+    "name": "Rust 1.0",
+    "year": 2015,
+    "who": "The Rust Core Team",
+    "text": "Rust 1.0 was announced on May 15, 2015 with a stability commitment, offering low-level control with safety guarantees and no garbage collector or runtime.",
+    "url": "https://blog.rust-lang.org/2015/05/15/Rust-1.0/"
+   }
+  ],
+  "open": [
+   {
+    "name": "Memory safety without cost",
+    "text": "CISA reports about 70 percent of the vulnerabilities Microsoft assigns a CVE are memory safety issues and urges memory safe languages; migrating existing C and C++ code at acceptable cost and performance is open.",
+    "url": "https://www.cisa.gov/news-events/news/urgent-need-memory-safety-software-products"
+   },
+   {
+    "name": "Concurrency that is easy to get right",
+    "text": "Lee argued in 2006 that threads undermine clarity, predictability and determinism and that programs should instead be built from deterministic, composable components with nondeterminism added only where needed; a mainstream model that achieves this is still open.",
+    "url": "https://www2.eecs.berkeley.edu/Pubs/TechRpts/2006/EECS-2006-1.html"
+   },
+   {
+    "name": "Gradual typing",
+    "text": "Siek and coauthors argue gradual typing needs a precise criterion, the gradual guarantee about programs that differ only in type annotations, and survey designs against it; whether mainstream languages satisfy it with good performance is open.",
+    "url": "https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.SNAPL.2015.274"
+   },
+   {
+    "name": "Languages that models write well",
+    "text": "MultiPL-E found Codex matches or exceeds its Python performance in several other languages while language popularity and features affect results; designing languages and tooling that language models write correctly is open.",
+    "url": "https://arxiv.org/abs/2208.08227"
+   }
+  ]
+ },
+ "apps": {
+  "landmarks": [
+   {
+    "name": "Relational model of data",
+    "year": 1970,
+    "who": "Edgar F. Codd, IBM San Jose Research Lab",
+    "text": "Codd's 1970 paper proposed organizing information as linkable tables so users can query without knowing the physical layout, with relationships based on data values, and IBM's System R project (1973) tested the idea, with SQL developed concurrently.",
+    "url": "https://www.ibm.com/history/relational-database"
+   },
+   {
+    "name": "Xerox Alto",
+    "year": 1972,
+    "who": "Chuck Thacker (hardware), Butler Lampson (software), Xerox PARC",
+    "text": "The Alto project began in 1972 (Lampson dates the system software start to mid-1973) and pioneered raster displays, the mouse, windows, menus, Ethernet and the first WYSIWYG editor.",
+    "url": "https://computerhistory.org/blog/xerox-alto-source-code/",
+    "more_urls": [
+     "https://bwlampson.site/38-AltoSoftware/WebPage.html"
+    ]
+   },
+   {
+    "name": "VisiCalc",
+    "year": 1979,
+    "who": "Dan Bricklin and Bob Frankston, Software Arts",
+    "text": "The first spreadsheet for personal computers, released in 1979 for the Apple II (prototyped in spring 1978), became the killer application that drove Apple II sales.",
+    "url": "https://www.computerhistory.org/revolution/personal-computers/17/305"
+   },
+   {
+    "name": "World Wide Web",
+    "year": 1989,
+    "who": "Tim Berners-Lee, CERN",
+    "text": "Berners-Lee wrote the first proposal in March 1989, had a first server and browser running by the end of 1990, announced the software in August 1991, and CERN released the source on a royalty-free basis on April 30, 1993.",
+    "url": "https://home.cern/science/computing/the-birth-of-the-web/short-history-web/",
+    "more_urls": [
+     "https://info.cern.ch/Proposal.html"
+    ]
+   },
+   {
+    "name": "SQLite",
+    "year": 2000,
+    "who": "The SQLite project",
+    "text": "The project started in May 2000 (the project page's own two links give 2000-05-09 and 2000-05-29) as a serverless, self-contained transactional SQL engine in one file, and its authors call it the most widely deployed database in the world.",
+    "url": "https://www.sqlite.org/about.html"
+   }
+  ],
+  "open": [
+   {
+    "name": "Reliability at planetary scale",
+    "text": "A faulty content update from CrowdStrike in July 2024 disrupted about 8.5 million Windows devices by Microsoft's estimate, showing that one defect in widely deployed software can fail systems worldwide; engineering updates that fail safely is open.",
+    "url": "https://blogs.microsoft.com/blog/2024/07/20/helping-our-customers-through-the-crowdstrike-outage/"
+   },
+   {
+    "name": "Accessibility of the web",
+    "text": "WebAIM's 2026 analysis of one million home pages found detectable WCAG 2 failures on 95.9 percent of them, up from 94.8 percent in 2025, with low-contrast text on 83.9 percent; making accessible output the default is open.",
+    "url": "https://webaim.org/projects/million/"
+   }
+  ]
+ },
+ "networks": {
+  "landmarks": [
+   {
+    "name": "Distributed communications",
+    "year": 1964,
+    "who": "Paul Baran, RAND",
+    "text": "RAND memorandum RM-3420 (1964) proposed an all-digital network of standardized message blocks with store-and-forward routing and no central control point, designed to survive damage to nodes and links.",
+    "url": "https://www.rand.org/pubs/research_memoranda/RM3420.html"
+   },
+   {
+    "name": "First ARPANET message",
+    "year": 1969,
+    "who": "Leonard Kleinrock's UCLA group and SRI",
+    "text": "At 10:30 p.m. on October 29, 1969 the first ARPANET message was sent from UCLA's Boelter Hall to the Stanford Research Institute, the first packet-switching network of its kind, which also introduced protocol layering.",
+    "url": "https://ethw.org/Milestones:Birthplace_of_the_Internet,_1969"
+   },
+   {
+    "name": "Ethernet",
+    "year": 1973,
+    "who": "Robert Metcalfe and David Boggs, Xerox PARC",
+    "text": "Ethernet was invented at Xerox PARC in 1973, inspired by ALOHAnet, and a 1980 Xerox, DEC and Intel specification became IEEE 802.3, the local network standard.",
+    "url": "https://ethw.org/Milestones:Ethernet_Local_Area_Network_(LAN),_1973-1985"
+   },
+   {
+    "name": "Transmission Control Program",
+    "year": 1974,
+    "who": "Vinton Cerf, Yogen Dalal and Carl Sunshine",
+    "text": "RFC 675 (December 1974) specified the Internet Transmission Control Program, with processes exchanging letters that may be split into fragments across packet networks, the ancestor of TCP (the Cerf and Kahn paper was also published in 1974).",
+    "url": "https://www.rfc-editor.org/rfc/rfc675"
+   },
+   {
+    "name": "Time, Clocks, and the Ordering of Events",
+    "year": 1978,
+    "who": "Leslie Lamport",
+    "text": "The CACM paper of July 1978 (his most cited, per Lamport) introduced the ordering of events in a distributed system.",
+    "url": "https://lamport.azurewebsites.net/pubs/pubs.html"
+   },
+   {
+    "name": "Domain Name System",
+    "year": 1983,
+    "who": "Paul Mockapetris",
+    "text": "RFC 882 (November 1983) introduced domain-style names and the servers and protocols to resolve them, (it was obsoleted by RFC 1034 and 1035).",
+    "url": "https://www.rfc-editor.org/rfc/rfc882"
+   },
+   {
+    "name": "TLS 1.3",
+    "year": 2018,
+    "who": "Eric Rescorla, IETF",
+    "text": "RFC 8446 (August 2018) specified TLS 1.3, designed to prevent eavesdropping, tampering and message forgery, and obsoleted RFC 5246 (the page now marks 8446 itself as superseded by RFC 9846).",
+    "url": "https://www.rfc-editor.org/rfc/rfc8446"
+   }
+  ],
+  "open": [
+   {
+    "name": "Post-quantum migration",
+    "text": "On August 13, 2024 NIST announced approval of FIPS 203 (ML-KEM, from CRYSTALS-Kyber), FIPS 204 (from Dilithium) and FIPS 205 (from SPHINCS+) to resist future quantum attacks; migrating deployed protocols and keys is open.",
+    "url": "https://csrc.nist.gov/news/2024/postquantum-cryptography-fips-approved"
+   },
+   {
+    "name": "Securing internet routing",
+    "text": "RFC 6480 (2012) describes RPKI, which lets address holders verifiably authorize ASes to originate routes, because BGP assumes the originating AS is authorized; securing routing across independent operators end to end is open.",
+    "url": "https://www.rfc-editor.org/rfc/rfc6480"
+   },
+   {
+    "name": "Verified distributed systems",
+    "text": "IronFleet (SOSP 2015) proved safety and liveness for a Paxos-based replicated state machine library and a sharded key-value store with competitive performance; verifying production-scale systems is open.",
+    "url": "https://www.microsoft.com/en-us/research/publication/ironfleet-proving-practical-distributed-systems-correct/"
+   }
+  ]
+ },
+ "learned": {
+  "landmarks": [
+   {
+    "name": "The perceptron",
+    "year": 1958,
+    "who": "Frank Rosenblatt",
+    "text": "In July 1958 the U.S. Office of Naval Research unveiled Rosenblatt's perceptron, a machine that learned to tell cards marked on the left from those on the right after 50 trials, which the Navy presented as a machine that learns by trial and error.",
+    "url": "https://news.cornell.edu/stories/2019/09/professors-perceptron-paved-way-ai-60-years-too-soon"
+   },
+   {
+    "name": "Backpropagation paper",
+    "year": 1986,
+    "who": "David Rumelhart, Geoffrey Hinton and Ronald Williams",
+    "text": "Their paper Learning representations by back-propagating errors (Nature 323, 1986) described learning representations in multilayer networks by back-propagating errors (earlier work on the method exists, including Werbos).",
+    "url": "https://en.wikipedia.org/wiki/Backpropagation"
+   },
+   {
+    "name": "AlexNet",
+    "year": 2012,
+    "who": "Alex Krizhevsky, Ilya Sutskever and Geoffrey Hinton",
+    "text": "Their NIPS 2012 network, trained on GPUs, classified 1.3 million ImageNet images into 1,000 classes with 39.7 percent top-1 and 18.9 percent top-5 error, clearly beating the previous best.",
+    "url": "https://proceedings.neurips.cc/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html"
+   },
+   {
+    "name": "Transformer",
+    "year": 2017,
+    "who": "Ashish Vaswani and seven coauthors",
+    "text": "Attention Is All You Need (arXiv June 12, 2017) introduced the Transformer, based entirely on attention, reaching 28.4 BLEU on English to German translation while training in parallel.",
+    "url": "https://arxiv.org/abs/1706.03762"
+   },
+   {
+    "name": "Generative pre-training",
+    "year": 2018,
+    "who": "OpenAI",
+    "text": "OpenAI's June 11, 2018 work pre-trained a transformer on unlabeled text with a language-modeling objective and fine-tuned it on specific tasks, with state-of-the-art results on several language tasks.",
+    "url": "https://openai.com/index/language-unsupervised/"
+   },
+   {
+    "name": "Codex",
+    "year": 2021,
+    "who": "Mark Chen and coauthors, OpenAI",
+    "text": "Evaluating Large Language Models Trained on Code (arXiv July 7, 2021) reported that Codex solved 28.8 percent of HumanEval problems on one attempt and 70.2 percent with 100 samples per problem, while GPT-3 solved none.",
+    "url": "https://arxiv.org/abs/2107.03374"
+   },
+   {
+    "name": "Algorithm recovered from weights",
+    "year": 2023,
+    "who": "Neel Nanda, Lawrence Chan, Tom Lieberum, Jess Smith and Jacob Steinhardt",
+    "text": "The paper (arXiv January 12, 2023) reverse-engineered small transformers trained on modular addition, finding they use discrete Fourier transforms and trigonometric identities to turn addition into rotation on a circle.",
+    "url": "https://arxiv.org/abs/2301.05217"
+   }
+  ],
+  "open": [
+   {
+    "name": "Interpreting what networks compute",
+    "text": "Sharkey and 28 coauthors (January 2025) survey the frontier of mechanistic interpretability and argue it needs conceptual and practical advances before it can meet its scientific and engineering goals.",
+    "url": "https://arxiv.org/abs/2501.16496"
+   },
+   {
+    "name": "Verifying learned programs",
+    "text": "Reluplex (2017) verified properties of ACAS Xu collision-avoidance networks about an order of magnitude larger than prior methods; verifying properties of networks at the scale of modern models is open.",
+    "url": "https://arxiv.org/abs/1702.01135"
+   },
+   {
+    "name": "Reliability of learned systems",
+    "text": "Kalai and coauthors (2025) argue that language-model hallucinations arise from statistical pressures in pretraining and that benchmarks that penalize uncertain answers teach models to guess.",
+    "url": "https://arxiv.org/abs/2509.04664"
+   }
+  ]
+ },
+ "text": {
+  "landmarks": [
+   {
+    "name": "ASCII",
+    "year": 1963,
+    "who": "American Standards Association, X3.2 subcommittee (work began with a 1961 proposal by IBM engineer Bob Bemer)",
+    "text": "The American Standards Association published ASA X3.4-1963, the first edition of ASCII, after work that began in May 1961 with a proposal by Bob Bemer; a major revision followed as USAS X3.4-1967.",
+    "url": "https://en.wikipedia.org/wiki/ASCII"
+   },
+   {
+    "name": "Unicode 1.0",
+    "year": 1991,
+    "who": "Unicode Consortium",
+    "text": "Volume 1 of The Unicode Standard, Version 1.0 was first printed in October 1991 (Volume 2 followed in June 1992), starting the character repertoire that UTF-8 later encoded.",
+    "url": "https://www.unicode.org/history/publicationdates.html"
+   },
+   {
+    "name": "UTF-8",
+    "year": 1992,
+    "who": "Ken Thompson, with design criteria from Rob Pike (Plan 9, Bell Labs)",
+    "text": "Ken Thompson devised UTF-8 in September 1992 following Rob Pike's design criteria, so that Plan 9, the first system to run it, could use Unicode without disrupting ASCII, whose byte values never appear inside longer UTF-8 sequences.",
+    "url": "https://www.rfc-editor.org/rfc/rfc3629"
+   },
+   {
+    "name": "Literate programming",
+    "year": 1984,
+    "who": "Donald Knuth",
+    "text": "Knuth's 'Literate Programming' (The Computer Journal 27(2), 1984) presented WEB, a combined programming language and documentation system, and argued for treating a program as a piece of literature addressed to human beings rather than to a computer.",
+    "url": "https://doi.org/10.1093/comjnl/27.2.97"
+   },
+   {
+    "name": "UTF-8 becomes an Internet Standard",
+    "year": 2003,
+    "who": "F. Yergeau (RFC 3629, STD 63)",
+    "text": "RFC 3629 (November 2003) made UTF-8 an Internet Standard and requires decoders to reject overlong forms such as C0 80 for U+0000, a loophole used in a widespread 2001 attack on web servers.",
+    "url": "https://www.rfc-editor.org/rfc/rfc3629"
+   }
+  ],
+  "open": [
+   {
+    "name": "Invisible and look-alike characters in source code",
+    "text": "Trojan Source (Boucher and Anderson, first posted October 2021, USENIX Security 2023) showed that bidirectional Unicode control characters make source display in a different order than compilers read it, with working attacks in twelve languages (CVE-2021-42574, and CVE-2021-42694 for the homoglyph variant). Unicode's UTS #39 offers confusable detection but says its skeleton is for testing confusability only, not for normalizing identifiers, so how every language, editor, and review tool should treat such characters is still unsettled.",
+    "url": "https://arxiv.org/abs/2111.00169"
+   },
+   {
+    "name": "Line endings and encodings do not round-trip cleanly",
+    "text": "Git has to convert line endings between LF and CRLF and re-encode files such as UTF-16 to UTF-8 on commit, and its own documentation warns that conversions may be irreversible and that non-UTF re-encoding may not be round-trip safe.",
+    "url": "https://git-scm.com/docs/gitattributes"
+   },
+   {
+    "name": "When are two identifiers the same name?",
+    "text": "UAX #31 recommends Normalization Form C for identifiers in case-sensitive languages and NFKC in case-insensitive ones, but these are recommended defaults, so whether and how each language normalizes identifiers is left to the language.",
+    "url": "https://unicode.org/reports/tr31/"
+   }
+  ]
+ },
+ "tokens": {
+  "landmarks": [
+   {
+    "name": "Lex",
+    "year": 1975,
+    "who": "Mike Lesk and Eric Schmidt, Bell Laboratories",
+    "text": "Lesk and Schmidt's 'Lex - A Lexical Analyzer Generator' (Bell Laboratories, 1975; Lesk's Computing Science Technical Report 39 is dated October 1975 and the Unix manual version July 21, 1975) described a program that generates lexical analyzers.",
+    "url": "https://en.wikipedia.org/wiki/Lex_(software)"
+   },
+   {
+    "name": "Byte pair encoding",
+    "year": 1994,
+    "who": "Philip Gage",
+    "text": "Philip Gage described byte pair encoding in 1994 as a data compression method in 'A New Algorithm for Data Compression' (The C Users Journal), the algorithm later reused to build subword vocabularies.",
+    "url": "https://en.wikipedia.org/wiki/Byte_pair_encoding"
+   },
+   {
+    "name": "Subword units for neural models",
+    "year": 2016,
+    "who": "Rico Sennrich, Barry Haddow, and Alexandra Birch",
+    "text": "Sennrich, Haddow, and Birch proposed segmenting rare words into subword units with the byte pair encoding algorithm for neural machine translation, reporting BLEU gains on WMT 15 English-German and English-Russian (posted to arXiv in August 2015, published at ACL 2016, which is the year given).",
+    "url": "https://arxiv.org/abs/1508.07909"
+   },
+   {
+    "name": "SentencePiece",
+    "year": 2018,
+    "who": "Taku Kudo and John Richardson",
+    "text": "SentencePiece (EMNLP 2018 demo) is an open-source subword tokenizer and detokenizer that trains directly on raw text, without requiring pre-tokenized words, which makes the whole text-to-tokens pipeline language independent.",
+    "url": "https://arxiv.org/abs/1808.06226"
+   },
+   {
+    "name": "Token-free byte models",
+    "year": 2021,
+    "who": "Linting Xue and colleagues, Google",
+    "text": "ByT5 showed that a standard Transformer with minimal changes can process raw bytes, with byte-level models competitive with token-level ones, more robust to noise, and better at spelling and pronunciation tasks.",
+    "url": "https://arxiv.org/abs/2105.13626"
+   }
+  ],
+  "open": [
+   {
+    "name": "Tokenizing numbers",
+    "text": "Popular models split numbers differently (LLaMa and PaLM use single digits, GPT-3.5 and GPT-4 use separate tokens for 1-, 2-, and 3-digit numbers), and Singh and Strouse (2024) study how this choice affects arithmetic in frontier models.",
+    "url": "https://arxiv.org/abs/2402.14903"
+   },
+   {
+    "name": "Tokens the model never learned",
+    "text": "Because tokenizer creation is disconnected from model training, vocabularies can contain tokens nearly absent from training data (the SolidGoldMagikarp case) that induce unwanted behavior, and Land and Bartolo (2024) note that a reliable way to detect them had been missing.",
+    "url": "https://arxiv.org/abs/2405.05417"
+   },
+   {
+    "name": "Can bytes replace tokens at scale?",
+    "text": "The Byte Latent Transformer (December 2024) groups bytes into patches by next-byte entropy and reports a FLOP-controlled scaling study up to 8B parameters and 4T training bytes, so whether tokenizer-free models can fully replace tokenizers at frontier scale is not yet shown.",
+    "url": "https://arxiv.org/abs/2412.09871"
+   }
+  ]
+ },
+ "tree": {
+  "landmarks": [
+   {
+    "name": "Hierarchy of grammars",
+    "year": 1956,
+    "who": "Noam Chomsky",
+    "text": "Chomsky's 'Three models for the description of language' (IRE Transactions on Information Theory, 1956) is where the general idea of a hierarchy of grammars was first described; the modern hierarchy with context-free grammars is credited to Chomsky and Schutzenberger's 1963 paper.",
+    "url": "https://doi.org/10.1109/TIT.1956.1056813"
+   },
+   {
+    "name": "Backus-Naur form in ALGOL 60",
+    "year": 1960,
+    "who": "John Backus (1959 notation), Peter Naur (editor), the ALGOL 60 committee",
+    "text": "Backus presented metalinguistic formulae for the syntax of the international algebraic language at the June 1959 Paris conference, and the 1960 ALGOL 60 report edited by Peter Naur used that notation (with ::= and |) to define a programming language's syntax formally; the year given is the 1960 report.",
+    "url": "https://www.masswerk.at/algol60/report.htm"
+   },
+   {
+    "name": "Yacc",
+    "year": 1975,
+    "who": "Stephen C. Johnson, Bell Labs",
+    "text": "Johnson's Yacc ('Yet Another Compiler-Compiler') was developed at Bell Labs in the early 1970s, appeared in Version 3 Unix, and was fully described in a 1975 technical report.",
+    "url": "https://en.wikipedia.org/wiki/Yacc"
+   },
+   {
+    "name": "Language Server Protocol",
+    "year": 2016,
+    "who": "Microsoft, Red Hat, and Codenvy (idea from Microsoft's VS Code team)",
+    "text": "On June 27, 2016 Microsoft, Red Hat, and Codenvy announced a collaboration to standardize the Language Server Protocol, a JSON-based protocol that lets one language server serve many editors; the idea grew out of repeated work by the VS Code team after integrating OmniSharp and TypeScript (the year given is this 2016 announcement, not the first internal use).",
+    "url": "https://sdtimes.com/codenvy-microsoft-red-hat-collaborate-language-server-protocol/"
+   },
+   {
+    "name": "Tree-sitter",
+    "year": 2013,
+    "who": "Max Brunsfeld",
+    "text": "Tree-sitter's GitHub repository was created in November 2013 with early commits by Max Brunsfeld, and it builds a concrete syntax tree and updates it as the file is edited, fast enough to parse on every keystroke and still useful when the code has syntax errors (talks about it date from 2017 and 2018).",
+    "url": "https://github.com/tree-sitter/tree-sitter"
+   }
+  ],
+  "open": [
+   {
+    "name": "Error-tolerant parsing",
+    "text": "Classic panic-mode error recovery often cascades into a chain of errors that drown out the original, and Diekmann and Tratt's CPCT+ (arXiv 2018) reports the complete set of minimum cost repair sequences for LR parsers, so recovery that is cheap, bounded, and gives repairs people trust for arbitrary grammars is still active work.",
+    "url": "https://arxiv.org/abs/1804.07133"
+   },
+   {
+    "name": "Making models emit valid syntax",
+    "text": "Grammar-constrained decoding guarantees that a language model's output follows a formal grammar, but most existing methods were limited to specific tasks such as parsing or code generation, and Geng, Josifoski, Peyrard and colleagues (2023) argue it should become a unified framework for structured output.",
+    "url": "https://arxiv.org/abs/2305.13971"
+   },
+   {
+    "name": "The cost of running a grammar beside a model",
+    "text": "Executing a context-free grammar over every token of a model's vocabulary at inference time adds non-negligible overhead, which XGrammar (2024) tries to reduce.",
+    "url": "https://arxiv.org/abs/2411.15100"
+   }
+  ]
+ },
+ "types": {
+  "landmarks": [
+   {
+    "name": "Theory of types",
+    "year": 1908,
+    "who": "Bertrand Russell",
+    "text": "Russell's 'Mathematical Logic as Based on the Theory of Types' (American Journal of Mathematics 30, 1908) presented type theory as a foundation for mathematics; the theory itself was first introduced in his 1903 Principles of Mathematics.",
+    "url": "https://doi.org/10.2307/2369948"
+   },
+   {
+    "name": "Propositions as types",
+    "year": 1934,
+    "who": "Haskell Curry (1934); William Howard (manuscript 1969, published 1980)",
+    "text": "Curry observed in 1934 that the types of combinators can be read as axiom schemes of intuitionistic implicational logic, and Howard's 1969 manuscript, published only in 1980 as 'The formulae-as-types notion of construction', made explicit the analogy between simply typed lambda calculus and natural deduction.",
+    "url": "https://doi.org/10.1073/pnas.20.11.584"
+   },
+   {
+    "name": "Simply typed lambda calculus",
+    "year": 1940,
+    "who": "Alonzo Church",
+    "text": "Church's 'A Formulation of the Simple Theory of Types' (Journal of Symbolic Logic 5, June 1940) introduced the simply typed lambda calculus as an attempt to avoid paradoxical uses of the untyped lambda calculus.",
+    "url": "https://doi.org/10.2307/2266170"
+   },
+   {
+    "name": "Principal types and polymorphic inference",
+    "year": 1978,
+    "who": "J. Roger Hindley (1969) and Robin Milner (1978)",
+    "text": "Hindley's 1969 paper on the principal type-scheme of an object in combinatory logic showed that the most general type can always be inferred, and Milner independently developed an equivalent method for his 1978 'A Theory of Type Polymorphism in Programming', first implemented in ML; the year given is Milner's paper.",
+    "url": "https://doi.org/10.1016/0022-0000(78)90014-4"
+   },
+   {
+    "name": "Martin-Lof type theory",
+    "year": 1975,
+    "who": "Per Martin-Löf",
+    "text": "Martin-Löf's 'An Intuitionistic Theory of Types: Predicative Part' (presented at Logic Colloquium '73, published 1975) was the first of his type theories to be published and introduced identity types; the year is the publication year, and earlier versions circulated as preprints in 1971 and 1972.",
+    "url": "https://doi.org/10.1016/s0049-237x(08)71945-1"
+   },
+   {
+    "name": "Ownership types in Rust",
+    "year": 2018,
+    "who": "Ralf Jung, Jacques-Henri Jourdan, Robbert Krebbers, Derek Dreyer (RustBelt); the Rust Core Team (1.0, May 15, 2015)",
+    "text": "Rust 1.0 shipped on May 15, 2015 with safety guarantees and no garbage collector or runtime, and RustBelt (POPL 2018, the year given) gave the first formal, machine-checked safety proof for a realistic subset of Rust and its ownership-based type system.",
+    "url": "https://doi.org/10.1145/3158154"
+   }
+  ],
+  "open": [
+   {
+    "name": "Usable dependent types",
+    "text": "Dependent type theory, type checking, and unification are well understood, but Brady (2013) notes that combining them into a realistic, usable high-level language is folklore rediscovered by each implementor, and Idris is one attempt at a general-purpose dependently typed language.",
+    "url": "https://doi.org/10.1017/S095679681300018X"
+   },
+   {
+    "name": "The cost of gradual typing",
+    "text": "Sound gradual typing inserts run-time checks at the boundary between typed and untyped code, and Takikawa and colleagues (POPL 2016) note that the few emerging implementations suffer performance overheads (a few report disastrous numbers) and propose a method to evaluate them, applied to Typed Racket.",
+    "url": "https://doi.org/10.1145/2837614.2837630"
+   },
+   {
+    "name": "Types for concurrency and communication",
+    "text": "Behavioral types (interfaces, protocols, contracts, choreographies) aim to ensure correctness of communication-intensive systems, but Ancona and colleagues (2016) stress that applying them successfully requires settling pragmatic questions from how they are represented in a language to how they combine with methods and functions.",
+    "url": "https://doi.org/10.1561/2500000031"
+   }
+  ]
+ },
+ "execution": {
+  "landmarks": [
+   {
+    "name": "Unsolvability of the Entscheidungsproblem (Church)",
+    "year": 1936,
+    "who": "Alonzo Church",
+    "text": "Church's 1936 'A Note on the Entscheidungsproblem' argued, without reference to computing machines, that the Entscheidungsproblem for first-order logic is unsolvable, a few months before Turing reached the same result.",
+    "url": "https://doi.org/10.2307/2269326"
+   },
+   {
+    "name": "Turing machine",
+    "year": 1936,
+    "who": "Alan Turing",
+    "text": "Turing's 'On Computable Numbers, with an Application to the Entscheidungsproblem' (Proceedings of the London Mathematical Society, volume dated 1936-37) introduced the Turing machine and a universal machine that can interpret any other machine's description, and used them to show the Entscheidungsproblem unsolvable.",
+    "url": "https://doi.org/10.1112/plms/s2-42.1.230"
+   },
+   {
+    "name": "Lisp and automatic storage reclamation",
+    "year": 1960,
+    "who": "John McCarthy, MIT",
+    "text": "McCarthy's April 1960 'Recursive Functions of Symbolic Expressions and Their Computation by Machine, Part I' defines LISP through recursive functions of symbolic expressions and describes automatic reclamation of unused list storage, a process he says he had already called garbage collection.",
+    "url": "https://doi.org/10.1145/367177.367199"
+   },
+   {
+    "name": "Mechanical evaluation of expressions",
+    "year": 1964,
+    "who": "Peter Landin",
+    "text": "Landin's 'The Mechanical Evaluation of Expressions' (The Computer Journal, 1964) showed how forms of expression in programming languages can be modelled in Church's lambda notation and described a way of interpreting such expressions.",
+    "url": "https://doi.org/10.1093/comjnl/6.4.308"
+   },
+   {
+    "name": "Toward a mathematical semantics",
+    "year": 1971,
+    "who": "Dana Scott and Christopher Strachey, Oxford",
+    "text": "Scott and Strachey's report 'Toward a Mathematical Semantics for Computer Languages', issued by Oxford's Programming Research Group (library stamp October 1971), is an early report on the denotational approach to defining what programs mean.",
+    "url": "https://www.cs.ox.ac.uk/files/3228/PRG06.pdf"
+   },
+   {
+    "name": "Structural operational semantics",
+    "year": 1981,
+    "who": "Gordon Plotkin, Aarhus University",
+    "text": "Plotkin's 1981 Aarhus report 'A Structural Approach to Operational Semantics' (DAIMI FN-19, reprinted with corrections in the Journal of Logic and Algebraic Programming in 2004) introduced structural operational semantics as a logical means to define operational semantics.",
+    "url": "https://doi.org/10.1016/j.jlap.2004.05.001"
+   }
+  ],
+  "open": [
+   {
+    "name": "A semantics for C as it is really used",
+    "text": "The ISO C standard leaves much unclear about pointers and memory objects, and Memarian and colleagues (2019) propose two coherent semantics for pointer provenance that try to reconcile the standard, mainstream compiler behavior, and existing C code, while describing ongoing interaction with the standards committee WG14.",
+    "url": "https://doi.org/10.1145/3290380"
+   },
+   {
+    "name": "Concurrent memory models",
+    "text": "Shared-memory concurrency in C and C++ was long poorly defined, and Batty and colleagues (2011) found that the draft standards of the time harbored substantial problems in their details while giving a mathematical semantics for C++ concurrency.",
+    "url": "https://doi.org/10.1145/1926385.1926394"
+   },
+   {
+    "name": "Predicting what a program will do",
+    "text": "Turing's 1936 paper showed that deciding whether a machine will ever print a given symbol is uncomputable, so no analysis can decide the behavior of every program, and abstract interpretation (Cousot and Cousot, 1977) instead describes computations in an abstract universe so that abstract execution gives some information about actual computations; getting useful, sound answers at acceptable cost is the ongoing question.",
+    "url": "https://doi.org/10.1145/512950.512973"
+   }
+  ]
+ },
+ "tests": {
+  "landmarks": [
+   {
+    "name": "The Harvard Mark II moth",
+    "year": 1947,
+    "who": "Harvard Mark II team (Grace Hopper was in the lab but the Smithsonian says the logbook was probably not hers)",
+    "text": "On September 9, 1947 a moth found stuck in the Harvard Mark II's switches was taped into its logbook with the note 'First actual case of bug being found', but 'bug' for a fault was already older (an 1878 Edison letter, an 1889 Pall Mall Gazette report), and the Smithsonian says the logbook was probably not Hopper's.",
+    "url": "https://daily.jstor.org/the-bug-in-the-computer-bug-story"
+   },
+   {
+    "name": "Testing shows the presence of bugs",
+    "year": 1972,
+    "who": "Edsger W. Dijkstra",
+    "text": "In 'The Humble Programmer' (ACM Turing Lecture, 1972, EWD 340) Dijkstra wrote that program testing can be a very effective way to show the presence of bugs but is hopelessly inadequate for showing their absence.",
+    "url": "https://www.cs.utexas.edu/~EWD/transcriptions/EWD03xx/EWD340.html"
+   },
+   {
+    "name": "Coupling effect and mutation testing",
+    "year": 1978,
+    "who": "Richard DeMillo, Richard Lipton, and Frederick Sayward",
+    "text": "'Hints on Test Data Selection: Help for the Practicing Programmer' (Computer, April 1978) states the coupling effect, that tests which uncover simple errors are also effective in uncovering much more complex ones, the premise behind mutation testing.",
+    "url": "https://doi.org/10.1109/C-M.1978.218136"
+   },
+   {
+    "name": "Fuzz testing",
+    "year": 1990,
+    "who": "Barton Miller, Lars Fredriksen, and Bryan So",
+    "text": "'An Empirical Study of the Reliability of UNIX Utilities' (Communications of the ACM, December 1990) built a random-character 'fuzz' generator, fed it to UNIX utilities, and classified the program bugs that caused the crashes.",
+    "url": "https://doi.org/10.1145/96267.96279"
+   },
+   {
+    "name": "JUnit and the xUnit family",
+    "year": 1997,
+    "who": "Kent Beck and Erich Gamma",
+    "text": "According to Martin Fowler, Beck and Gamma created JUnit in 1997, pair programming the first version test-first on a flight from Zurich to the OOPSLA conference in Atlanta, spreading the framework style that began with Beck's Smalltalk testing framework.",
+    "url": "https://martinfowler.com/bliki/Xunit.html"
+   },
+   {
+    "name": "QuickCheck",
+    "year": 2000,
+    "who": "Koen Claessen and John Hughes",
+    "text": "QuickCheck (ICFP 2000) lets a Haskell programmer state properties of programs as Haskell functions and test them automatically on random input, with custom test data generators.",
+    "url": "https://doi.org/10.1145/351240.351266"
+   },
+   {
+    "name": "American fuzzy lop",
+    "year": 2013,
+    "who": "Michal Zalewski (lcamtuf)",
+    "text": "American fuzzy lop, first publicly released as version 0.21b on November 12, 2013, uses compile-time instrumentation and genetic algorithms to find test cases that trigger new internal states in the targeted binary, and it is described by its author as a security-oriented fuzzer.",
+    "url": "https://lcamtuf.coredump.cx/afl/"
+   }
+  ],
+  "open": [
+   {
+    "name": "The test oracle problem",
+    "text": "Given an input, distinguishing the corresponding correct behavior from incorrect behavior is called the test oracle problem, and Barr and colleagues' 2015 survey says that when modelling, specifications, contracts, and metamorphic testing are not adequate, the final source of oracle information remains the human.",
+    "url": "https://doi.org/10.1109/TSE.2014.2372785"
+   },
+   {
+    "name": "Flaky tests",
+    "text": "Regression testing assumes that an unmodified test always passes or always fails for the same code, but flaky tests have non-deterministic outcomes, and Luo and colleagues (2014) studied 201 commits that likely fix flaky tests in 51 open-source projects to classify the root causes.",
+    "url": "https://doi.org/10.1145/2635868.2635920"
+   },
+   {
+    "name": "Judging how good a test suite is",
+    "text": "Code coverage is often used as a proxy for a test suite's ability to detect faults, but earlier studies reached no consensus on how strong the relationship is, and Inozemtseva and Holmes (2014) titled their result 'Coverage is not strongly correlated with test suite effectiveness'.",
+    "url": "https://doi.org/10.1145/2568225.2568271"
+   }
+  ]
+ },
+ "proof": {
+  "landmarks": [
+   {
+    "name": "Axiomatic basis for programs",
+    "year": 1969,
+    "who": "C. A. R. Hoare (following Robert Floyd, 1967)",
+    "text": "Hoare's 'An Axiomatic Basis for Computer Programming' (Communications of the ACM, October 1969) set out axioms and rules of inference for proving properties of computer programs, following Floyd's 1967 'Assigning Meanings to Programs'.",
+    "url": "https://doi.org/10.1145/363235.363259"
+   },
+   {
+    "name": "LCF proof checker",
+    "year": 1972,
+    "who": "Robin Milner",
+    "text": "Milner's May 1972 Stanford memo AIM-169, 'Logic for Computable Functions: description of a machine implementation', describes LCF, a proof-checker for a logic of computable functions.",
+    "url": "https://apps.dtic.mil/sti/pdfs/AD0785072.pdf"
+   },
+   {
+    "name": "Guarded commands and a calculus for deriving programs",
+    "year": 1975,
+    "who": "Edsger W. Dijkstra",
+    "text": "Dijkstra's 'Guarded Commands, Nondeterminacy and Formal Derivation of Programs' (Communications of the ACM, August 1975) introduced guarded commands as a building block for alternative and repetitive constructs and showed a calculus for the formal derivation of programs expressed in them.",
+    "url": "https://doi.org/10.1145/360933.360975"
+   },
+   {
+    "name": "Four color theorem checked in Coq",
+    "year": 2005,
+    "who": "Georges Gonthier (with Benjamin Werner), Microsoft Research and INRIA",
+    "text": "Gonthier's report describes a formalization of the Four Colour Theorem proof fully checked by Coq v7.3.1, completed in 2005, in which only the statement of the theorem needs review while the rest (99.8% per the abstract) is self-checking.",
+    "url": "https://www.cl.cam.ac.uk/~lp15/Pages/4colproof.pdf"
+   },
+   {
+    "name": "CompCert",
+    "year": 2009,
+    "who": "Xavier Leroy, Inria",
+    "text": "Leroy's 2006 POPL paper certified in Coq a compiler from Cminor to PowerPC assembly, and his 2009 'Formal Verification of a Realistic Compiler' reports CompCert, a Coq-verified compiler (proof of semantic preservation) from Clight, a large subset of C, to PowerPC assembly; the year given is the 2009 paper.",
+    "url": "https://doi.org/10.1145/1538788.1538814"
+   },
+   {
+    "name": "seL4",
+    "year": 2009,
+    "who": "Gerwin Klein and colleagues, NICTA and UNSW",
+    "text": "The seL4 SOSP 2009 paper reports the formal, machine-checked verification of the seL4 microkernel from an abstract specification down to its C implementation, which the authors say is, to their knowledge, the first formal proof of functional correctness of a complete, general-purpose operating-system kernel.",
+    "url": "https://doi.org/10.1145/1629575.1629596"
+   },
+   {
+    "name": "Lean and Mathlib",
+    "year": 2013,
+    "who": "Leonardo de Moura (Lean); the mathlib community",
+    "text": "Lean's first commit was in July 2013 by its creator Leonardo de Moura, Lean 4.0 was officially released in September 2023, and mathlib is a community-driven library of mathematics formalized in Lean with dependently typed foundations.",
+    "url": "https://lean-lang.org/fro/about"
+   }
+  ],
+  "open": [
+   {
+    "name": "Proof automation by learning",
+    "text": "AlphaProof (Nature 2025) learns to find formal proofs in Lean by reinforcement learning on millions of auto-formalized problems and, with AlphaGeometry 2, reached a score equivalent to a silver medallist at the 2024 International Mathematical Olympiad using multi-day computation, so cheap, general automation for large proofs and software is not yet here.",
+    "url": "https://doi.org/10.1038/s41586-025-09833-y"
+   },
+   {
+    "name": "Is the specification right?",
+    "text": "Fonseca and colleagues (EuroSys 2017) found 16 bugs in three formally verified distributed systems (IronFleet, Verdi, Chapar), some invalidating the verification guarantees, caused by violated assumptions, which shows that a proof is only as good as its specification and trusted base.",
+    "url": "https://doi.org/10.1145/3064176.3064183"
+   },
+   {
+    "name": "The cost of verified software",
+    "text": "Staples and colleagues (2014) studied nine projects associated with L4.verified, the seL4 verification, and found strong linear relationships between effort and proof size, so the human effort of proof grows with the size of what is proved.",
+    "url": "https://doi.org/10.1145/2652524.2652551"
+   }
+  ]
+ },
+ "change": {
+  "landmarks": [
+   {
+    "name": "SCCS",
+    "year": 1975,
+    "who": "Marc Rochkind, Bell Labs",
+    "text": "Rochkind's 'The Source Code Control System' (IEEE Transactions on Software Engineering, December 1975) describes a tool for storing, updating, and retrieving all versions of modules and for recording who made each change, when, where, and why.",
+    "url": "https://doi.org/10.1109/TSE.1975.6312866"
+   },
+   {
+    "name": "diff",
+    "year": 1976,
+    "who": "James Hunt and Douglas McIlroy",
+    "text": "Hunt and McIlroy's Bell Laboratories Computing Science Technical Report 41, 'An Algorithm for Differential File Comparison' (1976; the scanned copy is dated July 1976 while other sources say June), describes diff, which reports differences between two files as a minimal list of line changes using a longest common subsequence algorithm.",
+    "url": "https://www.cs.dartmouth.edu/doug/diff.pdf"
+   },
+   {
+    "name": "RCS",
+    "year": 1985,
+    "who": "Walter Tichy",
+    "text": "Tichy's 'RCS: A System for Version Control' (Software: Practice and Experience, July 1985) introduced the Revision Control System, which manages revisions of text documents, automates storing, retrieval, logging, and identification of revisions, and stores deltas between successive versions.",
+    "url": "https://doi.org/10.1002/spe.4380150703"
+   },
+   {
+    "name": "Continuous integration",
+    "year": 2000,
+    "who": "Kent Beck (Extreme Programming, 1990s); Martin Fowler (article, September 2000)",
+    "text": "Kent Beck developed continuous integration as part of Extreme Programming in the 1990s, and Martin Fowler's article of September 10, 2000 (rewritten 2006 and 2024) describes it as each team member merging into a shared codebase at least daily with an automated build, including tests, verifying each integration.",
+    "url": "https://martinfowler.com/articles/continuousIntegration.html"
+   },
+   {
+    "name": "Git",
+    "year": 2005,
+    "who": "Linus Torvalds",
+    "text": "Linus Torvalds made the first commit of Git on April 7, 2005, titled 'Initial revision of \"git\", the information manager from hell'.",
+    "url": "https://github.com/git/git/commit/e83c5163316f89bfbde7d9ab23ca2e25604af290"
+   }
+  ],
+  "open": [
+   {
+    "name": "What should a merge mean?",
+    "text": "Unstructured version control resolves merge conflicts by textual similarity and structured systems use language-specific knowledge, and Apel and colleagues (2011) proposed semistructured merge using annotated grammars, so a merge that is general across languages and still respects program structure is not settled.",
+    "url": "https://doi.org/10.1145/2025113.2025141"
+   },
+   {
+    "name": "Understanding code someone else wrote",
+    "text": "Earlier studies say program comprehension takes up as much as half of a developer's time, and Xia and colleagues (2018) measured it with professionals across many applications, not only the IDE, because developers' comprehension activity goes well beyond the IDE.",
+    "url": "https://doi.org/10.1109/TSE.2017.2734091"
+   },
+   {
+    "name": "Supply chain attacks",
+    "text": "On March 29, 2024 Andres Freund reported that the upstream xz repository and the xz release tarballs 5.6.0 and 5.6.1 had been backdoored (CVE-2024-3094), with an obfuscated script in the tarballs that was not in the upstream git source, so verifying that the code people build is the code people reviewed is open.",
+    "url": "https://www.openwall.com/lists/oss-security/2024/03/29/4"
+   }
+  ]
+ },
+ "computation": {
+  "landmarks": [
+   {
+    "name": "Incompleteness",
+    "year": 1931,
+    "who": "Kurt Gödel",
+    "text": "Gödel's 1931 paper 'Über formal unentscheidbare Sätze der Principia Mathematica und verwandter Systeme I' showed that in any consistent formal system able to carry out a certain amount of elementary arithmetic some statements can be neither proved nor disproved, and that such a system cannot prove its own consistency.",
+    "url": "https://doi.org/10.1007/BF01700692"
+   },
+   {
+    "name": "The Entscheidungsproblem is unsolvable",
+    "year": 1936,
+    "who": "Alonzo Church and Alan Turing",
+    "text": "Hilbert and Ackermann's 1928 book called the Entscheidungsproblem the main problem of mathematical logic, and in 1936 Church (a few months earlier) and Turing showed that no decision method exists for first-order logic, with Turing's paper introducing the Turing machine.",
+    "url": "https://doi.org/10.1112/plms/s2-42.1.230"
+   },
+   {
+    "name": "Rice's theorem",
+    "year": 1953,
+    "who": "Henry Gordon Rice",
+    "text": "Rice's theorem says that all non-trivial semantic properties of programs are undecidable; it appears in Rice's 1953 paper 'Classes of Recursively Enumerable Sets and Their Decision Problems' (Transactions of the American Mathematical Society 74), though the theorem was proved in his 1951 doctoral dissertation.",
+    "url": "https://doi.org/10.1090/S0002-9947-1953-0053041-6"
+   },
+   {
+    "name": "Algorithmic information",
+    "year": 1964,
+    "who": "Ray Solomonoff; Andrey Kolmogorov (1965); Gregory Chaitin (1966)",
+    "text": "Solomonoff gave a fuller account of the core theorem of algorithmic information in his 1964 'A Formal Theory of Inductive Inference' (first published in a 1960 report), Kolmogorov independently published it in Problems of Information Transmission in 1965, and Chaitin submitted his version to the Journal of the ACM in October 1966.",
+    "url": "https://doi.org/10.1016/S0019-9958(64)90223-2"
+   },
+   {
+    "name": "NP-completeness",
+    "year": 1971,
+    "who": "Stephen Cook (1971), Richard Karp (1972), and independently Leonid Levin",
+    "text": "Cook's 1971 'The Complexity of Theorem-Proving Procedures' showed that satisfiability is NP-complete, and Karp's 1972 'Reducibility among Combinatorial Problems' showed that 21 combinatorial problems are NP-complete.",
+    "url": "https://doi.org/10.1145/800157.805047"
+   },
+   {
+    "name": "Rule 110 is universal",
+    "year": 2004,
+    "who": "Matthew Cook",
+    "text": "Cook's 'Universality in Elementary Cellular Automata' (Complex Systems 15(1), 2004) argues that Rule 110, a one-dimensional elementary cellular automaton, is capable of universal computation, confirming a 1985 conjecture of Stephen Wolfram.",
+    "url": "https://www.complex-systems.com/abstracts/v15_i01_a01/"
+   },
+   {
+    "name": "BB(5) = 47,176,870",
+    "year": 2024,
+    "who": "The bbchallenge collaboration",
+    "text": "The bbchallenge collaboration announced on July 2, 2024 that the fifth Busy Beaver value is S(5) = 47,176,870, with a proof checked in the Coq proof assistant that enumerates 181,385,789 five-state Turing machines and decides for each whether it halts (the paper appeared on arXiv in September 2025).",
+    "url": "https://arxiv.org/abs/2509.12337"
+   }
+  ],
+  "open": [
+   {
+    "name": "P versus NP",
+    "text": "If it is easy to check that a solution to a problem is correct, is it also easy to solve the problem? Stephen Cook and Leonid Levin formulated the question independently in 1971, and it is one of the Clay Mathematics Institute's Millennium Problems.",
+    "url": "https://www.claymath.org/millennium/p-vs-np/"
+   },
+   {
+    "name": "BB(6)",
+    "text": "As of November 2026 the bbchallenge front page highlights a six-state halting machine by mxdys (2025) showing that BB(6) is greater than 2↑↑↑5 in Knuth's up-arrow notation, so the true value is unknown and the team lists BB(6) as a new goal.",
+    "url": "https://bbchallenge.org/"
+   },
+   {
+    "name": "The Collatz conjecture",
+    "text": "The Collatz conjecture asserts that repeatedly halving even numbers and sending odd N to 3N+1 reaches 1 from every positive integer, and Tao (2019) proved only that almost all orbits, in the sense of natural density, attain almost bounded values.",
+    "url": "https://arxiv.org/abs/1909.03562"
+   }
+  ]
+ },
+ "intelligence": {
+  "landmarks": [
+   {
+    "name": "Computing Machinery and Intelligence",
+    "year": 1950,
+    "who": "Alan Turing",
+    "text": "Turing's October 1950 paper in Mind proposed to consider the question 'Can machines think?' and replaced it with the imitation game, in which a judge exchanging text with a human and a computer tries to tell which is the human.",
+    "url": "https://doi.org/10.1093/mind/LIX.236.433"
+   },
+   {
+    "name": "Dartmouth proposal",
+    "year": 1955,
+    "who": "John McCarthy, Marvin Minsky, Nathaniel Rochester, and Claude Shannon",
+    "text": "The August 31, 1955 'Proposal for the Dartmouth Summer Research Project on Artificial Intelligence' proceeded on the conjecture that every aspect of learning or any other feature of intelligence can in principle be so precisely described that a machine can be made to simulate it.",
+    "url": "http://www-formal.stanford.edu/jmc/history/dartmouth/dartmouth.html"
+   },
+   {
+    "name": "Programming by example",
+    "year": 2011,
+    "who": "Sumit Gulwani, Microsoft Research",
+    "text": "Gulwani's POPL 2011 paper designed a string-manipulation language and an algorithm that synthesizes a program in it from input-output examples in a fraction of a second, for string-processing tasks that end users struggle with.",
+    "url": "https://doi.org/10.1145/1926385.1926423"
+   },
+   {
+    "name": "Codex",
+    "year": 2021,
+    "who": "Mark Chen and colleagues, OpenAI",
+    "text": "Codex, a GPT language model fine-tuned on public GitHub code, solved 28.8% of the HumanEval problems on a single try (70.2% with 100 samples per problem), and a production version powers GitHub Copilot.",
+    "url": "https://arxiv.org/abs/2107.03374"
+   },
+   {
+    "name": "Mechanistic reading of a learned algorithm",
+    "year": 2023,
+    "who": "Neel Nanda, Lawrence Chan, Tom Lieberum, Jess Smith, Jacob Steinhardt",
+    "text": "Nanda and colleagues fully reverse-engineered the algorithm that small transformers learn for modular addition, which uses discrete Fourier transforms and trigonometric identities to turn addition into rotation about a circle, explaining the 'grokking' behavior first reported by Power and colleagues in 2022.",
+    "url": "https://arxiv.org/abs/2301.05217"
+   },
+   {
+    "name": "AlphaDev",
+    "year": 2023,
+    "who": "Daniel Mankowitz and colleagues, DeepMind",
+    "text": "AlphaDev, a deep reinforcement learning agent that treated finding a faster sorting routine as a single-player game, discovered small sorting algorithms that outperformed the previous human benchmarks and were integrated into the LLVM standard C++ library (Nature, June 2023).",
+    "url": "https://doi.org/10.1038/s41586-023-06004-9"
+   },
+   {
+    "name": "AlphaProof",
+    "year": 2025,
+    "who": "Thomas Hubert and colleagues, Google DeepMind",
+    "text": "AlphaProof (Nature, November 2025) learns formal proofs in Lean through reinforcement learning, and with AlphaGeometry 2 it reached a score equivalent to a silver medallist at the 2024 International Mathematical Olympiad, which the authors call the first medal-level performance by an AI system to their knowledge.",
+    "url": "https://doi.org/10.1038/s41586-025-09833-y"
+   }
+  ],
+  "open": [
+   {
+    "name": "Verifying learned programs",
+    "text": "Deep neural networks are hard to use in safety-critical systems because it is very difficult to give formal guarantees about their behavior, and Reluplex (CAV 2017) extended the simplex method to verify properties of networks with ReLU activations, evaluated on a prototype of a next-generation airborne collision avoidance system.",
+    "url": "https://doi.org/10.1007/978-3-319-63387-9_5"
+   },
+   {
+    "name": "Correct-by-construction code from models",
+    "text": "Without effective methods for ensuring that generated code is correct, LLM code generation could lead to undesirable outcomes, and Clover (2023) proposes consistency checks among code, docstrings, and formal annotations, evaluated on annotated Dafny programs.",
+    "url": "https://arxiv.org/abs/2310.17807"
+   },
+   {
+    "name": "Specification versus intent",
+    "text": "Checking an implementation against a formal specification can be done mechanically, but there is no algorithmic way to ensure that the formal specification captures the user's intent, which is stated informally in natural language (Lahiri, 2024).",
+    "url": "https://arxiv.org/abs/2406.09757"
+   }
+  ]
+ }
+}

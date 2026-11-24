@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NL2SH-ALFA: Dataset | Renaissance Labs Code</title>
+<meta name="description" content="Natural language to Bash translation data with a manually verified test set and a large unverified training set Released with the paper &quot;LLM-Supported Natural Language to Bash Translation&quot;.">
+<link rel="canonical" href="https://code.renaissancelabs.eu/r/nl2sh-alfa/">
+<meta property="og:title" content="NL2SH-ALFA: Dataset | Renaissance Labs Code"><meta property="og:description" content="Natural language to Bash translation data with a manually verified test set and a large unverified training set Released with the paper &quot;LLM-Supported Natural Language to Bash Translation&quot;."><meta property="og:url" content="https://code.renaissancelabs.eu/r/nl2sh-alfa/"><meta property="og:type" content="website">
+<meta property="og:image" content="https://code.renaissancelabs.eu/assets/og/r-nl2sh-alfa.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="NL2SH-ALFA: Dataset | Renaissance Labs Code"><meta property="og:site_name" content="Renaissance Labs Code">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://code.renaissancelabs.eu/assets/og/r-nl2sh-alfa.jpg"><meta name="twitter:title" content="NL2SH-ALFA: Dataset | Renaissance Labs Code"><meta name="twitter:description" content="Natural language to Bash translation data with a manually verified test set and a large unverified training set Released with the paper &quot;LLM-Supported Natural Language to Bash Translation&quot;."><meta name="theme-color" content="#121311">
+<link rel="icon" href="/assets/favicon.png">
+<link rel="stylesheet" href="/styles.css?v=33e4a37a">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+  <a class="brand" href="/"><img src="/assets/mark.png" alt=""><span>Renaissance Labs &middot; Code</span></a>
+  <nav><a href="/program/">Program</a><a href="/stack/">Stack</a><a href="/languages/">Languages</a><a href="/world/">World</a><a href="/intelligence/">Intelligence</a><a href="/train/" aria-current="page">Train</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
+  <button class="theme" id="theme" type="button" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+</header>
+<main id="main">
+<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/train/">Train</a> / <a href="/catalog/">Catalog</a> / <a href="/stage/sft/">SFT</a></div>
+<span class="eyebrow">Dataset &middot; 2025-01</span><h1>NL2SH-ALFA</h1><p class="lede">Natural language to Bash translation data with a manually verified test set and a large unverified training set Released with the paper &quot;LLM-Supported Natural Language to Bash Translation&quot;.</p></div>
+<div class="layout"><div class="prose">
+<h2>How to use it</h2><p>Fine-tune on the train config and evaluate on the test config. Note that the config name, not the split name, selects train or test.</p>
+<h2>Caveats</h2><p>The training pairs are unverified. The paper abstract gives 40,939 training pairs while the card gives 40,639. One-line commands only, not multi-step administration.</p>
+<div class="codebox"><div class="lab"><span>load</span><button class="copy" type="button">Copy</button></div><pre><span class="k">from</span> datasets <span class="k">import</span> load_dataset
+ds = load_dataset(<span class="s">&quot;westenfelder/NL2SH-ALFA&quot;</span>, <span class="s">&quot;test&quot;</span>, split=<span class="s">&quot;train&quot;</span>)</pre></div>
+<h2>Related</h2><ul><li><a href="/r/nl2bash/">NL2Bash</a>: Bash one-liners collected from sites such as Stack Overflow, paired with English descriptions written by Bash...</li><li><a href="/r/intercode/">InterCode</a>: Framework for interactive coding environments in Docker, where the agent issues commands and sees execution...</li><li><a href="/r/nemotron-sft-opencode-v1/">Nemotron-SFT-OpenCode-v1</a>: Agentic instruction data for the OpenCode CLI: tool calling, AGENTS.md prompts, agent skills, bash-only tools...</li><li><a href="/r/openthoughts-agent-v1-sft/">OpenThoughts-Agent-v1-SFT</a>: Teacher-agent traces on nl2bash and InferredBugs (C# and Java bugs) tasks, in the Terminus-2 harness, used...</li><li><a href="/r/super-benchmark/">SUPER</a>: Allen Institute benchmark on setting up and running tasks from machine learning and NLP research repositories...</li><li><a href="/r/terminal-bench-2/">Terminal-Bench 2.0</a>: Hard terminal tasks in Harbor format (instruction, Docker environment, tests); official leaderboard at...</li></ul>
+</div><aside class="aside"><div class="panel"><h3>At a glance</h3><dl>
+<dt>Source</dt><dd><a href="https://huggingface.co/datasets/westenfelder/NL2SH-ALFA">huggingface.co/datasets/westenfelder/NL2SH-ALFA</a></dd>
+<dt>License</dt><dd>MIT</dd><dt>Size</dt><dd>Test config: 300 rows (card: 600 manually verified instruction-command pairs). Train config: 40,639 unverified pairs</dd>
+<dt>Stage</dt><dd><a class="pill st st-sft" href="/stage/sft/">SFT</a> <a class="pill st st-eval" href="/stage/eval/">Eval</a></dd>
+<dt>Languages</dt><dd><a href="/languages/bash/">Bash</a></dd>
+<dt>Form</dt><dd><a class="pill" href="/program/text/">Text</a> <a class="pill" href="/program/execution/">Execution</a></dd><dt>Stack level</dt><dd><a class="pill" href="/stack/os/">Operating systems</a></dd><dt>Tasks</dt><dd>Terminal and shell, Function generation</dd><dt>Difficulty</dt><dd>intro</dd>
+<dt>Checked</dt><dd>2026-11-24</dd></dl></div>
+<div class="panel"><h3>More links</h3><ul><li><a href="https://arxiv.org/abs/2502.06858">Paper</a></li></ul></div>
+<div class="panel"><h3>Evidence</h3><p class="mono">huggingface.co/api/datasets/westenfelder/NL2SH-ALFA (mit, created 2025-01-29, modified 2026-02-28); card README; datasets-server sizes; arxiv.org/abs/2502.06858 abstract</p></div></aside></div></div></div>
+</main>
+<footer class="wrap foot">
+  <a class="brand" href="https://renaissancelabs.eu"><img src="/assets/mark.png" alt="">Renaissance Labs</a>
+  <div class="foot-links"><a href="/catalog/">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
+</footer>
+<script src="/app.js?v=33e4a37a" defer></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>kGym and kBench (Linux kernel crash resolution): Benchmark | Renaissance Labs Code</title>
+<meta name="description" content="Platform and dataset for fixing real Linux kernel crashes found by the Syzkaller fuzzer. A patch is judged by building the kernel and re-running the crash reproducer.">
+<link rel="canonical" href="https://code.renaissancelabs.eu/r/kgym/">
+<meta property="og:title" content="kGym and kBench (Linux kernel crash resolution): Benchmark | Renaissance Labs Code"><meta property="og:description" content="Platform and dataset for fixing real Linux kernel crashes found by the Syzkaller fuzzer. A patch is judged by building the kernel and re-running the crash reproducer."><meta property="og:url" content="https://code.renaissancelabs.eu/r/kgym/"><meta property="og:type" content="website">
+<meta property="og:image" content="https://code.renaissancelabs.eu/assets/og/r-kgym.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="kGym and kBench (Linux kernel crash resolution): Benchmark | Renaissance Labs Code"><meta property="og:site_name" content="Renaissance Labs Code">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://code.renaissancelabs.eu/assets/og/r-kgym.jpg"><meta name="twitter:title" content="kGym and kBench (Linux kernel crash resolution): Benchmark | Renaissance Labs Code"><meta name="twitter:description" content="Platform and dataset for fixing real Linux kernel crashes found by the Syzkaller fuzzer. A patch is judged by building the kernel and re-running the crash reproducer."><meta name="theme-color" content="#121311">
+<link rel="icon" href="/assets/favicon.png">
+<link rel="stylesheet" href="/styles.css?v=33e4a37a">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+  <a class="brand" href="/"><img src="/assets/mark.png" alt=""><span>Renaissance Labs &middot; Code</span></a>
+  <nav><a href="/program/">Program</a><a href="/stack/">Stack</a><a href="/languages/">Languages</a><a href="/world/">World</a><a href="/intelligence/">Intelligence</a><a href="/train/" aria-current="page">Train</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
+  <button class="theme" id="theme" type="button" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+</header>
+<main id="main">
+<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/train/">Train</a> / <a href="/catalog/">Catalog</a> / <a href="/stage/eval/">Eval</a></div>
+<span class="eyebrow">Benchmark &middot; 2024-07</span><h1>kGym and kBench (Linux kernel crash resolution)</h1><p class="lede">Platform and dataset for fixing real Linux kernel crashes found by the Syzkaller fuzzer. A patch is judged by building the kernel and re-running the crash reproducer.</p></div>
+<div class="layout"><div class="prose">
+<h2>How to use it</h2><p>Use kGymSuite, the successor that runs on QEMU, to build kernels and replay reproducers. Start with the smaller set, which the authors trust more.</p>
+<h2>Caveats</h2><p>This repository has no license file; kGymSuite has an MIT license file. The paper abstract reports 0.72% (unassisted) and 5.38% (buggy files given) for the best model at release. Each evaluation is a kernel build, so it is slow and costly. Last commit 2025-11-08; kGymSuite last commit 2026-05-08.</p>
+<div class="callout warn"><b>License</b>This entry is not plainly permissive (family: unknown, read the source). Read the license on the source page before using it for training or for a product.</div>
+<h2>Related</h2><ul><li><a href="/r/llvm-apr-benchmark/">LLVM APR Benchmark</a>: Program repair on the LLVM compiler itself: each item is a real LLVM issue (for example a miscompilation in...</li><li><a href="/r/lca-ci-builds-repair/">Long Code Arena: CI builds repair</a>: Each item is a failing GitHub Actions run with its logs, the workflow file and the commit that later fixed...</li><li><a href="/r/multi-swe-bench/">Multi-SWE-bench</a>: Multilingual issue-resolving benchmark annotated by 68 experts from 2,456...</li><li><a href="/r/swe-bench-pro/">SWE-Bench Pro</a>: Long-horizon, enterprise-style tasks with a public set, a private held-out set, and a commercial set from...</li><li><a href="/r/swe-bench/">SWE-bench (full)</a>: Real GitHub issue plus repository; the agent must produce a patch that passes the repo&#x27;s own tests...</li><li><a href="/r/swe-bench-train/">SWE-bench (full, train/test splits)</a>: The original 2,294-issue benchmark, now with eval_script, image and log_parser columns. A SWE-bench-Train...</li></ul>
+</div><aside class="aside"><div class="panel"><h3>At a glance</h3><dl>
+<dt>Source</dt><dd><a href="https://github.com/Alex-Mathai-98/kGym-Kernel-Playground">github.com/Alex-Mathai-98/kGym-Kernel-Playground</a></dd>
+<dt>Size</dt><dd>504 kernel bugs in the C-reproducer set added December 2024, plus a smaller original set (README)</dd>
+<dt>Stage</dt><dd><a class="pill st st-eval" href="/stage/eval/">Eval</a></dd>
+<dt>Languages</dt><dd><a href="/languages/c/">C</a></dd>
+<dt>Form</dt><dd><a class="pill" href="/program/execution/">Execution</a> <a class="pill" href="/program/tests/">Tests</a> <a class="pill" href="/program/change/">Change</a></dd><dt>Stack level</dt><dd><a class="pill" href="/stack/os/">Operating systems</a></dd><dt>Tasks</dt><dd>Bug fixing and repair, Repository-level, Agentic (multi-step, tools)</dd><dt>Difficulty</dt><dd>frontier</dd>
+<dt>Checked</dt><dd>2026-11-24</dd></dl></div>
+<div class="panel"><h3>More links</h3><ul><li><a href="https://arxiv.org/abs/2407.02680">Paper</a></li><li><a href="https://github.com/ARiSE-Lab/kGymSuite">kGymSuite</a></li></ul></div>
+<div class="panel"><h3>Evidence</h3><p class="mono">GitHub API Alex-Mathai-98/kGym-Kernel-Playground (no license, last commit 2025-11-08) and ARiSE-Lab/kGymSuite (LICENSE file MIT, last commit 2026-05-08); READMEs; arxiv.org/abs/2407.02680 abstract</p></div></aside></div></div></div>
+</main>
+<footer class="wrap foot">
+  <a class="brand" href="https://renaissancelabs.eu"><img src="/assets/mark.png" alt="">Renaissance Labs</a>
+  <div class="foot-links"><a href="/catalog/">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
+</footer>
+<script src="/app.js?v=33e4a37a" defer></script>
+</body>
+</html>

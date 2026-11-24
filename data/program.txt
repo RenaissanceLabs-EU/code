@@ -1,0 +1,336 @@
+@id text
+@n 01
+@title Text
+@full Text: a program begins as a file of characters
+@short A program is first plain text: characters stored as bytes. Everything else is recovered from it.
+@question If a program is only a file of characters, what makes it different from a letter?
+@lede
+A program starts life as plain text: a sequence of characters, stored as a sequence of bytes. Nothing in the file marks it as special. The same bytes can be opened in an editor, printed, or sent in an email. What makes them code is that another program can read them and act on what they say.
+
+Plain text is an old and deliberate choice. It means every tool ever made for text also works on programs: editors, search, comparison, version control, and now language models, which read code the same way they read prose. The price is that text carries no structure of its own. Where a statement ends, which name belongs to which function, what any of it means: all of that has to be worked out from a flat line of characters. The other seven forms on this map are that working out.
+@example One line, three ways of looking
+The line `a = b % 2` is nine characters. Stored on disk it is nine numbers, here in hexadecimal:
+
+```bytes
+61 20 3D 20 62 20 25 20 32
+```
+
+The letter `a` is 61, the space is 20, and the percent sign is 25. These values were fixed by the ASCII standard in the 1960s and have not changed since for these characters. Add a character from outside that old set, such as `é`, and it takes two bytes (C3 A9) under UTF-8, the encoding most source code uses today.
+@fig bytes
+@figtitle From characters to bytes
+@figcap Type anything. Each column is one character, its Unicode code point, and the bytes that UTF-8 stores for it.
+@notice
+- In most languages the keywords, digits and operators take one byte each, exactly as in ASCII. Strings, comments and a few languages (Lean uses → and ∧) reach for characters outside it. UTF-8 was designed so that an old ASCII file is already a valid UTF-8 file.
+- A space is a byte like any other (20). A tab is a different byte (09). Two programs can look the same on screen and differ on disk, which matters in languages such as Python where indentation is part of the meaning.
+- A typical emoji takes four bytes, and ones built from several parts take many more. The machine does not know it is a face. It does not know `a` is a letter either.
+@ideas
+Character :: One written symbol: a letter, a digit, a bracket, a space.
+Code point :: The number Unicode assigns to a character. `a` is U+0061.
+Encoding :: The rule that turns code points into bytes. UTF-8 uses one to four bytes per character.
+Byte :: Eight bits, a number from 0 to 255. The unit in which files are stored and sent.
+Source file :: A text file holding part of a program. Large programs have thousands.
+Line ending :: The invisible character that ends a line: one byte (0A) on Unix systems, two (0D 0A) on Windows.
+@models
+A language model meets code mostly at this layer. Its training data is source text, and its output is source text. Every structure described on the following pages is something the model has to infer from characters, because it is rarely handed the tree or the types.
+
+So the data work at this layer decides a great deal. Public code is full of exact and near-exact copies, files produced by tools instead of people, minified bundles, and secrets that were committed by mistake. Each file also carries its own license. Collecting code as text, removing duplicates, filtering what should not be learned from, and keeping the license of every file are the first steps of any training run, and the resources below are the corpora and tools for them.
+
+@@@
+@id tokens
+@n 02
+@title Tokens
+@full Tokens: the words of a language
+@short The text is cut into the smallest pieces that mean something: names, numbers, operators.
+@question Where does one word of a program end and the next begin?
+@lede
+Before a program can be understood, its text is cut into tokens: the smallest pieces that mean something on their own. In `while b != 0` there are four: `while`, `b`, `!=` and `0`. The cutting is called lexing. Its rules are simple enough to write as patterns, and it is the first thing most compilers and interpreters do.
+
+Tokens come in a few kinds: keywords the language reserves, names the programmer invents, numbers, operators and punctuation. Spaces and comments are thrown away once they have done their job of keeping words apart, which is why most languages let you lay code out however you like.
+
+The word has a second meaning that matters on this site. Language models also cut text into tokens, but theirs are learned from statistics instead of defined by a grammar. A model's tokenizer may split one name into three pieces or glue a bracket to the line break after it. So the same program is tokenized twice, by two unrelated rules: once for the machine that will run it, and once for the model that reads or writes it.
+@example Longest match wins
+A lexer reads left to right and always takes the longest piece that fits. That one rule settles questions that would otherwise be ambiguous:
+
+- `a<=b` is three tokens (`a`, `<=`, `b`), not four. The lexer prefers `<=` to `<` followed by `=`.
+- `a = b % 2` and `a=b%2` are the same five tokens. The spaces only separate.
+- `while b` is two tokens. `whileb` is one: a name the programmer made up.
+@fig tokens
+@figtitle Cut a program into tokens
+@figcap Edit the program. Colors show the kind of each token. This is the real lexer that the other figures on this site run on.
+@notice
+- Delete every space you can. As long as two words do not merge, the tokens stay the same.
+- The comment shows up as a token here and is dropped before the next stage. To the machine it was never part of the program.
+- Type a character the language does not have, such as `@`. This is the earliest possible error: the text cannot even be cut into words.
+@ideas
+Token :: The smallest meaningful piece of program text, with a kind (keyword, name, number, operator) and a position.
+Lexer :: The part of a compiler that turns characters into tokens. Also called a scanner.
+Keyword :: A word the language reserves for itself, such as `while` or `return`.
+Identifier :: A name chosen by the programmer for a variable, function or type.
+Literal :: A value written out directly, such as `42` or `"hello"`.
+Longest match :: The rule that a lexer takes the longest token that fits at each position.
+Subword token :: A piece of text in a language model's learned vocabulary. It need not line up with the language's own tokens.
+@models
+Pretraining a language model on code is next-token prediction: given the tokens so far, guess the next one. Completion in an editor is the same task used directly, and fill-in-the-middle is its variant with text on both sides of the gap.
+
+Two consequences follow. First, everything a model reads or writes is measured in its own tokens, so a large repository does not fit in view at once, and what to show the model becomes a problem of its own. Second, the model's tokens ignore the language's structure. Indentation, long identifiers and rare symbols can each cost many tokens, and the same code formatted differently is a different input. Careful pipelines normalize formatting and place fill-in-the-middle gaps on real token or syntax boundaries instead of at random characters.
+
+@@@
+@id tree
+@n 03
+@title Structure
+@full Structure: the tree inside the text
+@short A parser turns the line of tokens into a tree that records what belongs to what.
+@question Why is 1 + 2 * 3 seven and not nine?
+@lede
+Tokens arrive in a line, but meaning is nested. In `1 + 2 * 3` the multiplication belongs together first, and its result is one side of the sum. A parser turns the line of tokens into a tree that records exactly what belongs to what, following the grammar of the language.
+
+That tree, the abstract syntax tree, is the form in which compilers, formatters and many analysis tools think about code. Compilers translate it, formatters print it back out, editors use it to color and to rename, and analysis tools search it for mistakes.
+
+A grammar is a short list of rules that describes infinitely many programs, because the rules can refer to themselves: an expression may contain an expression, a block may contain a block, to any depth. In most languages a text that does not fit the rules has no tree, and the compiler refuses it. It does not guess what you meant. This strictness is the first deep difference between a programming language and a human one.
+@example Two trees from the same five tokens
+`1 + 2 * 3` and `(1 + 2) * 3` use the same numbers and the same operators. The first is 7 and the second is 9, and the whole difference is the shape of the tree: which operation sits lower, and is therefore done first.
+
+The grammar decides this with precedence (multiplication binds tighter than addition) and associativity (`10 - 4 - 3` means `(10 - 4) - 3`). Parentheses are the programmer's way of overriding both.
+@fig tree
+@figtitle Parse a line into its tree
+@figcap Type one line or pick an example. The tree is drawn from the output of the real parser.
+@notice
+- Try `1 + 2 * 3` and then `(1 + 2) * 3`. The multiplication moves from the bottom of the tree to the top.
+- Leaves are names and numbers. Everything above a leaf is an operation waiting for its parts.
+- Remove a closing bracket. There is no tree at all, only a message saying where the grammar stopped fitting.
+@ideas
+Grammar :: The set of rules that says which sequences of tokens are programs. Usually a context-free grammar.
+Parser :: The part of a compiler that builds a tree from tokens according to the grammar.
+Abstract syntax tree :: The tree of a program with layout and punctuation removed, keeping only structure.
+Precedence :: The rule for which operator binds tighter when brackets are absent.
+Associativity :: The rule for grouping a chain of the same operator: left to right, or right to left.
+Recursion :: A rule that refers to itself. It is what lets a finite grammar describe unlimited nesting.
+Syntax error :: A place where the text does not fit the grammar. In most languages the program is rejected before anything runs.
+@models
+A model is given text and must produce text, so it has to keep the tree in mind without ever being shown it: every bracket closed, every block ended, every construct complete. Output that does not parse is worth nothing, which makes parsing the cheapest check there is. It needs no tests and takes milliseconds.
+
+Tools use the tree on both sides of training. On the data side, parsers such as tree-sitter pull whole functions out of files, compare code with formatting ignored, and choose gaps that match real syntactic units. On the output side, a grammar can constrain a model as it writes, so that every token it emits keeps the text a valid start of a program in that grammar. Few datasets expose the tree directly, so this layer is thin in the catalog. That thinness is a finding in itself.
+
+@@@
+@id types
+@n 04
+@title Types
+@full Types: what kind of thing is this?
+@short A checker works out what kind of value every name holds, for all runs at once, without running.
+@question What can be known about a program without running it?
+@lede
+A type says what kind of value something is: a whole number, a piece of text, a list of numbers, a function from numbers to yes-or-no. A type checker reads the tree and confirms that every operation is given the kind of value it needs. In a statically typed language you cannot add a number to `true`, and you cannot call something that is not a function. The checker establishes this for every possible run of the program at once, without running it a single time.
+
+Languages differ in when they check. Statically typed languages such as C, Java, Rust and Haskell check before the program runs and refuse to build it if a type is wrong. Dynamically typed languages such as Python, JavaScript and Ruby check each operation at the moment it happens, so the same mistake appears only if and when that line is reached, possibly in front of a user.
+
+Types are also where code first touches logic. In languages where every program is guaranteed to finish, a type can be read as a claim, and a program of that type as evidence for the claim. Followed far enough, that idea turns a type checker into a proof checker, which is the subject of the proof page.
+
+There is a cost. A checker that never lets a bad program through must sometimes refuse a good one, and richer type systems ask the programmer to say more.
+@example The same mistake in three languages
+Passing `true` where a number belongs:
+
+- In the small language on this page, `gcd(48, true)` is rejected before it runs.
+- In Python, `True` counts as the number 1, so a `gcd(48, True)` written the same way runs and quietly returns `True`, which equals 1.
+- In JavaScript, `"5" * 2` is 10 but `"5" + 2` is the text `"52"`.
+
+None of these is an accident. Each is a decision a language made about what types are for.
+@fig types
+@figtitle Infer and check the types
+@figcap Edit the program or pick a mistake. The checker runs on every keystroke and never executes the program.
+@notice
+- The working program contains no type annotations. Every type shown was inferred from use: `b != 0` forces `b` to be a number, and `a % b` forces `a` to be one too.
+- Each mistake is found with its exact position, before any test exists.
+- "Forget a return" is a mistake about paths, not values: one route through the function gives nothing back.
+@ideas
+Type :: A classification of values that says which operations make sense on them.
+Static checking :: Checking types before the program runs, for all runs at once.
+Dynamic checking :: Checking each operation's types at the moment it executes.
+Type inference :: Working out types from how names are used, without the programmer writing them.
+Soundness :: The guarantee that a program accepted by the checker cannot hit a type error when it runs.
+Generic type :: A type with a blank to fill in, such as "list of T", so one piece of code serves many types.
+Ownership :: Rust's use of types to track who may read or change a piece of memory, catching a class of memory errors at compile time.
+@models
+For a model, a type checker is a verifier one step stronger than a parser and nearly as cheap. It needs no tests, it covers all inputs, and its error messages say where and why. Systems that let a model compile, read the errors and try again lean on this constantly.
+
+It also changes what is learnable. In a typed language a wrong guess is often caught at once. In a dynamic language the same guess runs and fails later or never, so the feedback is weaker. Open data for teaching types directly, such as type prediction for Python or TypeScript, exists but is small next to the data for writing functions.
+
+@@@
+@id execution
+@n 05
+@title Execution
+@full Execution: the program runs
+@short The meaning of a program is what happens when a machine carries it out, one step at a time.
+@question What does a program mean?
+@lede
+The meaning of a program is what happens when it runs. A machine takes the first instruction, carries it out, and moves to the next. Each step changes one small piece of state: a value on a stack, the contents of a variable, the position in the program. That is the model every programmer works with, and the hardware makes it look true, billions of times a second.
+
+The semantics of a language is the exact rulebook for those steps. Under it, two programs that look nothing alike can mean the same thing, and two that differ by one character can mean entirely different things.
+
+Here code parts ways with every other kind of writing. To learn what a program does in general, there is no method that always beats running it. In 1936 Alan Turing proved a result that comes to the same thing: no procedure can decide, for every program and input, whether the program will eventually stop. Execution is the ground truth. Types, tests and proofs are all ways of predicting or constraining what execution will do.
+@example Euclid's algorithm, step by step
+To find the greatest common divisor of 48 and 18, replace the pair by the smaller number and the remainder, and repeat until the remainder is zero:
+
+```trace
+(48, 18)  ->  (18, 12)  ->  (12, 6)  ->  (6, 0)   answer: 6
+```
+
+Three trips around the loop. Each trip is thirteen instructions on the small machine used here, which you can follow one at a time below. The method is in Euclid's Elements, written around 300 BC, which makes it one of the oldest algorithms still run every day.
+@fig exec
+@figtitle Step through a running program
+@figcap Press Step. The highlighted source is the part the next instruction was compiled from. Edit the program and it is recompiled.
+@notice
+- The machine has no idea it is computing a greatest common divisor. It pushes, pops, compares and jumps.
+- When `gcd` is called, a new frame appears on the call stack with its own variables. When it returns, the frame is gone.
+- Change `b != 0` to `a != 0` and run. The machine does exactly what was written, straight into a division by zero.
+@ideas
+State :: Everything the machine holds at one moment: variables, stacks, and the position in the program.
+Instruction :: One step the machine can take, such as "push 0" or "jump to 13".
+Call stack :: The record of which functions are in progress, each with its own variables.
+Semantics :: The precise definition of what each construct of a language does when it runs.
+Side effect :: Anything a program does besides computing a value: printing, writing a file, sending a message.
+Termination :: Whether a program eventually stops. No general method can decide this for all programs.
+Undefined behavior :: A situation the language definition refuses to assign a meaning to. In C, reading past the end of an array is one.
+@models
+Most strong training signals for code come from this layer: run the candidate and see what happens. That is also why training on code needs sandboxes. A model's output is untrusted code, and it has to run somewhere it can do no harm.
+
+Models themselves are weak at this layer. Predicting what a program prints, without running it, means carrying exact state through many steps, and benchmarks built to test that skill show models losing track well before a real machine would. Execution traces are one answer: train on what programs actually did. The larger answer is to let the model run the code and read the result, which turns a writer into an agent.
+
+@@@
+@id tests
+@n 06
+@title Tests
+@full Tests: checking behavior by example
+@short Run the program on chosen inputs and compare. Cheap, automatic, and never complete.
+@question How do you know a program is right?
+@lede
+A test runs a program on a chosen input and compares the result with what was expected. It is the everyday way of knowing that software works: cheap, automatic and concrete. Large projects run thousands of tests on every change.
+
+The weakness is just as concrete. A test checks the inputs someone thought of. A program with infinitely many possible inputs passes its tests after being tried on a few of them. Tests can show that a bug is present. Unless every possible input can be tried, they cannot show that none remain.
+
+For training models, tests are what make code special among the things a model can learn. An answer can be checked by a machine, with no person judging it. A test suite's pass or fail is a reward, and nearly all reinforcement learning for code rests on it. It inherits the weakness exactly: the program that passes the tests is not necessarily the program anyone wanted.
+@example A wrong program that passes
+Suppose the tests for `gcd` are five examples. Here is a program that passes every one:
+
+```mini
+fn gcd(a, b) {
+  if a == 48 { return 6 }
+  if a == 17 { return 1 }
+  if a == 0 { return 9 }
+  if a == 12 { return 12 }
+  return 25
+}
+```
+
+It contains no idea of what a divisor is. It has memorized the answer sheet. A person would be embarrassed to write it, but an optimizer that is rewarded only for passing tests has no such feeling, and will find programs like it.
+@fig tests
+@figtitle Run the tests, then the held-out tests
+@figcap Edit the function or pick a version. Five tests are visible to the author. Five more are held back.
+@notice
+- "Off by one" passes four of the five visible tests. A small suite can miss a bug that only shows on some inputs.
+- "Wrong operator" never finishes on most inputs. The harness has to give up after a step limit, because no test can wait forever.
+- "Memorize the visible tests" scores five out of five, then zero out of five on inputs it has not seen. Held-out tests are the standard defense.
+@ideas
+Unit test :: A small test of one function or component on one input.
+Oracle :: The thing that knows the right answer for a test: an expected value, a reference program, or a property.
+Coverage :: The share of a program's lines or branches that the tests cause to run.
+Property-based test :: A test that states a rule (the result divides both inputs) and tries many generated inputs against it.
+Fuzzing :: Feeding a program huge numbers of random or mutated inputs to find crashes.
+Regression test :: A test added after a bug is fixed, so the same bug cannot return unnoticed.
+Held-out test :: A test hidden from whoever, or whatever, writes the program.
+@models
+In training, the test suite is the teacher. A model writes a program, the tests run, and the score becomes the reward. The quality of that reward is the quality of the tests. Thin suites accept wrong programs, and several well-known benchmarks were extended by other researchers with many more tests per problem once this was measured: HumanEval+ and MBPP+ have about 80 and 35 times as many tests as the originals.
+
+Models also exploit tests when they can. If the tests are readable from inside the sandbox, a model can special-case them, edit them, or read the expected values. Sound setups keep tests out of reach, hold some back, and review a sample of passing solutions by hand. The [guide](/guide/) and [pitfalls](/pitfalls/) pages cover this in practice.
+
+@@@
+@id proof
+@n 07
+@title Proof
+@full Proof: correct for every input
+@short Reasoning, checked by a machine, that a program meets its specification for all inputs.
+@question Can a program be known correct for inputs nobody has tried?
+@lede
+A proof shows that a program meets its specification for every input, by reasoning instead of trying. A proof assistant such as Lean, Rocq or Isabelle checks each step of the reasoning mechanically, so the trust rests on a small checking program and not on a reader's attention.
+
+This is where code and mathematics become the same activity. Under the Curry-Howard correspondence, in a language where every program terminates, a proposition is a type and a proof of it is a program of that type. In Lean and Rocq, checking a proof is type checking. Real systems have been verified with proof assistants, among them the seL4 microkernel (in Isabelle/HOL) and the CompCert C compiler (in Coq, now Rocq), under stated assumptions about what lies outside the proof.
+
+The cost is labor. Writing the proof usually takes far more effort than writing the program. And a proof is only as good as its specification. It establishes that the program does what the statement says. Whether the statement says what you wanted is a question no checker answers.
+@example Euclid's algorithm, proved in Lean
+The definition, a proof that it always terminates, and a theorem that its result divides both inputs, as accepted by Lean 4:
+
+```lean
+def gcd : Nat → Nat → Nat
+  | a, 0 => a
+  | a, b + 1 => gcd (b + 1) (a % (b + 1))
+termination_by _ b => b
+decreasing_by exact Nat.mod_lt _ (Nat.succ_pos _)
+
+theorem gcd_dvd (a b : Nat) : gcd a b ∣ a ∧ gcd a b ∣ b := by
+  induction b using Nat.strongRecOn generalizing a with
+  | _ b ih =>
+    cases b with
+    | zero => simp [gcd]
+    | succ n =>
+      rw [gcd]
+      have h := ih (a % (n + 1)) (Nat.mod_lt _ (Nat.succ_pos _)) (n + 1)
+      exact ⟨(Nat.dvd_mod_iff h.1).mp h.2, h.1⟩
+```
+
+The theorem covers all pairs of natural numbers, of which there are infinitely many. Look at what it does not say, though: that the result is the *greatest* common divisor. A function that always returned 1 would satisfy this statement too. Saying completely what you mean is the hard part of verification.
+@fig proof
+@figtitle Checking every case, up to a point
+@figcap Drag to check more pairs. A test, however large, covers a square. The theorem above covers the whole plane.
+@notice
+- Each square is one pair of numbers, checked by brute force against the definition of greatest common divisor.
+- Doubling the range makes four times the work, and the unchecked region is still infinite.
+- The pattern of colored squares is a theorem of its own: the share of pairs with no common factor tends to 6/π².
+@ideas
+Specification :: A precise statement of what a program is supposed to do.
+Invariant :: Something that stays true every time around a loop. For Euclid: the common divisors of the pair never change.
+Proof assistant :: A program that checks proofs step by step and accepts nothing it cannot verify.
+Trusted kernel :: The small core of a proof assistant that does the checking. Only it has to be right, apart from the axioms and the system it runs on.
+Termination proof :: An argument that a program always stops, usually by showing some quantity shrinks at every step.
+Hoare triple :: A claim of the form: if this holds before the code runs and the code finishes, that holds after.
+Propositions as types :: The reading of types as claims and programs as their proofs.
+@models
+A proof checker is the strongest verifier there is. A program that only works on the examples cannot satisfy it, so it closes the loophole tests leave open, though not every loophole: unfinished-proof placeholders, added axioms and weak statements can still be gamed. That makes proof a natural target for training by reward: the model edits a proof, the kernel says yes or no, and no judge is needed.
+
+Models that write Lean proofs have improved quickly, and our sister site [maps mathematics](https://math.renaissancelabs.eu/) with Lean environments built for this. Verified code generation, where a model writes a program together with a proof that it meets a specification in a language such as Dafny or Verus, is younger and smaller. The open question is whether the specification can be trusted, since that is the one part a checker takes on faith.
+
+@@@
+@id change
+@n 08
+@title Change
+@full Change: a program is never finished
+@short Real software is edited for decades by many hands. The unit of work is the change, not the program.
+@question What is a program, if it is different every week?
+@lede
+Real programs are not written once. They are changed, daily, by many people, for decades. The unit of work in software is therefore the change and not the program: a small difference between two versions, with a reason attached, read by someone else before it is accepted, and recorded for good.
+
+Version control systems such as Git keep every committed version, and the history stays unless someone rewrites it. That history is as much a part of the software as the current text, because it records why each line is the way it is.
+
+It follows that most programming is reading. The job is to understand an existing system well enough to alter one part without breaking the rest. This is the hardest form for people and for models, because it needs every other form on this map at once, across thousands of files, together with knowledge that is written down nowhere: why it was built this way, and what its users have come to depend on.
+@example Same behavior, different program
+There are two classic ways to write Euclid's algorithm. The older one subtracts the smaller number from the larger until they are equal. The other takes a remainder, which does many subtractions in one step. On 48 and 18 both give 6. On 1,000,000 and 1 the first takes almost a million trips around its loop and the second takes one.
+
+Replacing one with the other is a typical change: the behavior stays the same on the inputs it was meant for, the cost changes, and one behavior at the edges changes too (what happens when an input is zero). The figure below shows this change the way a programmer sees it.
+@fig diff
+@figtitle A change, as a diff
+@figcap Edit either side. Lines marked with a minus were removed and lines marked with a plus were added.
+@notice
+- Version control stores and shows software in this form, and review happens on the diff, not on the whole file.
+- The diff is computed on text, one line at a time. Reindent a block and every line counts as changed, though nothing in the tree moved.
+- Both versions give the same answer here. Nothing in the diff tells you that. Someone, or something, had to run them.
+@ideas
+Diff :: The difference between two versions of a text, as lines removed and lines added.
+Commit :: One recorded change, with an author, a time and a message saying why.
+Version control :: A system that stores the full history of a project and lets many people change it at once.
+Merge conflict :: Two changes that touch the same lines, which the system cannot combine by itself.
+Code review :: Reading someone else's change before it is accepted.
+Refactoring :: Changing the structure of code without changing what it does.
+Regression :: Something that used to work and stopped working after a change.
+Dependency :: Code written by someone else that a program needs in order to run.
+@models
+This is the form that separates writing functions from doing software engineering. Benchmarks in the SWE-bench family give a model a real repository and a real issue, and judge its change by the project's own tests. Scores on them say more about practical use than any function-level benchmark, and they are also harder to build and easier to contaminate.
+
+History is training data too. Most public commits are a before and an after, and many carry a stated reason, and reviews add a human judgment of the change. Agent trajectories record the reading, running and editing in between. The resources below cover commits, reviews, repository tasks and the environments that turn a repository into a place where a model can practice.

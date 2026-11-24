@@ -10,37 +10,38 @@
 <meta property="og:image" content="https://code.renaissancelabs.eu/assets/og/r-multi-swe-bench.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Multi-SWE-bench: Benchmark | Renaissance Labs Code"><meta property="og:site_name" content="Renaissance Labs Code">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://code.renaissancelabs.eu/assets/og/r-multi-swe-bench.jpg"><meta name="twitter:title" content="Multi-SWE-bench: Benchmark | Renaissance Labs Code"><meta name="twitter:description" content="Multilingual issue-resolving benchmark annotated by 68 experts from 2,456 candidates."><meta name="theme-color" content="#121311">
 <link rel="icon" href="/assets/favicon.png">
-<link rel="stylesheet" href="/styles.css?v=a7072e73">
+<link rel="stylesheet" href="/styles.css?v=33e4a37a">
 <script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="bar">
   <a class="brand" href="/"><img src="/assets/mark.png" alt=""><span>Renaissance Labs &middot; Code</span></a>
-  <nav><a href="/catalog/" aria-current="page">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/pitfalls/">Pitfalls</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
+  <nav><a href="/program/">Program</a><a href="/stack/">Stack</a><a href="/languages/">Languages</a><a href="/world/">World</a><a href="/intelligence/">Intelligence</a><a href="/train/" aria-current="page">Train</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
   <button class="theme" id="theme" type="button" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
 </header>
 <main id="main">
-<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/catalog/">Catalog</a> / <a href="/stage/eval/">Eval</a></div>
+<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/train/">Train</a> / <a href="/catalog/">Catalog</a> / <a href="/stage/eval/">Eval</a></div>
 <span class="eyebrow">Benchmark &middot; 2025-04</span><h1>Multi-SWE-bench</h1><p class="lede">Multilingual issue-resolving benchmark annotated by 68 experts from 2,456 candidates.</p></div>
 <div class="layout"><div class="prose">
 <h2>How to use it</h2><p>Alternative to SWE-bench Multilingual with more instances; check the card license before use. mini and flash variants exist for cheaper runs.</p>
 <h2>Caveats</h2><p>Execution-based. License is &#x27;other&#x27; in HF metadata, so read it. Public data, so contamination is possible.</p>
 <div class="callout warn"><b>License</b>This entry is not plainly permissive (family: unknown, read the source). Read the license on the source page before using it for training or for a product.</div>
-<h2>Related</h2><ul><li><a href="/r/swe-bench-pro/">SWE-Bench Pro</a>: Long-horizon, enterprise-style tasks with a public set, a private held-out set, and a commercial set from...</li><li><a href="/r/swe-bench-multilingual/">SWE-bench Multilingual</a>: Issue-resolution tasks in C, C++, Go, Java, JavaScript, TypeScript, PHP, Ruby and Rust, runnable in the...</li><li><a href="/r/swe-bench-multimodal/">SWE-bench Multimodal</a>: JavaScript and front-end issue tasks where the problem statement includes images such as...</li><li><a href="/r/swe-bench-live/">SWE-bench-Live</a>: Continuously updated issue-resolution benchmark with docker_image, test_cmds and rebuild_cmds per task,...</li><li><a href="/r/swe-bench/">SWE-bench (full)</a>: Real GitHub issue plus repository; the agent must produce a patch that passes the repo&#x27;s own tests...</li><li><a href="/r/swe-bench-train/">SWE-bench (full, train/test splits)</a>: The original 2,294-issue benchmark, now with eval_script, image and log_parser columns. A SWE-bench-Train...</li></ul>
+<h2>Related</h2><ul><li><a href="/r/swe-bench-pro/">SWE-Bench Pro</a>: Long-horizon, enterprise-style tasks with a public set, a private held-out set, and a commercial set from...</li><li><a href="/r/swe-bench-multilingual/">SWE-bench Multilingual</a>: Issue-resolution tasks in C, C++, Go, Java, JavaScript, TypeScript, PHP, Ruby and Rust, runnable in the...</li><li><a href="/r/swe-bench-multimodal/">SWE-bench Multimodal</a>: JavaScript and front-end issue tasks where the problem statement includes images such as...</li><li><a href="/r/swe-bench-live/">SWE-bench-Live</a>: Continuously updated issue-resolution benchmark with docker_image, test_cmds and rebuild_cmds per task,...</li><li><a href="/r/llvm-apr-benchmark/">LLVM APR Benchmark</a>: Program repair on the LLVM compiler itself: each item is a real LLVM issue (for example a miscompilation in...</li><li><a href="/r/lca-ci-builds-repair/">Long Code Arena: CI builds repair</a>: Each item is a failing GitHub Actions run with its logs, the workflow file and the commit that later fixed...</li></ul>
 </div><aside class="aside"><div class="panel"><h3>At a glance</h3><dl>
 <dt>Source</dt><dd><a href="https://huggingface.co/datasets/ByteDance-Seed/Multi-SWE-bench">huggingface.co/datasets/ByteDance-Seed/Multi-SWE</a></dd>
 <dt>License</dt><dd>other (see dataset card)</dd><dt>Size</dt><dd>1,632 instances in Java, TypeScript, JavaScript, Go, Rust, C, C++</dd>
 <dt>Stage</dt><dd><a class="pill st st-eval" href="/stage/eval/">Eval</a></dd>
-<dt>Languages</dt><dd>multi</dd><dt>Tasks</dt><dd>Agentic (multi-step, tools), Bug fixing and repair, Repository-level</dd><dt>Difficulty</dt><dd>hard</dd>
+<dt>Languages</dt><dd><a href="/languages/c/">C</a>, <a href="/languages/cpp/">C++</a>, <a href="/languages/rust/">Rust</a>, <a href="/languages/go/">Go</a>, <a href="/languages/java/">Java</a>, <a href="/languages/javascript/">JavaScript</a>, <a href="/languages/typescript/">TypeScript</a> <small>(source lists 7 in all)</small></dd>
+<dt>Form</dt><dd><a class="pill" href="/program/change/">Change</a></dd><dt>Stack level</dt><dd><a class="pill" href="/stack/apps/">Applications</a></dd><dt>Tasks</dt><dd>Agentic (multi-step, tools), Bug fixing and repair, Repository-level</dd><dt>Difficulty</dt><dd>hard</dd>
 <dt>Checked</dt><dd>2026-11-24</dd></dl></div>
 <div class="panel"><h3>More links</h3><ul><li><a href="https://arxiv.org/abs/2504.02605">Paper</a></li><li><a href="https://github.com/multi-swe-bench/multi-swe-bench">GitHub</a></li></ul></div>
 <div class="panel"><h3>Evidence</h3><p class="mono">huggingface.co/api/datasets/ByteDance-Seed/Multi-SWE-bench cardData.license=other; arxiv.org/abs/2504.02605; github.com/multi-swe-bench/multi-swe-bench Apache-2.0</p></div></aside></div></div></div>
 </main>
 <footer class="wrap foot">
   <a class="brand" href="https://renaissancelabs.eu"><img src="/assets/mark.png" alt="">Renaissance Labs</a>
-  <div class="foot-links"><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
+  <div class="foot-links"><a href="/catalog/">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
 </footer>
-<script src="/app.js?v=a7072e73" defer></script>
+<script src="/app.js?v=33e4a37a" defer></script>
 </body>
 </html>

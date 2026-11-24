@@ -10,37 +10,38 @@
 <meta property="og:image" content="https://code.renaissancelabs.eu/assets/og/r-testgeneval.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="TestGenEval: Benchmark | Renaissance Labs Code"><meta property="og:site_name" content="Renaissance Labs Code">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://code.renaissancelabs.eu/assets/og/r-testgeneval.jpg"><meta name="twitter:title" content="TestGenEval: Benchmark | Renaissance Labs Code"><meta name="twitter:description" content="Unit-test authoring and completion benchmark built from SWE-bench repositories, with a lite subset."><meta name="theme-color" content="#121311">
 <link rel="icon" href="/assets/favicon.png">
-<link rel="stylesheet" href="/styles.css?v=a7072e73">
+<link rel="stylesheet" href="/styles.css?v=33e4a37a">
 <script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="bar">
   <a class="brand" href="/"><img src="/assets/mark.png" alt=""><span>Renaissance Labs &middot; Code</span></a>
-  <nav><a href="/catalog/" aria-current="page">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/pitfalls/">Pitfalls</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
+  <nav><a href="/program/">Program</a><a href="/stack/">Stack</a><a href="/languages/">Languages</a><a href="/world/">World</a><a href="/intelligence/">Intelligence</a><a href="/train/" aria-current="page">Train</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
   <button class="theme" id="theme" type="button" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
 </header>
 <main id="main">
-<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/catalog/">Catalog</a> / <a href="/stage/eval/">Eval</a></div>
+<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/train/">Train</a> / <a href="/catalog/">Catalog</a> / <a href="/stage/eval/">Eval</a></div>
 <span class="eyebrow">Benchmark &middot; 2024-10</span><h1>TestGenEval</h1><p class="lede">Unit-test authoring and completion benchmark built from SWE-bench repositories, with a lite subset.</p></div>
 <div class="layout"><div class="prose">
 <h2>How to use it</h2><p>Use when training test-writing ability; check coverage and mutation score outputs.</p>
 <h2>Caveats</h2><p>Execution-based (coverage, mutation). Shares repos with SWE-bench, so overlap with SWE-bench-derived training data is likely. Splits seen: test 1,210, dev 210, train 15,439.</p>
 <div class="callout warn"><b>License</b>This entry is not plainly permissive (family: unknown, read the source). Read the license on the source page before using it for training or for a product.</div>
-<h2>Related</h2><ul><li><a href="/r/swt-bench/">SWT-Bench</a>: Agents write reproduction tests for real GitHub issues; a good test fails before and passes after the golden...</li><li><a href="/r/paper-reward-hack-audit/">Auditing Reward Hackability in Code RL Environments</a>: Abstract reports 22.4% of 49 SWE-bench Verified tasks accept a patch that differs from the gold patch (57.8%...</li><li><a href="/r/codescope/">CodeScope</a>: Execution-based multilingual, multitask benchmark covering code understanding and generation across many...</li><li><a href="/r/defects4j/">Defects4J</a>: Classic real-fault Java repair and testing database with infrastructure; used by repair benchmarks such as...</li><li><a href="/r/deveval/">DevEval (SDLC benchmark, arXiv 2403.08604)</a>: Evaluates LLMs across the software lifecycle: design, environment setup, implementation, acceptance and unit...</li><li><a href="/r/paper-evilgenie/">EvilGenie: A Reward Hacking Benchmark</a>: Benchmark on LiveCodeBench problems where hacking is easy; LLM judges detect obvious hacks, held-out tests...</li></ul>
+<h2>Related</h2><ul><li><a href="/r/swt-bench/">SWT-Bench</a>: Agents write reproduction tests for real GitHub issues; a good test fails before and passes after the golden...</li><li><a href="/r/paper-reward-hack-audit/">Auditing Reward Hackability in Code RL Environments</a>: Abstract reports 22.4% of 49 SWE-bench Verified tasks accept a patch that differs from the gold patch (57.8%...</li><li><a href="/r/cvdp/">CVDP (Comprehensive Verilog Design Problems)</a>: NVIDIA benchmark for RTL design and verification, with both single-turn and agentic problems written by...</li><li><a href="/r/codescope/">CodeScope</a>: Execution-based multilingual, multitask benchmark covering code understanding and generation across many...</li><li><a href="/r/cybergym/">CyberGym</a>: Evaluation of agents on real-world vulnerability analysis. Each task gives the vulnerable repository and, at...</li><li><a href="/r/defects4j/">Defects4J</a>: Classic real-fault Java repair and testing database with infrastructure; used by repair benchmarks such as...</li></ul>
 </div><aside class="aside"><div class="panel"><h3>At a glance</h3><dl>
 <dt>Source</dt><dd><a href="https://huggingface.co/datasets/kjain14/testgeneval">huggingface.co/datasets/kjain14/testgeneval</a></dd>
 <dt>License</dt><dd>license not in HF metadata</dd><dt>Size</dt><dd>1,210 test split (code and test file pairs); 68,647 tests across 11 Python repos (paper)</dd>
 <dt>Stage</dt><dd><a class="pill st st-eval" href="/stage/eval/">Eval</a></dd>
-<dt>Languages</dt><dd>python</dd><dt>Tasks</dt><dd>Test writing</dd><dt>Difficulty</dt><dd>hard</dd>
+<dt>Languages</dt><dd><a href="/languages/python/">Python</a> <small>(source lists 1 in all)</small></dd>
+<dt>Form</dt><dd><a class="pill" href="/program/tests/">Tests</a></dd><dt>Stack level</dt><dd><a class="pill" href="/stack/languages/">Languages</a></dd><dt>Tasks</dt><dd>Test writing</dd><dt>Difficulty</dt><dd>hard</dd>
 <dt>Checked</dt><dd>2026-11-24</dd></dl></div>
 <div class="panel"><h3>More links</h3><ul><li><a href="https://arxiv.org/abs/2410.00752">Paper</a></li></ul></div>
 <div class="panel"><h3>Evidence</h3><p class="mono">huggingface.co/api/datasets/kjain14/testgeneval; arxiv.org/abs/2410.00752</p></div></aside></div></div></div>
 </main>
 <footer class="wrap foot">
   <a class="brand" href="https://renaissancelabs.eu"><img src="/assets/mark.png" alt="">Renaissance Labs</a>
-  <div class="foot-links"><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
+  <div class="foot-links"><a href="/catalog/">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
 </footer>
-<script src="/app.js?v=a7072e73" defer></script>
+<script src="/app.js?v=33e4a37a" defer></script>
 </body>
 </html>

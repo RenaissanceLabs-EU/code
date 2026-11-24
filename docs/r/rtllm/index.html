@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RTLLM: Benchmark | Renaissance Labs Code</title>
+<meta name="description" content="Benchmark for generating design RTL from natural-language descriptions. Each design has its own folder of files.">
+<link rel="canonical" href="https://code.renaissancelabs.eu/r/rtllm/">
+<meta property="og:title" content="RTLLM: Benchmark | Renaissance Labs Code"><meta property="og:description" content="Benchmark for generating design RTL from natural-language descriptions. Each design has its own folder of files."><meta property="og:url" content="https://code.renaissancelabs.eu/r/rtllm/"><meta property="og:type" content="website">
+<meta property="og:image" content="https://code.renaissancelabs.eu/assets/og/r-rtllm.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="RTLLM: Benchmark | Renaissance Labs Code"><meta property="og:site_name" content="Renaissance Labs Code">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://code.renaissancelabs.eu/assets/og/r-rtllm.jpg"><meta name="twitter:title" content="RTLLM: Benchmark | Renaissance Labs Code"><meta name="twitter:description" content="Benchmark for generating design RTL from natural-language descriptions. Each design has its own folder of files."><meta name="theme-color" content="#121311">
+<link rel="icon" href="/assets/favicon.png">
+<link rel="stylesheet" href="/styles.css?v=33e4a37a">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+  <a class="brand" href="/"><img src="/assets/mark.png" alt=""><span>Renaissance Labs &middot; Code</span></a>
+  <nav><a href="/program/">Program</a><a href="/stack/">Stack</a><a href="/languages/">Languages</a><a href="/world/">World</a><a href="/intelligence/">Intelligence</a><a href="/train/" aria-current="page">Train</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
+  <button class="theme" id="theme" type="button" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+</header>
+<main id="main">
+<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/train/">Train</a> / <a href="/catalog/">Catalog</a> / <a href="/stage/eval/">Eval</a></div>
+<span class="eyebrow">Benchmark &middot; 2023-08</span><h1>RTLLM</h1><p class="lede">Benchmark for generating design RTL from natural-language descriptions. Each design has its own folder of files.</p></div>
+<div class="layout"><div class="prose">
+<h2>How to use it</h2><p>Generate RTL from each design description and check it with the files supplied for that design. Use it next to VerilogEval, since the designs are larger than HDLBits exercises.</p>
+<h2>Caveats</h2><p>Small (tens of designs), so scores are noisy. Version 2.1 corrected several design descriptions and testbenches, so state the version you ran. Last commit 2026-08-15.</p>
+
+<h2>Related</h2><ul><li><a href="/r/cvdp/">CVDP (Comprehensive Verilog Design Problems)</a>: NVIDIA benchmark for RTL design and verification, with both single-turn and agentic problems written by...</li><li><a href="/r/verilogeval/">VerilogEval</a>: Verilog generation benchmark from NVIDIA Research, scored by simulation. The 2024 revision adds...</li><li><a href="/r/apps/">APPS</a>: Interview-level and competition Python problems with solutions and test...</li><li><a href="/r/arcade-nl2code/">ARCADE</a>: Natural language to code problems inside data science notebooks, using pandas. Each problem comes with the...</li><li><a href="/r/aider-polyglot/">Aider Polyglot benchmark</a>: Hard Exercism exercises where the model must edit files in aider&#x27;s format and pass tests, measuring...</li><li><a href="/r/baxbench/">BaxBench</a>: Secure backend generation: each task pairs a scenario (an API to implement) with a framework (a language and...</li></ul>
+</div><aside class="aside"><div class="panel"><h3>At a glance</h3><dl>
+<dt>Source</dt><dd><a href="https://github.com/hkust-zhiyao/RTLLM">github.com/hkust-zhiyao/RTLLM</a></dd>
+<dt>License</dt><dd>MIT</dd><dt>Size</dt><dd>50 designs in RTLLM 2.0 (README); current version 2.1</dd>
+<dt>Stage</dt><dd><a class="pill st st-eval" href="/stage/eval/">Eval</a></dd>
+<dt>Languages</dt><dd><a href="/languages/verilog/">Verilog</a></dd>
+<dt>Form</dt><dd><a class="pill" href="/program/text/">Text</a> <a class="pill" href="/program/execution/">Execution</a> <a class="pill" href="/program/tests/">Tests</a></dd><dt>Stack level</dt><dd><a class="pill" href="/stack/gates/">Logic gates</a></dd><dt>Tasks</dt><dd>Function generation</dd><dt>Difficulty</dt><dd>intermediate</dd>
+<dt>Checked</dt><dd>2026-11-24</dd></dl></div>
+<div class="panel"><h3>More links</h3><ul><li><a href="https://arxiv.org/abs/2308.05345">Paper</a></li></ul></div>
+<div class="panel"><h3>Evidence</h3><p class="mono">GitHub API hkust-zhiyao/RTLLM (license MIT, last commit 2026-08-15); README (v2.1 notes, 50 designs in 2.0); arxiv.org/abs/2308.05345</p></div></aside></div></div></div>
+</main>
+<footer class="wrap foot">
+  <a class="brand" href="https://renaissancelabs.eu"><img src="/assets/mark.png" alt="">Renaissance Labs</a>
+  <div class="foot-links"><a href="/catalog/">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
+</footer>
+<script src="/app.js?v=33e4a37a" defer></script>
+</body>
+</html>

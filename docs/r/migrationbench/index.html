@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MigrationBench: Benchmark | Renaissance Labs Code</title>
+<meta name="description" content="Repository-level migration from Java 8 to the long-term support versions 17 and 21. The GitHub repository provides the evaluation framework that judges a migration.">
+<link rel="canonical" href="https://code.renaissancelabs.eu/r/migrationbench/">
+<meta property="og:title" content="MigrationBench: Benchmark | Renaissance Labs Code"><meta property="og:description" content="Repository-level migration from Java 8 to the long-term support versions 17 and 21. The GitHub repository provides the evaluation framework that judges a migration."><meta property="og:url" content="https://code.renaissancelabs.eu/r/migrationbench/"><meta property="og:type" content="website">
+<meta property="og:image" content="https://code.renaissancelabs.eu/assets/og/r-migrationbench.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="MigrationBench: Benchmark | Renaissance Labs Code"><meta property="og:site_name" content="Renaissance Labs Code">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://code.renaissancelabs.eu/assets/og/r-migrationbench.jpg"><meta name="twitter:title" content="MigrationBench: Benchmark | Renaissance Labs Code"><meta name="twitter:description" content="Repository-level migration from Java 8 to the long-term support versions 17 and 21. The GitHub repository provides the evaluation framework that judges a migration."><meta name="theme-color" content="#121311">
+<link rel="icon" href="/assets/favicon.png">
+<link rel="stylesheet" href="/styles.css?v=33e4a37a">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+  <a class="brand" href="/"><img src="/assets/mark.png" alt=""><span>Renaissance Labs &middot; Code</span></a>
+  <nav><a href="/program/">Program</a><a href="/stack/">Stack</a><a href="/languages/">Languages</a><a href="/world/">World</a><a href="/intelligence/">Intelligence</a><a href="/train/" aria-current="page">Train</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
+  <button class="theme" id="theme" type="button" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+</header>
+<main id="main">
+<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/train/">Train</a> / <a href="/catalog/">Catalog</a> / <a href="/stage/eval/">Eval</a></div>
+<span class="eyebrow">Benchmark &middot; 2025-05</span><h1>MigrationBench</h1><p class="lede">Repository-level migration from Java 8 to the long-term support versions 17 and 21. The GitHub repository provides the evaluation framework that judges a migration.</p></div>
+<div class="layout"><div class="prose">
+<h2>How to use it</h2><p>Start with the 300-repository selected subset.</p>
+<h2>Caveats</h2><p>The listed repositories are under MIT or Apache-2.0 per the README; the dataset rows hold repository names and commits, not the code. Evaluation needs Maven builds for every repository. GitHub last commit 2026-10-15.</p>
+<div class="codebox"><div class="lab"><span>load</span><button class="copy" type="button">Copy</button></div><pre><span class="k">from</span> datasets <span class="k">import</span> load_dataset
+ds = load_dataset(<span class="s">&quot;AmazonScience/migration-bench-java-selected&quot;</span>, split=<span class="s">&quot;test&quot;</span>)</pre></div>
+<h2>Related</h2><ul><li><a href="/r/commit0/">Commit0</a>: Agent must implement a library from its spec using interactive unit tests; measures long-form spec...</li><li><a href="/r/llvm-apr-benchmark/">LLVM APR Benchmark</a>: Program repair on the LLVM compiler itself: each item is a real LLVM issue (for example a miscompilation in...</li><li><a href="/r/lego-rl-2699/">Lego-RL-2699 and LegoFlow-SWE</a>: SWE-Lego family: Harbor-format RL environments, teacher trajectories and a Harbor-packaged SWE-bench Verified...</li><li><a href="/r/lca-ci-builds-repair/">Long Code Arena: CI builds repair</a>: Each item is a failing GitHub Actions run with its logs, the workflow file and the commit that later fixed...</li><li><a href="/r/ml-bench/">ML-Bench</a>: Tests whether a model can use existing machine learning repositories: read the documentation and code, then...</li><li><a href="/r/multi-swe-bench/">Multi-SWE-bench</a>: Multilingual issue-resolving benchmark annotated by 68 experts from 2,456...</li></ul>
+</div><aside class="aside"><div class="panel"><h3>At a glance</h3><dl>
+<dt>Source</dt><dd><a href="https://huggingface.co/datasets/AmazonScience/migration-bench-java-full">huggingface.co/datasets/AmazonScience/migration-</a></dd>
+<dt>License</dt><dd>Apache-2.0</dd><dt>Size</dt><dd>5,102 repositories (full); 300 in the selected subset; a separate unit-test-generation set of 4,814</dd>
+<dt>Stage</dt><dd><a class="pill st st-eval" href="/stage/eval/">Eval</a></dd>
+<dt>Languages</dt><dd><a href="/languages/java/">Java</a></dd>
+<dt>Form</dt><dd><a class="pill" href="/program/tests/">Tests</a> <a class="pill" href="/program/change/">Change</a></dd><dt>Stack level</dt><dd><a class="pill" href="/stack/languages/">Languages</a> <a class="pill" href="/stack/compilers/">Compilers</a></dd><dt>Tasks</dt><dd>Repository-level, Agentic (multi-step, tools)</dd><dt>Difficulty</dt><dd>hard</dd>
+<dt>Checked</dt><dd>2026-11-24</dd></dl></div>
+<div class="panel"><h3>More links</h3><ul><li><a href="https://arxiv.org/abs/2505.09569">Paper</a></li><li><a href="https://huggingface.co/datasets/AmazonScience/migration-bench-java-selected">Selected subset</a></li><li><a href="https://github.com/amazon-science/MigrationBench">GitHub</a></li></ul></div>
+<div class="panel"><h3>Evidence</h3><p class="mono">huggingface.co/api/datasets/AmazonScience/migration-bench-java-full and -selected (apache-2.0, test 5102 and 300); GitHub API amazon-science/MigrationBench (Apache-2.0, last commit 2026-10-15) and README; arxiv.org/abs/2505.09569 abstract</p></div></aside></div></div></div>
+</main>
+<footer class="wrap foot">
+  <a class="brand" href="https://renaissancelabs.eu"><img src="/assets/mark.png" alt="">Renaissance Labs</a>
+  <div class="foot-links"><a href="/catalog/">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
+</footer>
+<script src="/app.js?v=33e4a37a" defer></script>
+</body>
+</html>

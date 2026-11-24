@@ -10,37 +10,38 @@
 <meta property="og:image" content="https://code.renaissancelabs.eu/assets/og/r-openthoughts-agent-v1-sft.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="OpenThoughts-Agent-v1-SFT: Dataset | Renaissance Labs Code"><meta property="og:site_name" content="Renaissance Labs Code">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://code.renaissancelabs.eu/assets/og/r-openthoughts-agent-v1-sft.jpg"><meta name="twitter:title" content="OpenThoughts-Agent-v1-SFT: Dataset | Renaissance Labs Code"><meta name="twitter:description" content="Teacher-agent traces on nl2bash and InferredBugs (C# and Java bugs) tasks, in the Terminus-2 harness, used for OpenThinker-Agent-v1."><meta name="theme-color" content="#121311">
 <link rel="icon" href="/assets/favicon.png">
-<link rel="stylesheet" href="/styles.css?v=a7072e73">
+<link rel="stylesheet" href="/styles.css?v=33e4a37a">
 <script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="bar">
   <a class="brand" href="/"><img src="/assets/mark.png" alt=""><span>Renaissance Labs &middot; Code</span></a>
-  <nav><a href="/catalog/" aria-current="page">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/pitfalls/">Pitfalls</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
+  <nav><a href="/program/">Program</a><a href="/stack/">Stack</a><a href="/languages/">Languages</a><a href="/world/">World</a><a href="/intelligence/">Intelligence</a><a href="/train/" aria-current="page">Train</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
   <button class="theme" id="theme" type="button" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
 </header>
 <main id="main">
-<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/catalog/">Catalog</a> / <a href="/stage/sft/">SFT</a></div>
+<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/train/">Train</a> / <a href="/catalog/">Catalog</a> / <a href="/stage/sft/">SFT</a></div>
 <span class="eyebrow">Dataset &middot; 2025-12</span><h1>OpenThoughts-Agent-v1-SFT</h1><p class="lede">Teacher-agent traces on nl2bash and InferredBugs (C# and Java bugs) tasks, in the Terminus-2 harness, used for OpenThinker-Agent-v1.</p></div>
 <div class="layout"><div class="prose">
 <h2>How to use it</h2><p>Small, terminal-agent oriented SFT set; pair with its RL tasks.</p>
 <h2>Caveats</h2><p>Traces generated with GLM-4.6 (AWQ quant) per the card. Only two task families, so narrow.</p>
 
-<h2>Related</h2><ul><li><a href="/r/nemotron-sft-opencode-v1/">Nemotron-SFT-OpenCode-v1</a>: Agentic instruction data for the OpenCode CLI: tool calling, AGENTS.md prompts, agent skills, bash-only tools...</li><li><a href="/r/glm-5-3/">GLM-5.3</a>: Aug 2026 Z.ai open model; card says it uses the GLM-5.2 base with gains from post-training only, and claims...</li><li><a href="/r/glm-5-3-flash/">GLM-5.3-Flash</a>: Aug 2026 smaller GLM-5.3 with new base model, hybrid sparse/linear attention and native multimodality; MIT...</li><li><a href="/r/deepseek-v3-2/">DeepSeek-V3.2</a>: Dec 2025 DeepSeek V3 line model, MIT licensed; a common open teacher and RL starting point before...</li><li><a href="/r/deepseek-v4-pro/">DeepSeek-V4-Pro (and V4-Flash-0731)</a>: DeepSeek V4 generation (Apr 2026): Pro is the largest open DeepSeek; V4-Flash-0731 card says it outperforms...</li><li><a href="/r/deepseek-v4-1-flash/">DeepSeek-V4.1-Flash</a>: Sep 2026 DeepSeek open MoE with 1M context, MIT licensed; the card describes an encoder-decoder (CED) design...</li></ul>
+<h2>Related</h2><ul><li><a href="/r/nemotron-sft-opencode-v1/">Nemotron-SFT-OpenCode-v1</a>: Agentic instruction data for the OpenCode CLI: tool calling, AGENTS.md prompts, agent skills, bash-only tools...</li><li><a href="/r/glm-5-3/">GLM-5.3</a>: Aug 2026 Z.ai open model; card says it uses the GLM-5.2 base with gains from post-training only, and claims...</li><li><a href="/r/glm-5-3-flash/">GLM-5.3-Flash</a>: Aug 2026 smaller GLM-5.3 with new base model, hybrid sparse/linear attention and native multimodality; MIT...</li><li><a href="/r/super-benchmark/">SUPER</a>: Allen Institute benchmark on setting up and running tasks from machine learning and NLP research repositories...</li><li><a href="/r/deepseek-v3-2/">DeepSeek-V3.2</a>: Dec 2025 DeepSeek V3 line model, MIT licensed; a common open teacher and RL starting point before...</li><li><a href="/r/deepseek-v4-pro/">DeepSeek-V4-Pro (and V4-Flash-0731)</a>: DeepSeek V4 generation (Apr 2026): Pro is the largest open DeepSeek; V4-Flash-0731 card says it outperforms...</li></ul>
 </div><aside class="aside"><div class="panel"><h3>At a glance</h3><dl>
 <dt>Source</dt><dd><a href="https://huggingface.co/datasets/open-thoughts/OpenThoughts-Agent-v1-SFT">huggingface.co/datasets/open-thoughts/OpenThough</a></dd>
 <dt>License</dt><dd>Apache-2.0</dd><dt>Size</dt><dd>~15,200 traces (card)</dd>
 <dt>Stage</dt><dd><a class="pill st st-sft" href="/stage/sft/">SFT</a></dd>
-<dt>Languages</dt><dd>bash, java, multi</dd><dt>Tasks</dt><dd>Agentic (multi-step, tools), Terminal and shell</dd><dt>Difficulty</dt><dd>hard</dd>
+<dt>Languages</dt><dd><a href="/languages/java/">Java</a>, <a href="/languages/csharp/">C#</a>, <a href="/languages/bash/">Bash</a></dd>
+<dt>Form</dt><dd><a class="pill" href="/program/change/">Change</a></dd><dt>Stack level</dt><dd><a class="pill" href="/stack/os/">Operating systems</a></dd><dt>Tasks</dt><dd>Agentic (multi-step, tools), Terminal and shell</dd><dt>Difficulty</dt><dd>hard</dd>
 <dt>Checked</dt><dd>2026-11-24</dd></dl></div>
 <div class="panel"><h3>More links</h3><ul><li><a href="https://huggingface.co/datasets/open-thoughts/OpenThoughts-Agent-v1-RL">RL tasks</a></li></ul></div>
 <div class="panel"><h3>Evidence</h3><p class="mono">huggingface.co/api/datasets/open-thoughts/OpenThoughts-Agent-v1-SFT cardData.license, README.md</p></div></aside></div></div></div>
 </main>
 <footer class="wrap foot">
   <a class="brand" href="https://renaissancelabs.eu"><img src="/assets/mark.png" alt="">Renaissance Labs</a>
-  <div class="foot-links"><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
+  <div class="foot-links"><a href="/catalog/">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
 </footer>
-<script src="/app.js?v=a7072e73" defer></script>
+<script src="/app.js?v=33e4a37a" defer></script>
 </body>
 </html>

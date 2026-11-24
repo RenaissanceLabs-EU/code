@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What a program is: eight forms of the same thing | Renaissance Labs Code</title>
+<meta name="description" content="Text, tokens, tree, types, execution, tests, proof and change: one small program followed through every form it takes, with live figures.">
+<link rel="canonical" href="https://code.renaissancelabs.eu/program/">
+<meta property="og:title" content="What a program is: eight forms of the same thing | Renaissance Labs Code"><meta property="og:description" content="Text, tokens, tree, types, execution, tests, proof and change: one small program followed through every form it takes, with live figures."><meta property="og:url" content="https://code.renaissancelabs.eu/program/"><meta property="og:type" content="website">
+<meta property="og:image" content="https://code.renaissancelabs.eu/assets/og/program.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="What a program is: eight forms of the same thing | Renaissance Labs Code"><meta property="og:site_name" content="Renaissance Labs Code">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://code.renaissancelabs.eu/assets/og/program.jpg"><meta name="twitter:title" content="What a program is: eight forms of the same thing | Renaissance Labs Code"><meta name="twitter:description" content="Text, tokens, tree, types, execution, tests, proof and change: one small program followed through every form it takes, with live figures."><meta name="theme-color" content="#121311">
+<link rel="icon" href="/assets/favicon.png">
+<link rel="stylesheet" href="/styles.css?v=33e4a37a">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+  <a class="brand" href="/"><img src="/assets/mark.png" alt=""><span>Renaissance Labs &middot; Code</span></a>
+  <nav><a href="/program/" aria-current="page">Program</a><a href="/stack/">Stack</a><a href="/languages/">Languages</a><a href="/world/">World</a><a href="/intelligence/">Intelligence</a><a href="/train/">Train</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
+  <button class="theme" id="theme" type="button" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+</header>
+<main id="main">
+<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / What a program is</div><span class="eyebrow">Map one</span><h1>What a program <em>is</em></h1>
+<p class="lede">A program is one thing seen in eight forms. It is text, then words, then a tree, then something with types, then a running process, then something tested, something proved, and something that keeps changing. Each form is a different answer to the question "what is this?", and each gives a machine a different way to check it.</p></div>
+<div class="prose"><p>Follow one small program through all eight. The program is Euclid's algorithm for the greatest common divisor, written about 2,300 years ago and still run every day. On each page you can edit it and watch that form respond, because the figures are driven by a real lexer, parser, type checker, compiler and machine running in your browser.</p></div>
+<div class="forms"><a class="form" href="/program/text/"><span class="n">01</span><b>Text</b><i>A program is first plain text: characters stored as bytes. Everything else is recovered from it.</i><span class="ct">81 resources</span></a><a class="form" href="/program/tokens/"><span class="n">02</span><b>Tokens</b><i>The text is cut into the smallest pieces that mean something: names, numbers, operators.</i><span class="ct">45 resources</span></a><a class="form" href="/program/tree/"><span class="n">03</span><b>Structure</b><i>A parser turns the line of tokens into a tree that records what belongs to what.</i><span class="ct">3 resources</span></a><a class="form" href="/program/types/"><span class="n">04</span><b>Types</b><i>A checker works out what kind of value every name holds, for all runs at once, without running.</i><span class="ct">5 resources</span></a><a class="form" href="/program/execution/"><span class="n">05</span><b>Execution</b><i>The meaning of a program is what happens when a machine carries it out, one step at a time.</i><span class="ct">71 resources</span></a><a class="form" href="/program/tests/"><span class="n">06</span><b>Tests</b><i>Run the program on chosen inputs and compare. Cheap, automatic, and never complete.</i><span class="ct">87 resources</span></a><a class="form" href="/program/proof/"><span class="n">07</span><b>Proof</b><i>Reasoning, checked by a machine, that a program meets its specification for all inputs.</i><span class="ct">9 resources</span></a><a class="form" href="/program/change/"><span class="n">08</span><b>Change</b><i>Real software is edited for decades by many hands. The unit of work is the change, not the program.</i><span class="ct">112 resources</span></a></div>
+<div class="prose"><h2>Why the order matters</h2><p>Each form is built from the one before, and each is harder to get right. Text that cannot be cut into tokens has no tree. A tree with a type error is never run. A program that runs may fail its tests, and a program that passes its tests may still be wrong for an input nobody tried.</p>
+<p>Read the other way, the list is a ladder of checks, from cheapest to strongest: does it parse, does it type-check, does it run, does it pass, is it proved. That ladder is the reason code is the best understood subject for training models. At every rung a machine can say yes or no without asking a person.</p></div></div></div>
+</main>
+<footer class="wrap foot">
+  <a class="brand" href="https://renaissancelabs.eu"><img src="/assets/mark.png" alt="">Renaissance Labs</a>
+  <div class="foot-links"><a href="/catalog/">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
+</footer>
+<script src="/app.js?v=33e4a37a" defer></script>
+<script src="/lang.js?v=33e4a37a" defer></script><script src="/figs.js?v=33e4a37a" defer></script></body>
+</html>
