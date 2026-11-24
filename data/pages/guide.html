@@ -1,0 +1,81 @@
+<p>You do not need a frontier lab to make a model better at code. You need a loop you can trust. This guide is the short version of what the published evidence and the open tooling support, with the caveats attached. Every dataset and tool named here is in the <a href="/catalog/">catalog</a> with its license and limits. If you would rather answer a few questions and get a plan, use the <a href="/recipe/">recipe builder</a>.</p>
+
+<div class="callout"><b>The loop</b>1. Measure with an eval the model cannot have memorized. 2. Fix data quality. 3. Teach the format with SFT. 4. Reward what passes tests (RL with verifiable rewards). 5. Measure again with the same settings. Change one thing at a time.</div>
+
+<h2>0. Decide what &ldquo;better&rdquo; means</h2>
+<p>&ldquo;Good at code&rdquo; is at least five different skills: completing the next lines, writing a function from a description, fixing a bug in a repository, working in a terminal, and writing SQL. They need different data, different evals and different verifiers. Write down one sentence, such as &ldquo;resolve more real GitHub issues in Python repositories&rdquo;, and let it choose your eval. Everything below depends on that sentence.</p>
+
+<h2>1. Measure first</h2>
+<p>Before you change anything, score the model you have. This is the step people skip, and it is the one that makes every later decision honest.</p>
+<ul>
+<li><b>Use at least one eval the model cannot have seen.</b> Classic benchmarks such as HumanEval have been public for years and leak into training sets. {{r:livecodebench}} collects new problems with release dates, so you can score only problems published after your model&rsquo;s training cutoff. For repository tasks, {{r:swe-bench-live}} and {{r:swe-rebench}} refresh over time. Be careful with the best-known repository benchmark: OpenAI reported in February 2026 that it had stopped reporting {{r:swe-bench-verified}} after finding many problems with flawed tests or descriptions and signs of training exposure. Use it to compare with published numbers, not as your only gate.</li>
+<li><b>Match the eval to your sentence.</b> Function writing: EvalPlus-style tests. Repository work: SWE-bench-style tasks. Terminal work: {{r:terminal-bench-2}}.</li>
+<li><b>Freeze the settings.</b> Same prompt format, same sampling temperature, same number of samples, same harness version. Different harnesses give different numbers for the same model.</li>
+<li><b>Report pass@1 from several samples,</b> not one lucky run. The unbiased estimator is short:</li>
+</ul>
+{{snip:pass-at-k-unbiased}}
+{{snip:livecodebench-runner}}
+<p><b>Keep one private eval.</b> Fifty to two hundred tasks from your own domain, with tests, never published, never used for training. It is the only number you can fully trust.</p>
+<p>Also read failures by hand. Some benchmark instances have flawed tests or ambiguous statements, so a small difference on a single benchmark is easy to over-read.</p>
+
+<h2>2. Fix data quality</h2>
+<p>If you only change the data, you can still move a model a long way. Three things come first.</p>
+<ul>
+<li><b>Deduplicate.</b> Near-duplicate files inflate scores and waste training tokens. {{r:datatrove}} implements MinHash deduplication that you can run locally.</li>
+<li><b>Decontaminate.</b> Remove anything that overlaps your eval sets. Plain n-gram matching misses rephrased copies (a 2023 study, <a href="https://arxiv.org/abs/2311.04850">arXiv 2311.04850</a>, showed this), which is another reason to keep a private eval and a time-windowed one.</li>
+<li><b>Mind licenses.</b> Code corpora carry per-file licenses, and synthetic datasets inherit the terms of the model that wrote them. Keep the metadata.</li>
+</ul>
+{{snip:datatrove-minhash}}
+<p>For pretraining-scale data, quality filtering has repeatedly beaten raw volume for smaller models. {{r:stack-edu}} and {{r:the-stack-v3-train}} are the open starting points; {{r:opencoder-repo}} is the most transparent end-to-end recipe. Most readers will not pretrain. They will use this stage to clean their own SFT and RL data.</p>
+
+<h2>3. Teach the format with SFT</h2>
+<p>Supervised fine-tuning is cheap and fast to iterate. It teaches the model to follow instructions, explain, edit and call tools. Start small, because published results suggest that a few tens of thousands of carefully seeded, checked examples compete with much larger sets: the Magicoder paper (<a href="https://arxiv.org/abs/2312.02120">arXiv 2312.02120</a>) used 75K examples from {{r:magicoder-oss-instruct-75k}}, and SelfCodeAlign (<a href="https://arxiv.org/abs/2410.24198">arXiv 2410.24198</a>) used 74K self-generated, execution-validated pairs.</p>
+<ul>
+<li><b>Short answers and edits:</b> {{r:magicoder-oss-instruct-75k}}, {{r:opencodeinstruct}}, {{r:commitpackft}}.</li>
+<li><b>Hard reasoning:</b> distilled traces such as {{r:opencodereasoning}}. One caution from that paper: the authors report that filtering traces by execution hurt benchmark accuracy, so diversity of problems mattered more than verifying every trace. Treat it as a reason to run your own ablation, not as a rule.</li>
+<li><b>Repository and agent work:</b> trajectories such as {{r:swe-smith-trajectories}} and {{r:nebius-swe-rebench-openhands-trajectories}}. Match the harness you will deploy with, because trajectories encode its tool format.</li>
+</ul>
+{{snip:trl-sft-python}}
+<div class="callout warn"><b>Check teacher terms</b>Many synthetic sets were written by proprietary or open-weight teachers. Their cards name the teacher, and some are non-commercial. Look at the license and the caveats on each resource page before you train a model you plan to ship.</div>
+
+<h2>4. Preference data (optional)</h2>
+<p>Preference optimization is useful when SFT has plateaued and you want a cheap step before RL. Pairs derived from test results are far more reliable than pairs picked by another model. AceCoder (<a href="https://arxiv.org/abs/2502.01718">arXiv 2502.01718</a>) built pairs from test cases and reports gains from both reward models and RL; its data is in {{r:acecode-v2-122k}}. If you can run tests, building on-policy pairs from your own model&rsquo;s samples is often a better use of your time than a public set. Control for length, or the model learns that longer is better.</p>
+
+<h2>5. Reward what passes: RL with verifiable rewards</h2>
+<p>Code is one of the few domains where you can check the answer by running it. That is the idea behind RL with verifiable rewards: sample several solutions per task, run the tests, reward the ones that pass. Open recipes such as DeepCoder (14B model <a href="https://huggingface.co/agentica-org/DeepCoder-14B-Preview">card</a>) and Skywork-OR1 (<a href="https://arxiv.org/abs/2505.22312">arXiv 2505.22312</a>) report gains this way. The hard part is not the algorithm. It is the verifier.</p>
+<h3>Pick the task source to match the verifier</h3>
+<ul>
+<li><b>Function problems with tests:</b> {{r:kodcode}} (pytest, but check its non-commercial license), {{r:acecode-v2-122k}}.</li>
+<li><b>Competitive programming:</b> {{r:deepcoder-preview}}, {{r:skywork-or1-rl-data}}. The verifier runs stdin and stdout tests in a sandbox.</li>
+<li><b>Repository issues:</b> {{r:swe-gym}}, {{r:swe-smith}}, {{r:r2e-gym}}, {{r:swe-rebench}}. Each task has a container image. Reward is: the target failing tests now pass and the passing tests still pass.</li>
+<li><b>Terminal tasks:</b> Harbor-format tasks via {{r:harbor}}.</li>
+</ul>
+<h3>Keep a middle band of difficulty</h3>
+<p>With group-relative methods such as GRPO, a task where every sampled solution gets the same reward teaches nothing. Tasks the model always solves or never solves are wasted compute. Slide the figure to see how fast the useful fraction collapses at the extremes.</p>
+{{fig:grad}}
+<p>In practice, sample your own model several times per task and keep tasks with mixed outcomes. Some datasets ship difficulty fields you can use as a first filter. DeepCoder&rsquo;s card also describes filtering overlong and truncated samples.</p>
+<h3>Start from a model that already solves some tasks</h3>
+<p>The published open recipes start from strong distilled or instruct models (DeepCoder, AceReason and Skywork-OR1 all start from R1-distilled bases). From a weak start, most rollouts fail and the signal is thin. Do SFT first.</p>
+<h3>Build the verifier like an adversary is attacking it</h3>
+<p>One is. Models optimize whatever you reward. Documented cases include reading the future fix from git history, editing the tests, and fetching solutions from the web. See <a href="/pitfalls/">pitfalls</a>. The minimum:</p>
+<ul>
+<li>Run generated code in a container with no network, a read-only filesystem, and memory, CPU and process limits.</li>
+<li>Put the tests in after the agent finishes, from outside the sandbox. Never leave them where the agent can read or edit them.</li>
+<li>Strip future git history from repository tasks.</li>
+<li>Check each task with a reference solution: it must pass, and the unfixed code must fail.</li>
+</ul>
+{{snip:docker-hardened-sandbox}}
+{{snip:code-reward-subprocess}}
+{{snip:trl-grpo-unit-test-reward}}
+<p>For larger runs, use a framework built for rollouts, such as {{r:fw-verl}}. {{r:fw-trl}} is fine for small experiments.</p>
+
+<h2>6. Re-measure, and keep what helped</h2>
+<p>Run the same evals with the same settings. Look at three things: the target score, a general-coding regression check (RL on competitive problems can hurt other behavior), and a handful of outputs read by eye. If something got worse, undo the last change before adding another.</p>
+
+<h2>What we know, and what we do not</h2>
+<ul>
+<li><b>Well supported:</b> contamination inflates classic benchmarks; deduplication and quality filtering help; small checked SFT sets are competitive; test-verified RL moves reasoning and repository scores for models that start strong; verifiers get hacked.</li>
+<li><b>Contested:</b> whether large-scale RL beats distillation for small models. The OpenCodeReasoning paper (<a href="https://arxiv.org/abs/2504.01943">arXiv 2504.01943</a>) reports strong SFT-only results, while AceReason (<a href="https://arxiv.org/abs/2505.16400">arXiv 2505.16400</a>) argues large RL can go further. Run both at your scale if it matters.</li>
+<li><b>Not known to us:</b> the right data mixture for your base model and language mix. No page can tell you that. Your private eval can.</li>
+</ul>
+<p>Numbers quoted on resource pages come from the cited source on the check date. Benchmarks and leaderboards move fast, so confirm any score at its source.</p>

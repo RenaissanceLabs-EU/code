@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Stack v2: Dataset | Renaissance Labs Code</title>
+<meta name="description" content="StarCoder2 training corpus built on the Software Heritage archive (2023), with per-file license labels. The HF release holds metadata and SWH blob ids; contents come from the SWH S3 bucket.">
+<link rel="canonical" href="https://code.renaissancelabs.eu/r/the-stack-v2/">
+<meta property="og:title" content="The Stack v2: Dataset | Renaissance Labs Code"><meta property="og:description" content="StarCoder2 training corpus built on the Software Heritage archive (2023), with per-file license labels. The HF release holds metadata and SWH blob ids; contents come from the SWH S3 bucket."><meta property="og:url" content="https://code.renaissancelabs.eu/r/the-stack-v2/"><meta property="og:type" content="website">
+<meta property="og:image" content="https://code.renaissancelabs.eu/assets/og/r-the-stack-v2.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="The Stack v2: Dataset | Renaissance Labs Code"><meta property="og:site_name" content="Renaissance Labs Code">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://code.renaissancelabs.eu/assets/og/r-the-stack-v2.jpg"><meta name="twitter:title" content="The Stack v2: Dataset | Renaissance Labs Code"><meta name="twitter:description" content="StarCoder2 training corpus built on the Software Heritage archive (2023), with per-file license labels. The HF release holds metadata and SWH blob ids; contents come from the SWH S3 bucket."><meta name="theme-color" content="#121311">
+<link rel="icon" href="/assets/favicon.png">
+<link rel="stylesheet" href="/styles.css?v=a7072e73">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+  <a class="brand" href="/"><img src="/assets/mark.png" alt=""><span>Renaissance Labs &middot; Code</span></a>
+  <nav><a href="/catalog/" aria-current="page">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/pitfalls/">Pitfalls</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
+  <button class="theme" id="theme" type="button" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+</header>
+<main id="main">
+<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/catalog/">Catalog</a> / <a href="/stage/pretrain/">Data</a></div>
+<span class="eyebrow">Dataset &middot; 2024-02</span><h1>The Stack v2</h1><p class="lede">StarCoder2 training corpus built on the Software Heritage archive (2023), with per-file license labels. The HF release holds metadata and SWH blob ids; contents come from the SWH S3 bucket.</p></div>
+<div class="layout"><div class="prose">
+<h2>How to use it</h2><p>Use the train-smol-ids or train-full-ids variants for the StarCoder2 mix, or the dedup variant for custom filtering. Must accept terms and fetch file contents separately from Software Heritage.</p>
+<h2>Caveats</h2><p>Gated; accepting BigCode terms is required. Contents are not in the HF repo (need AWS access to SWH S3 and your own download tooling). License labels are heuristic (ScanCode), license laundering exists. Opt-outs only honored as of release date. Superseded by v3 for fresher data. Card could not be read without login, so sizes cite the v3 card.</p>
+<div class="callout warn"><b>License</b>This entry is not plainly permissive (family: mixed or per-file). Read the license on the source page before using it for training or for a product.</div>
+<h2>Related</h2><ul><li><a href="/r/paper-deepseek-coder/">DeepSeek-Coder</a>: Repo-level pretraining data construction (dependency-ordered files) and fill-in-the-middle for code...</li><li><a href="/r/nemotron-pretraining-code-v3/">Nemotron-Pretraining-Code-v3 (metadata)</a>: Incremental metadata list of permissively licensed GitHub files for Nemotron 3 Ultra pretraining; use with...</li><li><a href="/r/the-stack-v3-train/">The Stack v3 (train)</a>: Successor to The Stack v2: a direct GitHub crawl (cutoff 2025-08-07) with file contents inline, grouped by...</li><li><a href="/r/codellama-70b/">Code Llama 70B (legacy)</a>: Meta&#x27;s 2024 code Llama; included for historical comparison...</li><li><a href="/r/codestral-22b/">Codestral-22B-v0.1</a>: Mistral&#x27;s 2024 code model; weights open for research and testing...</li><li><a href="/r/common-pile-stackv2/">Common Pile: Stack v2 (openly licensed)</a>: Stack v2 filtered to openly licensed repos (all detected licenses on the Blue Oak list), part of the Common...</li></ul>
+</div><aside class="aside"><div class="panel"><h3>At a glance</h3><dl>
+<dt>Source</dt><dd><a href="https://huggingface.co/datasets/bigcode/the-stack-v2">huggingface.co/datasets/bigcode/the-stack-v2</a></dd>
+<dt>License</dt><dd>gated (auto): BigCode terms; license:other; per-file licenses vary (see card)</dd><dt>Size</dt><dd>Full 67.5 TB, dedup 32.1 TB, train 2.0 TB / ~550B tokens, 618 languages (figures from The Stack v3 card comparison table)</dd>
+<dt>Stage</dt><dd><a class="pill st st-pretrain" href="/stage/pretrain/">Data</a></dd>
+<dt>Languages</dt><dd>multi</dd><dt>Tasks</dt><dd>Completion and fill-in-the-middle, Repository-level</dd><dt>Difficulty</dt><dd>intermediate</dd>
+<dt>Checked</dt><dd>2026-11-24</dd></dl></div>
+<div class="panel"><h3>More links</h3><ul><li><a href="https://arxiv.org/abs/2402.19173">StarCoder 2 and The Stack v2 paper</a></li><li><a href="https://www.softwareheritage.org/legal/">Software Heritage legal</a></li></ul></div>
+<div class="panel"><h3>Evidence</h3><p class="mono">huggingface.co/api/datasets/bigcode/the-stack-v2 gated=auto license:other; sizes from HuggingFaceCode/stack-v3-train README table</p></div></aside></div></div></div>
+</main>
+<footer class="wrap foot">
+  <a class="brand" href="https://renaissancelabs.eu"><img src="/assets/mark.png" alt="">Renaissance Labs</a>
+  <div class="foot-links"><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
+</footer>
+<script src="/app.js?v=a7072e73" defer></script>
+</body>
+</html>

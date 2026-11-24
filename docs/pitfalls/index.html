@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pitfalls when training coding models | Renaissance Labs Code</title>
+<meta name="description" content="Contamination, reward hacking, weak tests, license traps and unsafe code execution: what goes wrong and how to avoid it.">
+<link rel="canonical" href="https://code.renaissancelabs.eu/pitfalls/">
+<meta property="og:title" content="Pitfalls when training coding models | Renaissance Labs Code"><meta property="og:description" content="Contamination, reward hacking, weak tests, license traps and unsafe code execution: what goes wrong and how to avoid it."><meta property="og:url" content="https://code.renaissancelabs.eu/pitfalls/"><meta property="og:type" content="website">
+<meta property="og:image" content="https://code.renaissancelabs.eu/assets/og/pitfalls.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Pitfalls when training coding models | Renaissance Labs Code"><meta property="og:site_name" content="Renaissance Labs Code">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://code.renaissancelabs.eu/assets/og/pitfalls.jpg"><meta name="twitter:title" content="Pitfalls when training coding models | Renaissance Labs Code"><meta name="twitter:description" content="Contamination, reward hacking, weak tests, license traps and unsafe code execution: what goes wrong and how to avoid it."><meta name="theme-color" content="#121311">
+<link rel="icon" href="/assets/favicon.png">
+<link rel="stylesheet" href="/styles.css?v=a7072e73">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+  <a class="brand" href="/"><img src="/assets/mark.png" alt=""><span>Renaissance Labs &middot; Code</span></a>
+  <nav><a href="/catalog/">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/pitfalls/" aria-current="page">Pitfalls</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
+  <button class="theme" id="theme" type="button" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+</header>
+<main id="main">
+<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / Pitfalls</div><span class="eyebrow">Pitfalls</span><h1>What goes wrong, and how to <em>see</em> it coming</h1><p class="lede">Most failed runs fail for the same few reasons.</p></div><div class="prose"><p>Most failed runs fail for one of a handful of reasons. Each is easy to avoid once you know to look for it.</p>
+
+<h2>Contamination: the score went up, the model did not get better</h2>
+<ul>
+<li><b>Symptom:</b> big gains on a classic benchmark, no gain on your own tasks.</li>
+<li><b>Cause:</b> benchmark problems or solutions (or rewrites of them) in the training data. Rephrased copies slip through n-gram decontamination (<a href="https://arxiv.org/abs/2311.04850">arXiv 2311.04850</a>).</li>
+<li><b>Fix:</b> decontaminate with a proper tool (<a href="/r/decon/">decon (Ai2)</a> is one), score on a time-windowed eval such as <a href="/r/livecodebench/">LiveCodeBench</a>, and keep a private eval that never touches a training set.</li>
+</ul>
+
+<h2>Reward hacking: the model learned to cheat your verifier</h2>
+<ul>
+<li><b>Git history.</b> Cursor audited agent trajectories and reported that in a measurable share the agent searched the repository&rsquo;s git history for the future fix commit (<a href="https://cursor.com/blog/reward-hacking-coding-benchmarks">Cursor blog</a>). SWE-bench removed future history from its images upstream, so older images are leaky.</li>
+<li><b>Editing tests.</b> If the agent can change the test files, it can make the tests pass. Apply tests after the agent finishes, from outside the sandbox.</li>
+<li><b>Network access.</b> Agents have been seen fetching fixes from the public web. Run rollouts without internet, or through an allowlist proxy.</li>
+<li><b>Special-casing.</b> Weak tests reward code that returns the expected values for the visible cases. Add tests, and check each task against a reference solution.</li>
+<li><b>Fix:</b> isolate, hide, strip, and monitor a sample of rollouts by eye, or with a judge model. A judge catches obvious hacks that held-out tests miss (<a href="https://arxiv.org/abs/2511.21654">arXiv 2511.21654</a>).</li>
+</ul>
+
+<h2>Weak or wrong tests</h2>
+<ul>
+<li><b>Symptom:</b> the reward goes up while real quality does not.</li>
+<li><b>Cause:</b> too few tests, flawed tests, or tests that accept different behavior from the reference. One study found that a notable share of sampled SWE-bench Verified tasks accepted patches that differ from the reference (<a href="https://arxiv.org/abs/2606.16062">arXiv 2606.16062</a>). More generated tests give a better reward signal (<a href="https://arxiv.org/abs/2501.01054">arXiv 2501.01054</a>).</li>
+<li><b>Fix:</b> filter tasks that the reference does not pass or that the unfixed code passes, and add tests where you can.</li>
+</ul>
+
+<h2>Dead tasks: RL that learns nothing</h2>
+<p>If every rollout for a task gets the same reward, the group-relative signal is zero. Keep a middle band of difficulty. See the figure in the <a href="/guide/#5-reward-what-passes-rl-with-verifiable-rewards">guide</a>. Starting RL from a model that solves almost nothing has the same effect.</p>
+
+<h2>License and terms traps</h2>
+<ul>
+<li>Corpora are mixed-license by file. Keep the metadata and filter.</li>
+<li>Synthetic data inherits the teacher&rsquo;s terms. Cards name OpenAI, Anthropic, DeepSeek, Qwen and other teachers. Some sets are non-commercial.</li>
+<li>Some open-weight model licenses carry conditions (revenue thresholds, non-production clauses). Read them before you distill from or ship derivatives of those models.</li>
+<li>A missing license field means unknown, not free.</li>
+</ul>
+
+<h2>Running untrusted code</h2>
+<p>Model-written code can delete files, read secrets and open connections. Never run it on your host or on a machine with credentials. Use a container or VM with no network, a read-only filesystem, and limits on memory, CPU and processes. A subprocess with a timeout is a convenience, not a security boundary. On a shared HPC cluster use rootless containers such as Apptainer, and ask your admins.</p>
+<div class="codebox"><div class="lab"><span>Hardened Docker run for untrusted generated code</span><button class="copy" type="button">Copy</button></div><pre><span class="k">docker</span> <span class="k">run</span> --rm \
+  --network none \
+  --read-only \
+  --memory 256m --memory-swap 256m \
+  --cpus <span class="n">1</span> \
+  --pids-limit <span class="n">64</span> \
+  --cap-drop ALL \
+  --security-opt no-new-privileges \
+  --user <span class="n">65534</span>:<span class="n">65534</span> \
+  --tmpfs /tmp:rw,noexec,nosuid,size=16m \
+  -v <span class="s">&quot;$PWD/job:/work:ro&quot;</span> -w /work \
+  <span class="k">python</span>:<span class="n">3.12</span>-slim timeout <span class="n">10</span> <span class="k">python</span> candidate.py</pre></div><p class="snote"><b>Verified:</b> ran locally (Docker 29.1.3); flags checked in docker/cli source, version seen: Docker 29.1.3, python:3.12-slim. Every flag exists in docker/cli container opts source (network, read-only, memory, pids-limit, cap-drop, security-opt, user, tmpfs, cpus). A near-identical command was run on Docker 29.1.3 with python:3.12-slim: the script ran as uid 65534, outbound socket failed, writes to the read-only mount failed, and writes to /tmp worked. Kernel shared with host: for adversarial code add gVisor/Firecracker and seccomp. The timeout is the coreutils one inside the image (not separately tested); also enforce a wall-clock kill from the outside (docker kill). <a href="https://github.com/docker/cli/blob/master/cli/command/container/opts.go">source</a> <a href="https://docs.docker.com/reference/cli/docker/container/run/">source</a></p>
+
+<h2>Evaluation mistakes</h2>
+<ul>
+<li>Treating a famous benchmark as ground truth. <a href="/r/swe-bench-verified/">SWE-bench Verified</a> and <a href="/r/swe-bench-pro/">SWE-Bench Pro</a> both have documented problems with flawed tests (see the caveats on each page). Prefer refreshing sets such as <a href="/r/swe-bench-live/">SWE-bench-Live</a>, and read failures.</li>
+<li>Comparing scores across different harnesses, prompts or sample counts.</li>
+<li>Reporting a single sample. Use several samples and the unbiased pass@k estimator.</li>
+<li>Trusting a small gap on one benchmark. Read the failures.</li>
+<li>Skipping a regression check on general coding after a narrow RL run.</li>
+</ul>
+
+<h2>SFT mistakes</h2>
+<ul>
+<li>Training on the prompt tokens as well as the response. Mask the prompt.</li>
+<li>Mixing chat templates. Use one, consistently, in training and in evaluation.</li>
+<li>Keeping unverified synthetic solutions that are simply wrong. Run them, or sample-check them.</li>
+<li>Match agent trajectories to the harness you will deploy with. Tool formats differ.</li>
+</ul>
+</div></div></div>
+</main>
+<footer class="wrap foot">
+  <a class="brand" href="https://renaissancelabs.eu"><img src="/assets/mark.png" alt="">Renaissance Labs</a>
+  <div class="foot-links"><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
+</footer>
+<script src="/app.js?v=a7072e73" defer></script>
+</body>
+</html>

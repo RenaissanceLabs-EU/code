@@ -1,0 +1,2125 @@
+[
+ {
+  "id": "humaneval",
+  "name": "HumanEval",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/openai/openai_humaneval",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2107.03374"
+   }
+  ],
+  "license": "MIT",
+  "size": "164 hand-written Python problems (test split)",
+  "summary": "Function-from-docstring Python problems with unit tests, introduced with Codex. The original functional-correctness benchmark.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": "intro",
+  "how_to_use": "Use only as a cheap smoke test that a code model is not broken. Do not use it to rank current models. Runs in seconds to minutes on one GPU.",
+  "caveats": "Execution-based (unit tests). Saturated: current frontier models are near ceiling, so differences are mostly noise. Public since 2021 and widely copied, so contamination is likely in web-scale pretraining data; the EvalPlus paper also showed the original tests are too weak (see HumanEval+). Measures short self-contained function synthesis only; not repo context, debugging, or design. Historical score in the paper abstract: Codex 28.8% (arXiv 2107.03374).",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"openai/openai_humaneval\", split=\"test\")",
+  "released": "2021-07",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/openai/openai_humaneval cardData.license=mit, splits test=164; arxiv.org/abs/2107.03374"
+ },
+ {
+  "id": "evalplus-humanevalplus",
+  "name": "HumanEval+ (EvalPlus)",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/evalplus/humanevalplus",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2305.01210"
+   },
+   {
+    "label": "GitHub",
+    "url": "https://github.com/evalplus/evalplus"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "164 problems (test split), with many more tests per problem than HumanEval",
+  "summary": "HumanEval with test suites expanded by LLM- and mutation-based input generation to catch plausible-but-wrong solutions.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": "intro",
+  "how_to_use": "Use instead of plain HumanEval as the quick Python function-level check (still a smoke test, not a gate). Run via the evalplus CLI.",
+  "caveats": "Execution-based. Per the EvalPlus README, HumanEval+ has 80x more tests than HumanEval. Same 164 prompts, so prompt-level contamination and saturation concerns remain; it fixes weak tests, not leakage. Python function level only.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"evalplus/humanevalplus\", split=\"test\")",
+  "released": "2023-05",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/evalplus/humanevalplus cardData.license=apache-2.0 splits test=164; github.com/evalplus/evalplus README"
+ },
+ {
+  "id": "evalplus-mbppplus",
+  "name": "MBPP+ (EvalPlus)",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/evalplus/mbppplus",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2305.01210"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "378 problems (test split)",
+  "summary": "MBPP subset, cleaned of broken tasks and given 35x more tests, for stricter checking of basic Python generation.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": "intro",
+  "how_to_use": "Pair with HumanEval+ as a fast regression check during SFT or RL runs. Run via evalplus.evaluate --dataset mbpp.",
+  "caveats": "Execution-based. The EvalPlus README states v0.2.0 trimmed MBPP+ from 399 to 378 tasks by removing broken ones. Entry-level problems, near saturation for strong models; public data so contamination is possible.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"evalplus/mbppplus\", split=\"test\")",
+  "released": "2023-05",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/evalplus/mbppplus splits test=378, license apache-2.0; github.com/evalplus/evalplus README"
+ },
+ {
+  "id": "mbpp",
+  "name": "MBPP (Mostly Basic Python Problems)",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/google-research-datasets/mbpp",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2108.07732"
+   }
+  ],
+  "license": "CC-BY-4.0",
+  "size": "974 tasks total; HF splits: train 374, validation 90, test 500, prompt 10",
+  "summary": "Crowd-written entry-level Python tasks with three asserts each.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": "intro",
+  "how_to_use": "Smoke test only; prefer MBPP+ (fewer broken tasks, more tests).",
+  "caveats": "Execution-based but with only about three asserts per task and known broken or ambiguous items (the reason EvalPlus cleaned it). Saturated and public since 2021, so contamination is likely. Entry-level skills only.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"google-research-datasets/mbpp\", split=\"test\")",
+  "released": "2021-08",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/google-research-datasets/mbpp cardData.license=cc-by-4.0 and split counts; arxiv.org/abs/2108.07732 (974 tasks)"
+ },
+ {
+  "id": "multipl-e",
+  "name": "MultiPL-E",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/nuprl/MultiPL-E",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2208.08227"
+   }
+  ],
+  "license": "MIT",
+  "size": "Translations of HumanEval and MBPP to 18 additional languages (about 157-161 problems per HumanEval language config)",
+  "summary": "A system that transpiles unit-test-based Python benchmarks to many programming languages, with prebuilt translated sets.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": "intro",
+  "how_to_use": "Use to check that a gain on Python carries over to other languages (Java, JS, Rust, Lua, etc.). Needs per-language toolchains, so run it in the provided containers; moderate cost.",
+  "caveats": "Execution-based. Inherits HumanEval and MBPP's saturation and contamination issues, and translated problems stay simple function-level tasks. Low-resource-language results are sensitive to translation artifacts. Per-config counts seen on the HF card: 157, 161, 161, 158 (first four configs).",
+  "load_snippet": null,
+  "released": "2022-08",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/nuprl/MultiPL-E cardData.license=mit; arxiv.org/abs/2208.08227 abstract"
+ },
+ {
+  "id": "humaneval-x",
+  "name": "HumanEval-X",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/THUDM/humaneval-x",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2303.17568"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "count not verified (derived from HumanEval's 164 problems)",
+  "summary": "Multilingual extension of HumanEval with generation and translation tasks, released with CodeGeeX.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python",
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": "intro",
+  "how_to_use": "Largely superseded by MultiPL-E and HumanEval-Pack for new work; keep only for comparison with older papers.",
+  "caveats": "Execution-based. Same saturation and public-data contamination concerns as HumanEval. Exact language list and problem count not verified in this pass.",
+  "load_snippet": null,
+  "released": "2023-03",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/THUDM/humaneval-x cardData.license=apache-2.0; arxiv.org/abs/2303.17568"
+ },
+ {
+  "id": "humanevalpack",
+  "name": "HumanEvalPack (OctoPack)",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/bigcode/humanevalpack",
+  "extra_links": [],
+  "license": "MIT",
+  "size": "164 problems per config (test split), several language and task configs",
+  "summary": "HumanEval extended to six languages and to fix, explain and synthesize tasks, used to evaluate instruction-tuned code models.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation",
+   "repair"
+  ],
+  "difficulty": "intro",
+  "how_to_use": "Use when you need a bug-fix (HumanEvalFix) signal across languages from the bigcode harness. Cheap.",
+  "caveats": "Execution-based for fix and synthesize variants. Derived from HumanEval so saturation and contamination apply. Task and language list not re-verified here beyond split counts.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/bigcode/humanevalpack cardData.license=mit, splits test=164 each"
+ },
+ {
+  "id": "cruxeval",
+  "name": "CRUXEval",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/cruxeval-org/cruxeval",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2401.03065"
+   }
+  ],
+  "license": "MIT",
+  "size": "800 Python functions (3-13 lines) with input and output prediction tasks",
+  "summary": "Tests code reasoning and execution understanding: predict the output for a given input, or an input for a given output.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "reasoning"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use as a reasoning-about-code probe complementary to generation benchmarks; cheap (800 items). Good for tracking the effect of execution-trace or CoT training data.",
+  "caveats": "Not purely 'run the model's code': graded by executing assertions on the model's predicted input or output. The paper found many models with high HumanEval scores did not show the same gains on CRUXEval. Public since January 2024; model-generated functions, so leakage and saturation by reasoning models are plausible.",
+  "load_snippet": null,
+  "released": "2024-01",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/cruxeval-org/cruxeval cardData.license=mit; arxiv.org/abs/2401.03065 (800 functions)"
+ },
+ {
+  "id": "livecodebench",
+  "name": "LiveCodeBench",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/livecodebench/code_generation_lite",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2403.07974"
+   },
+   {
+    "label": "Runner",
+    "url": "https://github.com/LiveCodeBench/LiveCodeBench"
+   },
+   {
+    "label": "Site",
+    "url": "https://livecodebench.github.io/"
+   }
+  ],
+  "license": "cc (HF metadata lists only 'cc', no version)",
+  "size": "Versioned releases of contest problems: release_v1 400, v2 511, v3 612, v4 713, v5 880 (per HF card); newer releases may exist",
+  "summary": "Contamination-resistant benchmark: continuously collects new problems from LeetCode, AtCoder and Codeforces, with release dates so you can evaluate only on problems newer than a model's training cutoff. Also has self-repair, code execution and test-output prediction scenarios.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "competitive",
+   "generation",
+   "repair",
+   "reasoning"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Run on a date window after your training cutoff as the main contamination-aware code-generation gate. Medium cost: sampling-heavy for reasoning models. Report the release version and date window, since scores are not comparable across them.",
+  "caveats": "Execution-based with hidden tests. Contamination resistance depends on you filtering by date; older windows are likely leaked. Measures contest-style algorithmic coding, not repo-level engineering. The HF dataset uses a loading script, which recent versions of the datasets library no longer support, so use the official runner (github.com/LiveCodeBench/LiveCodeBench) instead of load_dataset. Repo last pushed 2025-07-16, so check that the problem set you use is current.",
+  "load_snippet": null,
+  "released": "2024-03",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/livecodebench/code_generation_lite cardData; HF card text fetched 2026-11-24; arxiv.org/abs/2403.07974"
+ },
+ {
+  "id": "livecodebench-pro",
+  "name": "LiveCodeBench Pro",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/QAQAQAQAQ/LiveCodeBench-Pro",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2506.11928"
+   },
+   {
+    "label": "GitHub",
+    "url": "https://github.com/GavinZhengOI/LiveCodeBench-Pro"
+   }
+  ],
+  "license": "Apache-2.0 (gated: auto-approve access)",
+  "size": "Quarterly and biannual splits, e.g. quater_2025_1_3 166, quater_2025_4_6 167, biannual_2025_1_6 333 problems",
+  "summary": "Olympiad-medalist-annotated problems from Codeforces, ICPC and IOI, updated continually, with line-by-line analysis of failed model submissions.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "competitive",
+   "reasoning"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Use as a hard, fresh-problem gate for reasoning-heavy coding models, after LiveCodeBench saturates. High cost (long reasoning samples).",
+  "caveats": "Execution-based (judged against tests; companion testcase dataset exists). Per the paper abstract (arXiv 2506.11928), without tools the best model scored 53% pass@1 on medium and 0% on hard problems at the time of writing (June 2025); current numbers will differ. Freshness helps contamination but old splits are public.",
+  "load_snippet": null,
+  "released": "2025-06",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/QAQAQAQAQ/LiveCodeBench-Pro cardData license=apache-2.0, gated auto, split counts; arxiv.org/abs/2506.11928"
+ },
+ {
+  "id": "liveoibench",
+  "name": "LiveOIBench",
+  "kind": "benchmark",
+  "url": "https://arxiv.org/abs/2510.09595",
+  "extra_links": [],
+  "license": "not verified",
+  "size": "403 problems from 72 contests across 14 Informatics Olympiads (2023-2025), about 60 official tests each",
+  "summary": "Olympiad-level competitive programming benchmark using official test cases and offline judging, with human-contestant percentile comparison.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "competitive"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Candidate hard gate when you want olympiad difficulty with official tests and no online-judge dependency.",
+  "caveats": "Execution-based. Per a search result summary of the paper, GPT-5 reached about the 82nd percentile versus top human contestants usually above the 90th (not independently verified in this pass). I did not verify a data link or license, so only the paper is linked.",
+  "load_snippet": null,
+  "released": "2025-10",
+  "checked": "2026-11-24",
+  "evidence": "arxiv.org/abs/2510.09595 abstract (403 problems, 72 contests, 14 olympiads)"
+ },
+ {
+  "id": "codeelo",
+  "name": "CodeElo",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/Qwen/CodeElo",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2501.01257"
+   },
+   {
+    "label": "GitHub",
+    "url": "https://github.com/QwenLM/CodeElo"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "Codeforces-derived problem set (count not stated in metadata I read)",
+  "summary": "Competition-level benchmark that submits solutions to Codeforces to obtain human-comparable Elo ratings, avoiding the need for private tests.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "competitive"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Use for an Elo-style competition rating of reasoning models; heavy because it depends on live Codeforces submission.",
+  "caveats": "Submission-based (execution on Codeforces judge). Relies on an external platform and its rate limits; the paper motivates it by missing private tests and special judges in LiveCodeBench and USACO. Dataset and repo (QwenLM/CodeElo, no license field) were last updated in early 2025.",
+  "load_snippet": null,
+  "released": "2025-01",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/Qwen/CodeElo cardData.license=apache-2.0; arxiv.org/abs/2501.01257"
+ },
+ {
+  "id": "usaco",
+  "name": "USACO benchmark",
+  "kind": "benchmark",
+  "url": "https://github.com/princeton-nlp/USACO",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2404.10952"
+   }
+  ],
+  "license": "no license field in GitHub metadata; HF mirror gated (manual)",
+  "size": "307 USA Computing Olympiad problems with unit tests, reference code and analyses",
+  "summary": "Olympiad programming problems with episodic inference methods (retrieval, self-reflection).",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python",
+   "multi"
+  ],
+  "tasks": [
+   "competitive"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Occasional hard check; mostly of historical interest now. The same data also ships in inspect_evals (usaco).",
+  "caveats": "Execution-based. Public since 2024, so contamination is likely. The paper abstract reports GPT-4 at 8.7% pass@1 zero-shot CoT, which frontier models have since far exceeded. The HF mirror vectorzhou/USACO is gated.",
+  "load_snippet": null,
+  "released": "2024-04",
+  "checked": "2026-11-24",
+  "evidence": "github.com/princeton-nlp/USACO (130 stars, pushed 2025-01); arxiv.org/abs/2404.10952 (307 problems)"
+ },
+ {
+  "id": "apps",
+  "name": "APPS",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/codeparrot/apps",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2105.09938"
+   }
+  ],
+  "license": "MIT",
+  "size": "10,000 problems (train and test; per paper)",
+  "summary": "Interview and competition-style programming problems from open judges with test cases, usable for training and evaluation.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "competitive",
+   "generation"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Mostly a training/evaluation legacy set. Use only if you need continuity with older work.",
+  "caveats": "Execution-based, but many test cases are weak and some problems are flawed. Public since 2021, and the train split is in many pretraining mixes, so contamination is likely. Superseded by LiveCodeBench and CodeContests-style sets for evaluation.",
+  "load_snippet": null,
+  "released": "2021-05",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/codeparrot/apps cardData.license=mit; arxiv.org/abs/2105.09938"
+ },
+ {
+  "id": "codecontests",
+  "name": "CodeContests",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/deepmind/code_contests",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2203.07814"
+   }
+  ],
+  "license": "CC-BY-4.0",
+  "size": "10K-100K examples (HF size category); includes generated extra tests",
+  "summary": "DeepMind AlphaCode competitive programming set from Codeforces and other sites, with correct and incorrect solutions and augmented tests.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "competitive"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use primarily as RL/SFT training data; as an eval it is old and likely contaminated.",
+  "caveats": "Execution-based. Public since 2022. Better tests than APPS, but still leaked into many training mixes.",
+  "load_snippet": null,
+  "released": "2022-02",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/deepmind/code_contests cardData.license=cc-by-4.0 size_categories; arxiv.org/abs/2203.07814"
+ },
+ {
+  "id": "bigcodebench",
+  "name": "BigCodeBench",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/bigcode/bigcodebench",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2406.15877"
+   },
+   {
+    "label": "GitHub",
+    "url": "https://github.com/bigcode-project/bigcodebench"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "1,140 tasks per version split (v0.1.0_hf to v0.1.3+); BigCodeBench-Hard subset has 148",
+  "summary": "Python tasks requiring calls into many libraries with complex instructions, ",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use as a practical-API gate beyond HumanEval-style problems; moderate cost (needs a sandbox with many installed libraries).",
+  "caveats": "Execution-based with test cases. The GitHub repo (bigcode-project/bigcodebench) is archived as of 2026-11-24, so expect no more updates or fixes. Tasks are single-file Python, not repo-level. Public since 2024, so contamination is possible.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"bigcode/bigcodebench\", split=\"v0.1.2\")",
+  "released": "2024-06",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/bigcode/bigcodebench cardData.license=apache-2.0 splits v0.1.x=1140; github.com/bigcode-project/bigcodebench archived=true"
+ },
+ {
+  "id": "bigcodebench-hard",
+  "name": "BigCodeBench-Hard",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/bigcode/bigcodebench-hard",
+  "extra_links": [],
+  "license": "license not stated in card metadata (parent is Apache-2.0)",
+  "size": "148 tasks per version split",
+  "summary": "Harder 148-task subset of BigCodeBench selected for lower solve rates, cheaper to run.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Run instead of the full set when budget is tight.",
+  "caveats": "Same caveats as BigCodeBench (archived repo, public data). A subset selected on past model failures may drift in difficulty as models improve.",
+  "load_snippet": null,
+  "released": "2024-06",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/bigcode/bigcodebench-hard splits v0.1.x=148; cardData.license absent"
+ },
+ {
+  "id": "evalperf",
+  "name": "EvalPerf (Differential Performance Evaluation)",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/evalplus/evalperf",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2408.06450"
+   }
+  ],
+  "license": "not stated in HF metadata (EvalPlus repo is Apache-2.0)",
+  "size": "118 test + 2 demo tasks",
+  "summary": "Efficiency-demanding tasks with expensive generated inputs and a compound metric that compares the speed of model solutions to reference solutions.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Add when you care about code efficiency, not only correctness. Run with evalplus.evalperf (Linux/macOS only per README); timing-sensitive so needs a quiet machine.",
+  "caveats": "Execution-based but measures runtime, so results depend on hardware and load. Covers only Python function tasks drawn from existing benchmarks.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/evalplus/evalperf splits test=118, demo=2; arxiv.org/abs/2408.06450"
+ },
+ {
+  "id": "classeval",
+  "name": "ClassEval",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/FudanSELab/ClassEval",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2308.01861"
+   }
+  ],
+  "license": "MIT",
+  "size": "100 class-level Python tasks",
+  "summary": "Manually crafted class-level generation tasks (multiple interdependent methods), about 500 person-hours to build.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Occasional check on multi-method coherence; cheap. Also in inspect_evals (class_eval).",
+  "caveats": "Execution-based. Tiny (100 tasks), so noisy. The paper found LLMs do much worse on class-level than HumanEval-style method-level tasks.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"FudanSELab/ClassEval\", split=\"test\")",
+  "released": "2023-08",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/FudanSELab/ClassEval cardData.license=mit test=100; arxiv.org/abs/2308.01861"
+ },
+ {
+  "id": "ds-1000",
+  "name": "DS-1000",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/xlangai/DS-1000",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2211.11501"
+   }
+  ],
+  "license": "CC-BY-SA-4.0",
+  "size": "1,000 data science problems across 7 Python libraries",
+  "summary": "StackOverflow-derived NumPy, Pandas, etc. problems with multi-criteria execution plus surface-form checks, with perturbed problems to reduce memorization.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Cheap data-science check; use when your model targets notebooks and analytics.",
+  "caveats": "Execution-based. Per the paper only 1.8% of accepted Codex-002 solutions were incorrect. Library versions are pinned and old, so modern API behavior can differ; public since 2022.",
+  "load_snippet": null,
+  "released": "2022-11",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/xlangai/DS-1000 cardData.license=cc-by-sa-4.0; github.com/xlang-ai/DS-1000 CC-BY-SA-4.0; arxiv.org/abs/2211.11501"
+ },
+ {
+  "id": "codescope",
+  "name": "CodeScope",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/WeixiangYan/CodeScope",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2311.08588"
+   }
+  ],
+  "license": "CC-BY-NC-4.0",
+  "size": "size category 10M-100M (HF); multi-task, multilingual",
+  "summary": "Execution-based multilingual, multitask benchmark covering code understanding and generation across many languages.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation",
+   "repair",
+   "testing"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Rarely used; consider only if you need a broad multilingual multitask sweep and can accept noncommercial terms.",
+  "caveats": "Execution-based (per paper). Noncommercial license restricts use in some pipelines. Low adoption and last updated 2023-12, so no maintenance signal.",
+  "load_snippet": null,
+  "released": "2023-11",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/WeixiangYan/CodeScope cardData.license=cc-by-nc-4.0; arxiv.org/abs/2311.08588"
+ },
+ {
+  "id": "swe-bench",
+  "name": "SWE-bench (full)",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/princeton-nlp/SWE-bench",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2310.06770"
+   },
+   {
+    "label": "GitHub",
+    "url": "https://github.com/SWE-bench/SWE-bench"
+   }
+  ],
+  "license": "dataset card license not in HF metadata; harness repo is MIT",
+  "size": "2,294 test instances (plus dev 225, train 19,008) from 12 Python repos",
+  "summary": "Real GitHub issue plus repository; the agent must produce a patch that passes the repo's own tests (FAIL_TO_PASS and PASS_TO_PASS).",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "agentic",
+   "repair",
+   "repo-level"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Rarely run in full (expensive, noisy); use Verified or Lite for iteration and a fresher set for the final gate. Train split is usable as RL/SFT data source.",
+  "caveats": "Execution-based. Public since 2023, 12 repos only, so contamination and repo overfitting are real concerns. Runs need Docker images and substantial disk.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/princeton-nlp/SWE-bench splits dev 225, test 2294, train 19008; github.com/SWE-bench/SWE-bench license MIT; arxiv.org/abs/2310.06770"
+ },
+ {
+  "id": "swe-bench-lite",
+  "name": "SWE-bench Lite",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/princeton-nlp/SWE-bench_Lite",
+  "extra_links": [],
+  "license": "dataset card license not in HF metadata; harness repo MIT",
+  "size": "300 test + 23 dev instances",
+  "summary": "A cheaper filtered subset of SWE-bench for faster iteration.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "agentic",
+   "repair",
+   "repo-level"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use as a quick agentic smoke test (hours, not days). Not suitable as a final claim.",
+  "caveats": "Execution-based. Small (300) so noisy; contamination applies as for SWE-bench. Many instances have narrow or flawed tests (see SWE-bench Verified entry).",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"princeton-nlp/SWE-bench_Lite\", split=\"test\")",
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/princeton-nlp/SWE-bench_Lite splits dev 23, test 300"
+ },
+ {
+  "id": "swe-bench-verified",
+  "name": "SWE-bench Verified",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/princeton-nlp/SWE-bench_Verified",
+  "extra_links": [
+   {
+    "label": "OpenAI post",
+    "url": "https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/"
+   }
+  ],
+  "license": "dataset card license not in HF metadata; harness repo MIT",
+  "size": "500 human-validated test instances",
+  "summary": "500-task subset screened by human annotators for solvable, well-specified problems; long the headline agentic coding number.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "agentic",
+   "repair",
+   "repo-level"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Still useful as a relative regression check when training open agents, but do not treat it as a trustworthy absolute gate for frontier claims. Pair with SWE-bench Live, Multilingual or Pro for generality.",
+  "caveats": "Execution-based. OpenAI (post dated 2026-02-23) stopped reporting it: of 138 problems o3 did not consistently solve, 59.4% had material test or description issues (35.5% narrow tests, 18.8% wide tests), and all tested frontier models could reproduce gold patches or verbatim details for some tasks, suggesting training exposure. Epoch AI's review page also rates it as flawed (per a search snippet). Python only, 12 repos.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"princeton-nlp/SWE-bench_Verified\", split=\"test\")",
+  "released": "2024-08",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/princeton-nlp/SWE-bench_Verified test=500; openai.com/index/why-we-no-longer-evaluate-swe-bench-verified fetched 2026-11-24"
+ },
+ {
+  "id": "swe-bench-multimodal",
+  "name": "SWE-bench Multimodal",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/SWE-bench/SWE-bench_Multimodal",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2410.03859"
+   }
+  ],
+  "license": "license not in HF metadata",
+  "size": "test 480, dev 100 (current HF card; earlier princeton-nlp copy listed 510/102)",
+  "summary": "JavaScript and front-end issue tasks where the problem statement includes images such as screenshots.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "repair",
+   "repo-level"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use only if your agent handles images and front-end work. Expensive and small.",
+  "caveats": "Execution-based. Visual inputs are part of the task. Counts differ between the old and new HF copies, so pin the revision you use.",
+  "load_snippet": null,
+  "released": "2024-10",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/SWE-bench/SWE-bench_Multimodal splits dev 100, test 480; arxiv.org/abs/2410.03859"
+ },
+ {
+  "id": "swe-bench-multilingual",
+  "name": "SWE-bench Multilingual",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/SWE-bench/SWE-bench_Multilingual",
+  "extra_links": [],
+  "license": "MIT",
+  "size": "300 instances from 41 repos across 9 languages",
+  "summary": "Issue-resolution tasks in C, C++, Go, Java, JavaScript, TypeScript, PHP, Ruby and Rust, runnable in the SWE-bench harness with prebuilt images.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "repair",
+   "repo-level"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use next to Verified to check that agentic ability is not Python-only. Moderate to high cost.",
+  "caveats": "Execution-based. Public data (PRs from 2017-2025 per card), so older instances may be seen in training. Only 300 tasks, so wide confidence intervals.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"SWE-bench/SWE-bench_Multilingual\", split=\"test\")",
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/SWE-bench/SWE-bench_Multilingual cardData.license=mit test=300; card text fetched 2026-11-24"
+ },
+ {
+  "id": "multi-swe-bench",
+  "name": "Multi-SWE-bench",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/ByteDance-Seed/Multi-SWE-bench",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2504.02605"
+   },
+   {
+    "label": "GitHub",
+    "url": "https://github.com/multi-swe-bench/multi-swe-bench"
+   }
+  ],
+  "license": "other (see dataset card)",
+  "size": "1,632 instances in Java, TypeScript, JavaScript, Go, Rust, C, C++",
+  "summary": "Multilingual issue-resolving benchmark annotated by 68 experts from 2,456 candidates.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "repair",
+   "repo-level"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Alternative to SWE-bench Multilingual with more instances; check the card license before use. mini and flash variants exist for cheaper runs.",
+  "caveats": "Execution-based. License is 'other' in HF metadata, so read it. Public data, so contamination is possible.",
+  "load_snippet": null,
+  "released": "2025-04",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/ByteDance-Seed/Multi-SWE-bench cardData.license=other; arxiv.org/abs/2504.02605; github.com/multi-swe-bench/multi-swe-bench Apache-2.0"
+ },
+ {
+  "id": "swe-bench-pro",
+  "name": "SWE-Bench Pro",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/ScaleAI/SWE-bench_Pro",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2509.16941"
+   },
+   {
+    "label": "OpenAI critique",
+    "url": "https://openai.com/index/separating-signal-from-noise-coding-evaluations/"
+   }
+  ],
+  "license": "license not in HF metadata (public set drawn from copyleft repos per paper)",
+  "size": "1,865 problems from 41 repos: public 731, held-out 858, commercial 276 (paper). HF test split shows 731 rows.",
+  "summary": "Long-horizon, enterprise-style tasks with a public set, a private held-out set, and a commercial set from proprietary startup repos, designed to resist contamination.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "repair",
+   "repo-level"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Use the public set as a harder complement to Verified, but see the caveat before relying on it as a gate. Expensive: long trajectories.",
+  "caveats": "Execution-based. Only the public 731 are open, so held-out and commercial scores come from Scale. OpenAI first recommended it (2026-02-23), then retracted that on 2026-07-08, estimating about 30% of tasks broken (200 tasks, 27.4%, flagged by an automated pipeline; 249, 34.1%, by human annotation). Paper v2 abstract says performance stays below 45% pass@1 under a unified scaffold.",
+  "load_snippet": null,
+  "released": "2025-09",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/ScaleAI/SWE-bench_Pro; arxiv.org/abs/2509.16941; openai.com/index/separating-signal-from-noise-coding-evaluations fetched 2026-11-24"
+ },
+ {
+  "id": "swe-bench-live",
+  "name": "SWE-bench-Live",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/SWE-bench-Live/SWE-bench-Live",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2505.23419"
+   },
+   {
+    "label": "GitHub",
+    "url": "https://github.com/microsoft/SWE-bench-Live"
+   }
+  ],
+  "license": "MIT",
+  "size": "HF splits: full 1,888, test 1,000, verified 500, lite 300 (card 2026-11)",
+  "summary": "Continuously updated issue-resolving benchmark with automated instance construction (REPOLAUNCH), covering many more repositories than SWE-bench.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python",
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "repair",
+   "repo-level"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Good freshness-aware gate: evaluate only on instances created after your training cutoff. Moderate to high cost.",
+  "caveats": "Execution-based. Contamination resistance comes from monthly additions and filtering by date; older instances are public. Automated task construction can admit noisy tests. Split counts above are from the HF API.",
+  "load_snippet": null,
+  "released": "2025-05",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/SWE-bench-Live/SWE-bench-Live cardData.license=mit splits; github.com/microsoft/SWE-bench-Live MIT pushed 2026-11-22; arxiv.org/abs/2505.23419"
+ },
+ {
+  "id": "swe-rebench",
+  "name": "SWE-rebench (dataset + leaderboard)",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/nebius/SWE-rebench-leaderboard",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2505.20411"
+   },
+   {
+    "label": "Leaderboard site",
+    "url": "https://swe-rebench.com/"
+   }
+  ],
+  "license": "CC-BY-4.0",
+  "size": "Leaderboard dataset: test 860 plus monthly splits (e.g. 2025_01 109, 2025_02 76); companion training set nebius/SWE-rebench has 21,336 test rows and 6,542 filtered",
+  "summary": "Automated pipeline for fresh SWE tasks with decontaminated evaluation: monthly task sets let you compare models on problems created after their release.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "agentic",
+   "repair",
+   "repo-level"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use the monthly splits to measure on tasks newer than the model; the companion nebius/SWE-rebench is also a large RL/SFT task pool.",
+  "caveats": "Execution-based. Leaderboard runs a standardized scaffold, so scores are not comparable to vendor-reported SWE-bench numbers. Python only.",
+  "load_snippet": null,
+  "released": "2025-05",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/nebius/SWE-rebench-leaderboard and nebius/SWE-rebench cardData.license=cc-by-4.0 and split counts; arxiv.org/abs/2505.20411"
+ },
+ {
+  "id": "terminal-bench-2",
+  "name": "Terminal-Bench 2.0 (and 2.1)",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/harborframework/terminal-bench-2.0",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2601.11868"
+   },
+   {
+    "label": "2.1 repo",
+    "url": "https://github.com/harbor-framework/terminal-bench-2-1"
+   },
+   {
+    "label": "Announcement",
+    "url": "https://www.tbench.ai/news/announcement-2-0"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "89 tasks (paper); 2.1 revises 26 tasks",
+  "summary": "Hard terminal-agent tasks: each has its own Docker environment, a human-written solution and tests. Run through the Harbor framework. Version 2.1 fixes bugs, timeouts and reward-hacking holes in 26 tasks.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "bash",
+   "multi"
+  ],
+  "tasks": [
+   "terminal",
+   "agentic",
+   "tool-use"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Use as the main terminal-agent gate for agentic models; cost is Docker plus long agent runs. Pin 2.0 vs 2.1 and report which.",
+  "caveats": "Execution-based. Paper abstract: frontier models and agents score under 65%. A Snorkel post cites different task counts (66 plus a CPU-only set); I trust the paper's 89. Task environments are public, so leakage of solutions into training data is possible. Task fix history (2.1) shows verifier issues do occur.",
+  "load_snippet": null,
+  "released": "2025-11",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/harborframework/terminal-bench-2.0 license apache-2.0; github.com/harbor-framework/terminal-bench-2-1 Apache-2.0; arxiv.org/abs/2601.11868"
+ },
+ {
+  "id": "terminal-bench-3",
+  "name": "Terminal-Bench 3.0",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/harborframework/terminal-bench-3.0",
+  "extra_links": [
+   {
+    "label": "Terminal-Bench repo",
+    "url": "https://github.com/harbor-framework/terminal-bench"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "74 tasks (registry manifest version 3.0.0)",
+  "summary": "Next Terminal-Bench generation, mirrored from the GitHub repo at tag v3.0.0 and runnable through Harbor.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "bash",
+   "multi"
+  ],
+  "tasks": [
+   "terminal",
+   "agentic",
+   "tool-use"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Watch as the likely successor gate; pin the version if you use it.",
+  "caveats": "Execution-based. I could not confirm the release date or differences from 2.x from the card, and saw no scores. Terminal-Bench 1 (harbor-framework/terminal-bench-1) is the older, easier set.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/harborframework/terminal-bench-3.0 cardData.license=apache-2.0 lastModified 2026-08-21; card text fetched 2026-11-24"
+ },
+ {
+  "id": "aider-polyglot",
+  "name": "Aider Polyglot benchmark",
+  "kind": "benchmark",
+  "url": "https://github.com/Aider-AI/polyglot-benchmark",
+  "extra_links": [
+   {
+    "label": "Leaderboard",
+    "url": "https://aider.chat/docs/leaderboards/"
+   }
+  ],
+  "license": "no license field in GitHub metadata (aider itself is Apache-2.0)",
+  "size": "225 Exercism exercises in C++, Go, Java, JavaScript, Python, Rust",
+  "summary": "Hard Exercism exercises where the model must edit files in aider's format and pass tests, measuring instruction following plus multilingual editing.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation",
+   "repair"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use as a cheap-ish multilingual code-editing gate (225 tasks); also tests edit-format discipline. Run with the aider benchmark harness in Docker.",
+  "caveats": "Execution-based. Aider's leaderboard (updated 2025-11-20 when I read it) lists gpt-5 (high) at 88.0% in a run dated 2025-08-23, indicating near saturation at the top. Exercism exercises are public and widely seen in training. Small tasks, not repo-scale.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "github.com/Aider-AI/polyglot-benchmark; aider.chat/docs/leaderboards/ fetched 2026-11-24"
+ },
+ {
+  "id": "spider",
+  "name": "Spider",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/xlangai/spider",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/1809.08887"
+   }
+  ],
+  "license": "CC-BY-SA-4.0",
+  "size": "10,181 questions, 5,693 SQL queries, 200 databases (paper); HF: train 7,000, validation 1,034",
+  "summary": "Cross-domain text-to-SQL with unseen schemas at test time.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "sql"
+  ],
+  "tasks": [
+   "sql"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Legacy SQL check; cheap. Use BIRD or Spider 2.0 for anything current.",
+  "caveats": "Execution and exact-match metrics. Saturated by modern LLMs and public for years, so contamination is likely; schemas are small and clean compared with real databases.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"xlangai/spider\", split=\"validation\")",
+  "released": "2018-09",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/xlangai/spider cardData.license=cc-by-sa-4.0 splits; arxiv.org/abs/1809.08887"
+ },
+ {
+  "id": "bird-sql",
+  "name": "BIRD (and Mini-Dev)",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/birdsql/bird_mini_dev",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2305.03111"
+   },
+   {
+    "label": "Mini-Dev repo",
+    "url": "https://github.com/bird-bench/mini_dev"
+   }
+  ],
+  "license": "CC-BY-SA-4.0 (mini_dev card)",
+  "size": "12,751 text-SQL pairs, 95 databases, 33.4 GB (paper); Mini-Dev is the small dev subset",
+  "summary": "Large-database text-to-SQL emphasizing dirty values, external knowledge and query efficiency.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "sql"
+  ],
+  "tasks": [
+   "sql"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use the Mini-Dev subset for cheap SQL regression checks, full dev for gates.",
+  "caveats": "Execution-based. Public dev set; a newer dev snapshot (birdsql/bird_sql_dev_20251106) exists. Mini-Dev license verified; the full set license not checked.",
+  "load_snippet": null,
+  "released": "2023-05",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/birdsql/bird_mini_dev cardData.license=cc-by-sa-4.0; arxiv.org/abs/2305.03111"
+ },
+ {
+  "id": "spider2",
+  "name": "Spider 2.0",
+  "kind": "benchmark",
+  "url": "https://github.com/xlang-ai/Spider2",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2411.07763"
+   }
+  ],
+  "license": "MIT",
+  "size": "632 enterprise text-to-SQL workflow problems",
+  "summary": "Real enterprise workflows over BigQuery, Snowflake and local databases with 1,000+ columns, requiring metadata search, dialect docs and multi-step SQL.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "sql"
+  ],
+  "tasks": [
+   "sql",
+   "agentic"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Use as the hard SQL-agent gate; needs cloud DB credentials for the full setting (check repo for local-only variants).",
+  "caveats": "Execution-based. Much harder than Spider/BIRD, so not saturated. Some settings require access to commercial cloud warehouses.",
+  "load_snippet": null,
+  "released": "2024-11",
+  "checked": "2026-11-24",
+  "evidence": "github.com/xlang-ai/Spider2 license MIT pushed 2026-08-12; arxiv.org/abs/2411.07763"
+ },
+ {
+  "id": "repobench",
+  "name": "RepoBench",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/tianyang/repobench_python_v1.1",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2306.03091"
+   }
+  ],
+  "license": "CC (HF metadata 'cc'); GitHub repo CC-BY-4.0",
+  "size": "Python v1.1: cross_file_first 8,033, cross_file_random 7,618, in_file 7,910",
+  "summary": "Repo-level code completion with retrieval (R), completion (C) and pipeline (P) tasks in Python and Java.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python",
+   "multi"
+  ],
+  "tasks": [
+   "completion",
+   "repo-level"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use for completion-model (FIM or autocomplete) evaluation with cross-file context.",
+  "caveats": "Mostly exact-match and edit-similarity, not execution-based. Built from public GitHub code, so contamination is likely for models trained on it.",
+  "load_snippet": null,
+  "released": "2023-06",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/tianyang/repobench_python_v1.1 splits; github.com/Leolty/repobench CC-BY-4.0; arxiv.org/abs/2306.03091"
+ },
+ {
+  "id": "crosscodeeval",
+  "name": "CrossCodeEval",
+  "kind": "benchmark",
+  "url": "https://github.com/amazon-science/cceval",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2310.11248"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "multi-language cross-file completion set (count not extracted)",
+  "summary": "Completion tasks that cannot be solved without cross-file context, in several languages, with static-analysis-based construction.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion",
+   "repo-level"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use to test retrieval-augmented completion; pair with RepoBench.",
+  "caveats": "Match-based metrics, not execution-based. Built from open-source repos so leakage possible. Task count and language list not extracted in this pass.",
+  "load_snippet": null,
+  "released": "2023-10",
+  "checked": "2026-11-24",
+  "evidence": "github.com/amazon-science/cceval Apache-2.0 pushed 2025-08; arxiv.org/abs/2310.11248"
+ },
+ {
+  "id": "safim",
+  "name": "SAFIM (Syntax-Aware Fill-in-the-Middle)",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/gonglinyuan/safim",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2403.04814"
+   },
+   {
+    "label": "GitHub",
+    "url": "https://github.com/gonglinyuan/safim"
+   }
+  ],
+  "license": "CC-BY-4.0",
+  "size": "17,720 examples (paper); HF size 10K-100K",
+  "summary": "FIM benchmark focused on syntactic structures (blocks, conditionals, API calls), with problems sourced after April 2022 to reduce contamination.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use to evaluate FIM ability of base and code-completion models; mix of execution-based and syntactic matching depending on subtask.",
+  "caveats": "Per the paper, execution-based tests for algorithmic subsets; the contamination window is limited to data after April 2022 so newer models may have seen it.",
+  "load_snippet": null,
+  "released": "2024-03",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/gonglinyuan/safim cardData.license=cc-by-4.0; arxiv.org/abs/2403.04814"
+ },
+ {
+  "id": "canitedit",
+  "name": "CanItEdit",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/nuprl/CanItEdit",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2312.12450"
+   },
+   {
+    "label": "GitHub",
+    "url": "https://github.com/nuprl/CanItEdit"
+   }
+  ],
+  "license": "MIT",
+  "size": "105 instructional editing tasks (test)",
+  "summary": "Hand-crafted instructional code editing problems with descriptive and lazy instruction variants, tested by execution.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation",
+   "repair"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Cheap check of instruction-following edits; run when training on commit or edit data.",
+  "caveats": "Execution-based. Small (105). Python only; public since 2023-24. GitHub repo license field shows NOASSERTION; HF card says MIT.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"nuprl/CanItEdit\", split=\"test\")",
+  "released": "2023-12",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/nuprl/CanItEdit cardData.license=[mit], test=105; arxiv.org/abs/2312.12450"
+ },
+ {
+  "id": "deveval",
+  "name": "DevEval (SDLC benchmark, arXiv 2403.08604)",
+  "kind": "benchmark",
+  "url": "https://arxiv.org/abs/2403.08604",
+  "extra_links": [],
+  "license": "not verified",
+  "size": "multi-stage tasks, four languages (counts not extracted)",
+  "summary": "Evaluates LLMs across the software lifecycle: design, environment setup, implementation, acceptance and unit testing. Note the name clashes with other 'DevEval'/'DevBench' projects.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation",
+   "testing",
+   "repo-level"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Reference only; low adoption. Check which 'DevBench' or 'DevEval' you mean before citing.",
+  "caveats": "Part LLM-judged, part test-based. I did not find a verified data release in this pass. Title is a case study, not a mature leaderboard.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "arxiv.org/abs/2403.08604 abstract"
+ },
+ {
+  "id": "projecteval",
+  "name": "ProjectEval",
+  "kind": "benchmark",
+  "url": "https://arxiv.org/abs/2503.07010",
+  "extra_links": [],
+  "license": "not verified",
+  "size": "count not extracted",
+  "summary": "Project-level generation benchmark with three input levels, evaluated by simulated user interaction plus code similarity.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation",
+   "repo-level",
+   "agentic"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Niche; consider for web-app generation agents.",
+  "caveats": "Benchmark built by an LLM with human review; uses simulated user interaction for execution. I did not verify a repo or data link.",
+  "load_snippet": null,
+  "released": "2025-03",
+  "checked": "2026-11-24",
+  "evidence": "arxiv.org/abs/2503.07010 abstract"
+ },
+ {
+  "id": "commit0",
+  "name": "Commit0",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/commit0/commit0",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2412.01769"
+   },
+   {
+    "label": "GitHub",
+    "url": "https://github.com/commit-0/commit0"
+   }
+  ],
+  "license": "MIT (GitHub repo)",
+  "size": "54 library-from-scratch tasks (HF test split)",
+  "summary": "Agent must implement a library from its spec using interactive unit tests; measures long-form spec following.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "agentic",
+   "repo-level",
+   "generation"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Use as an expensive stress test for from-scratch library generation.",
+  "caveats": "Execution-based (unit tests). Small (54 libraries). Repo last pushed 2026-02. Libraries are public so leakage is possible. HF dataset metadata has no license field.",
+  "load_snippet": null,
+  "released": "2024-12",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/commit0/commit0 test=54; github.com/commit-0/commit0 MIT; arxiv.org/abs/2412.01769"
+ },
+ {
+  "id": "mle-bench",
+  "name": "MLE-bench",
+  "kind": "benchmark",
+  "url": "https://github.com/openai/mle-bench",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2410.07095"
+   }
+  ],
+  "license": "NOASSERTION in GitHub metadata (see repo)",
+  "size": "75 Kaggle competitions",
+  "summary": "Agents train models, prepare data and run experiments on real Kaggle competitions, graded against human leaderboards.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "agentic"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Only relevant for ML-engineering agents; very expensive (GPU hours per task).",
+  "caveats": "Execution and leaderboard-based. Paper abstract: o1-preview with AIDE reached at least bronze in 16.9% of competitions (2024). Needs Kaggle data downloads and GPUs.",
+  "load_snippet": null,
+  "released": "2024-10",
+  "checked": "2026-11-24",
+  "evidence": "github.com/openai/mle-bench pushed 2026-04; arxiv.org/abs/2410.07095"
+ },
+ {
+  "id": "paperbench",
+  "name": "PaperBench",
+  "kind": "benchmark",
+  "url": "https://arxiv.org/abs/2504.01848",
+  "extra_links": [],
+  "license": "not verified",
+  "size": "20 ICML 2024 papers, 8,316 gradable subtasks",
+  "summary": "Agents replicate ML papers from scratch; rubric-graded by an LLM judge. Also ported to inspect_evals (paperbench).",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "agentic"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Niche research-agent eval; very expensive.",
+  "caveats": "Not execution-only: scoring uses an LLM judge with author-co-developed rubrics. License of the official data not verified here.",
+  "load_snippet": null,
+  "released": "2025-04",
+  "checked": "2026-11-24",
+  "evidence": "arxiv.org/abs/2504.01848 abstract; inspect_evals src list"
+ },
+ {
+  "id": "swe-lancer",
+  "name": "SWE-Lancer",
+  "kind": "benchmark",
+  "url": "https://arxiv.org/abs/2502.12115",
+  "extra_links": [
+   {
+    "label": "Repo (archived)",
+    "url": "https://github.com/openai/SWELancer-Benchmark"
+   }
+  ],
+  "license": "repo openai/SWELancer-Benchmark: no license field; archived",
+  "size": "1,400+ freelance Upwork tasks worth $1M in payouts",
+  "summary": "Independent engineering tasks graded by end-to-end tests plus managerial decisions, mapped to real payouts.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "repo-level"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Optional; also available in inspect_evals (swe_lancer). Expensive.",
+  "caveats": "Execution-based for IC tasks (e2e tests triple-verified), proposal-matching for manager tasks. The original GitHub repo is archived as of 2026-11-24 and only a subset was public.",
+  "load_snippet": null,
+  "released": "2025-02",
+  "checked": "2026-11-24",
+  "evidence": "arxiv.org/abs/2502.12115; github.com/openai/SWELancer-Benchmark archived=true"
+ },
+ {
+  "id": "metr-time-horizon",
+  "name": "METR time-horizon task suite (HCAST, RE-Bench)",
+  "kind": "benchmark",
+  "url": "https://arxiv.org/abs/2503.14499",
+  "extra_links": [
+   {
+    "label": "Analysis repo",
+    "url": "https://github.com/METR/eval-analysis-public"
+   }
+  ],
+  "license": "public-tasks repo: NOASSERTION; archived",
+  "size": "tasks from RE-Bench, HCAST and 66 shorter tasks (per paper)",
+  "summary": "Measures the 50% task-completion time horizon: the human task length models complete at 50% success. Reported to double about every seven months since 2019.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "reasoning"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Use as a long-horizon pointer for how agent capability scales with task duration; not a practical training gate.",
+  "caveats": "Per paper abstract, Claude 3.7 Sonnet had about a 50-minute horizon (early 2025). Not all tasks are public (the METR/public-tasks repo is archived). Time horizon depends on human baselines and task mix.",
+  "load_snippet": null,
+  "released": "2025-03",
+  "checked": "2026-11-24",
+  "evidence": "arxiv.org/abs/2503.14499 abstract; github.com/METR/public-tasks archived=true; github.com/METR/eval-analysis-public"
+ },
+ {
+  "id": "cyberseceval",
+  "name": "CyberSecEval (Purple Llama)",
+  "kind": "benchmark",
+  "url": "https://github.com/meta-llama/PurpleLlama",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2312.04724"
+   }
+  ],
+  "license": "NOASSERTION in GitHub metadata (per-component licenses)",
+  "size": "multi-suite; insecure code generation plus cyberattack compliance tests",
+  "summary": "Meta's suite for insecure-code generation and cyber misuse, with later versions adding more tests; also in inspect_evals (cyberseceval_2 to 4).",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Run as a safety gate for code models before release, alongside CWEval for dynamic checks.",
+  "caveats": "Original insecure-code tests use static analysis rules (CWEval's authors criticize unclear specs and impractical evaluation). Not execution-based for functionality. Repo license is mixed, so check it.",
+  "load_snippet": null,
+  "released": "2023-12",
+  "checked": "2026-11-24",
+  "evidence": "github.com/meta-llama/PurpleLlama pushed 2026-11-20; arxiv.org/abs/2312.04724"
+ },
+ {
+  "id": "seccodeplt",
+  "name": "SecCodePLT",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/Virtue-AI-HUB/SecCodePLT",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2410.11096"
+   }
+  ],
+  "license": "MIT",
+  "size": "insecure_coding split 1,345 rows (HF); gated auto",
+  "summary": "Security benchmark built from validated seeds expanded by mutation, with dynamic tests for both code generation and cyberattack helpfulness.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Add for secure-code evaluation with dynamic checks.",
+  "caveats": "Dynamic test-based. Gated (auto-approval). The paper (listed as SeCodePLT on arXiv) claims better coverage than static-rule benchmarks, which I did not independently check.",
+  "load_snippet": null,
+  "released": "2024-10",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/Virtue-AI-HUB/SecCodePLT cardData.license=mit, gated=auto; arxiv.org/abs/2410.11096"
+ },
+ {
+  "id": "cweval",
+  "name": "CWEval",
+  "kind": "benchmark",
+  "url": "https://github.com/Co1lin/CWEval",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2501.08200"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "119 tasks (HF mirror purpcode/CWEval)",
+  "summary": "Outcome-driven evaluation of both functionality and security of generated code using test oracles for CWE-linked tasks.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Cheap secure-code regression check next to HumanEval-style functional tests.",
+  "caveats": "Execution-based. Small, public since January 2025.",
+  "load_snippet": null,
+  "released": "2025-01",
+  "checked": "2026-11-24",
+  "evidence": "github.com/Co1lin/CWEval Apache-2.0; huggingface.co/api/datasets/purpcode/CWEval test=119; arxiv.org/abs/2501.08200"
+ },
+ {
+  "id": "testgeneval",
+  "name": "TestGenEval",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/kjain14/testgeneval",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2410.00752"
+   }
+  ],
+  "license": "license not in HF metadata",
+  "size": "1,210 test split (code and test file pairs); 68,647 tests across 11 Python repos (paper)",
+  "summary": "Unit-test authoring and completion benchmark built from SWE-bench repositories, with a lite subset.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "testing"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use when training test-writing ability; check coverage and mutation score outputs.",
+  "caveats": "Execution-based (coverage, mutation). Shares repos with SWE-bench, so overlap with SWE-bench-derived training data is likely. Splits seen: test 1,210, dev 210, train 15,439.",
+  "load_snippet": null,
+  "released": "2024-10",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/kjain14/testgeneval; arxiv.org/abs/2410.00752"
+ },
+ {
+  "id": "swt-bench",
+  "name": "SWT-Bench",
+  "kind": "benchmark",
+  "url": "https://github.com/logic-star-ai/swt-bench",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2406.12952"
+   }
+  ],
+  "license": "MIT",
+  "size": "Verified variant 433 instances (HF eth-sri/SWT-bench_Verified_bm25_27k_zsb); also Lite",
+  "summary": "Agents write reproduction tests for real GitHub issues; a good test fails before and passes after the golden patch.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "testing",
+   "agentic"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use to check whether agents can turn issues into fail-to-pass tests, a key skill for RL reward construction.",
+  "caveats": "Execution-based. Derived from SWE-bench so shares contamination concerns. HF license not stated.",
+  "load_snippet": null,
+  "released": "2024-06",
+  "checked": "2026-11-24",
+  "evidence": "github.com/logic-star-ai/swt-bench MIT; huggingface.co/api/datasets/eth-sri/SWT-bench_Verified_bm25_27k_zsb test=433; arxiv.org/abs/2406.12952"
+ },
+ {
+  "id": "defects4j",
+  "name": "Defects4J",
+  "kind": "benchmark",
+  "url": "https://github.com/rjust/defects4j",
+  "extra_links": [
+   {
+    "label": "RepairBench",
+    "url": "https://github.com/ASSERT-KTH/repairbench"
+   }
+  ],
+  "license": "MIT",
+  "size": "database of real Java faults (count not extracted)",
+  "summary": "Classic real-fault Java repair and testing database with infrastructure; used by repair benchmarks such as RepairBench.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "java"
+  ],
+  "tasks": [
+   "repair",
+   "testing"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use for Java program repair evaluation; requires Java toolchains.",
+  "caveats": "Execution-based. Public since 2014, heavily contaminated in code training data; RepairBench (ASSERT-KTH/repairbench, no license field) is a leaderboard built on it.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "github.com/rjust/defects4j MIT pushed 2026-04; github.com/ASSERT-KTH/repairbench pushed 2025-10"
+ },
+ {
+  "id": "minif2f",
+  "name": "miniF2F",
+  "kind": "benchmark",
+  "url": "https://github.com/facebookresearch/miniF2F",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2109.00110"
+   }
+  ],
+  "license": "MIT (facebookresearch updated version)",
+  "size": "488 problem statements (244 valid, 244 test)",
+  "summary": "Formal Olympiad-level problems (AIME, AMC, IMO, coursework) in Lean and other systems for theorem proving.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "lean"
+  ],
+  "tasks": [
+   "formal",
+   "reasoning"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use as the standard Lean theorem-proving gate; cheap relative to agentic evals.",
+  "caveats": "Verifier-checked (Lean). Heavily saturated by recent provers and public for years, so contamination is likely. The original openai/miniF2F repo is archived and has fixes elsewhere; use a corrected version.",
+  "load_snippet": null,
+  "released": "2021-08",
+  "checked": "2026-11-24",
+  "evidence": "github.com/facebookresearch/miniF2F MIT; openai/miniF2F archived; arxiv.org/abs/2109.00110; HF HaimingW/miniF2F-lean4 splits"
+ },
+ {
+  "id": "putnambench",
+  "name": "PutnamBench",
+  "kind": "benchmark",
+  "url": "https://github.com/trishullab/PutnamBench",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2407.11214"
+   }
+  ],
+  "license": "no license field in GitHub metadata",
+  "size": "1,692 formalizations of 640 Putnam theorems (Lean 4, Isabelle, partial Coq)",
+  "summary": "Hard undergraduate competition math formalizations for neural theorem provers.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "lean"
+  ],
+  "tasks": [
+   "formal",
+   "reasoning"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Use as the harder Lean gate beyond miniF2F. Expensive search-based proving.",
+  "caveats": "Verifier-checked. Maintained with an active leaderboard; repo pushed 2026-11-09. License field absent, so check the repo.",
+  "load_snippet": null,
+  "released": "2024-07",
+  "checked": "2026-11-24",
+  "evidence": "github.com/trishullab/PutnamBench; arxiv.org/abs/2407.11214"
+ },
+ {
+  "id": "evalplus-cli",
+  "name": "EvalPlus CLI",
+  "kind": "tool",
+  "url": "https://github.com/evalplus/evalplus",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "Python package and CLI",
+  "summary": "Evaluation framework behind HumanEval+, MBPP+ and EvalPerf with backends for HF, vLLM, Ollama, OpenAI, Anthropic, Gemini and Bedrock.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Run evalplus.evaluate for correctness and evalplus.evalperf for efficiency; use evalplus.codegen to separate generation from sandboxed execution.",
+  "caveats": "Python-only function-level benchmarks. Last push 2025-10-02. Sandbox execution runs untrusted code, so use Docker.",
+  "load_snippet": null,
+  "released": "2023-05",
+  "checked": "2026-11-24",
+  "evidence": "github.com/evalplus/evalplus license Apache-2.0; README fetched 2026-11-24"
+ },
+ {
+  "id": "bigcode-evaluation-harness",
+  "name": "bigcode-evaluation-harness",
+  "kind": "tool",
+  "url": "https://github.com/bigcode-project/bigcode-evaluation-harness",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "Harness with tasks incl. HumanEval(+), MBPP(+), MultiPL-E, HumanEvalPack, APPS, DS-1000, SantaCoder-FIM, QuixBugs, ReCode",
+  "summary": "Framework for evaluating autoregressive code models on many classic benchmarks with HF transformers.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation",
+   "completion"
+  ],
+  "difficulty": null,
+  "how_to_use": "Use for base-model and FIM evaluation when reproducing BigCode-style tables. Starting point for legacy tasks.",
+  "caveats": "Last push 2025-07-22; no agentic or SWE tasks. Executing generated code needs a sandbox.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "github.com/bigcode-project/bigcode-evaluation-harness Apache-2.0; bigcode_eval/tasks listing"
+ },
+ {
+  "id": "lm-evaluation-harness",
+  "name": "lm-evaluation-harness (code tasks)",
+  "kind": "tool",
+  "url": "https://github.com/EleutherAI/lm-evaluation-harness",
+  "extra_links": [],
+  "license": "MIT",
+  "size": "General LLM harness; code tasks include humaneval, humaneval_infilling, mbpp, code_x_glue",
+  "summary": "The standard few-shot LLM harness; code coverage is basic.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Use for quick HumanEval/MBPP numbers inside a broader multi-task sweep; for serious code evaluation prefer EvalPlus or LiveCodeBench.",
+  "caveats": "Code tasks are thin; code execution requires explicit opt-in because it runs untrusted code.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "github.com/EleutherAI/lm-evaluation-harness MIT pushed 2026-11-04; lm_eval/tasks listing"
+ },
+ {
+  "id": "livecodebench-runner",
+  "name": "LiveCodeBench runner",
+  "kind": "tool",
+  "url": "https://github.com/LiveCodeBench/LiveCodeBench",
+  "extra_links": [],
+  "license": "MIT",
+  "size": "Python CLI",
+  "summary": "Official runner for LiveCodeBench scenarios (code generation, self-repair, code execution, test output prediction) with date-window filtering.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "competitive",
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Use for the contamination-aware window evaluation; install with uv.",
+  "caveats": "Last push 2025-07-16, so check it supports the release you want. Needs vLLM or API backends.",
+  "load_snippet": null,
+  "released": "2024-03",
+  "checked": "2026-11-24",
+  "evidence": "github.com/LiveCodeBench/LiveCodeBench MIT; README fetched"
+ },
+ {
+  "id": "inspect-evals",
+  "name": "Inspect AI / inspect_evals",
+  "kind": "tool",
+  "url": "https://github.com/UKGovernmentBEIS/inspect_evals",
+  "extra_links": [
+   {
+    "label": "Inspect docs",
+    "url": "https://inspect.aisi.org.uk/"
+   }
+  ],
+  "license": "MIT",
+  "size": "Collection of community-maintained evals for Inspect AI",
+  "summary": "Large eval collection including apps, bigcodebench, class_eval, ds1000, humaneval, mbpp, usaco, swe_bench, swe_lancer, livecodebench_pro, mle_bench, paperbench and cyberseceval_2 to 4.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "generation",
+   "terminal"
+  ],
+  "difficulty": null,
+  "how_to_use": "Use when you want one sandboxed, agent-capable harness (Docker/K8s sandboxes) across coding and security evals; good for agentic gates.",
+  "caveats": "Third-party ports can differ in prompts and scoring from the original harness, so scores may not match published numbers. Actively maintained (pushed 2026-11-23).",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "github.com/UKGovernmentBEIS/inspect_evals MIT; src/inspect_evals listing"
+ },
+ {
+  "id": "opencompass",
+  "name": "OpenCompass",
+  "kind": "tool",
+  "url": "https://github.com/open-compass/opencompass",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "Evaluation platform with many datasets",
+  "summary": "Includes configs for bigcodebench, cruxeval, ds1000, humaneval (plus, multi, x, pro), livecodebench, livecodebench_pro and mbpp (plus, pro).",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Use for broad LLM leaderboards including code; large model-zoo support.",
+  "caveats": "Prompt formats may differ from original releases. Heavy configuration.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "github.com/open-compass/opencompass Apache-2.0 pushed 2026-11-24; configs/datasets listing"
+ },
+ {
+  "id": "lighteval",
+  "name": "lighteval",
+  "kind": "tool",
+  "url": "https://github.com/huggingface/lighteval",
+  "extra_links": [],
+  "license": "MIT",
+  "size": "Hugging Face evaluation toolkit",
+  "summary": "Evaluation library with LiveCodeBench tasks (src/lighteval/tasks/tasks/lcb) among many others.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation",
+   "competitive"
+  ],
+  "difficulty": null,
+  "how_to_use": "Use for HF-ecosystem evaluation with backends including vLLM; check task list for current code coverage.",
+  "caveats": "Code coverage smaller than dedicated harnesses; I saw LiveCodeBench only.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "github.com/huggingface/lighteval MIT pushed 2026-11-18; code search hit lcb"
+ },
+ {
+  "id": "evalscope",
+  "name": "EvalScope",
+  "kind": "tool",
+  "url": "https://github.com/modelscope/evalscope",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "ModelScope eval framework",
+  "summary": "Includes benchmarks for bigcodebench, ds1000, humaneval(plus), live_code_bench, mbpp(plus), swe_bench, swe_bench_pro and terminal_bench.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation",
+   "agentic",
+   "terminal"
+  ],
+  "difficulty": null,
+  "how_to_use": "Useful when you want one framework spanning generation and agentic coding benchmarks, plus performance stress testing.",
+  "caveats": "Many benchmark adapters; verify scoring against the original before comparing numbers.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "github.com/modelscope/evalscope Apache-2.0 pushed 2026-11-24; evalscope/benchmarks listing"
+ },
+ {
+  "id": "swe-bench-harness",
+  "name": "SWE-bench evaluation harness",
+  "kind": "tool",
+  "url": "https://github.com/SWE-bench/SWE-bench",
+  "extra_links": [
+   {
+    "label": "Experiments repo",
+    "url": "https://github.com/SWE-bench/experiments"
+   }
+  ],
+  "license": "MIT",
+  "size": "Docker-based harness",
+  "summary": "Official Docker harness that applies model patches and runs repo tests, used by Verified, Lite, Multilingual and Multimodal.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "repair"
+  ],
+  "difficulty": null,
+  "how_to_use": "Run patches through it for any SWE-bench-format set; plan for large disk and many containers.",
+  "caveats": "Heavy on disk and CPU. Some downstream sets (SWE-bench-Live, Pro) ship their own harnesses.",
+  "load_snippet": null,
+  "released": "2023-10",
+  "checked": "2026-11-24",
+  "evidence": "github.com/SWE-bench/SWE-bench MIT pushed 2026-09-18"
+ },
+ {
+  "id": "harbor",
+  "name": "Harbor",
+  "kind": "tool",
+  "url": "https://github.com/harbor-framework/harbor",
+  "extra_links": [
+   {
+    "label": "Docs",
+    "url": "https://tbench.ai/docs"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "Agent evaluation and RL-environment framework",
+  "summary": "Official harness for Terminal-Bench 2.0 and 3.0 runs; the repo describes it as a framework for evaluating and improving agents.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "terminal",
+   "agentic"
+  ],
+  "difficulty": null,
+  "how_to_use": "Run terminal-bench registry datasets with harbor run -d <dataset> -a <agent> -m <model> (per tbench docs); needs Docker.",
+  "caveats": "Young project; CLI details may change. Command shape taken from a search summary of the tbench docs.",
+  "load_snippet": null,
+  "released": "2025-11",
+  "checked": "2026-11-24",
+  "evidence": "github.com/harbor-framework/harbor Apache-2.0 pushed 2026-11-24"
+ },
+ {
+  "id": "aider-benchmark-harness",
+  "name": "aider benchmark harness",
+  "kind": "tool",
+  "url": "https://github.com/Aider-AI/aider",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "benchmark/ directory in the aider repo",
+  "summary": "Runs the polyglot benchmark in Docker against any model aider supports.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation",
+   "repair"
+  ],
+  "difficulty": null,
+  "how_to_use": "Use to reproduce polyglot numbers for your own model endpoint.",
+  "caveats": "Last push 2026-05-22. Harness details are in aider docs; not re-verified here.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "github.com/Aider-AI/aider Apache-2.0"
+ },
+ {
+  "id": "artificial-analysis",
+  "name": "Artificial Analysis (pointer)",
+  "kind": "tool",
+  "url": "https://artificialanalysis.ai/",
+  "extra_links": [],
+  "license": "not applicable (third-party site)",
+  "size": "Aggregated leaderboard",
+  "summary": "Third-party site that aggregates model intelligence and coding indices; useful as a pointer to current coding scores.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Check for an independent view across models; do not use as a training gate.",
+  "caveats": "Methodology and the set of benchmarks inside its coding index change; not verified in this pass.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "URL only; content not fetched"
+ }
+]

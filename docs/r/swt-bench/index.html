@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SWT-Bench: Benchmark | Renaissance Labs Code</title>
+<meta name="description" content="Agents write reproduction tests for real GitHub issues; a good test fails before and passes after the golden patch.">
+<link rel="canonical" href="https://code.renaissancelabs.eu/r/swt-bench/">
+<meta property="og:title" content="SWT-Bench: Benchmark | Renaissance Labs Code"><meta property="og:description" content="Agents write reproduction tests for real GitHub issues; a good test fails before and passes after the golden patch."><meta property="og:url" content="https://code.renaissancelabs.eu/r/swt-bench/"><meta property="og:type" content="website">
+<meta property="og:image" content="https://code.renaissancelabs.eu/assets/og/r-swt-bench.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="SWT-Bench: Benchmark | Renaissance Labs Code"><meta property="og:site_name" content="Renaissance Labs Code">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://code.renaissancelabs.eu/assets/og/r-swt-bench.jpg"><meta name="twitter:title" content="SWT-Bench: Benchmark | Renaissance Labs Code"><meta name="twitter:description" content="Agents write reproduction tests for real GitHub issues; a good test fails before and passes after the golden patch."><meta name="theme-color" content="#121311">
+<link rel="icon" href="/assets/favicon.png">
+<link rel="stylesheet" href="/styles.css?v=a7072e73">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+  <a class="brand" href="/"><img src="/assets/mark.png" alt=""><span>Renaissance Labs &middot; Code</span></a>
+  <nav><a href="/catalog/" aria-current="page">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/pitfalls/">Pitfalls</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
+  <button class="theme" id="theme" type="button" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+</header>
+<main id="main">
+<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/catalog/">Catalog</a> / <a href="/stage/eval/">Eval</a></div>
+<span class="eyebrow">Benchmark &middot; 2024-06</span><h1>SWT-Bench</h1><p class="lede">Agents write reproduction tests for real GitHub issues; a good test fails before and passes after the golden patch.</p></div>
+<div class="layout"><div class="prose">
+<h2>How to use it</h2><p>Use to check whether agents can turn issues into fail-to-pass tests, a key skill for RL reward construction.</p>
+<h2>Caveats</h2><p>Execution-based. Derived from SWE-bench so shares contamination concerns. HF license not stated.</p>
+
+<h2>Related</h2><ul><li><a href="/r/commit0/">Commit0</a>: Agent must implement a library from its spec using interactive unit tests; measures long-form spec...</li><li><a href="/r/mle-bench/">MLE-bench</a>: Agents train models, prepare data and run experiments on real Kaggle competitions, graded against human...</li><li><a href="/r/paperbench/">PaperBench</a>: Agents replicate ML papers from scratch; rubric-graded by an LLM judge. Also ported to inspect_evals...</li><li><a href="/r/swe-bench/">SWE-bench (full)</a>: Real GitHub issue plus repository; the agent must produce a patch that passes the repo&#x27;s own tests...</li><li><a href="/r/swe-bench-train/">SWE-bench (full, train/test splits)</a>: The original 2,294-issue benchmark, now with eval_script, image and log_parser columns. A SWE-bench-Train...</li><li><a href="/r/swe-bench-lite/">SWE-bench Lite</a>: A cheaper filtered subset of SWE-bench for faster...</li></ul>
+</div><aside class="aside"><div class="panel"><h3>At a glance</h3><dl>
+<dt>Source</dt><dd><a href="https://github.com/logic-star-ai/swt-bench">github.com/logic-star-ai/swt-bench</a></dd>
+<dt>License</dt><dd>MIT</dd><dt>Size</dt><dd>Verified variant 433 instances (HF eth-sri/SWT-bench_Verified_bm25_27k_zsb); also Lite</dd>
+<dt>Stage</dt><dd><a class="pill st st-eval" href="/stage/eval/">Eval</a></dd>
+<dt>Languages</dt><dd>python</dd><dt>Tasks</dt><dd>Test writing, Agentic (multi-step, tools)</dd><dt>Difficulty</dt><dd>hard</dd>
+<dt>Checked</dt><dd>2026-11-24</dd></dl></div>
+<div class="panel"><h3>More links</h3><ul><li><a href="https://arxiv.org/abs/2406.12952">Paper</a></li></ul></div>
+<div class="panel"><h3>Evidence</h3><p class="mono">github.com/logic-star-ai/swt-bench MIT; huggingface.co/api/datasets/eth-sri/SWT-bench_Verified_bm25_27k_zsb test=433; arxiv.org/abs/2406.12952</p></div></aside></div></div></div>
+</main>
+<footer class="wrap foot">
+  <a class="brand" href="https://renaissancelabs.eu"><img src="/assets/mark.png" alt="">Renaissance Labs</a>
+  <div class="foot-links"><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
+</footer>
+<script src="/app.js?v=a7072e73" defer></script>
+</body>
+</html>

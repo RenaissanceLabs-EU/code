@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SWE-rebench (nebius, v1): Environment | Renaissance Labs Code</title>
+<meta name="description" content="Continuously mined Python GitHub issue tasks with install configs, F2P/P2P tests and docker_image names, from Nebius; also feeds a decontaminated leaderboard.">
+<link rel="canonical" href="https://code.renaissancelabs.eu/r/swe-rebench/">
+<meta property="og:title" content="SWE-rebench (nebius, v1): Environment | Renaissance Labs Code"><meta property="og:description" content="Continuously mined Python GitHub issue tasks with install configs, F2P/P2P tests and docker_image names, from Nebius; also feeds a decontaminated leaderboard."><meta property="og:url" content="https://code.renaissancelabs.eu/r/swe-rebench/"><meta property="og:type" content="website">
+<meta property="og:image" content="https://code.renaissancelabs.eu/assets/og/r-swe-rebench.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="SWE-rebench (nebius, v1): Environment | Renaissance Labs Code"><meta property="og:site_name" content="Renaissance Labs Code">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://code.renaissancelabs.eu/assets/og/r-swe-rebench.jpg"><meta name="twitter:title" content="SWE-rebench (nebius, v1): Environment | Renaissance Labs Code"><meta name="twitter:description" content="Continuously mined Python GitHub issue tasks with install configs, F2P/P2P tests and docker_image names, from Nebius; also feeds a decontaminated leaderboard."><meta name="theme-color" content="#121311">
+<link rel="icon" href="/assets/favicon.png">
+<link rel="stylesheet" href="/styles.css?v=a7072e73">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+  <a class="brand" href="/"><img src="/assets/mark.png" alt=""><span>Renaissance Labs &middot; Code</span></a>
+  <nav><a href="/catalog/" aria-current="page">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/pitfalls/">Pitfalls</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
+  <button class="theme" id="theme" type="button" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+</header>
+<main id="main">
+<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/catalog/">Catalog</a> / <a href="/stage/sft/">SFT</a></div>
+<span class="eyebrow">Environment &middot; 2025-05</span><h1>SWE-rebench (nebius, v1)</h1><p class="lede">Continuously mined Python GitHub issue tasks with install configs, F2P/P2P tests and docker_image names, from Nebius; also feeds a decontaminated leaderboard.</p></div>
+<div class="layout"><div class="prose">
+<h2>How to use it</h2><p>Use the filtered split for quality; docker_image/install_config let you reproduce environments. Good RL pool next to SWE-Gym and R2E-Gym.</p>
+<h2>Caveats</h2><p>The huge test split is unfiltered: some tasks have ambiguous statements or weak tests. Underlying repo licenses vary (license_name column). Check time overlap with your eval set.</p>
+<div class="codebox"><div class="lab"><span>load</span><button class="copy" type="button">Copy</button></div><pre><span class="k">from</span> datasets <span class="k">import</span> load_dataset
+ds = load_dataset(<span class="s">&quot;nebius/SWE-rebench&quot;</span>, split=<span class="s">&quot;filtered&quot;</span>)</pre></div>
+<h2>Related</h2><ul><li><a href="/r/nemotron-sft-swe-v2/">Nemotron-SFT-SWE-v2</a>: SWE-Bench-style data: OpenHands agentic trajectories and agentless sub-task SFT data built from...</li><li><a href="/r/openswe/">OpenSWE (GAIR, daVinci-Env)</a>: Large open set of executable Python SWE environments with synthesis pipeline...</li><li><a href="/r/r2e-gym/">R2E-Gym (Subset)</a>: Procedurally generated executable environments from commits (back-translated issue text, LM-generated tests)...</li><li><a href="/r/swe-gym/">SWE-Gym</a>: Real GitHub issue tasks with FAIL_TO_PASS and PASS_TO_PASS tests, built for training and verifying SWE...</li><li><a href="/r/swe-synth/">SWE-Synth</a>: Synthetic bug-fix instances with setup patches, F2P/P2P tests and problem statements, plus Moatless SFT...</li><li><a href="/r/swe-bench/">SWE-bench (full)</a>: Real GitHub issue plus repository; the agent must produce a patch that passes the repo&#x27;s own tests...</li></ul>
+</div><aside class="aside"><div class="panel"><h3>At a glance</h3><dl>
+<dt>Source</dt><dd><a href="https://huggingface.co/datasets/nebius/SWE-rebench">huggingface.co/datasets/nebius/SWE-rebench</a></dd>
+<dt>License</dt><dd>CC-BY-4.0</dd><dt>Size</dt><dd>21,336 tasks (test split), 6,542 in filtered split</dd>
+<dt>Stage</dt><dd><a class="pill st st-sft" href="/stage/sft/">SFT</a> <a class="pill st st-rl" href="/stage/rl/">RL</a> <a class="pill st st-eval" href="/stage/eval/">Eval</a></dd>
+<dt>Languages</dt><dd>python</dd><dt>Tasks</dt><dd>Agentic (multi-step, tools), Repository-level, Bug fixing and repair</dd><dt>Difficulty</dt><dd>hard</dd>
+<dt>Checked</dt><dd>2026-11-24</dd></dl></div>
+<div class="panel"><h3>More links</h3><ul><li><a href="https://arxiv.org/abs/2505.20411">Paper</a></li><li><a href="https://swe-rebench.com/">Leaderboard site</a></li></ul></div>
+<div class="panel"><h3>Evidence</h3><p class="mono">huggingface.co/api/datasets/nebius/SWE-rebench cardData.license cc-by-4.0, splits test/filtered</p></div></aside></div></div></div>
+</main>
+<footer class="wrap foot">
+  <a class="brand" href="https://renaissancelabs.eu"><img src="/assets/mark.png" alt="">Renaissance Labs</a>
+  <div class="foot-links"><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
+</footer>
+<script src="/app.js?v=a7072e73" defer></script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Qwen3.8-27B: Model | Renaissance Labs Code</title>
+<meta name="description" content="Newest open Qwen generation (Aug 2026): dense vision-language model with thinking mode and gains in coding and long-horizon agentic tasks. A strong post-trained starting point for SFT/RL on ">
+<link rel="canonical" href="https://code.renaissancelabs.eu/r/qwen3-8-27b/">
+<meta property="og:title" content="Qwen3.8-27B: Model | Renaissance Labs Code"><meta property="og:description" content="Newest open Qwen generation (Aug 2026): dense vision-language model with thinking mode and gains in coding and long-horizon agentic tasks. A strong post-trained starting point for SFT/RL on "><meta property="og:url" content="https://code.renaissancelabs.eu/r/qwen3-8-27b/"><meta property="og:type" content="website">
+<meta property="og:image" content="https://code.renaissancelabs.eu/assets/og/r-qwen3-8-27b.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Qwen3.8-27B: Model | Renaissance Labs Code"><meta property="og:site_name" content="Renaissance Labs Code">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://code.renaissancelabs.eu/assets/og/r-qwen3-8-27b.jpg"><meta name="twitter:title" content="Qwen3.8-27B: Model | Renaissance Labs Code"><meta name="twitter:description" content="Newest open Qwen generation (Aug 2026): dense vision-language model with thinking mode and gains in coding and long-horizon agentic tasks. A strong post-trained starting point for SFT/RL on "><meta name="theme-color" content="#121311">
+<link rel="icon" href="/assets/favicon.png">
+<link rel="stylesheet" href="/styles.css?v=a7072e73">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+  <a class="brand" href="/"><img src="/assets/mark.png" alt=""><span>Renaissance Labs &middot; Code</span></a>
+  <nav><a href="/catalog/" aria-current="page">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/pitfalls/">Pitfalls</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
+  <button class="theme" id="theme" type="button" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+</header>
+<main id="main">
+<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/catalog/">Catalog</a> / <a href="/stage/sft/">SFT</a></div>
+<span class="eyebrow">Model &middot; 2026-08</span><h1>Qwen3.8-27B</h1><p class="lede">Newest open Qwen generation (Aug 2026): dense vision-language model with thinking mode and gains in coding and long-horizon agentic tasks. A strong post-trained starting point for SFT/RL on a single node, and a mid-size teacher.</p></div>
+<div class="layout"><div class="prose">
+<h2>How to use it</h2><p>Use as the default dense starting point when you want to add domain or Swedish/agentic RL on top. Thinking on by default; toggle per request.</p>
+<h2>Caveats</h2><p>Post-trained checkpoint only: Qwen/Qwen3.8-27B-Base returned 401 on the HF API so no open base was confirmed. Not a coder-specialized model. Vision encoder adds size. No coding score copied here: the card compares against proprietary models under its own harness settings.</p>
+
+<h2>Related</h2><ul><li><a href="/r/deepseek-v4-1-flash/">DeepSeek-V4.1-Flash</a>: Sep 2026 DeepSeek open MoE with 1M context, MIT licensed; the card describes an encoder-decoder (CED) design...</li><li><a href="/r/deepseek-v3-2/">DeepSeek-V3.2</a>: Dec 2025 DeepSeek V3 line model, MIT licensed; a common open teacher and RL starting point before...</li><li><a href="/r/deepseek-v4-pro/">DeepSeek-V4-Pro (and V4-Flash-0731)</a>: DeepSeek V4 generation (Apr 2026): Pro is the largest open DeepSeek; V4-Flash-0731 card says it outperforms...</li><li><a href="/r/kimi-k3-1-pro/">Kimi K3.1 Pro</a>: Nov 2026 open-weight agentic model post-trained from Kimi K3 with large-scale joint RL; the largest open...</li><li><a href="/r/qwen3-coder-30b-a3b/">Qwen3-Coder-30B-A3B-Instruct</a>: Small MoE Qwen3 coder that is easy to fine-tune and serve; the most downloaded recent Qwen coder in HF search...</li><li><a href="/r/qwen3-coder-480b-a35b/">Qwen3-Coder-480B-A35B-Instruct</a>: July 2025 flagship Qwen coder: large MoE for agentic coding and repository-scale context. Commonly used as a...</li></ul>
+</div><aside class="aside"><div class="panel"><h3>At a glance</h3><dl>
+<dt>Source</dt><dd><a href="https://huggingface.co/Qwen/Qwen3.8-27B">huggingface.co/Qwen/Qwen3.8-27B</a></dd>
+<dt>License</dt><dd>Apache-2.0</dd><dt>Size</dt><dd>27.8B params (safetensors total), dense, 262,144 ctx native, extensible to 1M</dd>
+<dt>Stage</dt><dd><a class="pill st st-sft" href="/stage/sft/">SFT</a> <a class="pill st st-rl" href="/stage/rl/">RL</a></dd>
+<dt>Languages</dt><dd>multi</dd><dt>Tasks</dt><dd>Function generation, Agentic (multi-step, tools), Repository-level, Reasoning-heavy</dd><dt>Difficulty</dt><dd>frontier</dd>
+<dt>Checked</dt><dd>2026-11-24</dd></dl></div>
+<div class="panel"><h3>More links</h3><ul><li><a href="https://huggingface.co/Qwen/Qwen3.8-27B">Collection page / card</a></li></ul></div>
+<div class="panel"><h3>Evidence</h3><p class="mono">huggingface.co/api/models/Qwen/Qwen3.8-27B cardData.license, safetensors.total, config.json, README</p></div></aside></div></div></div>
+</main>
+<footer class="wrap foot">
+  <a class="brand" href="https://renaissancelabs.eu"><img src="/assets/mark.png" alt="">Renaissance Labs</a>
+  <div class="foot-links"><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
+</footer>
+<script src="/app.js?v=a7072e73" defer></script>
+</body>
+</html>

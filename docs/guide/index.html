@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to improve any model at coding: a guide | Renaissance Labs Code</title>
+<meta name="description" content="Measure first, fix data, SFT, then verifiable-reward RL, then re-measure. The honest short version, with caveats.">
+<link rel="canonical" href="https://code.renaissancelabs.eu/guide/">
+<meta property="og:title" content="How to improve any model at coding: a guide | Renaissance Labs Code"><meta property="og:description" content="Measure first, fix data, SFT, then verifiable-reward RL, then re-measure. The honest short version, with caveats."><meta property="og:url" content="https://code.renaissancelabs.eu/guide/"><meta property="og:type" content="website">
+<meta property="og:image" content="https://code.renaissancelabs.eu/assets/og/guide.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="How to improve any model at coding: a guide | Renaissance Labs Code"><meta property="og:site_name" content="Renaissance Labs Code">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://code.renaissancelabs.eu/assets/og/guide.jpg"><meta name="twitter:title" content="How to improve any model at coding: a guide | Renaissance Labs Code"><meta name="twitter:description" content="Measure first, fix data, SFT, then verifiable-reward RL, then re-measure. The honest short version, with caveats."><meta name="theme-color" content="#121311">
+<link rel="icon" href="/assets/favicon.png">
+<link rel="stylesheet" href="/styles.css?v=a7072e73">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+  <a class="brand" href="/"><img src="/assets/mark.png" alt=""><span>Renaissance Labs &middot; Code</span></a>
+  <nav><a href="/catalog/">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/" aria-current="page">Guide</a><a href="/pitfalls/">Pitfalls</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
+  <button class="theme" id="theme" type="button" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+</header>
+<main id="main">
+<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / Guide</div><span class="eyebrow">Guide</span><h1>How to improve <em>any</em> model at coding</h1><p class="lede">The short version: measure, fix the data, teach the format, reward what passes, measure again.</p></div><div class="prose"><p>You do not need a frontier lab to make a model better at code. You need a loop you can trust. This guide is the short version of what the published evidence and the open tooling support, with the caveats attached. Every dataset and tool named here is in the <a href="/catalog/">catalog</a> with its license and limits. If you would rather answer a few questions and get a plan, use the <a href="/recipe/">recipe builder</a>.</p>
+
+<div class="callout"><b>The loop</b>1. Measure with an eval the model cannot have memorized. 2. Fix data quality. 3. Teach the format with SFT. 4. Reward what passes tests (RL with verifiable rewards). 5. Measure again with the same settings. Change one thing at a time.</div>
+
+<h2>0. Decide what &ldquo;better&rdquo; means</h2>
+<p>&ldquo;Good at code&rdquo; is at least five different skills: completing the next lines, writing a function from a description, fixing a bug in a repository, working in a terminal, and writing SQL. They need different data, different evals and different verifiers. Write down one sentence, such as &ldquo;resolve more real GitHub issues in Python repositories&rdquo;, and let it choose your eval. Everything below depends on that sentence.</p>
+
+<h2>1. Measure first</h2>
+<p>Before you change anything, score the model you have. This is the step people skip, and it is the one that makes every later decision honest.</p>
+<ul>
+<li><b>Use at least one eval the model cannot have seen.</b> Classic benchmarks such as HumanEval have been public for years and leak into training sets. <a href="/r/livecodebench/">LiveCodeBench</a> collects new problems with release dates, so you can score only problems published after your model&rsquo;s training cutoff. For repository tasks, <a href="/r/swe-bench-live/">SWE-bench-Live</a> and <a href="/r/swe-rebench/">SWE-rebench (nebius, v1)</a> refresh over time. Be careful with the best-known repository benchmark: OpenAI reported in February 2026 that it had stopped reporting <a href="/r/swe-bench-verified/">SWE-bench Verified</a> after finding many problems with flawed tests or descriptions and signs of training exposure. Use it to compare with published numbers, not as your only gate.</li>
+<li><b>Match the eval to your sentence.</b> Function writing: EvalPlus-style tests. Repository work: SWE-bench-style tasks. Terminal work: <a href="/r/terminal-bench-2/">Terminal-Bench 2.0</a>.</li>
+<li><b>Freeze the settings.</b> Same prompt format, same sampling temperature, same number of samples, same harness version. Different harnesses give different numbers for the same model.</li>
+<li><b>Report pass@1 from several samples,</b> not one lucky run. The unbiased estimator is short:</li>
+</ul>
+<div class="codebox"><div class="lab"><span>Unbiased pass@k estimator</span><button class="copy" type="button">Copy</button></div><pre><span class="k">import</span> numpy <span class="k">as</span> np
+
+
+<span class="k">def</span> pass_at_k(n, c, k):
+    <span class="s">&quot;&quot;</span>&quot;Unbiased <span class="k">pass</span>@k estimator (Chen et al. <span class="n">2021</span>, Codex paper).
+
+    n: samples generated per problem, c: samples that passed, k: budget.
+    Computes <span class="n">1</span> - C(n-c, k) / C(n, k) <span class="k">in</span> a numerically stable product form.
+    <span class="s">&quot;&quot;</span>&quot;
+    <span class="k">if</span> n - c &lt; k:
+        <span class="k">return</span> <span class="n">1.0</span>
+    <span class="k">return</span> <span class="n">1.0</span> - np.prod(<span class="n">1.0</span> - k / np.arange(n - c + <span class="n">1</span>, n + <span class="n">1</span>))
+
+
+<span class="k">if</span> __name__ == <span class="s">&quot;__main__&quot;</span>:
+    <span class="k">from</span> math <span class="k">import</span> comb
+    <span class="c"># tiny check against the exact combinatorial definition</span>
+    <span class="k">for</span> n, c, k <span class="k">in</span> [(<span class="n">10</span>, <span class="n">3</span>, <span class="n">1</span>), (<span class="n">10</span>, <span class="n">3</span>, <span class="n">5</span>), (<span class="n">200</span>, <span class="n">37</span>, <span class="n">10</span>), (<span class="n">20</span>, <span class="n">0</span>, <span class="n">5</span>), (<span class="n">20</span>, <span class="n">20</span>, <span class="n">5</span>), (<span class="n">5</span>, <span class="n">1</span>, <span class="n">5</span>)]:
+        exact = <span class="n">1.0</span> - comb(n - c, k) / comb(n, k) <span class="k">if</span> n - c &gt;= k <span class="k">else</span> <span class="n">1.0</span>
+        <span class="k">assert</span> abs(pass_at_k(n, c, k) - exact) &lt; <span class="n">1e</span>-<span class="n">12</span>, (n, c, k)
+    <span class="k">assert</span> abs(pass_at_k(<span class="n">10</span>, <span class="n">3</span>, <span class="n">1</span>) - <span class="n">0.3</span>) &lt; <span class="n">1e</span>-<span class="n">12</span>  <span class="c"># pass@1 is c/n</span>
+    print(<span class="s">&quot;ok&quot;</span>, round(pass_at_k(<span class="n">200</span>, <span class="n">37</span>, <span class="n">10</span>), <span class="n">6</span>))</pre></div><p class="snote"><b>Verified:</b> ran locally, version seen: Python 3.9.6, numpy. Ran locally on Python 3.9 with numpy: matches the exact 1 - C(n-c,k)/C(n,k) definition for six cases, pass@1 equals c/n, and the check prints ok. Average the result over problems. Needs n &gt;= k. <a href="https://arxiv.org/abs/2107.03374">source</a></p>
+<div class="codebox"><div class="lab"><span>LiveCodeBench code generation with release version and date window</span><button class="copy" type="button">Copy</button></div><pre><span class="k">git</span> clone https://github.com/LiveCodeBench/LiveCodeBench.<span class="k">git</span> &amp;&amp; cd LiveCodeBench
+<span class="k">pip</span> <span class="k">install</span> -e .   <span class="c"># or: uv pip install -e .</span>
+
+<span class="c"># generate + evaluate on a fine-grained release (contamination control by release)</span>
+<span class="k">python</span> -m lcb_runner.runner.main --model {model_name} --scenario codegeneration \
+    --evaluate --release_version release_v6
+
+<span class="c"># re-score only problems released after a cutoff date (YYYY-MM-DD)</span>
+<span class="k">python</span> -m lcb_runner.evaluation.compute_scores --eval_all_file {saved_eval_all_file} --start_date <span class="n">2023</span>-<span class="n">09</span>-<span class="n">01</span></pre></div><p class="snote"><b>Verified:</b> matched official docs on 2026-11-24, version seen: LiveCodeBench main (pyproject 0.1.0, Python &gt;=3.10). Flags per the README: --release_version (default release_latest; also v1, v2, v1_v3, v4_v5 style), --evaluate, and compute_scores --start_date/--end_date. {model_name} must be listed in lcb_runner/lm_styles.py; local models take --local_model_path. Uses vllm for open models. Not run locally. The README example uses release_v2 and start_date 2023-09-01 (for DeepSeek); pick a cutoff after your model&#x27;s training cutoff. Code is executed on the host: run in a container. <a href="https://raw.githubusercontent.com/LiveCodeBench/LiveCodeBench/main/README.md">source</a></p>
+<p><b>Keep one private eval.</b> Fifty to two hundred tasks from your own domain, with tests, never published, never used for training. It is the only number you can fully trust.</p>
+<p>Also read failures by hand. Some benchmark instances have flawed tests or ambiguous statements, so a small difference on a single benchmark is easy to over-read.</p>
+
+<h2>2. Fix data quality</h2>
+<p>If you only change the data, you can still move a model a long way. Three things come first.</p>
+<ul>
+<li><b>Deduplicate.</b> Near-duplicate files inflate scores and waste training tokens. <a href="/r/datatrove/">datatrove</a> implements MinHash deduplication that you can run locally.</li>
+<li><b>Decontaminate.</b> Remove anything that overlaps your eval sets. Plain n-gram matching misses rephrased copies (a 2023 study, <a href="https://arxiv.org/abs/2311.04850">arXiv 2311.04850</a>, showed this), which is another reason to keep a private eval and a time-windowed one.</li>
+<li><b>Mind licenses.</b> Code corpora carry per-file licenses, and synthetic datasets inherit the terms of the model that wrote them. Keep the metadata.</li>
+</ul>
+<div class="codebox"><div class="lab"><span>datatrove MinHash dedup of code, local executor</span><button class="copy" type="button">Copy</button></div><pre><span class="k">from</span> datatrove.executor <span class="k">import</span> LocalPipelineExecutor
+<span class="k">from</span> datatrove.pipeline.dedup <span class="k">import</span> MinhashDedupSignature
+<span class="k">from</span> datatrove.pipeline.dedup.minhash <span class="k">import</span> (
+    MinhashConfig, MinhashDedupBuckets, MinhashDedupCluster, MinhashDedupFilter,
+)
+<span class="k">from</span> datatrove.pipeline.readers <span class="k">import</span> JsonlReader
+<span class="k">from</span> datatrove.pipeline.writers.jsonl <span class="k">import</span> JsonlWriter
+<span class="k">from</span> datatrove.utils.hashing <span class="k">import</span> HashConfig
+
+cfg = MinhashConfig(hash_config=HashConfig(precision=<span class="n">64</span>), num_buckets=<span class="n">14</span>, hashes_per_bucket=<span class="n">8</span>)
+BASE, LOGS, TASKS = <span class="s">&quot;work/minhash&quot;</span>, <span class="s">&quot;work/logs&quot;</span>, <span class="n">8</span>
+reader = JsonlReader(<span class="s">&quot;data/raw_jsonl/&quot;</span>, text_key=<span class="s">&quot;content&quot;</span>)  <span class="c"># code field name in your files</span>
+
+s1 = LocalPipelineExecutor(
+    pipeline=[reader, MinhashDedupSignature(output_folder=f<span class="s">&quot;{BASE}/sigs&quot;</span>, config=cfg)],
+    tasks=TASKS, logging_dir=f<span class="s">&quot;{LOGS}/s1&quot;</span>)
+s2 = LocalPipelineExecutor(
+    pipeline=[MinhashDedupBuckets(input_folder=f<span class="s">&quot;{BASE}/sigs&quot;</span>, output_folder=f<span class="s">&quot;{BASE}/buckets&quot;</span>, config=cfg)],
+    tasks=cfg.num_buckets, logging_dir=f<span class="s">&quot;{LOGS}/s2&quot;</span>, depends=s1)
+s3 = LocalPipelineExecutor(
+    pipeline=[MinhashDedupCluster(input_folder=f<span class="s">&quot;{BASE}/buckets&quot;</span>, output_folder=f<span class="s">&quot;{BASE}/remove_ids&quot;</span>, config=cfg)],
+    tasks=<span class="n">1</span>, logging_dir=f<span class="s">&quot;{LOGS}/s3&quot;</span>, depends=s2)
+s4 = LocalPipelineExecutor(
+    pipeline=[reader, MinhashDedupFilter(input_folder=f<span class="s">&quot;{BASE}/remove_ids&quot;</span>),
+              JsonlWriter(f<span class="s">&quot;{BASE}/deduplicated&quot;</span>)],
+    tasks=TASKS, logging_dir=f<span class="s">&quot;{LOGS}/s4&quot;</span>, depends=s3)  <span class="c"># same TASKS and reader as stage 1</span>
+s4.<span class="k">run</span>()</pre></div><p class="snote"><b>Verified:</b> matched official docs on 2026-11-24 (source of example and classes); not executed, version seen: datatrove 0.10.1 (main). Adapted from datatrove examples/minhash_deduplication.py (which uses SlurmPipelineExecutor): same four stages and MinhashConfig values; swapped to LocalPipelineExecutor (signature confirmed in executor/local.py) and added text_key. Class names and args confirmed from source. Not run: datatrove needs Python &gt;=3.11. MinhashDedupSignature has language=Languages.english by default, whose word tokenizer is tuned for prose, so for code consider a custom shingling or a different near-dedup tool and validate on a sample. Decontaminate against eval sets (HumanEval, MBPP, LiveCodeBench) separately. LICENSE: keep per-file license metadata and filter to permissive licenses (for example by SPDX id) before training; The Stack v2 does this by file license detection. PII: scrub emails, keys, and IPs (datatrove has PII/formatting filters; BigCode used StarPII) and honor opt-out lists. <a href="https://raw.githubusercontent.com/huggingface/datatrove/main/examples/minhash_deduplication.py">source</a> <a href="https://raw.githubusercontent.com/huggingface/datatrove/main/src/datatrove/pipeline/dedup/minhash.py">source</a> <a href="https://raw.githubusercontent.com/huggingface/datatrove/main/src/datatrove/executor/local.py">source</a></p>
+<p>For pretraining-scale data, quality filtering has repeatedly beaten raw volume for smaller models. <a href="/r/stack-edu/">Stack-Edu</a> and <a href="/r/the-stack-v3-train/">The Stack v3 (train)</a> are the open starting points; <a href="/r/opencoder-repo/">OpenCoder repo</a> is the most transparent end-to-end recipe. Most readers will not pretrain. They will use this stage to clean their own SFT and RL data.</p>
+
+<h2>3. Teach the format with SFT</h2>
+<p>Supervised fine-tuning is cheap and fast to iterate. It teaches the model to follow instructions, explain, edit and call tools. Start small, because published results suggest that a few tens of thousands of carefully seeded, checked examples compete with much larger sets: the Magicoder paper (<a href="https://arxiv.org/abs/2312.02120">arXiv 2312.02120</a>) used 75K examples from <a href="/r/magicoder-oss-instruct-75k/">Magicoder OSS-Instruct 75K</a>, and SelfCodeAlign (<a href="https://arxiv.org/abs/2410.24198">arXiv 2410.24198</a>) used 74K self-generated, execution-validated pairs.</p>
+<ul>
+<li><b>Short answers and edits:</b> <a href="/r/magicoder-oss-instruct-75k/">Magicoder OSS-Instruct 75K</a>, <a href="/r/opencodeinstruct/">OpenCodeInstruct (NVIDIA)</a>, <a href="/r/commitpackft/">CommitPackFT</a>.</li>
+<li><b>Hard reasoning:</b> distilled traces such as <a href="/r/opencodereasoning/">OpenCodeReasoning</a>. One caution from that paper: the authors report that filtering traces by execution hurt benchmark accuracy, so diversity of problems mattered more than verifying every trace. Treat it as a reason to run your own ablation, not as a rule.</li>
+<li><b>Repository and agent work:</b> trajectories such as <a href="/r/swe-smith-trajectories/">SWE-smith trajectories</a> and <a href="/r/nebius-swe-rebench-openhands-trajectories/">nebius SWE-rebench OpenHands trajectories</a>. Match the harness you will deploy with, because trajectories encode its tool format.</li>
+</ul>
+<div class="codebox"><div class="lab"><span>SFT on a code instruction dataset with TRL SFTTrainer</span><button class="copy" type="button">Copy</button></div><pre><span class="k">from</span> datasets <span class="k">import</span> load_dataset
+<span class="k">from</span> <span class="k">trl</span> <span class="k">import</span> SFTConfig, SFTTrainer
+
+<span class="c"># Magicoder OSS-Instruct has columns: lang, problem, solution (verified via the HF datasets server).</span>
+ds = load_dataset(<span class="s">&quot;ise-uiuc/Magicoder-OSS-Instruct-75K&quot;</span>, split=<span class="s">&quot;train&quot;</span>)
+ds = ds.map(
+    <span class="k">lambda</span> ex: {<span class="s">&quot;prompt&quot;</span>: ex[<span class="s">&quot;problem&quot;</span>], <span class="s">&quot;completion&quot;</span>: ex[<span class="s">&quot;solution&quot;</span>]},
+    remove_columns=ds.column_names,
+)  <span class="c"># standard prompt-completion format, see TRL dataset_formats</span>
+
+trainer = SFTTrainer(
+    model=<span class="s">&quot;Qwen/Qwen2.5-0.5B&quot;</span>,
+    args=SFTConfig(output_dir=<span class="s">&quot;out/sft-code&quot;</span>, packing=<span class="k">False</span>),
+    train_dataset=ds,
+)
+trainer.train()</pre></div><p class="snote"><b>Verified:</b> matched official docs on 2026-11-24; dataset columns checked via datasets-server; not executed, version seen: TRL main (VERSION 1.19.0.dev0). SFTTrainer(model=&lt;str&gt;, train_dataset=...) and SFTConfig(packing=...) come from the TRL docs; prompt-completion datasets are supported. Not executed locally (TRL main requires Python &gt;=3.11, local is 3.9, and training needs a GPU). The dataset is GPT-3.5 generated, so check OpenAI terms and license before commercial use. Swap model for your base model. <a href="https://raw.githubusercontent.com/huggingface/trl/main/docs/source/sft_trainer.md">source</a> <a href="https://huggingface.co/datasets/ise-uiuc/Magicoder-OSS-Instruct-75K">source</a></p>
+<div class="callout warn"><b>Check teacher terms</b>Many synthetic sets were written by proprietary or open-weight teachers. Their cards name the teacher, and some are non-commercial. Look at the license and the caveats on each resource page before you train a model you plan to ship.</div>
+
+<h2>4. Preference data (optional)</h2>
+<p>Preference optimization is useful when SFT has plateaued and you want a cheap step before RL. Pairs derived from test results are far more reliable than pairs picked by another model. AceCoder (<a href="https://arxiv.org/abs/2502.01718">arXiv 2502.01718</a>) built pairs from test cases and reports gains from both reward models and RL; its data is in <a href="/r/acecode-v2-122k/">AceCode-V2-122K (TIGER-Lab)</a>. If you can run tests, building on-policy pairs from your own model&rsquo;s samples is often a better use of your time than a public set. Control for length, or the model learns that longer is better.</p>
+
+<h2>5. Reward what passes: RL with verifiable rewards</h2>
+<p>Code is one of the few domains where you can check the answer by running it. That is the idea behind RL with verifiable rewards: sample several solutions per task, run the tests, reward the ones that pass. Open recipes such as DeepCoder (14B model <a href="https://huggingface.co/agentica-org/DeepCoder-14B-Preview">card</a>) and Skywork-OR1 (<a href="https://arxiv.org/abs/2505.22312">arXiv 2505.22312</a>) report gains this way. The hard part is not the algorithm. It is the verifier.</p>
+<h3>Pick the task source to match the verifier</h3>
+<ul>
+<li><b>Function problems with tests:</b> <a href="/r/kodcode/">KodCode-V1</a> (pytest, but check its non-commercial license), <a href="/r/acecode-v2-122k/">AceCode-V2-122K (TIGER-Lab)</a>.</li>
+<li><b>Competitive programming:</b> <a href="/r/deepcoder-preview/">DeepCoder-Preview-Dataset</a>, <a href="/r/skywork-or1-rl-data/">Skywork-OR1-RL-Data</a>. The verifier runs stdin and stdout tests in a sandbox.</li>
+<li><b>Repository issues:</b> <a href="/r/swe-gym/">SWE-Gym</a>, <a href="/r/swe-smith/">SWE-smith</a>, <a href="/r/r2e-gym/">R2E-Gym (Subset)</a>, <a href="/r/swe-rebench/">SWE-rebench (nebius, v1)</a>. Each task has a container image. Reward is: the target failing tests now pass and the passing tests still pass.</li>
+<li><b>Terminal tasks:</b> Harbor-format tasks via <a href="/r/harbor/">Harbor</a>.</li>
+</ul>
+<h3>Keep a middle band of difficulty</h3>
+<p>With group-relative methods such as GRPO, a task where every sampled solution gets the same reward teaches nothing. Tasks the model always solves or never solves are wasted compute. Slide the figure to see how fast the useful fraction collapses at the extremes.</p>
+<figure class="fig" id="gradfig"><svg viewBox="0 0 640 230" role="img" aria-label="Chance that a group of rollouts gives a learning signal, by the model's pass rate on the task"><line x1="20" y1="190" x2="620" y2="190" stroke="var(--rule-strong)"/><g id="gradbars"></g></svg>
+<div class="ctl"><label for="gradp">Model pass rate on a task</label><input id="gradp" type="range" min="0" max="1" step="0.05" value="0.5"><b id="gradv">50%</b></div>
+<figcaption id="gradtxt"></figcaption><figcaption>Bars: the chance that a group of 8 rollouts for one task is mixed (some pass, some fail), assuming each rollout passes independently with the pass rate on the x-axis. Groups where every rollout gets the same reward have zero advantage under group-relative methods such as GRPO, so they teach nothing. This is why RL task sets are filtered to a middle band of difficulty. Computed as 1 - p^8 - (1-p)^8.</figcaption></figure>
+<p>In practice, sample your own model several times per task and keep tasks with mixed outcomes. Some datasets ship difficulty fields you can use as a first filter. DeepCoder&rsquo;s card also describes filtering overlong and truncated samples.</p>
+<h3>Start from a model that already solves some tasks</h3>
+<p>The published open recipes start from strong distilled or instruct models (DeepCoder, AceReason and Skywork-OR1 all start from R1-distilled bases). From a weak start, most rollouts fail and the signal is thin. Do SFT first.</p>
+<h3>Build the verifier like an adversary is attacking it</h3>
+<p>One is. Models optimize whatever you reward. Documented cases include reading the future fix from git history, editing the tests, and fetching solutions from the web. See <a href="/pitfalls/">pitfalls</a>. The minimum:</p>
+<ul>
+<li>Run generated code in a container with no network, a read-only filesystem, and memory, CPU and process limits.</li>
+<li>Put the tests in after the agent finishes, from outside the sandbox. Never leave them where the agent can read or edit them.</li>
+<li>Strip future git history from repository tasks.</li>
+<li>Check each task with a reference solution: it must pass, and the unfixed code must fail.</li>
+</ul>
+<div class="codebox"><div class="lab"><span>Hardened Docker run for untrusted generated code</span><button class="copy" type="button">Copy</button></div><pre><span class="k">docker</span> <span class="k">run</span> --rm \
+  --network none \
+  --read-only \
+  --memory 256m --memory-swap 256m \
+  --cpus <span class="n">1</span> \
+  --pids-limit <span class="n">64</span> \
+  --cap-drop ALL \
+  --security-opt no-new-privileges \
+  --user <span class="n">65534</span>:<span class="n">65534</span> \
+  --tmpfs /tmp:rw,noexec,nosuid,size=16m \
+  -v <span class="s">&quot;$PWD/job:/work:ro&quot;</span> -w /work \
+  <span class="k">python</span>:<span class="n">3.12</span>-slim timeout <span class="n">10</span> <span class="k">python</span> candidate.py</pre></div><p class="snote"><b>Verified:</b> ran locally (Docker 29.1.3); flags checked in docker/cli source, version seen: Docker 29.1.3, python:3.12-slim. Every flag exists in docker/cli container opts source (network, read-only, memory, pids-limit, cap-drop, security-opt, user, tmpfs, cpus). A near-identical command was run on Docker 29.1.3 with python:3.12-slim: the script ran as uid 65534, outbound socket failed, writes to the read-only mount failed, and writes to /tmp worked. Kernel shared with host: for adversarial code add gVisor/Firecracker and seccomp. The timeout is the coreutils one inside the image (not separately tested); also enforce a wall-clock kill from the outside (docker kill). <a href="https://github.com/docker/cli/blob/master/cli/command/container/opts.go">source</a> <a href="https://docs.docker.com/reference/cli/docker/container/run/">source</a></p>
+<div class="codebox"><div class="lab"><span>Reward function: run code plus tests in a subprocess with limits</span><button class="copy" type="button">Copy</button></div><pre><span class="k">import</span> os
+<span class="k">import</span> subprocess
+<span class="k">import</span> sys
+<span class="k">import</span> tempfile
+
+<span class="k">try</span>:
+    <span class="k">import</span> resource  <span class="c"># POSIX only</span>
+<span class="k">except</span> ImportError:  <span class="c"># pragma: no cover</span>
+    resource = <span class="k">None</span>
+
+
+<span class="k">def</span> _limits(cpu_seconds, mem_bytes):
+    <span class="k">def</span> apply():
+        <span class="k">if</span> resource <span class="k">is</span> <span class="k">None</span>:
+            <span class="k">return</span>
+        os.setsid()
+        resource.setrlimit(resource.RLIMIT_CPU, (cpu_seconds, cpu_seconds))
+        resource.setrlimit(resource.RLIMIT_FSIZE, (<span class="n">1</span> &lt;&lt; <span class="n">20</span>, <span class="n">1</span> &lt;&lt; <span class="n">20</span>))
+        resource.setrlimit(resource.RLIMIT_CORE, (<span class="n">0</span>, <span class="n">0</span>))
+        <span class="k">if</span> sys.platform.startswith(<span class="s">&quot;linux&quot;</span>):  <span class="c"># RLIMIT_AS is unreliable on macOS</span>
+            resource.setrlimit(resource.RLIMIT_AS, (mem_bytes, mem_bytes))
+            resource.setrlimit(resource.RLIMIT_NPROC, (<span class="n">64</span>, <span class="n">64</span>))
+    <span class="k">return</span> apply
+
+
+<span class="k">def</span> run_tests(code, tests, timeout=<span class="n">5.0</span>, mem_mb=<span class="n">512</span>):
+    <span class="s">&quot;&quot;</span>&quot;Return <span class="n">1.0</span> <span class="k">if</span> `code` followed by `tests` exits <span class="n">0</span> within `timeout` seconds, <span class="k">else</span> <span class="n">0.0</span>.
+
+    NOT a security sandbox: no network <span class="k">or</span> filesystem isolation. Use Docker/gVisor <span class="k">for</span> untrusted code.
+    <span class="s">&quot;&quot;</span>&quot;
+    program = code + <span class="s">&quot;\n\n&quot;</span> + tests + <span class="s">&quot;\n&quot;</span>
+    <span class="k">with</span> tempfile.TemporaryDirectory() <span class="k">as</span> tmp:
+        path = os.path.join(tmp, <span class="s">&quot;main.py&quot;</span>)
+        <span class="k">with</span> open(path, <span class="s">&quot;w&quot;</span>) <span class="k">as</span> f:
+            f.write(program)
+        <span class="k">try</span>:
+            proc = subprocess.<span class="k">run</span>(
+                [sys.executable, <span class="s">&quot;-I&quot;</span>, path], cwd=tmp, stdin=subprocess.DEVNULL,
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=timeout,
+                env={<span class="s">&quot;PATH&quot;</span>: os.environ.get(<span class="s">&quot;PATH&quot;</span>, <span class="s">&quot;&quot;</span>), <span class="s">&quot;PYTHONHASHSEED&quot;</span>: <span class="s">&quot;0&quot;</span>},
+                preexec_fn=_limits(int(timeout) + <span class="n">1</span>, mem_mb &lt;&lt; <span class="n">20</span>),
+            )
+        <span class="k">except</span> subprocess.TimeoutExpired:
+            <span class="k">return</span> <span class="n">0.0</span>
+        <span class="k">return</span> <span class="n">1.0</span> <span class="k">if</span> proc.returncode == <span class="n">0</span> <span class="k">else</span> <span class="n">0.0</span>
+
+
+<span class="k">if</span> __name__ == <span class="s">&quot;__main__&quot;</span>:
+    tests = <span class="s">&quot;assert add(2, 3) == 5&quot;</span>
+    <span class="k">assert</span> run_tests(<span class="s">&quot;def add(a, b):\n    return a + b&quot;</span>, tests) == <span class="n">1.0</span>
+    <span class="k">assert</span> run_tests(<span class="s">&quot;def add(a, b):\n    return a * b&quot;</span>, tests) == <span class="n">0.0</span>
+    <span class="k">assert</span> run_tests(<span class="s">&quot;while True:\n    pass&quot;</span>, tests, timeout=<span class="n">1.0</span>) == <span class="n">0.0</span>
+    <span class="k">assert</span> run_tests(<span class="s">&quot;def add(a, b:\n&quot;</span>, tests) == <span class="n">0.0</span>  <span class="c"># syntax error</span>
+    print(<span class="s">&quot;ok: pass=1.0 fail=0.0 timeout=0.0 syntax-error=0.0&quot;</span>)</pre></div><p class="snote"><b>Verified:</b> ran locally, version seen: Python 3.9.6. Ran locally on Python 3.9 (macOS): passing example returns 1.0, failing 0.0, infinite loop 0.0 (timeout), syntax error 0.0. NOT a security sandbox: no network or filesystem isolation, and memory/process rlimits are applied only on Linux. Use inside a container (see docker-hardened-sandbox) for untrusted code. </p>
+<div class="codebox"><div class="lab"><span>GRPO with a unit-test execution reward (MBPP) in TRL</span><button class="copy" type="button">Copy</button></div><pre><span class="k">import</span> re
+<span class="k">from</span> datasets <span class="k">import</span> load_dataset
+<span class="k">from</span> <span class="k">trl</span> <span class="k">import</span> GRPOConfig, GRPOTrainer
+<span class="k">from</span> reward <span class="k">import</span> run_tests  <span class="c"># from the subprocess reward snippet (code-reward-subprocess)</span>
+
+ds = load_dataset(<span class="s">&quot;google-research-datasets/mbpp&quot;</span>, <span class="s">&quot;full&quot;</span>, split=<span class="s">&quot;train&quot;</span>)
+ds = ds.map(<span class="k">lambda</span> ex: {<span class="s">&quot;prompt&quot;</span>: ex[<span class="s">&quot;text&quot;</span>] + <span class="s">&quot;\nReturn only a Python code block.&quot;</span>})
+
+
+<span class="k">def</span> extract_code(text):
+    m = re.search(r<span class="s">&quot;```(?:python)?\n(.*?)```&quot;</span>, text, re.S)
+    <span class="k">return</span> m.group(<span class="n">1</span>) <span class="k">if</span> m <span class="k">else</span> text
+
+
+<span class="k">def</span> unit_test_reward(completions, test_list, test_setup_code, **kwargs):
+    <span class="s">&quot;&quot;</span>&quot;Called by GRPOTrainer <span class="k">with</span> prompts, completions, completion_ids, trainer_state
+    plus every dataset column <span class="k">except</span> prompt (here test_list, test_setup_code).
+    Must <span class="k">return</span> one float per completion.<span class="s">&quot;&quot;</span>&quot;
+    rewards = []
+    <span class="k">for</span> completion, tests, setup <span class="k">in</span> zip(completions, test_list, test_setup_code):
+        code = (setup <span class="k">or</span> <span class="s">&quot;&quot;</span>) + <span class="s">&quot;\n&quot;</span> + extract_code(completion)
+        rewards.append(run_tests(code, <span class="s">&quot;\n&quot;</span>.join(tests), timeout=<span class="n">5.0</span>))
+    <span class="k">return</span> rewards
+
+
+trainer = GRPOTrainer(
+    model=<span class="s">&quot;Qwen/Qwen2.5-0.5B-Instruct&quot;</span>,
+    reward_funcs=unit_test_reward,
+    args=GRPOConfig(output_dir=<span class="s">&quot;out/grpo-mbpp&quot;</span>, num_generations=<span class="n">8</span>, max_completion_length=<span class="n">512</span>),
+    train_dataset=ds,
+)
+trainer.train()</pre></div><p class="snote"><b>Verified:</b> matched official docs on 2026-11-24; reward helper ran locally; trainer not executed, version seen: TRL main (VERSION 1.19.0.dev0). Reward signature (completions plus **kwargs carrying dataset columns, returns list of floats) is per the TRL GRPO docs; MBPP columns (text, code, test_list, test_setup_code) were checked on the HF datasets server. GRPOTrainer itself was not run locally (needs Python &gt;=3.11 and a GPU); the run_tests helper was run locally. run_tests is not a sandbox, so run training workers inside a container with no network (see docker-hardened-sandbox). Reward hacking is possible: tests are visible in the dataset, so for real runs hold out tests the model never sees. <a href="https://raw.githubusercontent.com/huggingface/trl/main/docs/source/grpo_trainer.md">source</a> <a href="https://huggingface.co/datasets/google-research-datasets/mbpp">source</a></p>
+<p>For larger runs, use a framework built for rollouts, such as <a href="/r/fw-verl/">verl</a>. <a href="/r/fw-trl/">TRL</a> is fine for small experiments.</p>
+
+<h2>6. Re-measure, and keep what helped</h2>
+<p>Run the same evals with the same settings. Look at three things: the target score, a general-coding regression check (RL on competitive problems can hurt other behavior), and a handful of outputs read by eye. If something got worse, undo the last change before adding another.</p>
+
+<h2>What we know, and what we do not</h2>
+<ul>
+<li><b>Well supported:</b> contamination inflates classic benchmarks; deduplication and quality filtering help; small checked SFT sets are competitive; test-verified RL moves reasoning and repository scores for models that start strong; verifiers get hacked.</li>
+<li><b>Contested:</b> whether large-scale RL beats distillation for small models. The OpenCodeReasoning paper (<a href="https://arxiv.org/abs/2504.01943">arXiv 2504.01943</a>) reports strong SFT-only results, while AceReason (<a href="https://arxiv.org/abs/2505.16400">arXiv 2505.16400</a>) argues large RL can go further. Run both at your scale if it matters.</li>
+<li><b>Not known to us:</b> the right data mixture for your base model and language mix. No page can tell you that. Your private eval can.</li>
+</ul>
+<p>Numbers quoted on resource pages come from the cited source on the check date. Benchmarks and leaderboards move fast, so confirm any score at its source.</p>
+</div></div></div>
+</main>
+<footer class="wrap foot">
+  <a class="brand" href="https://renaissancelabs.eu"><img src="/assets/mark.png" alt="">Renaissance Labs</a>
+  <div class="foot-links"><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
+</footer>
+<script src="/app.js?v=a7072e73" defer></script>
+</body>
+</html>

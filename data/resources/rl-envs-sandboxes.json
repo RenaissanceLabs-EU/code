@@ -1,0 +1,2375 @@
+[
+ {
+  "id": "swe-gym",
+  "name": "SWE-Gym",
+  "kind": "environment",
+  "url": "https://huggingface.co/datasets/SWE-Gym/SWE-Gym",
+  "extra_links": [
+   {
+    "label": "Code",
+    "url": "https://github.com/SWE-Gym/SWE-Gym"
+   },
+   {
+    "label": "Lite",
+    "url": "https://huggingface.co/datasets/SWE-Gym/SWE-Gym-Lite"
+   },
+   {
+    "label": "Raw",
+    "url": "https://huggingface.co/datasets/SWE-Gym/SWE-Gym-Raw"
+   }
+  ],
+  "license": "MIT",
+  "size": "2,438 train instances from 11 Python repos (HF split count)",
+  "summary": "Real GitHub issue tasks with FAIL_TO_PASS and PASS_TO_PASS tests, built for training and verifying SWE agents. Lite (230) and Raw (64,689 unvalidated PR rows) variants exist.",
+  "stages": [
+   "sft",
+   "rl"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "agentic",
+   "repo-level",
+   "repair"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use as a small, clean RL pool with per-repo Docker images from the SWE-Gym repo; pair with the SWE-bench test harness as verifier. Combine with larger sets for scale.",
+  "caveats": "Small. Only 2.4k tasks, so pass-rate filtering leaves little. Repo overlap with SWE-bench test repos is a known contamination concern for SWE-bench evals. Images must be built or pulled separately.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"SWE-Gym/SWE-Gym\", split=\"train\")",
+  "released": "2024-12",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/SWE-Gym/SWE-Gym (license mit, train=2438); github.com/SWE-Gym/SWE-Gym Apache-2.0 code"
+ },
+ {
+  "id": "swe-smith",
+  "name": "SWE-smith",
+  "kind": "environment",
+  "url": "https://huggingface.co/datasets/SWE-bench/SWE-smith",
+  "extra_links": [
+   {
+    "label": "Code",
+    "url": "https://github.com/SWE-bench/SWE-smith"
+   },
+   {
+    "label": "Python-only",
+    "url": "https://huggingface.co/datasets/SWE-bench/SWE-smith-py"
+   },
+   {
+    "label": "Java",
+    "url": "https://huggingface.co/datasets/SWE-bench/SWE-smith-java"
+   },
+   {
+    "label": "Trajectories",
+    "url": "https://huggingface.co/datasets/SWE-bench/SWE-smith-trajectories"
+   }
+  ],
+  "license": "MIT",
+  "size": "59,136 synthetic task instances (train); py subset 50,908",
+  "summary": "Synthetic bug-injection tasks generated per repo (LM-written, rewritten, procedural and PR-mirror bugs) with test-based validation and per-task Docker image names. Java and other-language variants are listed under SWE-bench on HF.",
+  "stages": [
+   "sft",
+   "rl"
+  ],
+  "languages": [
+   "python",
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "repo-level",
+   "repair"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Large cheap source of verifiable SWE tasks. Filter by pass rate of your current policy before RL; use the image_name column to pull per-task containers.",
+  "caveats": "Synthetic bugs are easier and less natural than real issues; problem statements are LM generated. Nemotron-Cascade used it as one of five sources, not alone. Check test-leak risk: FAIL_TO_PASS tests are present in the repo image.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"SWE-bench/SWE-smith\", split=\"train\")",
+  "released": "2025-04",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/SWE-bench/SWE-smith (license mit, train=59136); github.com/SWE-bench/SWE-smith MIT pushed 2026-11-23"
+ },
+ {
+  "id": "swe-rebench",
+  "name": "SWE-rebench (nebius, v1)",
+  "kind": "environment",
+  "url": "https://huggingface.co/datasets/nebius/SWE-rebench",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2505.20411"
+   }
+  ],
+  "license": "CC-BY-4.0",
+  "size": "21,336 tasks (test split), 6,542 in filtered split",
+  "summary": "Continuously mined Python GitHub issue tasks with install configs, F2P/P2P tests and docker_image names, from Nebius; also feeds a decontaminated leaderboard.",
+  "stages": [
+   "rl",
+   "sft",
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "agentic",
+   "repo-level",
+   "repair"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use the filtered split for quality; docker_image/install_config let you reproduce environments. Good RL pool next to SWE-Gym and R2E-Gym.",
+  "caveats": "The huge test split is unfiltered: some tasks have ambiguous statements or weak tests. Underlying repo licenses vary (license_name column). Check time overlap with your eval set.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"nebius/SWE-rebench\", split=\"filtered\")",
+  "released": "2025-05",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/nebius/SWE-rebench cardData.license cc-by-4.0, splits test/filtered"
+ },
+ {
+  "id": "swe-rebench-v2",
+  "name": "SWE-rebench V2",
+  "kind": "environment",
+  "url": "https://huggingface.co/datasets/nebius/SWE-rebench-V2",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2602.23866"
+   },
+   {
+    "label": "PRs set",
+    "url": "https://huggingface.co/datasets/nebius/SWE-rebench-V2-PRs"
+   },
+   {
+    "label": "Code",
+    "url": "https://github.com/SWE-rebench/SWE-rebench-V2"
+   }
+  ],
+  "license": "CC-BY-4.0",
+  "size": "32,079 issue-linked tasks, 3,617 repos, 20 languages (paper: arXiv 2602.23866)",
+  "summary": "Language-agnostic executable SWE tasks with pre-built images, F2P/P2P tests and LLM quality filtering. A companion set has 126,300 PR-derived tasks.",
+  "stages": [
+   "rl",
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "repo-level",
+   "repair"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Best open multilingual SWE RL pool as of late 2026. Start with the issue-linked set, add the PRs set for volume after filtering.",
+  "caveats": "PR-derived tasks lack issue text quality guarantees. Images are large. Repo licenses vary (license column). Leaderboard maintained for V1 Python only per HF discussion.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"nebius/SWE-rebench-V2\", split=\"train\")",
+  "released": "2026-02",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/nebius/SWE-rebench-V2 (cc-by-4.0, train=32079); arxiv.org/abs/2602.23866"
+ },
+ {
+  "id": "r2e-gym",
+  "name": "R2E-Gym (Subset)",
+  "kind": "environment",
+  "url": "https://huggingface.co/datasets/R2E-Gym/R2E-Gym-Subset",
+  "extra_links": [
+   {
+    "label": "Code",
+    "url": "https://github.com/R2E-Gym/R2E-Gym"
+   },
+   {
+    "label": "Lite",
+    "url": "https://huggingface.co/datasets/R2E-Gym/R2E-Gym-Lite"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "4,578 train tasks with per-task docker_image (R2E-Gym-Subset)",
+  "summary": "Procedurally generated executable environments from commits (back-translated issue text, LM-generated tests) used to train SWE agents and verifiers; includes dev splits in the Lite variant.",
+  "stages": [
+   "rl",
+   "sft"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "agentic",
+   "repo-level",
+   "repair"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use as a second RL source beside real-issue sets; pull images named in docker_image.",
+  "caveats": "Problem statements are back-translated, tests partly LM-written, so label noise exists. Code repo last pushed 2025-07-13. The Lite variant card has no license field.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"R2E-Gym/R2E-Gym-Subset\", split=\"train\")",
+  "released": "2025-02",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/R2E-Gym/R2E-Gym-Subset (apache-2.0, train=4578); github.com/R2E-Gym/R2E-Gym Apache-2.0"
+ },
+ {
+  "id": "swe-bench-extra",
+  "name": "SWE-bench-extra",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/nebius/SWE-bench-extra",
+  "extra_links": [],
+  "license": "CC-BY-4.0",
+  "size": "6,376 train instances",
+  "summary": "Nebius earlier large SWE-bench-format task collection (patch, test_patch, F2P/P2P, license per instance), precursor to SWE-rebench.",
+  "stages": [
+   "sft",
+   "rl"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "agentic",
+   "repo-level",
+   "repair"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Mostly superseded by SWE-rebench; still usable for SFT or RL if you build the environments yourself.",
+  "caveats": "No image columns, so environments must be reconstructed. Superseded by SWE-rebench.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"nebius/SWE-bench-extra\", split=\"train\")",
+  "released": "2025-05",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/nebius/SWE-bench-extra (cc-by-4.0, train=6376)"
+ },
+ {
+  "id": "swe-bench-train",
+  "name": "SWE-bench (full, train/test splits)",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/SWE-bench/SWE-bench",
+  "extra_links": [
+   {
+    "label": "Code",
+    "url": "https://github.com/SWE-bench/SWE-bench"
+   },
+   {
+    "label": "Verified",
+    "url": "https://huggingface.co/datasets/SWE-bench/SWE-bench_Verified"
+   }
+  ],
+  "license": "MIT (GitHub repo; HF card has no license field)",
+  "size": "2,294 test + 225 dev instances in the HF repo; no train split listed",
+  "summary": "The original 2,294-issue benchmark, now with eval_script, image and log_parser columns. A SWE-bench-Train subset (1,063 questions per the Nemotron-Cascade card) was used by Nemotron-Cascade.",
+  "stages": [
+   "eval",
+   "rl"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "agentic",
+   "repo-level",
+   "repair"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Treat as eval, not training. If using the old train data, exclude repos in your eval set as Nemotron-Cascade did.",
+  "caveats": "The HF repo currently exposes test/dev only (verified 2026-11-24). Train data cited by Nemotron-Cascade came from princeton-nlp/SWE-bench; repo overlap contaminates Verified/Lite evals. Git history leak was patched upstream (PR 471).",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"SWE-bench/SWE-bench\", split=\"test\")",
+  "released": "2023-10",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/SWE-bench/SWE-bench splits; github.com/SWE-bench/SWE-bench MIT"
+ },
+ {
+  "id": "swe-bench-live",
+  "name": "SWE-bench-Live",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/SWE-bench-Live/SWE-bench-Live",
+  "extra_links": [
+   {
+    "label": "Code",
+    "url": "https://github.com/microsoft/SWE-bench-Live"
+   }
+  ],
+  "license": "MIT",
+  "size": "1,000 test, 1,888 full, 300 lite, 500 verified instances (split counts)",
+  "summary": "Continuously updated issue-resolution benchmark with docker_image, test_cmds and rebuild_cmds per task, intended to stay ahead of contamination.",
+  "stages": [
+   "eval",
+   "rl"
+  ],
+  "languages": [
+   "python",
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "repo-level",
+   "repair"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Use older monthly slices as extra RL data only if you keep recent months held out.",
+  "caveats": "Designed as eval; training on it burns the contamination guarantee. Split definitions may change between updates.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"SWE-bench-Live/SWE-bench-Live\", split=\"full\")",
+  "released": "2025",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/SWE-bench-Live/SWE-bench-Live (mit; splits test/lite/verified/full); github.com/microsoft/SWE-bench-Live MIT"
+ },
+ {
+  "id": "multi-swe-rl",
+  "name": "Multi-SWE-RL",
+  "kind": "environment",
+  "url": "https://huggingface.co/datasets/ByteDance-Seed/Multi-SWE-RL",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2504.02605"
+   },
+   {
+    "label": "Code",
+    "url": "https://github.com/multi-swe-bench/multi-swe-bench"
+   }
+  ],
+  "license": "other (HF card says 'other'; see card)",
+  "size": "Community RL dataset, first batch data_20240601_20250331; per-language counts not machine-readable on the card",
+  "summary": "ByteDance Seed community effort to collect multilingual SWE RL instances (unannotated new instances plus discarded Multi-SWE-bench instances).",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "repo-level",
+   "repair"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Treat as raw material: you must build environments with the multi-swe-bench toolkit before using it for RL.",
+  "caveats": "Unannotated and license is vague ('other'). Last HF update 2025-07-23. Little documentation of sizes in the card, so size is not verified.",
+  "load_snippet": null,
+  "released": "2025-04",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/ByteDance-Seed/Multi-SWE-RL cardData.license other; github.com/multi-swe-bench/multi-swe-bench Apache-2.0"
+ },
+ {
+  "id": "swe-dev",
+  "name": "SWE-Dev",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/Dorothydu/SWE-Dev",
+  "extra_links": [
+   {
+    "label": "Code",
+    "url": "https://github.com/DorothyDUUU/SWE-Dev"
+   },
+   {
+    "label": "Trajectories",
+    "url": "https://huggingface.co/datasets/zai-org/SWE-Dev-train"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "10K-100K feature-development samples (HF size category)",
+  "summary": "Feature-driven development tasks: product requirement, partial source, developer-written unit tests and ground-truth code, supporting SFT and RL with test-based reward.",
+  "stages": [
+   "sft",
+   "rl"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "repo-level",
+   "generation"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use for feature implementation (not bug fixing) RL, executing the bundled unit tests as reward.",
+  "caveats": "Exact train/test counts not verified here. A separate zai-org/SWE-Dev-train holds SFT/RFT trajectories (17,871 sft, 2,276 rft rows) with no license on its card. GitHub code repo has no license.",
+  "load_snippet": null,
+  "released": "2025-05",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/Dorothydu/SWE-Dev cardData.license apache-2.0"
+ },
+ {
+  "id": "swe-synth",
+  "name": "SWE-Synth",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/swesynth/SWE-Synth",
+  "extra_links": [],
+  "license": "none stated on dataset card (null in API)",
+  "size": "9,459 train instances",
+  "summary": "Synthetic bug-fix instances with setup patches, F2P/P2P tests and problem statements, plus Moatless SFT trajectories in sibling datasets.",
+  "stages": [
+   "sft",
+   "rl"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "agentic",
+   "repo-level",
+   "repair"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use as additional synthetic SWE data after checking license with authors.",
+  "caveats": "No license on card, so redistribution rights unclear. Last updated 2025-03.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"swesynth/SWE-Synth\", split=\"train\")",
+  "released": "2025-03",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/swesynth/SWE-Synth (features and train=9459; license null)"
+ },
+ {
+  "id": "swe-flow",
+  "name": "SWE-Flow / Repo2RLEnv swe_flow recipe",
+  "kind": "environment",
+  "url": "https://github.com/Hambaobao/SWE-Flow",
+  "extra_links": [
+   {
+    "label": "Repo2RLEnv",
+    "url": "https://github.com/huggingface/Repo2RLEnv"
+   },
+   {
+    "label": "Sample tasks",
+    "url": "https://huggingface.co/datasets/FineEnvs/repo2rlenv-swe-flow"
+   }
+  ],
+  "license": "MIT",
+  "size": "SWE-Flow code; Repo2RLEnv sample set FineEnvs/repo2rlenv-swe-flow has 100 Harbor tasks",
+  "summary": "Test-driven synthesis: trace passing tests, remove exercised functions, ask the agent to reconstruct them, reward via retained tests. Hugging Face Repo2RLEnv now packages the recipe as Harbor tasks.",
+  "stages": [
+   "rl",
+   "sft"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "repo-level",
+   "generation",
+   "agentic"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use Repo2RLEnv to turn your own repos into Harbor-format RL tasks.",
+  "caveats": "Sample HF set is only 100 tasks with mixed source licenses. SWE-Flow repo last pushed 2025-06-29 with 40 stars.",
+  "load_snippet": null,
+  "released": "2025-06",
+  "checked": "2026-11-24",
+  "evidence": "github.com/Hambaobao/SWE-Flow MIT; huggingface.co/datasets/FineEnvs/repo2rlenv-swe-flow card text"
+ },
+ {
+  "id": "repo2rlenv",
+  "name": "Repo2RLEnv",
+  "kind": "tool",
+  "url": "https://github.com/huggingface/Repo2RLEnv",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "809 stars, pushed 2026-11-24",
+  "summary": "Hugging Face tool that turns any repository into verifiable RL environments for coding agents in Harbor task format (instruction, Dockerfile, tests, reward script).",
+  "stages": [
+   "rl",
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "repo-level"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use to build private RL tasks from your own codebases with the same format as Terminal-Bench 2.",
+  "caveats": "Young project; recipe quality varies. Verify tests cannot be edited by the agent in each generated task.",
+  "load_snippet": null,
+  "released": "2026",
+  "checked": "2026-11-24",
+  "evidence": "github.com/huggingface/Repo2RLEnv API (Apache-2.0, pushed 2026-11-24)"
+ },
+ {
+  "id": "openswe",
+  "name": "OpenSWE (GAIR, daVinci-Env)",
+  "kind": "environment",
+  "url": "https://huggingface.co/datasets/GAIR/OpenSWE",
+  "extra_links": [
+   {
+    "label": "Code",
+    "url": "https://github.com/GAIR-NLP/OpenSWE"
+   }
+  ],
+  "license": "other (gated, access conditions on card); code repo licensed per GitHub as NOASSERTION; search snippet says AGPL-3.0 (unverified)",
+  "size": "10K-100K rows (HF size category); paper claims 45,320 Docker environments",
+  "summary": "Large open set of executable Python SWE environments with synthesis pipeline released.",
+  "stages": [
+   "rl",
+   "sft"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "agentic",
+   "repo-level",
+   "repair"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Request access, read license terms, then use for large-scale RL after pass-rate filtering.",
+  "caveats": "Gated with auto-approval; license ambiguous. Counts from paper abstract via search, not confirmed from API.",
+  "load_snippet": null,
+  "released": "2026-03",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/GAIR/OpenSWE (license other, gated auto)"
+ },
+ {
+  "id": "lego-rl-2699",
+  "name": "Lego-RL-2699 and LegoFlow-SWE",
+  "kind": "environment",
+  "url": "https://huggingface.co/datasets/Lego-X/Lego-RL-2699",
+  "extra_links": [
+   {
+    "label": "LegoFlow-SWE",
+    "url": "https://huggingface.co/datasets/Lego-X/LegoFlow-SWE"
+   },
+   {
+    "label": "SWE-Lego paper",
+    "url": "https://arxiv.org/abs/2601.01426"
+   }
+  ],
+  "license": "AGPL-3.0 (RL set); Apache-2.0 (LegoFlow-SWE, SWE-Lego-Real-Data)",
+  "size": "1K-10K Harbor RL environments (HF size category); Verified-500 packaged as Harbor tasks",
+  "summary": "SWE-Lego family: Harbor-format RL environments, teacher trajectories and a Harbor-packaged SWE-bench Verified for evaluating against the same trainer.",
+  "stages": [
+   "rl",
+   "sft",
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "repo-level"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use if your trainer reads Harbor tasks; check AGPL implications before redistributing derived data.",
+  "caveats": "AGPL-3.0 on RL set is restrictive. LEGO-RL paper id seen in card (2608.17393) not independently opened. SWE-Lego code repo Apache-2.0.",
+  "load_snippet": null,
+  "released": "2026-08",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/Lego-X/Lego-RL-2699 license agpl-3.0; Lego-X/LegoFlow-SWE card"
+ },
+ {
+  "id": "nemotron-cascade-rl-swe",
+  "name": "Nemotron-Cascade-RL-SWE",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/nvidia/Nemotron-Cascade-RL-SWE",
+  "extra_links": [
+   {
+    "label": "Report",
+    "url": "https://arxiv.org/abs/2512.13607"
+   }
+  ],
+  "license": "CC-BY-4.0",
+  "size": "Per card (16K-prompt slice): 23,236 SWE-Fixer, 2,472 SWE-Smith (card prints '24,72'), 1,063 SWE-Bench-Train, 4,244 SWE-rebench questions",
+  "summary": "NVIDIA recipe data for SWE RL: difficulty-filtered mix of SWE-Bench-Train, SWE-rebench, SWE-smith, R2E-Gym-Subset and SWE-Fixer, with repos from SWE-bench Verified excluded to avoid contamination.",
+  "stages": [
+   "rl",
+   "sft"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "repair",
+   "repo-level"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Take as a template for mixing five sources and excluding eval repos. Reward there is execution-free (reward model), not Docker.",
+  "caveats": "Card states no Docker execution reward was used, so this is not an execution-verified recipe. Question counts are on the card; the SWE-Smith figure is garbled on the card.",
+  "load_snippet": null,
+  "released": "2025-12",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/datasets/nvidia/Nemotron-Cascade-RL-SWE README (cc-by-4.0)"
+ },
+ {
+  "id": "nemotron-swe-trajectories",
+  "name": "NVIDIA SWE-Zero / SWE-Hero OpenHands trajectories",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/nvidia/SWE-Hero-openhands-trajectories",
+  "extra_links": [
+   {
+    "label": "SWE-Zero",
+    "url": "https://huggingface.co/datasets/nvidia/SWE-Zero-openhands-trajectories"
+   },
+   {
+    "label": "Nebius OpenHands trajectories",
+    "url": "https://huggingface.co/datasets/nebius/SWE-rebench-openhands-trajectories"
+   }
+  ],
+  "license": "CC-BY-4.0",
+  "size": "SWE-Hero 10K-100K, SWE-Zero 100K-1M trajectories (HF size categories)",
+  "summary": "OpenHands agent trajectories with model_patch and repo license columns, for SFT or rejection sampling on SWE tasks.",
+  "stages": [
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "repo-level"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Filter by resolved status and license column before SFT.",
+  "caveats": "Resolve labels are not in the verified column list (instance_id, repo, license, trajectory_id, trajectory, model_patch, dataset). Teacher-model terms apply; check card.",
+  "load_snippet": null,
+  "released": "2026-05",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/nvidia/SWE-Hero-openhands-trajectories cc-by-4.0; SWE-Zero cc-by-4.0"
+ },
+ {
+  "id": "deepcoder-preview",
+  "name": "DeepCoder-Preview-Dataset",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/agentica-org/DeepCoder-Preview-Dataset",
+  "extra_links": [
+   {
+    "label": "rLLM (training code)",
+    "url": "https://github.com/rllm-org/rllm"
+   }
+  ],
+  "license": "MIT",
+  "size": "24K problems with tests per card; configs lcbv5 (599 train, 279 test) and codeforces (408 test) verified in API",
+  "summary": "Verified-test competitive programming set used to train DeepCoder-14B: TACO verified, PrimeIntellect SYNTHETIC-1 code and LiveCodeBench problems with test lists.",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "competitive",
+   "generation"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Standard small RL pool for GRPO code runs; run tests with a sandbox (SandboxFusion, verl's code reward).",
+  "caveats": "Includes LiveCodeBench v5 train problems, so do not eval on lcbv5 train/test overlap. Only 2 of the configs inspected; 24K figure from card.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"agentica-org/DeepCoder-Preview-Dataset\", \"lcbv5\", split=\"train\")",
+  "released": "2025-04",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/agentica-org/DeepCoder-Preview-Dataset (mit); README"
+ },
+ {
+  "id": "open-r1-codeforces",
+  "name": "open-r1/codeforces",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/open-r1/codeforces",
+  "extra_links": [
+   {
+    "label": "Reasoning traces",
+    "url": "https://huggingface.co/datasets/open-r1/codeforces-cots"
+   }
+  ],
+  "license": "CC-BY-4.0",
+  "size": "10,024 problems (9,556 train + 468 test); verifiable config 8,338 train + 422 test",
+  "summary": "Codeforces problems with statements, editorials, official tests and generated checkers, including interactive problems; the 'verifiable' config keeps problems with complete tests.",
+  "stages": [
+   "rl",
+   "sft",
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "competitive",
+   "generation"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use the verifiable config for RL; run C++/Python with checker support. Problems carry a rating column for difficulty filtering.",
+  "caveats": "Needs a judge that handles special checkers and interactors. Statements are scraped from codeforces.com (card gives CC-BY-4.0; rights to original content not verified).",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"open-r1/codeforces\", \"verifiable\", split=\"train\")",
+  "released": "2025-03",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/open-r1/codeforces cc-by-4.0, config verifiable"
+ },
+ {
+  "id": "code-contests",
+  "name": "CodeContests (DeepMind)",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/deepmind/code_contests",
+  "extra_links": [],
+  "license": "CC-BY-4.0",
+  "size": "10K-100K problems (HF size category)",
+  "summary": "Competitive problems from Codeforces, CodeChef, AtCoder and others with generated tests and correct/incorrect human solutions in Python, C++ and Java.",
+  "stages": [
+   "sft",
+   "rl",
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "competitive",
+   "generation"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Classic source of RL problems; many prepared versions exist (Eurus-2, Nemotron-RL).",
+  "caveats": "False-positive rate of original generated tests is high; CodeContests+ and CodeContests-O exist to fix this. Python 2 solutions present.",
+  "load_snippet": null,
+  "released": "2022-2023",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/deepmind/code_contests (cc-by-4.0)"
+ },
+ {
+  "id": "taco",
+  "name": "TACO",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/BAAI/TACO",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "25,443 train + 1,000 test problems",
+  "summary": "Large algorithmic problem set with tests, solutions, difficulty and algorithm tags, aggregated from many contest sites.",
+  "stages": [
+   "sft",
+   "rl"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "competitive",
+   "generation"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use difficulty/skill tags for curriculum; filter via the verified subset in DeepCoder-Preview-Dataset.",
+  "caveats": "Raw test quality varies (DeepCoder filtered to a verified subset). Upstream site terms not fully clear.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"BAAI/TACO\", \"ALL\", split=\"train\")",
+  "released": "2023-12",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/BAAI/TACO (apache-2.0, ALL: train 25443, test 1000)"
+ },
+ {
+  "id": "apps",
+  "name": "APPS",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/codeparrot/apps",
+  "extra_links": [],
+  "license": "MIT (card list)",
+  "size": "10K-100K problems (card; test split commonly 5,000)",
+  "summary": "Interview-level and competition Python problems with solutions and test cases.",
+  "stages": [
+   "sft",
+   "rl",
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "competitive",
+   "generation"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Old but common RL sanity set; heavily contaminated in modern pretraining data.",
+  "caveats": "Known noisy tests and duplicates. Prefer cleaned derivatives.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"codeparrot/apps\", split=\"train\")",
+  "released": "2021-05",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/codeparrot/apps (license mit)"
+ },
+ {
+  "id": "code-contests-plus",
+  "name": "CodeContests+",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/ByteDance-Seed/Code-Contests-Plus",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2506.05817"
+   }
+  ],
+  "license": "CC-BY-4.0",
+  "size": "10K-100K problems; configs 1x to 5x test multiplicity",
+  "summary": "CodeContests with LLM-generated, validated test generators and checkers to raise test quality, built using SandboxFusion; intended as better RL verifiers.",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "competitive",
+   "testing"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Prefer over raw CodeContests for RL reward accuracy.",
+  "caveats": "Larger test multiplicities cost more sandbox time. Sandbox required.",
+  "load_snippet": null,
+  "released": "2025-06",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/ByteDance-Seed/Code-Contests-Plus (cc-by-4.0)"
+ },
+ {
+  "id": "codecontests-o",
+  "name": "CodeContests-O",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/caijanfeng/CodeContests-O",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2601.13682"
+   }
+  ],
+  "license": "not stated in card header (API license null); check card",
+  "size": "11,407 train + 162 test + 114 valid problems; dataset_size about 714 GB",
+  "summary": "Feedback-driven iterative test case generation for CodeContests problems: generators, checkers and corner cases.",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "competitive",
+   "testing"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use the generators rather than download the whole set; partial download by file.",
+  "caveats": "Enormous (about 325 GB download). License unspecified. Paper arXiv 2601.13682.",
+  "load_snippet": null,
+  "released": "2026-01",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/caijanfeng/CodeContests-O splits"
+ },
+ {
+  "id": "skywork-or1-rl-data",
+  "name": "Skywork-OR1-RL-Data",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/Skywork/Skywork-OR1-RL-Data",
+  "extra_links": [
+   {
+    "label": "Code",
+    "url": "https://github.com/SkyworkAI/Skywork-OR1"
+   }
+  ],
+  "license": "Apache-2.0 on GitHub repo; HF card has no license field",
+  "size": "105,055 math + 14,057 code problems",
+  "summary": "RL-ready math and code problems in verl format (prompt, reward_model.ground_truth) with per-model pass difficulty labels for 1.5B, 7B and 32B R1 distills.",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "competitive",
+   "reasoning"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use extra_info.model_difficulty to drop always-solved and never-solved items before GRPO.",
+  "caveats": "Card license missing. Code ground truth are large test blobs (about 1.5 GB for 14k code rows).",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"Skywork/Skywork-OR1-RL-Data\", split=\"code\")",
+  "released": "2025-05",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/Skywork/Skywork-OR1-RL-Data splits; github.com/SkyworkAI/Skywork-OR1 Apache-2.0"
+ },
+ {
+  "id": "synthetic-1",
+  "name": "SYNTHETIC-1",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/PrimeIntellect/SYNTHETIC-1",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "1,994,262 rows; card sections: 777k math, 144k algorithmic coding, 70k SWE, 61k code understanding",
+  "summary": "Prime Intellect crowdsourced DeepSeek-R1 traces with verification_info and score columns across math, coding, SWE and more.",
+  "stages": [
+   "sft",
+   "rl"
+  ],
+  "languages": [
+   "python",
+   "multi"
+  ],
+  "tasks": [
+   "reasoning",
+   "competitive"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Filter by score and task_type for verified-correct traces or reuse problems with verification_info for RL.",
+  "caveats": "R1-generated; check DeepSeek license terms. Wide mix, many non-code rows.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"PrimeIntellect/SYNTHETIC-1\", split=\"train\")",
+  "released": "2025-02",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/PrimeIntellect/SYNTHETIC-1 apache-2.0, train=1994262"
+ },
+ {
+  "id": "eurus-2-rl-data",
+  "name": "Eurus-2-RL-Data",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/PRIME-RL/Eurus-2-RL-Data",
+  "extra_links": [],
+  "license": "MIT",
+  "size": "455k math + 26k coding problems (card)",
+  "summary": "PRIME RL training set: outcome-verifiable math answers and coding test cases from APPS, CodeContests, TACO and Codeforces, deduplicated.",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "competitive"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Early baseline mix for outcome-reward RL.",
+  "caveats": "Cleaning was mostly deduplication, so test quality is raw.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"PRIME-RL/Eurus-2-RL-Data\", split=\"train\")",
+  "released": "2025-02",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/PRIME-RL/Eurus-2-RL-Data (mit); README"
+ },
+ {
+  "id": "nemotron-rl-competitive-coding",
+  "name": "Nemotron-RL-coding-competitive_coding",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/nvidia/Nemotron-RL-coding-competitive_coding",
+  "extra_links": [
+   {
+    "label": "NeMo Gym",
+    "url": "https://github.com/NVIDIA-NeMo/Gym"
+   }
+  ],
+  "license": "CC-BY-SA-4.0 in card metadata, card text says CC-BY-4.0 (inconsistent)",
+  "size": "16,083 train rows in metadata; card text says 25k records, 7.62 GB",
+  "summary": "NeMo Gym RLVR set of Python competitive problems with unit tests from CodeContests and open-r1/codeforces.",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "competitive"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use with NeMo Gym or convert to verl format.",
+  "caveats": "License inconsistency and count mismatch between YAML and prose; confirm before redistribution. Tests are inlined, so about 5 GB.",
+  "load_snippet": null,
+  "released": "2025-07",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/nvidia/Nemotron-RL-coding-competitive_coding; README yaml"
+ },
+ {
+  "id": "kodcode",
+  "name": "KodCode-V1",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/KodCode/KodCode-V1",
+  "extra_links": [
+   {
+    "label": "Code",
+    "url": "https://github.com/KodCode-AI/KodCode"
+   }
+  ],
+  "license": "CC-BY-NC-4.0",
+  "size": "484,097 train (+3,335 use_with_caution)",
+  "summary": "Fully synthetic coding questions with solutions and pytest-style tests validated by execution; fields include gpt pass percentage and difficulty.",
+  "stages": [
+   "sft",
+   "rl"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation",
+   "testing"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use gpt_pass_percentage and gpt_difficulty to select medium difficulty for RL; tests are runnable.",
+  "caveats": "Non-commercial license. Generated with GPT-4 family so OpenAI terms may apply. Easier than competition sets.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"KodCode/KodCode-V1\", split=\"train\")",
+  "released": "2025-03",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/KodCode/KodCode-V1 (cc-by-nc-4.0, columns listed)"
+ },
+ {
+  "id": "rstar-coder",
+  "name": "rStar-Coder",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/microsoft/rStar-Coder",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2505.21297"
+   }
+  ],
+  "license": "CC-BY-4.0",
+  "size": "418K problems, 580K reasoning solutions (card)",
+  "summary": "Competitive problems with mutually verified test cases, with configs synthetic_sft, synthetic_rl, synthetic_rl_testcase, seed_sft, seed_testcase.",
+  "stages": [
+   "sft",
+   "rl"
+  ],
+  "languages": [
+   "python",
+   "multi"
+  ],
+  "tasks": [
+   "competitive",
+   "reasoning"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use synthetic_rl plus synthetic_rl_testcase for RL; seed_* configs have real problems.",
+  "caveats": "Test cases live in separate config, join by id. Large. Solutions from Qwen/DeepSeek models.",
+  "load_snippet": null,
+  "released": "2025-05",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/datasets/microsoft/rStar-Coder README (cc-by-4.0, configs)"
+ },
+ {
+  "id": "opencodereasoning",
+  "name": "OpenCodeReasoning",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/nvidia/OpenCodeReasoning",
+  "extra_links": [],
+  "license": "CC-BY-4.0",
+  "size": "735,255 rows across split_0 (567,850) and split_1 (167,405)",
+  "summary": "R1-generated reasoning solutions for competitive problems with difficulty column and source license column.",
+  "stages": [
+   "sft"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "competitive",
+   "reasoning"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use for SFT warm start before RL; join split_1 to original problems by index.",
+  "caveats": "split_1 lacks question text and needs reconstruction from source datasets.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"nvidia/OpenCodeReasoning\", \"split_0\", split=\"split_0\")",
+  "released": "2025-04",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/nvidia/OpenCodeReasoning (cc-by-4.0, config columns)"
+ },
+ {
+  "id": "livecodebench",
+  "name": "LiveCodeBench",
+  "kind": "benchmark",
+  "url": "https://github.com/LiveCodeBench/LiveCodeBench",
+  "extra_links": [],
+  "license": "MIT",
+  "size": "980 stars; problem releases dated by contest",
+  "summary": "Contamination-aware benchmark from LeetCode, AtCoder and Codeforces with problem release dates; DeepCoder used the lcbv5 train problems for RL.",
+  "stages": [
+   "eval",
+   "rl"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "competitive",
+   "generation"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Use date filtering to keep eval clean of your RL data.",
+  "caveats": "Repo last pushed 2025-07-16. Training on recent problems makes it unusable as eval.",
+  "load_snippet": null,
+  "released": "2024-03",
+  "checked": "2026-11-24",
+  "evidence": "github.com/LiveCodeBench/LiveCodeBench API (MIT)"
+ },
+ {
+  "id": "terminal-bench-2",
+  "name": "Terminal-Bench 2.0",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/harborframework/terminal-bench-2.0",
+  "extra_links": [
+   {
+    "label": "Repo",
+    "url": "https://github.com/harbor-framework/terminal-bench-2"
+   },
+   {
+    "label": "TB 3.0",
+    "url": "https://huggingface.co/datasets/harborframework/terminal-bench-3.0"
+   },
+   {
+    "label": "Terminal-Bench framework",
+    "url": "https://github.com/harbor-framework/terminal-bench"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "under 1K tasks (HF size category); read-only mirror",
+  "summary": "Hard terminal tasks in Harbor format (instruction, Docker environment, tests); official leaderboard at tbench.ai. Also terminal-bench 2.1, 3.0 and a science split on HF.",
+  "stages": [
+   "eval",
+   "rl"
+  ],
+  "languages": [
+   "bash",
+   "multi"
+  ],
+  "tasks": [
+   "terminal",
+   "agentic"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Run with Harbor; use as eval, and use Harbor task format to author RL tasks.",
+  "caveats": "Few tasks so not an RL pool; HF page is a mirror, primary repo is GitHub. Unofficial leaderboard warning on card.",
+  "load_snippet": null,
+  "released": "2025-2026",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/harborframework/terminal-bench-2.0 apache-2.0; github.com/harbor-framework/terminal-bench-2 Apache-2.0"
+ },
+ {
+  "id": "spider",
+  "name": "Spider",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/xlangai/spider",
+  "extra_links": [],
+  "license": "CC-BY-SA-4.0",
+  "size": "7,000 train + 1,034 validation",
+  "summary": "Cross-domain text-to-SQL; databases are executable SQLite so execution accuracy gives a reward.",
+  "stages": [
+   "sft",
+   "rl",
+   "eval"
+  ],
+  "languages": [
+   "sql"
+  ],
+  "tasks": [
+   "sql",
+   "generation"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Train GRPO with execution-match reward on SQLite, compare result sets.",
+  "caveats": "Saturated for strong models; the HF dataset has questions and gold SQL but SQLite databases come from the Spider site or a separate dataset.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"xlangai/spider\", \"spider\", split=\"train\")",
+  "released": "2018",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/xlangai/spider (cc-by-sa-4.0)"
+ },
+ {
+  "id": "bird-mini-dev",
+  "name": "BIRD mini-dev and BIRD-Critic",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/birdsql/bird_mini_dev",
+  "extra_links": [
+   {
+    "label": "BIRD-Critic",
+    "url": "https://huggingface.co/datasets/birdsql/bird-critic-1.0-sqlite"
+   },
+   {
+    "label": "Spider2",
+    "url": "https://github.com/xlang-ai/Spider2"
+   }
+  ],
+  "license": "CC-BY-SA-4.0",
+  "size": "bird_mini_dev (1K-10K rows by size category); BIRD-Critic SQLite also on HF",
+  "summary": "Harder, more realistic text-to-SQL with execution-based evaluation; BIRD-Critic covers SQL debugging with test cases.",
+  "stages": [
+   "eval",
+   "rl"
+  ],
+  "languages": [
+   "sql"
+  ],
+  "tasks": [
+   "sql",
+   "repair"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use BIRD train (birdsql/bird23-train-filtered) for execution-reward RL; mini-dev for eval.",
+  "caveats": "Exact row counts not read here. BIRD train is older and sometimes noisy. Execution match can be gamed by empty or equivalent result sets.",
+  "load_snippet": null,
+  "released": "2023-2025",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/birdsql/bird_mini_dev and bird-critic-1.0-sqlite (cc-by-sa-4.0)"
+ },
+ {
+  "id": "lean-workbook",
+  "name": "Lean Workbook",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/internlm/Lean-Workbook",
+  "extra_links": [
+   {
+    "label": "Proofs",
+    "url": "https://huggingface.co/datasets/Goedel-LM/Lean-workbook-proofs"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "10K-100K formalized problems (HF size category)",
+  "summary": "Auto-formalized competition-style problems in Lean 4, used for theorem-prover RL; Goedel-LM/Lean-workbook-proofs has 29,750 proofs.",
+  "stages": [
+   "sft",
+   "rl"
+  ],
+  "languages": [
+   "lean"
+  ],
+  "tasks": [
+   "formal",
+   "reasoning"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Verifier is the Lean 4 compiler (kimina-lean-server, Lean REPL); filter by pass rate.",
+  "caveats": "Auto-formalization noise: some statements trivial or false. Compiler checks proof validity only, not statement faithfulness.",
+  "load_snippet": null,
+  "released": "2024-06",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/internlm/Lean-Workbook (apache-2.0)"
+ },
+ {
+  "id": "kimina-prover-promptset",
+  "name": "Kimina-Prover-Promptset",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/project-numina/Kimina-Prover-Promptset",
+  "extra_links": [
+   {
+    "label": "Lean server",
+    "url": "https://github.com/project-numina/kimina-lean-server"
+   }
+  ],
+  "license": "none stated (API null)",
+  "size": "24,418 train statements",
+  "summary": "Lean 4 formal statements with natural-language versions used for Kimina-Prover RL.",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "lean"
+  ],
+  "tasks": [
+   "formal"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Pair with kimina-lean-server as verifier.",
+  "caveats": "No license on card. Project repo MIT for the server.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"project-numina/Kimina-Prover-Promptset\", split=\"train\")",
+  "released": "2025-08",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/project-numina/Kimina-Prover-Promptset (features, train=24418)"
+ },
+ {
+  "id": "numinamath-lean",
+  "name": "NuminaMath-LEAN",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/AI-MO/NuminaMath-LEAN",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "104,155 train rows",
+  "summary": "Competition problems with formal statements, ground-truth proofs and an rl_data field for Lean 4 training.",
+  "stages": [
+   "sft",
+   "rl"
+  ],
+  "languages": [
+   "lean"
+  ],
+  "tasks": [
+   "formal",
+   "reasoning"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use formal_statement with a Lean verifier; check rl_data to choose RL subsets.",
+  "caveats": "Not every row has a verified proof; the field semantics should be read from the card.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"AI-MO/NuminaMath-LEAN\", split=\"train\")",
+  "released": "2025-07",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/AI-MO/NuminaMath-LEAN (apache-2.0, train=104155)"
+ },
+ {
+  "id": "formalmath",
+  "name": "FormalMATH",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/SphereLab/FormalMATH-All",
+  "extra_links": [],
+  "license": "MIT",
+  "size": "size not verified",
+  "summary": "Large Lean 4 formal math benchmark spanning olympiad to undergraduate level.",
+  "stages": [
+   "eval",
+   "rl"
+  ],
+  "languages": [
+   "lean"
+  ],
+  "tasks": [
+   "formal"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Mainly an eval; subsets could feed RL if decontaminated.",
+  "caveats": "Row count not read from the API response. Eval use.",
+  "load_snippet": null,
+  "released": "2025-05",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/SphereLab/FormalMATH-All (mit)"
+ },
+ {
+  "id": "deepseek-proverbench",
+  "name": "DeepSeek-ProverBench",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/deepseek-ai/DeepSeek-ProverBench",
+  "extra_links": [
+   {
+    "label": "Prover V1 data",
+    "url": "https://huggingface.co/datasets/deepseek-ai/DeepSeek-Prover-V1"
+   }
+  ],
+  "license": "not stated in API",
+  "size": "size not verified",
+  "summary": "Held-out Lean 4 problems for DeepSeek-Prover-V2; related V1 training data deepseek-ai/DeepSeek-Prover-V1 has license 'other'.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "lean"
+  ],
+  "tasks": [
+   "formal"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Eval only.",
+  "caveats": "License field absent; DeepSeek-Prover-V1 data license is 'other' (see card).",
+  "load_snippet": null,
+  "released": "2025-04",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/deepseek-ai/DeepSeek-ProverBench; DeepSeek-Prover-V1 license other"
+ },
+ {
+  "id": "verina",
+  "name": "Verina",
+  "kind": "benchmark",
+  "url": "https://huggingface.co/datasets/sunblaze-ucb/verina",
+  "extra_links": [
+   {
+    "label": "Code",
+    "url": "https://github.com/sunblaze-ucb/verina"
+   },
+   {
+    "label": "VerinaPlus",
+    "url": "https://huggingface.co/datasets/XiaoyangLiu-sjtu/VerinaPlus"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "189 tasks",
+  "summary": "Verifiable code generation in Lean: each task has description, Lean code, signature, tests and rejected inputs; evaluates code, spec and proof generation. VerinaLite/Plus variants exist.",
+  "stages": [
+   "eval",
+   "rl"
+  ],
+  "languages": [
+   "lean"
+  ],
+  "tasks": [
+   "formal",
+   "generation"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Good for training models to write code plus specs plus proofs, with Lean checker as verifier.",
+  "caveats": "Tiny (189 tasks). Treat as eval or few-shot.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"sunblaze-ucb/verina\", split=\"train\")",
+  "released": "2025",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/sunblaze-ucb/verina (apache-2.0, train=189); github.com/sunblaze-ucb/verina Apache-2.0"
+ },
+ {
+  "id": "clever",
+  "name": "CLEVER",
+  "kind": "benchmark",
+  "url": "https://github.com/trishullab/clever",
+  "extra_links": [],
+  "license": "MIT",
+  "size": "50 stars; pushed 2026-08-26",
+  "summary": "Lean benchmark for end-to-end verified code generation: specification and implementation proven correct.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "lean"
+  ],
+  "tasks": [
+   "formal"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Use as eval or hard RL seed.",
+  "caveats": "Small benchmark. Dataset ids on HF not verified so only GitHub listed.",
+  "load_snippet": null,
+  "released": "2025",
+  "checked": "2026-11-24",
+  "evidence": "github.com/trishullab/clever API (MIT)"
+ },
+ {
+  "id": "reasoning-gym",
+  "name": "Reasoning Gym",
+  "kind": "environment",
+  "url": "https://github.com/open-thought/reasoning-gym",
+  "extra_links": [
+   {
+    "label": "Nemotron-RL-ReasoningGym-v1",
+    "url": "https://huggingface.co/datasets/nvidia/Nemotron-RL-ReasoningGym-v1"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "1,557 stars; pushed 2026-11-09",
+  "summary": "Library of procedurally generated reasoning tasks with programmatic verifiers, including code and algorithm tasks; infinite data.",
+  "stages": [
+   "rl",
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "reasoning"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use for generic verifiable RL and curriculum via its difficulty settings; NVIDIA published a Nemotron-RL-ReasoningGym dataset.",
+  "caveats": "Not mostly code; coverage of real programming is limited.",
+  "load_snippet": null,
+  "released": "2025",
+  "checked": "2026-11-24",
+  "evidence": "github.com/open-thought/reasoning-gym API (Apache-2.0)"
+ },
+ {
+  "id": "prime-verifiers",
+  "name": "verifiers (Prime Intellect)",
+  "kind": "tool",
+  "url": "https://github.com/PrimeIntellect-ai/verifiers",
+  "extra_links": [
+   {
+    "label": "Community environments",
+    "url": "https://github.com/PrimeIntellect-ai/prime-environments"
+   }
+  ],
+  "license": "MIT",
+  "size": "4,805 stars; pushed 2026-11-24",
+  "summary": "Library for RL environments and evals; environments are installable packages and can be published to the Prime Intellect Environments Hub.",
+  "stages": [
+   "rl",
+   "tooling",
+   "eval"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "tool-use",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Write a reward function plus dataset as an environment, then train with prime-rl or other trainers.",
+  "caveats": "API changes quickly. Hub environments are community made with light review.",
+  "load_snippet": null,
+  "released": "2025",
+  "checked": "2026-11-24",
+  "evidence": "github.com/PrimeIntellect-ai/verifiers API (MIT)"
+ },
+ {
+  "id": "openenv",
+  "name": "OpenEnv",
+  "kind": "tool",
+  "url": "https://github.com/meta-pytorch/OpenEnv",
+  "extra_links": [],
+  "license": "BSD-3-Clause",
+  "size": "2,889 stars; pushed 2026-11-24",
+  "summary": "Interface library for RL post-training with environments (Gym-style API served over containers).",
+  "stages": [
+   "rl",
+   "tooling"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Wrap code execution tasks as containerized envs to plug into TRL or other trainers.",
+  "caveats": "Repo moved under the openenv org; early API.",
+  "load_snippet": null,
+  "released": "2025",
+  "checked": "2026-11-24",
+  "evidence": "github.com/meta-pytorch/OpenEnv API (BSD-3-Clause)"
+ },
+ {
+  "id": "nemo-gym",
+  "name": "NVIDIA NeMo Gym",
+  "kind": "tool",
+  "url": "https://github.com/NVIDIA-NeMo/Gym",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "1,353 stars; pushed 2026-11-24",
+  "summary": "Framework and collection of RLVR environments and datasets (competitive coding, SWE) for NeMo-RL and other trainers.",
+  "stages": [
+   "rl",
+   "tooling"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "agentic",
+   "competitive"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use its datasets (Nemotron-RL-*) and verifier servers with NeMo-RL.",
+  "caveats": "Dataset licenses vary per dataset.",
+  "load_snippet": null,
+  "released": "2025",
+  "checked": "2026-11-24",
+  "evidence": "github.com/NVIDIA-NeMo/Gym API (Apache-2.0)"
+ },
+ {
+  "id": "harbor",
+  "name": "Harbor",
+  "kind": "tool",
+  "url": "https://github.com/harbor-framework/harbor",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "7,412 stars; pushed 2026-11-24",
+  "summary": "Framework for running agents in containerized tasks: used for Terminal-Bench 2, SWE-bench adapters, and RL rollouts; supports Docker and cloud sandboxes.",
+  "stages": [
+   "eval",
+   "rl",
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "terminal",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use as the harness to run tasks in parallel and collect reward from test.sh output.",
+  "caveats": "Repo renamed from laude-institute/harbor; old URL redirects.",
+  "load_snippet": null,
+  "released": "2025",
+  "checked": "2026-11-24",
+  "evidence": "github.com/harbor-framework/harbor API (Apache-2.0)"
+ },
+ {
+  "id": "fw-verl",
+  "name": "verl",
+  "kind": "tool",
+  "url": "https://github.com/volcengine/verl",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "24338 stars; pushed 2026-11-24",
+  "summary": "HybridFlow RL post-training framework; supports GRPO/PPO with rule-based and sandbox code rewards. Verified active on GitHub API.",
+  "stages": [
+   "rl",
+   "tooling"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Pick based on scale and ecosystem; write or plug a code-execution reward that calls a sandbox (SandboxFusion, Harbor, Docker).",
+  "caveats": "Feature claims reflect repo description only; check docs for exact code-reward support. Stars and push date as of 2026-11-24.",
+  "load_snippet": null,
+  "released": "2023-2025",
+  "checked": "2026-11-24",
+  "evidence": "github.com/volcengine/verl API (license Apache-2.0, pushed 2026-11-24, archived false)"
+ },
+ {
+  "id": "fw-trl",
+  "name": "TRL",
+  "kind": "tool",
+  "url": "https://github.com/huggingface/trl",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "19813 stars; pushed 2026-11-24",
+  "summary": "Hugging Face RL library with GRPO trainer and custom reward functions. Verified active on GitHub API.",
+  "stages": [
+   "rl",
+   "tooling"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Pick based on scale and ecosystem; write or plug a code-execution reward that calls a sandbox (SandboxFusion, Harbor, Docker).",
+  "caveats": "Feature claims reflect repo description only; check docs for exact code-reward support. Stars and push date as of 2026-11-24.",
+  "load_snippet": null,
+  "released": "2023-2025",
+  "checked": "2026-11-24",
+  "evidence": "github.com/huggingface/trl API (license Apache-2.0, pushed 2026-11-24, archived false)"
+ },
+ {
+  "id": "fw-openrlhf",
+  "name": "OpenRLHF",
+  "kind": "tool",
+  "url": "https://github.com/OpenRLHF/OpenRLHF",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "10180 stars; pushed 2026-11-03",
+  "summary": "Ray-based scalable RL framework with PPO/REINFORCE variants and agentic mode. Verified active on GitHub API.",
+  "stages": [
+   "rl",
+   "tooling"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Pick based on scale and ecosystem; write or plug a code-execution reward that calls a sandbox (SandboxFusion, Harbor, Docker).",
+  "caveats": "Feature claims reflect repo description only; check docs for exact code-reward support. Stars and push date as of 2026-11-24.",
+  "load_snippet": null,
+  "released": "2023-2025",
+  "checked": "2026-11-24",
+  "evidence": "github.com/OpenRLHF/OpenRLHF API (license Apache-2.0, pushed 2026-11-03, archived false)"
+ },
+ {
+  "id": "fw-skyrl",
+  "name": "SkyRL",
+  "kind": "tool",
+  "url": "https://github.com/NovaSky-AI/SkyRL",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "2569 stars; pushed 2026-11-23",
+  "summary": "Modular full-stack RL library including SkyRL-gym environments and multi-turn SWE training. Verified active on GitHub API.",
+  "stages": [
+   "rl",
+   "tooling"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Pick based on scale and ecosystem; write or plug a code-execution reward that calls a sandbox (SandboxFusion, Harbor, Docker).",
+  "caveats": "Feature claims reflect repo description only; check docs for exact code-reward support. Stars and push date as of 2026-11-24.",
+  "load_snippet": null,
+  "released": "2023-2025",
+  "checked": "2026-11-24",
+  "evidence": "github.com/NovaSky-AI/SkyRL API (license Apache-2.0, pushed 2026-11-23, archived false)"
+ },
+ {
+  "id": "fw-prime-rl",
+  "name": "prime-rl",
+  "kind": "tool",
+  "url": "https://github.com/PrimeIntellect-ai/prime-rl",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "2276 stars; pushed 2026-11-24",
+  "summary": "Async agentic RL training at scale; integrates with verifiers environments. Verified active on GitHub API.",
+  "stages": [
+   "rl",
+   "tooling"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Pick based on scale and ecosystem; write or plug a code-execution reward that calls a sandbox (SandboxFusion, Harbor, Docker).",
+  "caveats": "Feature claims reflect repo description only; check docs for exact code-reward support. Stars and push date as of 2026-11-24.",
+  "load_snippet": null,
+  "released": "2023-2025",
+  "checked": "2026-11-24",
+  "evidence": "github.com/PrimeIntellect-ai/prime-rl API (license Apache-2.0, pushed 2026-11-24, archived false)"
+ },
+ {
+  "id": "fw-rllm",
+  "name": "rLLM",
+  "kind": "tool",
+  "url": "https://github.com/rllm-org/rllm",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "5933 stars; pushed 2026-10-16",
+  "summary": "Framework behind DeepCoder and SWE agent RL runs. Verified active on GitHub API.",
+  "stages": [
+   "rl",
+   "tooling"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Pick based on scale and ecosystem; write or plug a code-execution reward that calls a sandbox (SandboxFusion, Harbor, Docker).",
+  "caveats": "Feature claims reflect repo description only; check docs for exact code-reward support. Stars and push date as of 2026-11-24.",
+  "load_snippet": null,
+  "released": "2023-2025",
+  "checked": "2026-11-24",
+  "evidence": "github.com/rllm-org/rllm API (license Apache-2.0, pushed 2026-10-16, archived false)"
+ },
+ {
+  "id": "fw-areal",
+  "name": "AReaL",
+  "kind": "tool",
+  "url": "https://github.com/inclusionAI/AReaL",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "5930 stars; pushed 2026-11-24",
+  "summary": "Async RL system for LLM agents (repo now under areal-project). Verified active on GitHub API.",
+  "stages": [
+   "rl",
+   "tooling"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Pick based on scale and ecosystem; write or plug a code-execution reward that calls a sandbox (SandboxFusion, Harbor, Docker).",
+  "caveats": "Feature claims reflect repo description only; check docs for exact code-reward support. Stars and push date as of 2026-11-24.",
+  "load_snippet": null,
+  "released": "2023-2025",
+  "checked": "2026-11-24",
+  "evidence": "github.com/inclusionAI/AReaL API (license Apache-2.0, pushed 2026-11-24, archived false)"
+ },
+ {
+  "id": "fw-nemo-rl",
+  "name": "NeMo-RL",
+  "kind": "tool",
+  "url": "https://github.com/NVIDIA-NeMo/RL",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "2160 stars; pushed 2026-11-24",
+  "summary": "NVIDIA scalable RL toolkit, pairs with NeMo Gym. Verified active on GitHub API.",
+  "stages": [
+   "rl",
+   "tooling"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Pick based on scale and ecosystem; write or plug a code-execution reward that calls a sandbox (SandboxFusion, Harbor, Docker).",
+  "caveats": "Feature claims reflect repo description only; check docs for exact code-reward support. Stars and push date as of 2026-11-24.",
+  "load_snippet": null,
+  "released": "2023-2025",
+  "checked": "2026-11-24",
+  "evidence": "github.com/NVIDIA-NeMo/RL API (license Apache-2.0, pushed 2026-11-24, archived false)"
+ },
+ {
+  "id": "fw-slime",
+  "name": "slime",
+  "kind": "tool",
+  "url": "https://github.com/THUDM/slime",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "8866 stars; pushed 2026-11-05",
+  "summary": "SGLang-based RL scaling framework from Tsinghua/Z.ai. Verified active on GitHub API.",
+  "stages": [
+   "rl",
+   "tooling"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Pick based on scale and ecosystem; write or plug a code-execution reward that calls a sandbox (SandboxFusion, Harbor, Docker).",
+  "caveats": "Feature claims reflect repo description only; check docs for exact code-reward support. Stars and push date as of 2026-11-24.",
+  "load_snippet": null,
+  "released": "2023-2025",
+  "checked": "2026-11-24",
+  "evidence": "github.com/THUDM/slime API (license Apache-2.0, pushed 2026-11-05, archived false)"
+ },
+ {
+  "id": "fw-roll",
+  "name": "ROLL",
+  "kind": "tool",
+  "url": "https://github.com/alibaba/ROLL",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "3459 stars; pushed 2026-11-24",
+  "summary": "Alibaba RL library with agentic pipelines. Verified active on GitHub API.",
+  "stages": [
+   "rl",
+   "tooling"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Pick based on scale and ecosystem; write or plug a code-execution reward that calls a sandbox (SandboxFusion, Harbor, Docker).",
+  "caveats": "Feature claims reflect repo description only; check docs for exact code-reward support. Stars and push date as of 2026-11-24.",
+  "load_snippet": null,
+  "released": "2023-2025",
+  "checked": "2026-11-24",
+  "evidence": "github.com/alibaba/ROLL API (license Apache-2.0, pushed 2026-11-24, archived false)"
+ },
+ {
+  "id": "fw-open-instruct",
+  "name": "Open-Instruct (AI2)",
+  "kind": "tool",
+  "url": "https://github.com/allenai/open-instruct",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "3947 stars; pushed 2026-11-24",
+  "summary": "AI2 post-training codebase including RLVR (GRPO) training. Verified active on GitHub API.",
+  "stages": [
+   "rl",
+   "tooling"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Pick based on scale and ecosystem; write or plug a code-execution reward that calls a sandbox (SandboxFusion, Harbor, Docker).",
+  "caveats": "Feature claims reflect repo description only; check docs for exact code-reward support. Stars and push date as of 2026-11-24.",
+  "load_snippet": null,
+  "released": "2023-2025",
+  "checked": "2026-11-24",
+  "evidence": "github.com/allenai/open-instruct API (license Apache-2.0, pushed 2026-11-24, archived false)"
+ },
+ {
+  "id": "sb-docker",
+  "name": "Docker (Moby)",
+  "kind": "tool",
+  "url": "https://github.com/moby/moby",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "72,309 stars; pushed 2026-11-24",
+  "summary": "Container runtime standard for SWE task images; shares the host kernel so isolation is weaker than microVMs. Default for SWE-bench, SWE-smith, R2E-Gym.",
+  "stages": [
+   "rl",
+   "eval",
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "terminal",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use for isolating code execution during RL reward computation; match isolation strength to trust level and throughput needs.",
+  "caveats": "Note stars/push as of 2026-11-24. Isolation and licensing details beyond the GitHub API fields not individually verified; NOASSERTION means GitHub could not detect an SPDX id. Docker-class containers share the host kernel.",
+  "load_snippet": null,
+  "released": "n/a",
+  "checked": "2026-11-24",
+  "evidence": "github.com/moby/moby API (license Apache-2.0, pushed 2026-11-24)"
+ },
+ {
+  "id": "sb-podman",
+  "name": "Podman",
+  "kind": "tool",
+  "url": "https://github.com/containers/podman",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "33,382 stars; pushed 2026-11-24",
+  "summary": "Daemonless, rootless Docker-compatible container engine; useful where a root daemon is not allowed.",
+  "stages": [
+   "rl",
+   "eval",
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "terminal",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use for isolating code execution during RL reward computation; match isolation strength to trust level and throughput needs.",
+  "caveats": "Note stars/push as of 2026-11-24. Isolation and licensing details beyond the GitHub API fields not individually verified; NOASSERTION means GitHub could not detect an SPDX id. Docker-class containers share the host kernel.",
+  "load_snippet": null,
+  "released": "n/a",
+  "checked": "2026-11-24",
+  "evidence": "github.com/containers/podman API (license Apache-2.0, pushed 2026-11-24)"
+ },
+ {
+  "id": "sb-apptainer",
+  "name": "Apptainer",
+  "kind": "tool",
+  "url": "https://github.com/apptainer/apptainer",
+  "extra_links": [],
+  "license": "NOASSERTION (BSD-style per project, verify)",
+  "size": "2,030 stars; pushed 2026-11-20",
+  "summary": "HPC container runtime that runs without root; needed on clusters like Berzelius where Docker is unavailable. SWE images must be converted from Docker.",
+  "stages": [
+   "rl",
+   "eval",
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "terminal",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use for isolating code execution during RL reward computation; match isolation strength to trust level and throughput needs.",
+  "caveats": "Note stars/push as of 2026-11-24. Isolation and licensing details beyond the GitHub API fields not individually verified; NOASSERTION means GitHub could not detect an SPDX id. Docker-class containers share the host kernel.",
+  "load_snippet": null,
+  "released": "n/a",
+  "checked": "2026-11-24",
+  "evidence": "github.com/apptainer/apptainer API (license NOASSERTION (BSD-style per project, verify), pushed 2026-11-20)"
+ },
+ {
+  "id": "sb-firecracker",
+  "name": "Firecracker",
+  "kind": "tool",
+  "url": "https://github.com/firecracker-microvm/firecracker",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "38,197 stars; pushed 2026-11-24",
+  "summary": "microVM monitor: strongest isolation for untrusted code at scale; underpins E2B-style sandboxes.",
+  "stages": [
+   "rl",
+   "eval",
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "terminal",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use for isolating code execution during RL reward computation; match isolation strength to trust level and throughput needs.",
+  "caveats": "Note stars/push as of 2026-11-24. Isolation and licensing details beyond the GitHub API fields not individually verified; NOASSERTION means GitHub could not detect an SPDX id. Docker-class containers share the host kernel.",
+  "load_snippet": null,
+  "released": "n/a",
+  "checked": "2026-11-24",
+  "evidence": "github.com/firecracker-microvm/firecracker API (license Apache-2.0, pushed 2026-11-24)"
+ },
+ {
+  "id": "sb-gvisor",
+  "name": "gVisor",
+  "kind": "tool",
+  "url": "https://github.com/google/gvisor",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "20,102 stars; pushed 2026-11-24",
+  "summary": "User-space kernel for container isolation as an OCI runtime (runsc).",
+  "stages": [
+   "rl",
+   "eval",
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "terminal",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use for isolating code execution during RL reward computation; match isolation strength to trust level and throughput needs.",
+  "caveats": "Note stars/push as of 2026-11-24. Isolation and licensing details beyond the GitHub API fields not individually verified; NOASSERTION means GitHub could not detect an SPDX id. Docker-class containers share the host kernel.",
+  "load_snippet": null,
+  "released": "n/a",
+  "checked": "2026-11-24",
+  "evidence": "github.com/google/gvisor API (license Apache-2.0, pushed 2026-11-24)"
+ },
+ {
+  "id": "sb-kata",
+  "name": "Kata Containers",
+  "kind": "tool",
+  "url": "https://github.com/kata-containers/kata-containers",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "9,212 stars; pushed 2026-11-24",
+  "summary": "Containers in lightweight VMs; Kubernetes friendly.",
+  "stages": [
+   "rl",
+   "eval",
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "terminal",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use for isolating code execution during RL reward computation; match isolation strength to trust level and throughput needs.",
+  "caveats": "Note stars/push as of 2026-11-24. Isolation and licensing details beyond the GitHub API fields not individually verified; NOASSERTION means GitHub could not detect an SPDX id. Docker-class containers share the host kernel.",
+  "load_snippet": null,
+  "released": "n/a",
+  "checked": "2026-11-24",
+  "evidence": "github.com/kata-containers/kata-containers API (license Apache-2.0, pushed 2026-11-24)"
+ },
+ {
+  "id": "sb-bubblewrap",
+  "name": "bubblewrap",
+  "kind": "tool",
+  "url": "https://github.com/containers/bubblewrap",
+  "extra_links": [],
+  "license": "NOASSERTION (LGPL per upstream, verify)",
+  "size": "9,611 stars; pushed 2026-11-24",
+  "summary": "Unprivileged namespace sandbox used by Flatpak; lightweight wrapper for running test commands.",
+  "stages": [
+   "rl",
+   "eval",
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "terminal",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use for isolating code execution during RL reward computation; match isolation strength to trust level and throughput needs.",
+  "caveats": "Note stars/push as of 2026-11-24. Isolation and licensing details beyond the GitHub API fields not individually verified; NOASSERTION means GitHub could not detect an SPDX id. Docker-class containers share the host kernel.",
+  "load_snippet": null,
+  "released": "n/a",
+  "checked": "2026-11-24",
+  "evidence": "github.com/containers/bubblewrap API (license NOASSERTION (LGPL per upstream, verify), pushed 2026-11-24)"
+ },
+ {
+  "id": "sb-nsjail",
+  "name": "nsjail",
+  "kind": "tool",
+  "url": "https://github.com/google/nsjail",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "4,204 stars; pushed 2026-11-20",
+  "summary": "Namespace/seccomp/cgroup jail for process isolation.",
+  "stages": [
+   "rl",
+   "eval",
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "terminal",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use for isolating code execution during RL reward computation; match isolation strength to trust level and throughput needs.",
+  "caveats": "Note stars/push as of 2026-11-24. Isolation and licensing details beyond the GitHub API fields not individually verified; NOASSERTION means GitHub could not detect an SPDX id. Docker-class containers share the host kernel.",
+  "load_snippet": null,
+  "released": "n/a",
+  "checked": "2026-11-24",
+  "evidence": "github.com/google/nsjail API (license Apache-2.0, pushed 2026-11-20)"
+ },
+ {
+  "id": "sb-isolate",
+  "name": "isolate",
+  "kind": "tool",
+  "url": "https://github.com/ioi/isolate",
+  "extra_links": [],
+  "license": "NOASSERTION (GPL per upstream, verify)",
+  "size": "1,506 stars; pushed 2026-10-26",
+  "summary": "IOI contest sandbox with cgroup limits; used by Judge0.",
+  "stages": [
+   "rl",
+   "eval",
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "terminal",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use for isolating code execution during RL reward computation; match isolation strength to trust level and throughput needs.",
+  "caveats": "Note stars/push as of 2026-11-24. Isolation and licensing details beyond the GitHub API fields not individually verified; NOASSERTION means GitHub could not detect an SPDX id. Docker-class containers share the host kernel.",
+  "load_snippet": null,
+  "released": "n/a",
+  "checked": "2026-11-24",
+  "evidence": "github.com/ioi/isolate API (license NOASSERTION (GPL per upstream, verify), pushed 2026-10-26)"
+ },
+ {
+  "id": "sb-piston",
+  "name": "Piston",
+  "kind": "tool",
+  "url": "https://github.com/engineer-man/piston",
+  "extra_links": [],
+  "license": "MIT",
+  "size": "2,845 stars; pushed 2026-07-31",
+  "summary": "Multi-language code execution engine with API.",
+  "stages": [
+   "rl",
+   "eval",
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "terminal",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use for isolating code execution during RL reward computation; match isolation strength to trust level and throughput needs.",
+  "caveats": "Note stars/push as of 2026-11-24. Isolation and licensing details beyond the GitHub API fields not individually verified; NOASSERTION means GitHub could not detect an SPDX id. Docker-class containers share the host kernel.",
+  "load_snippet": null,
+  "released": "n/a",
+  "checked": "2026-11-24",
+  "evidence": "github.com/engineer-man/piston API (license MIT, pushed 2026-07-31)"
+ },
+ {
+  "id": "sb-judge0",
+  "name": "Judge0",
+  "kind": "tool",
+  "url": "https://github.com/judge0/judge0",
+  "extra_links": [],
+  "license": "GPL-3.0",
+  "size": "4,520 stars; pushed 2026-10-26",
+  "summary": "Online judge API with sandboxed execution for 60+ languages.",
+  "stages": [
+   "rl",
+   "eval",
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "terminal",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use for isolating code execution during RL reward computation; match isolation strength to trust level and throughput needs.",
+  "caveats": "Note stars/push as of 2026-11-24. Isolation and licensing details beyond the GitHub API fields not individually verified; NOASSERTION means GitHub could not detect an SPDX id. Docker-class containers share the host kernel.",
+  "load_snippet": null,
+  "released": "n/a",
+  "checked": "2026-11-24",
+  "evidence": "github.com/judge0/judge0 API (license GPL-3.0, pushed 2026-10-26)"
+ },
+ {
+  "id": "sb-sandboxfusion",
+  "name": "SandboxFusion",
+  "kind": "tool",
+  "url": "https://github.com/bytedance/SandboxFusion",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "1,082 stars; pushed 2026-07-14",
+  "summary": "ByteDance code sandbox with many languages and datasets, built for RL code rewards; used to build CodeContests+.",
+  "stages": [
+   "rl",
+   "eval",
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "terminal",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use for isolating code execution during RL reward computation; match isolation strength to trust level and throughput needs.",
+  "caveats": "Note stars/push as of 2026-11-24. Isolation and licensing details beyond the GitHub API fields not individually verified; NOASSERTION means GitHub could not detect an SPDX id. Docker-class containers share the host kernel.",
+  "load_snippet": null,
+  "released": "n/a",
+  "checked": "2026-11-24",
+  "evidence": "github.com/bytedance/SandboxFusion API (license Apache-2.0, pushed 2026-07-14)"
+ },
+ {
+  "id": "sb-e2b",
+  "name": "E2B",
+  "kind": "tool",
+  "url": "https://github.com/e2b-dev/E2B",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "14,996 stars; pushed 2026-11-23",
+  "summary": "Open-source cloud sandboxes for agents (isolation technology not verified here).",
+  "stages": [
+   "rl",
+   "eval",
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "terminal",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use for isolating code execution during RL reward computation; match isolation strength to trust level and throughput needs.",
+  "caveats": "Note stars/push as of 2026-11-24. Isolation and licensing details beyond the GitHub API fields not individually verified; NOASSERTION means GitHub could not detect an SPDX id. Docker-class containers share the host kernel.",
+  "load_snippet": null,
+  "released": "n/a",
+  "checked": "2026-11-24",
+  "evidence": "github.com/e2b-dev/E2B API (license Apache-2.0, pushed 2026-11-23)"
+ },
+ {
+  "id": "sb-modal",
+  "name": "Modal sandboxes (SDK)",
+  "kind": "tool",
+  "url": "https://github.com/modal-labs/modal-client",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "540 stars; pushed 2026-11-24",
+  "summary": "SDK for Modal, with Sandboxes for running untrusted code on demand; hosted service, SDK is open source.",
+  "stages": [
+   "rl",
+   "eval",
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "terminal",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use for isolating code execution during RL reward computation; match isolation strength to trust level and throughput needs.",
+  "caveats": "Note stars/push as of 2026-11-24. Isolation and licensing details beyond the GitHub API fields not individually verified; NOASSERTION means GitHub could not detect an SPDX id. Docker-class containers share the host kernel.",
+  "load_snippet": null,
+  "released": "n/a",
+  "checked": "2026-11-24",
+  "evidence": "github.com/modal-labs/modal-client API (license Apache-2.0, pushed 2026-11-24)"
+ },
+ {
+  "id": "sb-openhands",
+  "name": "OpenHands",
+  "kind": "tool",
+  "url": "https://github.com/OpenHands/OpenHands",
+  "extra_links": [],
+  "license": "MIT",
+  "size": "94,230 stars; pushed 2026-11-24",
+  "summary": "Agent platform and runtime with docker sandbox; used to generate SWE-Gym and Nemotron trajectories.",
+  "stages": [
+   "rl",
+   "eval",
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "terminal",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use for isolating code execution during RL reward computation; match isolation strength to trust level and throughput needs.",
+  "caveats": "Note stars/push as of 2026-11-24. Isolation and licensing details beyond the GitHub API fields not individually verified; NOASSERTION means GitHub could not detect an SPDX id. Docker-class containers share the host kernel.",
+  "load_snippet": null,
+  "released": "n/a",
+  "checked": "2026-11-24",
+  "evidence": "github.com/OpenHands/OpenHands API (license MIT, pushed 2026-11-24)"
+ },
+ {
+  "id": "sb-swe-agent",
+  "name": "SWE-agent",
+  "kind": "tool",
+  "url": "https://github.com/SWE-agent/SWE-agent",
+  "extra_links": [],
+  "license": "MIT",
+  "size": "20,866 stars; pushed 2026-11-23",
+  "summary": "Princeton agent harness for GitHub issue tasks.",
+  "stages": [
+   "rl",
+   "eval",
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "terminal",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use for isolating code execution during RL reward computation; match isolation strength to trust level and throughput needs.",
+  "caveats": "Note stars/push as of 2026-11-24. Isolation and licensing details beyond the GitHub API fields not individually verified; NOASSERTION means GitHub could not detect an SPDX id. Docker-class containers share the host kernel.",
+  "load_snippet": null,
+  "released": "n/a",
+  "checked": "2026-11-24",
+  "evidence": "github.com/SWE-agent/SWE-agent API (license MIT, pushed 2026-11-23)"
+ },
+ {
+  "id": "sb-mini-swe-agent",
+  "name": "mini-swe-agent",
+  "kind": "tool",
+  "url": "https://github.com/SWE-agent/mini-swe-agent",
+  "extra_links": [],
+  "license": "MIT",
+  "size": "10,042 stars; pushed 2026-11-23",
+  "summary": "Roughly 100-line bash-only agent; simple harness for RL rollouts.",
+  "stages": [
+   "rl",
+   "eval",
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "terminal",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use for isolating code execution during RL reward computation; match isolation strength to trust level and throughput needs.",
+  "caveats": "Note stars/push as of 2026-11-24. Isolation and licensing details beyond the GitHub API fields not individually verified; NOASSERTION means GitHub could not detect an SPDX id. Docker-class containers share the host kernel.",
+  "load_snippet": null,
+  "released": "n/a",
+  "checked": "2026-11-24",
+  "evidence": "github.com/SWE-agent/mini-swe-agent API (license MIT, pushed 2026-11-23)"
+ },
+ {
+  "id": "sb-bigcode-eval",
+  "name": "bigcode-evaluation-harness",
+  "kind": "tool",
+  "url": "https://github.com/bigcode-project/bigcode-evaluation-harness",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "1,063 stars; pushed 2025-07-22",
+  "summary": "Code LLM eval harness that executes untrusted generations; README provides Dockerfiles for evaluating in containers 'for security and reproducibility' and supports generating on GPUs then executing elsewhere.",
+  "stages": [
+   "rl",
+   "eval",
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "terminal",
+   "agentic"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use for isolating code execution during RL reward computation; match isolation strength to trust level and throughput needs.",
+  "caveats": "Note stars/push as of 2026-11-24. Isolation and licensing details beyond the GitHub API fields not individually verified; NOASSERTION means GitHub could not detect an SPDX id. Docker-class containers share the host kernel.",
+  "load_snippet": null,
+  "released": "n/a",
+  "checked": "2026-11-24",
+  "evidence": "github.com/bigcode-project/bigcode-evaluation-harness API (license Apache-2.0, pushed 2025-07-22)"
+ }
+]

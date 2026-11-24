@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GitHub Code (CodeParrot): Dataset | Renaissance Labs Code</title>
+<meta name="description" content="BigQuery-derived GitHub dump with repo, path, language and license per file; used for CodeParrot.">
+<link rel="canonical" href="https://code.renaissancelabs.eu/r/github-code/">
+<meta property="og:title" content="GitHub Code (CodeParrot): Dataset | Renaissance Labs Code"><meta property="og:description" content="BigQuery-derived GitHub dump with repo, path, language and license per file; used for CodeParrot."><meta property="og:url" content="https://code.renaissancelabs.eu/r/github-code/"><meta property="og:type" content="website">
+<meta property="og:image" content="https://code.renaissancelabs.eu/assets/og/r-github-code.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="GitHub Code (CodeParrot): Dataset | Renaissance Labs Code"><meta property="og:site_name" content="Renaissance Labs Code">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://code.renaissancelabs.eu/assets/og/r-github-code.jpg"><meta name="twitter:title" content="GitHub Code (CodeParrot): Dataset | Renaissance Labs Code"><meta name="twitter:description" content="BigQuery-derived GitHub dump with repo, path, language and license per file; used for CodeParrot."><meta name="theme-color" content="#121311">
+<link rel="icon" href="/assets/favicon.png">
+<link rel="stylesheet" href="/styles.css?v=a7072e73">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+  <a class="brand" href="/"><img src="/assets/mark.png" alt=""><span>Renaissance Labs &middot; Code</span></a>
+  <nav><a href="/catalog/" aria-current="page">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/pitfalls/">Pitfalls</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
+  <button class="theme" id="theme" type="button" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+</header>
+<main id="main">
+<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/catalog/">Catalog</a> / <a href="/stage/pretrain/">Data</a></div>
+<span class="eyebrow">Dataset &middot; 2022-10</span><h1>GitHub Code (CodeParrot)</h1><p class="lede">BigQuery-derived GitHub dump with repo, path, language and license per file; used for CodeParrot.</p></div>
+<div class="layout"><div class="prose">
+<h2>How to use it</h2><p>Small-scale experiments; filter by licenses and languages through the loading script options.</p>
+<h2>Caveats</h2><p>Includes copyleft code (GPL etc.), not for permissive-only policies without filtering. 2022-era, no dedup, benchmark contamination likely. Uses a loading script (trust_remote_code).</p>
+<div class="callout warn"><b>License</b>This entry is not plainly permissive (family: mixed or per-file). Read the license on the source page before using it for training or for a product.</div><div class="codebox"><div class="lab"><span>load</span><button class="copy" type="button">Copy</button></div><pre><span class="k">from</span> datasets <span class="k">import</span> load_dataset
+ds = load_dataset(<span class="s">&quot;codeparrot/github-code&quot;</span>, streaming=<span class="k">True</span>, split=<span class="s">&quot;train&quot;</span>, licenses=[<span class="s">&quot;mit&quot;</span>,<span class="s">&quot;isc&quot;</span>])</pre></div>
+<h2>Related</h2><ul><li><a href="/r/codellama-70b/">Code Llama 70B (legacy)</a>: Meta&#x27;s 2024 code Llama; included for historical comparison...</li><li><a href="/r/codestral-22b/">Codestral-22B-v0.1</a>: Mistral&#x27;s 2024 code model; weights open for research and testing...</li><li><a href="/r/common-pile-stackv2/">Common Pile: Stack v2 (openly licensed)</a>: Stack v2 filtered to openly licensed repos (all detected licenses on the Blue Oak list), part of the Common...</li><li><a href="/r/common-pile-stackv2-edu/">Common Pile: Stack v2 edu filtered</a>: Educational-quality subset of the openly licensed Stack v2 used for Comma...</li><li><a href="/r/paper-deepseek-coder/">DeepSeek-Coder</a>: Repo-level pretraining data construction (dependency-ordered files) and fill-in-the-middle for code...</li><li><a href="/r/paper-deepseek-coder-v2/">DeepSeek-Coder-V2</a>: Continued pretraining of a MoE on code and math tokens to reach closed-model-level code results at...</li></ul>
+</div><aside class="aside"><div class="panel"><h3>At a glance</h3><dl>
+<dt>Source</dt><dd><a href="https://huggingface.co/datasets/codeparrot/github-code">huggingface.co/datasets/codeparrot/github-code</a></dd>
+<dt>License</dt><dd>license:other; per-file license field per repo (mix of permissive and copyleft)</dd><dt>Size</dt><dd>115M files, 32 languages, 1 TB (per card)</dd>
+<dt>Stage</dt><dd><a class="pill st st-pretrain" href="/stage/pretrain/">Data</a></dd>
+<dt>Languages</dt><dd>multi</dd><dt>Tasks</dt><dd>Completion and fill-in-the-middle</dd><dt>Difficulty</dt><dd>intro</dd>
+<dt>Checked</dt><dd>2026-11-24</dd></dl></div>
+
+<div class="panel"><h3>Evidence</h3><p class="mono">huggingface.co/api/datasets/codeparrot/github-code license:other; README</p></div></aside></div></div></div>
+</main>
+<footer class="wrap foot">
+  <a class="brand" href="https://renaissancelabs.eu"><img src="/assets/mark.png" alt="">Renaissance Labs</a>
+  <div class="foot-links"><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
+</footer>
+<script src="/app.js?v=a7072e73" defer></script>
+</body>
+</html>

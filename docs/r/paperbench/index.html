@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PaperBench: Benchmark | Renaissance Labs Code</title>
+<meta name="description" content="Agents replicate ML papers from scratch; rubric-graded by an LLM judge. Also ported to inspect_evals (paperbench).">
+<link rel="canonical" href="https://code.renaissancelabs.eu/r/paperbench/">
+<meta property="og:title" content="PaperBench: Benchmark | Renaissance Labs Code"><meta property="og:description" content="Agents replicate ML papers from scratch; rubric-graded by an LLM judge. Also ported to inspect_evals (paperbench)."><meta property="og:url" content="https://code.renaissancelabs.eu/r/paperbench/"><meta property="og:type" content="website">
+<meta property="og:image" content="https://code.renaissancelabs.eu/assets/og/r-paperbench.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="PaperBench: Benchmark | Renaissance Labs Code"><meta property="og:site_name" content="Renaissance Labs Code">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://code.renaissancelabs.eu/assets/og/r-paperbench.jpg"><meta name="twitter:title" content="PaperBench: Benchmark | Renaissance Labs Code"><meta name="twitter:description" content="Agents replicate ML papers from scratch; rubric-graded by an LLM judge. Also ported to inspect_evals (paperbench)."><meta name="theme-color" content="#121311">
+<link rel="icon" href="/assets/favicon.png">
+<link rel="stylesheet" href="/styles.css?v=a7072e73">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+  <a class="brand" href="/"><img src="/assets/mark.png" alt=""><span>Renaissance Labs &middot; Code</span></a>
+  <nav><a href="/catalog/" aria-current="page">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/pitfalls/">Pitfalls</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
+  <button class="theme" id="theme" type="button" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+</header>
+<main id="main">
+<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/catalog/">Catalog</a> / <a href="/stage/eval/">Eval</a></div>
+<span class="eyebrow">Benchmark &middot; 2025-04</span><h1>PaperBench</h1><p class="lede">Agents replicate ML papers from scratch; rubric-graded by an LLM judge. Also ported to inspect_evals (paperbench).</p></div>
+<div class="layout"><div class="prose">
+<h2>How to use it</h2><p>Niche research-agent eval; very expensive.</p>
+<h2>Caveats</h2><p>Not execution-only: scoring uses an LLM judge with author-co-developed rubrics. License of the official data not verified here.</p>
+<div class="callout warn"><b>License</b>This entry is not plainly permissive (family: unknown, read the source). Read the license on the source page before using it for training or for a product.</div>
+<h2>Related</h2><ul><li><a href="/r/commit0/">Commit0</a>: Agent must implement a library from its spec using interactive unit tests; measures long-form spec...</li><li><a href="/r/mle-bench/">MLE-bench</a>: Agents train models, prepare data and run experiments on real Kaggle competitions, graded against human...</li><li><a href="/r/swe-bench/">SWE-bench (full)</a>: Real GitHub issue plus repository; the agent must produce a patch that passes the repo&#x27;s own tests...</li><li><a href="/r/swe-bench-train/">SWE-bench (full, train/test splits)</a>: The original 2,294-issue benchmark, now with eval_script, image and log_parser columns. A SWE-bench-Train...</li><li><a href="/r/swe-bench-lite/">SWE-bench Lite</a>: A cheaper filtered subset of SWE-bench for faster...</li><li><a href="/r/swe-bench-verified/">SWE-bench Verified</a>: 500-task subset screened by human annotators for solvable, well-specified problems; long the headline agentic...</li></ul>
+</div><aside class="aside"><div class="panel"><h3>At a glance</h3><dl>
+<dt>Source</dt><dd><a href="https://arxiv.org/abs/2504.01848">arxiv.org/abs/2504.01848</a></dd>
+<dt>License</dt><dd>not verified</dd><dt>Size</dt><dd>20 ICML 2024 papers, 8,316 gradable subtasks</dd>
+<dt>Stage</dt><dd><a class="pill st st-eval" href="/stage/eval/">Eval</a></dd>
+<dt>Languages</dt><dd>python</dd><dt>Tasks</dt><dd>Agentic (multi-step, tools)</dd><dt>Difficulty</dt><dd>frontier</dd>
+<dt>Checked</dt><dd>2026-11-24</dd></dl></div>
+
+<div class="panel"><h3>Evidence</h3><p class="mono">arxiv.org/abs/2504.01848 abstract; inspect_evals src list</p></div></aside></div></div></div>
+</main>
+<footer class="wrap foot">
+  <a class="brand" href="https://renaissancelabs.eu"><img src="/assets/mark.png" alt="">Renaissance Labs</a>
+  <div class="foot-links"><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
+</footer>
+<script src="/app.js?v=a7072e73" defer></script>
+</body>
+</html>

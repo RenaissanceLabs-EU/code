@@ -1,0 +1,1625 @@
+[
+ {
+  "id": "the-stack-v3-train",
+  "name": "The Stack v3 (train)",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/HuggingFaceCode/stack-v3-train",
+  "extra_links": [
+   {
+    "label": "Dataset card",
+    "url": "https://huggingface.co/datasets/HuggingFaceCode/stack-v3-train"
+   }
+  ],
+  "license": "odc-by (dataset card); per-file source licenses recorded in license_type (permissive or no_license) and detected_licenses",
+  "size": "Training subset: 15.9 TB of source code, 713 languages, 173M repos, ~3.6T tokens (v3.1). Full corpus: 113.7 TB, 770 languages, 224M repos",
+  "summary": "Successor to The Stack v2: a direct GitHub crawl (cutoff 2025-08-07) with file contents inline, grouped by repository, near-deduplicated, quality filtered and PII redacted. Built for repo-level code pretraining.",
+  "stages": [
+   "pretrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion",
+   "repo-level"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Default open starting point for a fresh code pretraining run with repo context. Stream it first; there are no per-language configs, so filter files[].language yourself.",
+  "caveats": "Not gated, unlike v2. Files labeled no_license are included (non_permissive are excluded), so check your own policy on unlicensed code. Opt-out via Am I in The Stack, applied before each patch release. Excludes issues, PRs, Kaggle and docs that came with StarCoder2. v3.1 removed exact duplicates (4.9T to 3.6T tokens), so pin the version. stack-v3-full is an HF bucket, not a dataset, and is huge. Possible overlap with benchmark repos: decontaminate.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"HuggingFaceCode/stack-v3-train\", split=\"train\", streaming=True)\nfor repo in ds:\n    print(repo[\"repo_path\"], repo[\"num_files\"]); break",
+  "released": "2026-07",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/HuggingFaceCode/stack-v3-train cardData.license=odc-by; dataset card README (sizes, license_type, pipeline)"
+ },
+ {
+  "id": "the-stack-v2",
+  "name": "The Stack v2",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/bigcode/the-stack-v2",
+  "extra_links": [
+   {
+    "label": "StarCoder 2 and The Stack v2 paper",
+    "url": "https://arxiv.org/abs/2402.19173"
+   },
+   {
+    "label": "Software Heritage legal",
+    "url": "https://www.softwareheritage.org/legal/"
+   }
+  ],
+  "license": "gated (auto): BigCode terms; license:other; per-file licenses vary (see card)",
+  "size": "Full 67.5 TB, dedup 32.1 TB, train 2.0 TB / ~550B tokens, 618 languages (figures from The Stack v3 card comparison table)",
+  "summary": "StarCoder2 training corpus built on the Software Heritage archive (2023), with per-file license labels. The HF release holds metadata and SWH blob ids; contents come from the SWH S3 bucket.",
+  "stages": [
+   "pretrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion",
+   "repo-level"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use the train-smol-ids or train-full-ids variants for the StarCoder2 mix, or the dedup variant for custom filtering. Must accept terms and fetch file contents separately from Software Heritage.",
+  "caveats": "Gated; accepting BigCode terms is required. Contents are not in the HF repo (need AWS access to SWH S3 and your own download tooling). License labels are heuristic (ScanCode), license laundering exists. Opt-outs only honored as of release date. Superseded by v3 for fresher data. Card could not be read without login, so sizes cite the v3 card.",
+  "load_snippet": null,
+  "released": "2024-02",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/bigcode/the-stack-v2 gated=auto license:other; sizes from HuggingFaceCode/stack-v3-train README table"
+ },
+ {
+  "id": "the-stack-v2-dedup",
+  "name": "The Stack v2 (dedup)",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/bigcode/the-stack-v2-dedup",
+  "extra_links": [],
+  "license": "gated (auto): BigCode terms; license:other; per-file licenses vary",
+  "size": "32.1 TB dedup (per The Stack v3 card table); HF repo storage ~185 GB of metadata",
+  "summary": "Near-deduplicated variant of The Stack v2 (metadata plus SWH blob ids) for building custom training mixes.",
+  "stages": [
+   "pretrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use when you want to apply your own quality and license filters on top of a deduplicated base.",
+  "caveats": "Same gating, SWH download and license caveats as The Stack v2. Dedup is MinHash-based and cross-file, not repo-aware.",
+  "load_snippet": null,
+  "released": "2024-02",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/bigcode/the-stack-v2-dedup (gated, usedStorage 185GB)"
+ },
+ {
+  "id": "the-stack-v2-train-smol-ids",
+  "name": "The Stack v2 train (smol ids)",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/bigcode/the-stack-v2-train-smol-ids",
+  "extra_links": [],
+  "license": "gated (auto): BigCode terms; license:other",
+  "size": "HF repo storage ~33 GB (ids and metadata); exact token count not verified",
+  "summary": "Id list for the smaller training subset of The Stack v2 used in StarCoder2 training; a lightweight route to a few-hundred-billion-token mix.",
+  "stages": [
+   "pretrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Start here if the full v2 is too large; download contents from SWH using the ids.",
+  "caveats": "Ids only; contents need Software Heritage S3. Gated. Subset definition not verified from the card (could not read).",
+  "load_snippet": null,
+  "released": "2024-02",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/bigcode/the-stack-v2-train-smol-ids (gated, usedStorage 33GB)"
+ },
+ {
+  "id": "the-stack-v1",
+  "name": "The Stack v1",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/bigcode/the-stack",
+  "extra_links": [
+   {
+    "label": "StarCoder paper",
+    "url": "https://arxiv.org/abs/2305.06161"
+   }
+  ],
+  "license": "gated (auto): BigCode terms; license:other; permissive source licenses, per-file license field",
+  "size": "Full 6.4 TB, dedup 2.9 TB, 358 languages, ~200B train tokens (from The Stack v3 card table)",
+  "summary": "First BigCode corpus of permissively licensed GitHub code (2022 cutoff), used for StarCoder and SantaCoder.",
+  "stages": [
+   "pretrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion"
+  ],
+  "difficulty": "intro",
+  "how_to_use": "Mostly superseded by v2/v3; useful for reproducing older models or small experiments (the-stack-smol).",
+  "caveats": "Gated; old 2022 cutoff; heavy overlap with other corpora; benchmark contamination (HumanEval-style) needs decontamination. Card is gated so sizes cite the v3 card.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"bigcode/the-stack\", data_dir=\"data/python\", split=\"train\", streaming=True)",
+  "released": "2022-11",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/bigcode/the-stack gated=auto license:other; v3 README table"
+ },
+ {
+  "id": "starcoderdata",
+  "name": "StarCoderData",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/bigcode/starcoderdata",
+  "extra_links": [
+   {
+    "label": "StarCoder paper",
+    "url": "https://arxiv.org/abs/2305.06161"
+   }
+  ],
+  "license": "gated (auto): BigCode terms; license:other",
+  "size": "HF repo storage ~311 GB; token count not verified from card",
+  "summary": "The StarCoder (v1) training set: filtered code from The Stack plus GitHub issues, commits and Jupyter, in ready-to-train form.",
+  "stages": [
+   "pretrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion"
+  ],
+  "difficulty": "intro",
+  "how_to_use": "Handy ready-made 250B-token-scale code corpus for small models; widely used in TinyLlama-style runs.",
+  "caveats": "Gated and card unreadable here, so size and composition not independently verified. 2022-era code, contamination risk.",
+  "load_snippet": null,
+  "released": "2023-05",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/bigcode/starcoderdata gated=auto usedStorage 311GB"
+ },
+ {
+  "id": "starcoder2data-extras",
+  "name": "StarCoder2 data extras",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/bigcode/starcoder2data-extras",
+  "extra_links": [
+   {
+    "label": "StarCoder 2 paper",
+    "url": "https://arxiv.org/abs/2402.19173"
+   }
+  ],
+  "license": "not stated in card (HF license field unset); components carry their own licenses (e.g. Stack Overflow CC-BY-SA, Wikipedia, arXiv)",
+  "size": "12 configs: arxiv 1.56M docs (89 GB), issues 15.5M (31 GB), stackoverflow 10.4M (36 GB), wikipedia 6.6M, kaggle 580k, documentation 60k, ir_cpp 2.9M (102 GB), ir_python/rust/low_resource, owm 6.3M, lhq 7.0M",
+  "summary": "The non-code parts of the StarCoder2 mix: arXiv, GitHub issues, Stack Overflow, Wikipedia, Kaggle notebooks, docs, LLVM IR and OpenWebMath.",
+  "stages": [
+   "pretrain",
+   "midtrain"
+  ],
+  "languages": [
+   "multi",
+   "python"
+  ],
+  "tasks": [
+   "completion",
+   "reasoning"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Add selected configs (issues, stackoverflow, kaggle, ir_*) for code-adjacent text and math/reasoning breadth.",
+  "caveats": "License is unspecified at dataset level; arXiv and Stack Overflow texts have their own terms (CC-BY-SA requires attribution/share-alike). Verify before commercial use.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"bigcode/starcoder2data-extras\", \"kaggle\", split=\"train\", streaming=True)",
+  "released": "2024-02",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/bigcode/starcoder2data-extras cardData.dataset_info (rows and bytes)"
+ },
+ {
+  "id": "stack-edu",
+  "name": "Stack-Edu",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/HuggingFaceTB/stack-edu",
+  "extra_links": [
+   {
+    "label": "SmolLM2 paper",
+    "url": "https://arxiv.org/abs/2502.02737"
+   }
+  ],
+  "license": "not stated in dataset card (HF license field unset); underlying files are permissively licensed StarCoder2Data (see license_type and detected_licenses columns)",
+  "size": "15 language configs, 167,063,359 rows total (summed from card dataset_info); metadata only, ~34.8 GB",
+  "summary": "Educational-quality subset of StarCoder2Data, selected with language-specific classifiers (score and int_score columns), built for SmolLM2. Ships blob ids, not file text.",
+  "stages": [
+   "pretrain",
+   "midtrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion",
+   "generation"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Filter by int_score (check the SmolLM2 paper for the threshold used) and fetch content from Software Heritage by blob_id. Quality-over-quantity code source for mid-training and small models.",
+  "caveats": "Contains blob_id and metadata only; you must download file contents from Software Heritage S3. License inherited per file. Classifier labels are LLM-annotated and noisy at the margin. Only 15 languages.",
+  "load_snippet": null,
+  "released": "2025-03",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/HuggingFaceTB/stack-edu cardData.dataset_info; README features list"
+ },
+ {
+  "id": "smollm-corpus",
+  "name": "SmolLM-Corpus (Python-Edu, Cosmopedia, FineWeb-Edu-Dedup)",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/HuggingFaceTB/smollm-corpus",
+  "extra_links": [],
+  "license": "odc-by (cardData.license)",
+  "size": "Subsets python-edu, cosmopedia-v2, fineweb-edu-dedup (220B tokens per card); python-edu size not stated in card",
+  "summary": "Pretraining corpus of SmolLM v1 including Python-Edu: Python files scored 4 or more by an educational code classifier.",
+  "stages": [
+   "pretrain",
+   "midtrain"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "completion",
+   "generation"
+  ],
+  "difficulty": "intro",
+  "how_to_use": "Use python-edu as a compact high-quality Python source; Cosmopedia adds synthetic textbook text.",
+  "caveats": "Python only for code; Cosmopedia is synthetic from Mixtral, with that model's terms. Superseded for code by Stack-Edu. Python-edu includes file text; license inherited from source repos.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"HuggingFaceTB/smollm-corpus\", \"python-edu\", split=\"train\", streaming=True)",
+  "released": "2024-07",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/HuggingFaceTB/smollm-corpus license odc-by; README"
+ },
+ {
+  "id": "cosmopedia",
+  "name": "Cosmopedia",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/HuggingFaceTB/cosmopedia",
+  "extra_links": [
+   {
+    "label": "Generation code",
+    "url": "https://github.com/huggingface/cosmopedia"
+   }
+  ],
+  "license": "apache-2.0 (cardData.license)",
+  "size": "HF repo storage ~727 GB; token count not verified from card here",
+  "summary": "Large synthetic textbooks, blog posts and stories generated from seed web data; includes code-flavored subsets used in SmolLM pretraining.",
+  "stages": [
+   "pretrain",
+   "midtrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation",
+   "reasoning"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Mix small shares for educational-style text beside code corpora; see the repo for generation prompts.",
+  "caveats": "Synthetic from Mixtral-8x7B-Instruct, so check that model's terms of use. Hallucinated facts possible. Not code-specific.",
+  "load_snippet": null,
+  "released": "2024-03",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/HuggingFaceTB/cosmopedia license apache-2.0"
+ },
+ {
+  "id": "opc-annealing-corpus",
+  "name": "OpenCoder annealing corpus",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/OpenCoder-LLM/opc-annealing-corpus",
+  "extra_links": [
+   {
+    "label": "OpenCoder paper",
+    "url": "https://arxiv.org/abs/2411.04905"
+   }
+  ],
+  "license": "odc-by",
+  "size": "3 configs: algorithmic_corpus, synthetic_code_snippet, synthetic_qa; HF repo ~76 GB",
+  "summary": "Annealing-phase data of OpenCoder: algorithm-related code from The Stack v2 plus synthetic rewrites and synthetic QA seeded from it.",
+  "stages": [
+   "midtrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation",
+   "reasoning",
+   "competitive"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use in the final low-learning-rate annealing stage of a code run; the paper reports ablations showing the synthetic data helps.",
+  "caveats": "Synthetic parts were generated by LLMs (check the paper for which). Algorithmic subset is derived from Stack v2, with per-file license caveats. Token counts not stated in card.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"OpenCoder-LLM/opc-annealing-corpus\", \"algorithmic_corpus\", split=\"train\", streaming=True)",
+  "released": "2024-11",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/OpenCoder-LLM/opc-annealing-corpus license odc-by; README"
+ },
+ {
+  "id": "opc-fineweb-code-corpus",
+  "name": "OpenCoder FineWeb code corpus",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/OpenCoder-LLM/opc-fineweb-code-corpus",
+  "extra_links": [
+   {
+    "label": "OpenCoder paper",
+    "url": "https://arxiv.org/abs/2411.04905"
+   }
+  ],
+  "license": "mit (cardData.license); underlying web pages carry their own rights",
+  "size": "HF repo ~148 GB; token count not verified here",
+  "summary": "Code-related web pages recalled from FineWeb with a trained fastText-style recall pipeline (url, tag, text, file_path, dump fields).",
+  "stages": [
+   "pretrain",
+   "midtrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion",
+   "reasoning"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Add as code-related web text (tutorials, docs, Q&A) alongside raw repos.",
+  "caveats": "MIT label is on the dataset, not the scraped pages. Recall quality not independently evaluated. Name redirects from fineweb-code-corpus.",
+  "load_snippet": null,
+  "released": "2024-11",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/OpenCoder-LLM/opc-fineweb-code-corpus license mit; README features"
+ },
+ {
+  "id": "opc-fineweb-math-corpus",
+  "name": "OpenCoder FineWeb math corpus",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/OpenCoder-LLM/opc-fineweb-math-corpus",
+  "extra_links": [],
+  "license": "odc-by (cardData.license)",
+  "size": "HF repo ~9.9 GB",
+  "summary": "Math-related web pages recalled from FineWeb, used alongside code in OpenCoder pretraining.",
+  "stages": [
+   "pretrain",
+   "midtrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "reasoning"
+  ],
+  "difficulty": "intro",
+  "how_to_use": "Small math addition for code-model mid-training mixes.",
+  "caveats": "Small; token count not stated here. Web page rights vary.",
+  "load_snippet": null,
+  "released": "2024-11",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/OpenCoder-LLM/opc-fineweb-math-corpus license odc-by"
+ },
+ {
+  "id": "refinecode-meta",
+  "name": "RefineCode (metadata)",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/OpenCoder-LLM/RefineCode-code-corpus-meta",
+  "extra_links": [
+   {
+    "label": "OpenCoder paper",
+    "url": "https://arxiv.org/abs/2411.04905"
+   },
+   {
+    "label": "OpenCoder repo",
+    "url": "https://github.com/OpenCoder-llm/OpenCoder-llm"
+   }
+  ],
+  "license": "mit (metadata); underlying code per-repo licenses",
+  "size": "Metadata only: 336,845,710 files covered from The Stack v2 (about 50% of volume). Full RefineCode claimed: 960B tokens, 607 languages plus 75B web-recalled code tokens",
+  "summary": "Repo and path metadata to reproduce OpenCoder's RefineCode pretraining corpus, which applies 130+ language-specific heuristic rules.",
+  "stages": [
+   "pretrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use to reproduce RefineCode from Stack v2 blobs, or read the rule sets for your own cleaning pipeline.",
+  "caveats": "Only the Stack v2 half is covered; GitHub half withheld for legal reasons per card. You still need Stack v2 / SWH access to get code. Size claims are from the card, not recomputed.",
+  "load_snippet": null,
+  "released": "2024-11",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/OpenCoder-LLM/RefineCode-code-corpus-meta license mit; README"
+ },
+ {
+  "id": "nemotron-pretraining-code-v1",
+  "name": "Nemotron-Pretraining-Code-v1",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/nvidia/Nemotron-Pretraining-Code-v1",
+  "extra_links": [
+   {
+    "label": "Nemotron Nano 2 page",
+    "url": "https://research.nvidia.com/labs/adlr/NVIDIA-Nemotron-Nano-2"
+   }
+  ],
+  "license": "gated (manual): NVIDIA Data Agreement for Model Training; license:other",
+  "size": "175.1B tokens synthetic code plus metadata to rebuild ~747.4B tokens of curated GitHub code (per NVIDIA Nemotron Nano 2 page)",
+  "summary": "Code part of NVIDIA's Nemotron Nano 2 pretraining data: LLM-synthesized code and metadata for a permissively licensed GitHub subset.",
+  "stages": [
+   "pretrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion",
+   "generation"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use as the synthetic-code complement to a reconstructed GitHub corpus; follow the v2 and v3 incremental metadata releases.",
+  "caveats": "Manual gating and training-only agreement. Synthetic data derives from LLM outputs (check card for generator terms). GitHub portion is metadata: you must refetch files yourself. Card unreadable without access, sizes from NVIDIA research page.",
+  "load_snippet": null,
+  "released": "2025-08",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/nvidia/Nemotron-Pretraining-Code-v1 gated=manual license other; research.nvidia.com Nemotron Nano 2 page via search"
+ },
+ {
+  "id": "nemotron-pretraining-code-v2",
+  "name": "Nemotron-Pretraining-Code-v2",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/nvidia/Nemotron-Pretraining-Code-v2",
+  "extra_links": [],
+  "license": "gated (manual): NVIDIA Data Agreement for Model Training; license:other",
+  "size": "Adds metadata for 377M more filtered, deduplicated GitHub files (~340B tokens), per the v3 card summary; HF storage ~907 GB",
+  "summary": "Second Nemotron code pretraining release: more GitHub metadata plus synthetic code data.",
+  "stages": [
+   "pretrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion",
+   "generation"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use together with v1; v3 adds incremental files.",
+  "caveats": "Gated. Specific v2 composition not verified from the card (unreadable without access); figures are from search snippets of the v3 card.",
+  "load_snippet": null,
+  "released": "2025-12",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/nvidia/Nemotron-Pretraining-Code-v2 gated=manual; v3 card via search"
+ },
+ {
+  "id": "nemotron-pretraining-code-v3",
+  "name": "Nemotron-Pretraining-Code-v3 (metadata)",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/nvidia/Nemotron-Pretraining-Code-v3",
+  "extra_links": [],
+  "license": "cc-by-4.0 for the metadata; code files under their own licenses",
+  "size": "Nemotron-Code-Metadata: 146.3M new GitHub files (~173B tokens, cutoff 2025-09-30), 8.2 GB, columns commit_id and rel_path",
+  "summary": "Incremental metadata list of permissively licensed GitHub files for Nemotron 3 Ultra pretraining; use with v1/v2.",
+  "stages": [
+   "pretrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion",
+   "repo-level"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use to extend a v1/v2 corpus with 2025 data; you download files from GitHub yourself at the given commit.",
+  "caveats": "Metadata only, not code; GitHub rate limits and repo deletion cause attrition. Only incremental files, must be joined with v1 and v2. Not gated.",
+  "load_snippet": null,
+  "released": "2026-06",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/nvidia/Nemotron-Pretraining-Code-v3 license cc-by-4.0 gated=False; README"
+ },
+ {
+  "id": "nemotron-cc-code-v1",
+  "name": "Nemotron-CC-Code-v1",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/nvidia/Nemotron-CC-Code-v1",
+  "extra_links": [],
+  "license": "gated (manual): NVIDIA Data Agreement for Model Training; tags cc-by-4.0, cc-by-sa-4.0, gfdl, other",
+  "size": "HF repo ~563 GB; token count not verified (API card text describes a v2.1 pretraining dataset)",
+  "summary": "NVIDIA's code-from-web pretraining set: code-related pages from Common Crawl, reprocessed for training; part of the Nemotron pretraining family.",
+  "stages": [
+   "pretrain",
+   "midtrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion",
+   "reasoning"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Add as web-recalled code and technical text beside GitHub corpora.",
+  "caveats": "Mixed licenses incl. CC-BY-SA and GFDL (attribution/share-alike obligations). Gated, training-use-only agreement. Composition details could not be read without access.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/nvidia/Nemotron-CC-Code-v1 gated=manual cardData.license list"
+ },
+ {
+  "id": "dolma3-dolmino-mix-100b",
+  "name": "Dolma 3 Dolmino mix (100B)",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/allenai/dolma3_dolmino_mix-100B-1025",
+  "extra_links": [
+   {
+    "label": "Dolma 3 mix 6T",
+    "url": "https://huggingface.co/datasets/allenai/dolma3_mix-6T-1025"
+   }
+  ],
+  "license": "odc-by (cardData.license)",
+  "size": "100B-token mid-training mix; code parts: StackEdu FIM 10.0B tokens (16.2M docs), CraneCode Python synthetic 10.0B (11.7M docs), Code Meta-Reasoning 459M",
+  "summary": "Ai2 OLMo 3 mid-training mix with fill-in-the-middle Stack-Edu, synthetic Python (CraneCode) and code meta-reasoning data.",
+  "stages": [
+   "midtrain"
+  ],
+  "languages": [
+   "multi",
+   "python"
+  ],
+  "tasks": [
+   "completion",
+   "generation",
+   "reasoning"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use as a reference recipe for mid-training proportions (card lists mix percentages) and pull the code configs (stack_edu_fim, cranecode, code_meta_reasoning).",
+  "caveats": "Synthetic subsets come from LLMs with their own terms; check card. The mix percentages are Ai2's, not ablated for your model.",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"allenai/dolma3_dolmino_mix-100B-1025\", \"stack_edu_fim\", split=\"train\", streaming=True)",
+  "released": "2025-10",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/allenai/dolma3_dolmino_mix-100B-1025 license odc-by; README token table"
+ },
+ {
+  "id": "common-pile-stackv2",
+  "name": "Common Pile: Stack v2 (openly licensed)",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/common-pile/stackv2",
+  "extra_links": [
+   {
+    "label": "Common Pile paper",
+    "url": "https://arxiv.org/abs/2506.05209"
+   },
+   {
+    "label": "Edu-filtered version",
+    "url": "https://huggingface.co/datasets/common-pile/stackv2_edu_filtered"
+   }
+  ],
+  "license": "per-document licenses in metadata.license; only Blue Oak Council certified licenses kept (HF license field unset)",
+  "size": "218,364,133 documents, 4,774.7 GB UTF-8",
+  "summary": "Stack v2 filtered to openly licensed repos (all detected licenses on the Blue Oak list), part of the Common Pile v0.1 for license-clean pretraining.",
+  "stages": [
+   "pretrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Pick this when you need a documented, conservative license policy for code pretraining (see also stackv2_edu_filtered).",
+  "caveats": "License detection is inherited from Stack v2 and can be wrong (card warns of license laundering). Large (storage ~1.3 TB).",
+  "load_snippet": null,
+  "released": "2025-06",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/common-pile/stackv2; README statistics"
+ },
+ {
+  "id": "common-pile-stackv2-edu",
+  "name": "Common Pile: Stack v2 edu filtered",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/common-pile/stackv2_edu_filtered",
+  "extra_links": [],
+  "license": "per-document licenses; Blue Oak certified only (HF license field unset)",
+  "size": "69,588,607 documents, 255 GB UTF-8 (per card)",
+  "summary": "Educational-quality subset of the openly licensed Stack v2 used for Comma v0.1.",
+  "stages": [
+   "pretrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion"
+  ],
+  "difficulty": "intro",
+  "how_to_use": "Use as a small, license-conservative, quality-filtered code source.",
+  "caveats": "Same license-detection caveats as the raw set. The card text mislabels itself as the raw version in places; trust the statistics table.",
+  "load_snippet": null,
+  "released": "2025-06",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/common-pile/stackv2_edu_filtered; README statistics"
+ },
+ {
+  "id": "github-code",
+  "name": "GitHub Code (CodeParrot)",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/codeparrot/github-code",
+  "extra_links": [],
+  "license": "license:other; per-file license field per repo (mix of permissive and copyleft)",
+  "size": "115M files, 32 languages, 1 TB (per card)",
+  "summary": "BigQuery-derived GitHub dump with repo, path, language and license per file; used for CodeParrot.",
+  "stages": [
+   "pretrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion"
+  ],
+  "difficulty": "intro",
+  "how_to_use": "Small-scale experiments; filter by licenses and languages through the loading script options.",
+  "caveats": "Includes copyleft code (GPL etc.), not for permissive-only policies without filtering. 2022-era, no dedup, benchmark contamination likely. Uses a loading script (trust_remote_code).",
+  "load_snippet": "from datasets import load_dataset\nds = load_dataset(\"codeparrot/github-code\", streaming=True, split=\"train\", licenses=[\"mit\",\"isc\"])",
+  "released": "2022-10",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/codeparrot/github-code license:other; README"
+ },
+ {
+  "id": "github-code-clean",
+  "name": "GitHub Code Clean",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/codeparrot/github-code-clean",
+  "extra_links": [],
+  "license": "apache-2.0 (dataset label); per-file repo licenses still apply",
+  "size": "389 GB on HF; 3.39M files (2.94%) removed relative to github-code",
+  "summary": "Filtered github-code: average line length under 100, alphanumeric fraction over 0.25 and autogenerated files removed.",
+  "stages": [
+   "pretrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion"
+  ],
+  "difficulty": "intro",
+  "how_to_use": "Quick, cleaner variant for small runs.",
+  "caveats": "The Apache label does not relicense code inside; file licenses vary. No near-dedup.",
+  "load_snippet": null,
+  "released": "2022-07",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/codeparrot/github-code-clean license apache-2.0; README"
+ },
+ {
+  "id": "commitpack",
+  "name": "CommitPack",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/bigcode/commitpack",
+  "extra_links": [
+   {
+    "label": "OctoPack paper",
+    "url": "https://arxiv.org/abs/2308.07124"
+   },
+   {
+    "label": "Octopack repo",
+    "url": "https://github.com/bigcode-project/octopack"
+   }
+  ],
+  "license": "mit (dataset); commits from permissively licensed repos",
+  "size": "4 TB of commits, 350 languages",
+  "summary": "Commits (message, before/after code) scraped from permissively licensed GitHub repos; basis of OctoPack.",
+  "stages": [
+   "pretrain",
+   "midtrain",
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "repair",
+   "generation"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use for code-edit and commit-message data; use CommitPackFT for instruction-tuning.",
+  "caveats": "Huge (HF storage ~21 TB). Many commit messages are low quality; noisy. 2022-ish cutoff.",
+  "load_snippet": null,
+  "released": "2023-08",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/bigcode/commitpack license mit; README"
+ },
+ {
+  "id": "commitpackft",
+  "name": "CommitPackFT",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/bigcode/commitpackft",
+  "extra_links": [
+   {
+    "label": "OctoPack paper",
+    "url": "https://arxiv.org/abs/2308.07124"
+   }
+  ],
+  "license": "mit",
+  "size": "HF repo ~35 GB",
+  "summary": "Filtered CommitPack subset with high-quality commit messages that resemble instructions.",
+  "stages": [
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "repair",
+   "generation"
+  ],
+  "difficulty": "intro",
+  "how_to_use": "Instruction-tuning data for code editing.",
+  "caveats": "Still noisy; permissive source repos only.",
+  "load_snippet": null,
+  "released": "2023-08",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/bigcode/commitpackft license mit; commitpack README description"
+ },
+ {
+  "id": "jupyter-code-text-pairs",
+  "name": "Jupyter code-text pairs",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/bigcode/jupyter-code-text-pairs",
+  "extra_links": [],
+  "license": "not stated (HF license field unset; card is empty)",
+  "size": "9,305,991 examples, ~14.0 GB",
+  "summary": "Pairs of notebook markdown and code from Jupyter notebooks (BigCode).",
+  "stages": [
+   "pretrain",
+   "midtrain"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": "intro",
+  "how_to_use": "Optional code-with-explanation data.",
+  "caveats": "Card has no documentation; license and provenance unspecified, so verify before use.",
+  "load_snippet": null,
+  "released": "2023-02",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/bigcode/jupyter-code-text-pairs; README dataset_info"
+ },
+ {
+  "id": "github-jupyter-parsed",
+  "name": "GitHub Jupyter parsed",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/codeparrot/github-jupyter-parsed",
+  "extra_links": [],
+  "license": "license:other; each example has its repo's license (15 licenses per card)",
+  "size": "HF repo ~7.2 GB",
+  "summary": "Jupyter notebooks parsed to markdown (as text) and Python code cells only.",
+  "stages": [
+   "pretrain",
+   "midtrain"
+  ],
+  "languages": [
+   "python"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": "intro",
+  "how_to_use": "Small notebook-style data.",
+  "caveats": "Old (2022), BigQuery-sourced; license varies per example.",
+  "load_snippet": null,
+  "released": "2022-10",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/codeparrot/github-jupyter-parsed; README"
+ },
+ {
+  "id": "stack-github-issues",
+  "name": "The Stack GitHub issues",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/bigcode/the-stack-github-issues",
+  "extra_links": [],
+  "license": "gated (auto); license field unset",
+  "size": "HF repo ~67 GB",
+  "summary": "GitHub issue and discussion text collected for StarCoder-era training.",
+  "stages": [
+   "pretrain",
+   "midtrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "review",
+   "reasoning"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Include for natural-language-plus-code discussion data; also in starcoder2data-extras (issues, 15.5M rows).",
+  "caveats": "Gated and unreadable; contents not verified. Contains usernames and PII risk: needs redaction.",
+  "load_snippet": null,
+  "released": "2023-03",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/bigcode/the-stack-github-issues gated=auto"
+ },
+ {
+  "id": "stack-exchange-preferences",
+  "name": "H4 Stack Exchange preferences",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/HuggingFaceH4/stack-exchange-preferences",
+  "extra_links": [],
+  "license": "cc-by-sa-4.0",
+  "size": "~22 GB download",
+  "summary": "Stack Overflow questions with at least two scored answers, built for preference-model training and usable for LM training.",
+  "stages": [
+   "midtrain",
+   "preference"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation",
+   "reasoning"
+  ],
+  "difficulty": "intro",
+  "how_to_use": "Use for code Q&A text and preference pairs.",
+  "caveats": "CC-BY-SA share-alike. Reflects an older Stack Overflow dump (2023); answers can be outdated or wrong.",
+  "load_snippet": null,
+  "released": "2023-03",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/HuggingFaceH4/stack-exchange-preferences cardData.license; README"
+ },
+ {
+  "id": "finemath",
+  "name": "FineMath",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/HuggingFaceTB/finemath",
+  "extra_links": [
+   {
+    "label": "SmolLM2 paper",
+    "url": "https://arxiv.org/abs/2502.02737"
+   }
+  ],
+  "license": "odc-by",
+  "size": "several configs; e.g. finemath-4plus 6.7M docs per card",
+  "summary": "High-quality math web pages with step-by-step reasoning, used with code in SmolLM2 mid-training.",
+  "stages": [
+   "midtrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "reasoning"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Math component of code-model mid-training mixes.",
+  "caveats": "Web text rights vary; math not code.",
+  "load_snippet": null,
+  "released": "2024-12",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/HuggingFaceTB/finemath license odc-by; README dataset_info"
+ },
+ {
+  "id": "open-web-math",
+  "name": "OpenWebMath",
+  "kind": "dataset",
+  "url": "https://huggingface.co/datasets/open-web-math/open-web-math",
+  "extra_links": [],
+  "license": "odc-by (card); underlying pages unspecified",
+  "size": "6,315,233 documents, 56.7 GB",
+  "summary": "Math web documents extracted from Common Crawl with LaTeX preserved; used in StarCoder2 and many mixes.",
+  "stages": [
+   "pretrain",
+   "midtrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "reasoning"
+  ],
+  "difficulty": "intro",
+  "how_to_use": "Math/reasoning share of a code mid-training mix.",
+  "caveats": "Web rights vary. 2023 vintage.",
+  "load_snippet": null,
+  "released": "2023-10",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/datasets/open-web-math/open-web-math; README"
+ },
+ {
+  "id": "datatrove",
+  "name": "datatrove",
+  "kind": "tool",
+  "url": "https://github.com/huggingface/datatrove",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "3,433 GitHub stars (checked 2026-11-24)",
+  "summary": "Hugging Face's platform-agnostic data pipeline library: readers, filters, MinHash dedup, tokenization, and executors for local, Slurm and Ray.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [],
+  "difficulty": null,
+  "how_to_use": "Use to build the whole pipeline (language filter, heuristics, MinHash dedup, tokenize) in one framework; FineWeb and Stack v2 recipes were built on it.",
+  "caveats": "Pipelines can need large disk and CPU for dedup stages; read Slurm docs before scaling.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "GitHub API huggingface/datatrove license Apache-2.0, pushed 2026-11-24, not archived"
+ },
+ {
+  "id": "nemo-curator",
+  "name": "NeMo Curator",
+  "kind": "tool",
+  "url": "https://github.com/NVIDIA-NeMo/Curator",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "1,872 stars",
+  "summary": "GPU-accelerated data curation for LLMs: dedup (exact, fuzzy, semantic), quality classifiers, PII, decontamination, synthetic data.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [],
+  "difficulty": null,
+  "how_to_use": "Use when you have GPUs and need fast fuzzy dedup and classifier filtering at multi-TB scale.",
+  "caveats": "Best on NVIDIA GPUs with RAPIDS; setup is heavier than datatrove. Repo moved from NVIDIA/NeMo-Curator.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "GitHub API NVIDIA-NeMo/Curator license Apache-2.0, pushed 2026-11-24"
+ },
+ {
+  "id": "bigcode-dataset",
+  "name": "bigcode-dataset",
+  "kind": "tool",
+  "url": "https://github.com/bigcode-project/bigcode-dataset",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "503 stars; folders: preprocessing, pii, near_deduplication, decontamination, language_selection",
+  "summary": "The BigCode data repo: preprocessing filters, PII pipeline, near-deduplication and benchmark decontamination scripts for The Stack and StarCoder.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [],
+  "difficulty": null,
+  "how_to_use": "Reference implementation for code-specific filters, MinHash near-dedup and decontamination; copy ideas even if you use datatrove.",
+  "caveats": "Last push 2024-08, built for 2022-2023 pipelines; may need updating.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "GitHub API bigcode-project/bigcode-dataset; contents listing"
+ },
+ {
+  "id": "text-dedup",
+  "name": "text-dedup",
+  "kind": "tool",
+  "url": "https://github.com/ChenghaoMou/text-dedup",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "765 stars",
+  "summary": "Collection of deduplication methods for text: MinHash, SimHash, suffix array, Bloom filter, exact hash.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [],
+  "difficulty": null,
+  "how_to_use": "Use for medium-scale dedup on one machine or Spark; supports the BigCode-style MinHash recipe.",
+  "caveats": "Maintainer-scale project; pushed 2026-03. Check memory at large scale.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "GitHub API ChenghaoMou/text-dedup"
+ },
+ {
+  "id": "datasketch",
+  "name": "datasketch",
+  "kind": "tool",
+  "url": "https://github.com/ekzhu/datasketch",
+  "extra_links": [],
+  "license": "MIT",
+  "size": "2,981 stars",
+  "summary": "Python library for MinHash, LSH, LSH Forest and HyperLogLog used for near-duplicate detection.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [],
+  "difficulty": null,
+  "how_to_use": "Building block for custom MinHash-LSH dedup (the method used for Stack v2/v3 near-dedup).",
+  "caveats": "Pure Python is slow at web scale; use for prototypes or smaller corpora.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "GitHub API ekzhu/datasketch"
+ },
+ {
+  "id": "duplodocus",
+  "name": "duplodocus",
+  "kind": "tool",
+  "url": "https://github.com/allenai/duplodocus",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "99 stars",
+  "summary": "Ai2 Rust CLI for exact and MinHash dedup over large JSONL datasets.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [],
+  "difficulty": null,
+  "how_to_use": "Use for fast single-node dedup of JSONL shards.",
+  "caveats": "Young project; JSONL input only; less battle-tested.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "GitHub API allenai/duplodocus; README"
+ },
+ {
+  "id": "decon",
+  "name": "decon (Ai2)",
+  "kind": "tool",
+  "url": "https://github.com/allenai/decon",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "40 stars",
+  "summary": "Token-based decontamination tool that finds training documents containing eval instances and writes reports and cleaned datasets.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [],
+  "difficulty": null,
+  "how_to_use": "Run after dedup; load your eval sets (HumanEval, MBPP, LiveCodeBench etc.) and drop or report hits.",
+  "caveats": "Young project; coverage depends on the eval files you supply and on n-gram sampling settings.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "GitHub API allenai/decon; README"
+ },
+ {
+  "id": "dolma-toolkit",
+  "name": "Dolma toolkit",
+  "kind": "tool",
+  "url": "https://github.com/allenai/dolma",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "1,566 stars",
+  "summary": "Ai2 data toolkit: fast Rust tagger/mixer, Bloom filter dedup and mixing used for OLMo corpora.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [],
+  "difficulty": null,
+  "how_to_use": "Use the mixer/tagger for tagging, filtering and building data mixes by source proportion.",
+  "caveats": "Bloom filter dedup is approximate; fits web text better than code.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "GitHub API allenai/dolma"
+ },
+ {
+  "id": "data-juicer",
+  "name": "Data-Juicer",
+  "kind": "tool",
+  "url": "https://github.com/datajuicer/data-juicer",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "7,272 stars",
+  "summary": "One-stop data processing system with 100+ operators for text, code and multimodal data, including code filters and dedup.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [],
+  "difficulty": null,
+  "how_to_use": "Use when you want a configurable operator pipeline with built-in analysis.",
+  "caveats": "Large surface area; verify operator quality on your code data.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "GitHub API datajuicer/data-juicer"
+ },
+ {
+  "id": "dclm-baselines",
+  "name": "DCLM (DataComp-LM)",
+  "kind": "tool",
+  "url": "https://github.com/mlfoundations/dclm",
+  "extra_links": [],
+  "license": "MIT",
+  "size": "1,479 stars",
+  "summary": "Framework and baselines for data curation experiments including fastText quality classifier filtering of web text.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [],
+  "difficulty": null,
+  "how_to_use": "Borrow the fastText classifier-filtering recipe for code-web recall.",
+  "caveats": "Targeted at web text, not code repos.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "GitHub API mlfoundations/dclm"
+ },
+ {
+  "id": "scancode-toolkit",
+  "name": "ScanCode Toolkit",
+  "kind": "tool",
+  "url": "https://github.com/aboutcode-org/scancode-toolkit",
+  "extra_links": [],
+  "license": "NOASSERTION in GitHub API (mixed code and data licenses; verify in repo before redistribution)",
+  "size": "2,679 stars",
+  "summary": "License, copyright and package detection engine used by The Stack v2 and v3 for file-level license labels.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [],
+  "difficulty": null,
+  "how_to_use": "Run on license files then propagate to the directory subtree (the Stack v3 method).",
+  "caveats": "Slow on full corpora (so run on license-bearing files only). Detection is probabilistic and misses non-standard license text.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "GitHub API aboutcode-org/scancode-toolkit license NOASSERTION; Stack v3 README"
+ },
+ {
+  "id": "go-license-detector",
+  "name": "go-license-detector",
+  "kind": "tool",
+  "url": "https://github.com/src-d/go-license-detector",
+  "extra_links": [],
+  "license": "NOASSERTION in GitHub API (verify in repo)",
+  "size": "236 stars",
+  "summary": "Go library and CLI to detect open-source licenses in a repository's files, used in earlier The Stack pipelines.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [],
+  "difficulty": null,
+  "how_to_use": "Fast first-pass repo-level license detection.",
+  "caveats": "Last push 2023-06; unmaintained.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "GitHub API src-d/go-license-detector"
+ },
+ {
+  "id": "licensee",
+  "name": "Licensee",
+  "kind": "tool",
+  "url": "https://github.com/licensee/licensee",
+  "extra_links": [],
+  "license": "MIT",
+  "size": "922 stars",
+  "summary": "Ruby tool GitHub uses to detect a project's license from its LICENSE file.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [],
+  "difficulty": null,
+  "how_to_use": "Cross-check license labels against GitHub's own detection.",
+  "caveats": "Repo-level only; Ruby dependency.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "GitHub API licensee/licensee"
+ },
+ {
+  "id": "spdx-license-list-data",
+  "name": "SPDX license list data",
+  "kind": "tool",
+  "url": "https://github.com/spdx/license-list-data",
+  "extra_links": [],
+  "license": "not shown by GitHub API; verify in repo (data is CC0 per SPDX docs, unverified here)",
+  "size": "720 stars",
+  "summary": "Canonical machine-readable list of SPDX license ids and texts.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [],
+  "difficulty": null,
+  "how_to_use": "Normalize license strings to SPDX ids before applying an allowlist.",
+  "caveats": "Pair with the Blue Oak Council list for permissive policy.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "GitHub API spdx/license-list-data"
+ },
+ {
+  "id": "go-enry",
+  "name": "go-enry",
+  "kind": "tool",
+  "url": "https://github.com/go-enry/go-enry",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "633 stars",
+  "summary": "Fast Go port of GitHub Linguist for programming language detection; used by The Stack v3 for language, vendor and generated-file flags.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [],
+  "difficulty": null,
+  "how_to_use": "Use to assign languages and flag vendored/generated files at scale.",
+  "caveats": "Extension and heuristics based; ambiguous extensions (.h, .m) can misclassify.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "GitHub API go-enry/go-enry; Stack v3 README"
+ },
+ {
+  "id": "linguist",
+  "name": "GitHub Linguist",
+  "kind": "tool",
+  "url": "https://github.com/github-linguist/linguist",
+  "extra_links": [],
+  "license": "MIT",
+  "size": "13,804 stars",
+  "summary": "The reference language-detection library and language list behind GitHub's language stats.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [],
+  "difficulty": null,
+  "how_to_use": "Reference definitions for file-extension to language mapping.",
+  "caveats": "Ruby; go-enry is faster for pipelines.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "GitHub API github-linguist/linguist"
+ },
+ {
+  "id": "tree-sitter",
+  "name": "tree-sitter",
+  "kind": "tool",
+  "url": "https://github.com/tree-sitter/tree-sitter",
+  "extra_links": [],
+  "license": "MIT",
+  "size": "27,563 stars",
+  "summary": "Incremental parser with grammars for many languages; used to parse code for syntax filtering, AST-based chunking and function extraction.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [],
+  "difficulty": null,
+  "how_to_use": "Filter out unparsable files and chunk at function/class boundaries for training data.",
+  "caveats": "Grammar quality varies by language.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "GitHub API tree-sitter/tree-sitter"
+ },
+ {
+  "id": "presidio",
+  "name": "Microsoft Presidio",
+  "kind": "tool",
+  "url": "https://github.com/data-privacy-stack/presidio",
+  "extra_links": [],
+  "license": "MIT",
+  "size": "12,030 stars",
+  "summary": "PII detection and anonymization SDK with recognizers and custom operators (repo moved from microsoft/presidio).",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [],
+  "difficulty": null,
+  "how_to_use": "Useful for non-code text (issues, docs, Q&A) PII scrubbing alongside StarPII.",
+  "caveats": "Tuned for natural text, weaker on code identifiers; combine with code-specific detectors.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "GitHub API microsoft/presidio (redirect to data-privacy-stack/presidio)"
+ },
+ {
+  "id": "starpii",
+  "name": "StarPII (bigcode)",
+  "kind": "tool",
+  "url": "https://huggingface.co/bigcode/starpii",
+  "extra_links": [],
+  "license": "gated (auto) BigCode terms; license field unset in API",
+  "size": "HF model; downloads 86 (API)",
+  "summary": "BigCode's NER model for detecting names, emails, keys, passwords and IPs in code, used for The Stack v2/v3 PII redaction.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [],
+  "difficulty": null,
+  "how_to_use": "Run on files, replace spans with placeholders (<EMAIL>, <KEY>, <NAME>, <PASSWORD>) as in Stack v3.",
+  "caveats": "Gated; false positives/negatives exist; combine with regex secret scanners.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/bigcode/starpii gated=auto; Stack v3 README step 5"
+ },
+ {
+  "id": "stack-edu-classifiers",
+  "name": "Stack-Edu / Python-Edu classifiers",
+  "kind": "tool",
+  "url": "https://huggingface.co/HuggingFaceTB/stack-edu-classifier-python",
+  "extra_links": [],
+  "license": "not stated (HF license field unset); could not re-verify license",
+  "size": "One classifier per language (e.g. -python); sizes not checked",
+  "summary": "Educational-quality scorers for code (0-5 scale, LLM-annotated labels) used to build Stack-Edu and Python-Edu.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [],
+  "difficulty": null,
+  "how_to_use": "Score your own code corpora and keep high scores; thresholds from SmolLM2 paper.",
+  "caveats": "License unverified (API rate-limited); labels are LLM-generated and noisy.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/HuggingFaceTB/stack-edu-classifier-python (200 in earlier call); python-edu README"
+ },
+ {
+  "id": "tiktoken",
+  "name": "tiktoken",
+  "kind": "tool",
+  "url": "https://github.com/openai/tiktoken",
+  "extra_links": [],
+  "license": "MIT",
+  "size": "19,719 stars",
+  "summary": "Fast BPE tokenizer library; reference for counting tokens in mixes.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [],
+  "difficulty": null,
+  "how_to_use": "Count tokens with the target tokenizer, not a proxy, before setting mixing ratios.",
+  "caveats": "Different tokenizers inflate or shrink code token counts (indentation, identifiers); recount per tokenizer.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "GitHub API openai/tiktoken"
+ },
+ {
+  "id": "hf-tokenizers",
+  "name": "Hugging Face tokenizers",
+  "kind": "tool",
+  "url": "https://github.com/huggingface/tokenizers",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "11,296 stars",
+  "summary": "Rust tokenizer library for training BPE, Unigram and WordPiece vocabularies.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [],
+  "difficulty": null,
+  "how_to_use": "Train a code-aware BPE on your own mix (whitespace/digit handling matter for code).",
+  "caveats": "Tokenizer training data should match final mix, otherwise code merges are poor.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "GitHub API huggingface/tokenizers"
+ },
+ {
+  "id": "sentencepiece",
+  "name": "SentencePiece",
+  "kind": "tool",
+  "url": "https://github.com/google/sentencepiece",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "12,181 stars",
+  "summary": "Unsupervised tokenizer for BPE/unigram; many code and multilingual models use it.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [],
+  "difficulty": null,
+  "how_to_use": "Use with byte-fallback and explicit whitespace tokens for code.",
+  "caveats": "Default normalization can damage code whitespace; disable it.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "GitHub API google/sentencepiece"
+ },
+ {
+  "id": "nanotron",
+  "name": "nanotron",
+  "kind": "tool",
+  "url": "https://github.com/huggingface/nanotron",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "2,871 stars",
+  "summary": "Minimalistic large-model pretraining library from Hugging Face, used with datatrove-tokenized data.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [],
+  "difficulty": null,
+  "how_to_use": "Pair with datatrove tokenization for small and mid-scale pretraining experiments.",
+  "caveats": "Focus is on training, not data; scaling beyond mid-size is your job.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "GitHub API huggingface/nanotron"
+ },
+ {
+  "id": "software-heritage-graph",
+  "name": "Software Heritage archive and graph",
+  "kind": "tool",
+  "url": "https://archive.softwareheritage.org",
+  "extra_links": [
+   {
+    "label": "Legal",
+    "url": "https://www.softwareheritage.org/legal/"
+   },
+   {
+    "label": "swh-graph",
+    "url": "https://github.com/SoftwareHeritage/swh-graph"
+   }
+  ],
+  "license": "Archive content under original licenses; SWH terms of use apply (see legal page)",
+  "size": "Largest public archive of source code (size not verified here)",
+  "summary": "Universal archive of public source code; The Stack v2 sourced contents via SWH, and graph dataset/swh-graph tools allow bulk analysis.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [],
+  "difficulty": null,
+  "how_to_use": "Fetch blobs by SWHID/blob id with SWH bulk access; check the bulk download options and terms first.",
+  "caveats": "Check SWH terms of use for bulk access; license per file unverified; code can include removed-by-owner content.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "archive.softwareheritage.org HTTP 200; softwareheritage.org/legal HTTP 200; swh-graph GitHub API GPL-3.0"
+ },
+ {
+  "id": "lm-evaluation-harness",
+  "name": "EleutherAI lm-evaluation-harness",
+  "kind": "tool",
+  "url": "https://github.com/EleutherAI/lm-evaluation-harness",
+  "extra_links": [],
+  "license": "MIT",
+  "size": "14,529 stars",
+  "summary": "Standard eval harness with many benchmarks for tracking pretraining checkpoints.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [],
+  "difficulty": null,
+  "how_to_use": "Use to track code benchmark scores across mid-training checkpoints.",
+  "caveats": "Not a decontamination tool by itself; run n-gram overlap checks separately.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "GitHub API EleutherAI/lm-evaluation-harness"
+ },
+ {
+  "id": "bigcode-evaluation-harness",
+  "name": "BigCode Evaluation Harness",
+  "kind": "tool",
+  "url": "https://github.com/bigcode-project/bigcode-evaluation-harness",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "1,063 stars",
+  "summary": "Framework to evaluate code LLMs on HumanEval, MBPP, MultiPL-E and more.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [],
+  "difficulty": null,
+  "how_to_use": "Track code pretraining/mid-training progress with these benchmarks.",
+  "caveats": "Executes generated code; use a sandbox. Last push 2025-07.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "GitHub API bigcode-project/bigcode-evaluation-harness"
+ },
+ {
+  "id": "deduplicate-text-datasets",
+  "name": "deduplicate-text-datasets (suffix array)",
+  "kind": "tool",
+  "url": "https://github.com/google-research/deduplicate-text-datasets",
+  "extra_links": [
+   {
+    "label": "Deduplicating Training Data Makes Language Models Better",
+    "url": "https://arxiv.org/abs/2107.06499"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "1,272 stars; archived",
+  "summary": "Google's suffix-array exact substring dedup tool from the Lee et al. dedup paper.",
+  "stages": [
+   "tooling"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [],
+  "difficulty": null,
+  "how_to_use": "Use for exact substring dedup research; reference for the paper's method.",
+  "caveats": "Archived (last push 2024-07); needs large RAM and disk, see the memory caution before running.",
+  "load_snippet": null,
+  "released": null,
+  "checked": "2026-11-24",
+  "evidence": "GitHub API google-research/deduplicate-text-datasets archived=true"
+ }
+]

@@ -1,0 +1,256 @@
+[
+  {
+    "id": "trl-sft-python",
+    "title": "SFT on a code instruction dataset with TRL SFTTrainer",
+    "tool": "TRL",
+    "stage": "sft",
+    "language": "python",
+    "code": "from datasets import load_dataset\nfrom trl import SFTConfig, SFTTrainer\n\n# Magicoder OSS-Instruct has columns: lang, problem, solution (verified via the HF datasets server).\nds = load_dataset(\"ise-uiuc/Magicoder-OSS-Instruct-75K\", split=\"train\")\nds = ds.map(\n    lambda ex: {\"prompt\": ex[\"problem\"], \"completion\": ex[\"solution\"]},\n    remove_columns=ds.column_names,\n)  # standard prompt-completion format, see TRL dataset_formats\n\ntrainer = SFTTrainer(\n    model=\"Qwen/Qwen2.5-0.5B\",\n    args=SFTConfig(output_dir=\"out/sft-code\", packing=False),\n    train_dataset=ds,\n)\ntrainer.train()",
+    "notes": "SFTTrainer(model=<str>, train_dataset=...) and SFTConfig(packing=...) come from the TRL docs; prompt-completion datasets are supported. Not executed locally (TRL main requires Python >=3.11, local is 3.9, and training needs a GPU). The dataset is GPT-3.5 generated, so check OpenAI terms and license before commercial use. Swap model for your base model.",
+    "source_urls": [
+      "https://raw.githubusercontent.com/huggingface/trl/main/docs/source/sft_trainer.md",
+      "https://huggingface.co/datasets/ise-uiuc/Magicoder-OSS-Instruct-75K"
+    ],
+    "verified_how": "matched official docs on 2026-11-24; dataset columns checked via datasets-server; not executed",
+    "tool_version_seen": "TRL main (VERSION 1.19.0.dev0)"
+  },
+  {
+    "id": "trl-grpo-unit-test-reward",
+    "title": "GRPO with a unit-test execution reward (MBPP) in TRL",
+    "tool": "TRL",
+    "stage": "rl",
+    "language": "python",
+    "code": "import re\nfrom datasets import load_dataset\nfrom trl import GRPOConfig, GRPOTrainer\nfrom reward import run_tests  # from the subprocess reward snippet (code-reward-subprocess)\n\nds = load_dataset(\"google-research-datasets/mbpp\", \"full\", split=\"train\")\nds = ds.map(lambda ex: {\"prompt\": ex[\"text\"] + \"\\nReturn only a Python code block.\"})\n\n\ndef extract_code(text):\n    m = re.search(r\"```(?:python)?\\n(.*?)```\", text, re.S)\n    return m.group(1) if m else text\n\n\ndef unit_test_reward(completions, test_list, test_setup_code, **kwargs):\n    \"\"\"Called by GRPOTrainer with prompts, completions, completion_ids, trainer_state\n    plus every dataset column except prompt (here test_list, test_setup_code).\n    Must return one float per completion.\"\"\"\n    rewards = []\n    for completion, tests, setup in zip(completions, test_list, test_setup_code):\n        code = (setup or \"\") + \"\\n\" + extract_code(completion)\n        rewards.append(run_tests(code, \"\\n\".join(tests), timeout=5.0))\n    return rewards\n\n\ntrainer = GRPOTrainer(\n    model=\"Qwen/Qwen2.5-0.5B-Instruct\",\n    reward_funcs=unit_test_reward,\n    args=GRPOConfig(output_dir=\"out/grpo-mbpp\", num_generations=8, max_completion_length=512),\n    train_dataset=ds,\n)\ntrainer.train()",
+    "notes": "Reward signature (completions plus **kwargs carrying dataset columns, returns list of floats) is per the TRL GRPO docs; MBPP columns (text, code, test_list, test_setup_code) were checked on the HF datasets server. GRPOTrainer itself was not run locally (needs Python >=3.11 and a GPU); the run_tests helper was run locally. run_tests is not a sandbox, so run training workers inside a container with no network (see docker-hardened-sandbox). Reward hacking is possible: tests are visible in the dataset, so for real runs hold out tests the model never sees.",
+    "source_urls": [
+      "https://raw.githubusercontent.com/huggingface/trl/main/docs/source/grpo_trainer.md",
+      "https://huggingface.co/datasets/google-research-datasets/mbpp"
+    ],
+    "verified_how": "matched official docs on 2026-11-24; reward helper ran locally; trainer not executed",
+    "tool_version_seen": "TRL main (VERSION 1.19.0.dev0)"
+  },
+  {
+    "id": "evalplus-vllm-hf",
+    "title": "EvalPlus HumanEval+/MBPP+ with vLLM or HF backend",
+    "tool": "EvalPlus",
+    "stage": "eval",
+    "language": "bash",
+    "code": "pip install evalplus\n\n# vLLM backend (replace [humaneval|mbpp] with one of them)\nevalplus.evaluate --model \"ise-uiuc/Magicoder-S-DS-6.7B\" \\\n                  --dataset humaneval \\\n                  --backend vllm \\\n                  --greedy\n\n# HF backend\nevalplus.evaluate --model \"ise-uiuc/Magicoder-S-DS-6.7B\" \\\n                  --dataset mbpp \\\n                  --backend hf \\\n                  --greedy\n\n# Safer: generate locally, execute inside the official Docker image\nevalplus.codegen --model \"ise-uiuc/Magicoder-S-DS-6.7B\" --dataset humaneval --backend vllm --greedy\ndocker run --rm --pull=always -v $(pwd)/evalplus_results:/app ganler/evalplus:latest \\\n           evalplus.evaluate --dataset humaneval \\\n           --samples /app/humaneval/ise-uiuc--Magicoder-S-DS-6.7B_vllm_temp_0.0.jsonl",
+    "notes": "Commands copied from the EvalPlus README. Not run (needs a GPU and a 6.7B model download). Adjust the model name; the Docker samples path follows the README example naming (org--model_backend_temp_X.jsonl).",
+    "source_urls": [
+      "https://raw.githubusercontent.com/evalplus/evalplus/master/README.md"
+    ],
+    "verified_how": "matched official docs on 2026-11-24",
+    "tool_version_seen": "evalplus v0.3.1 (latest release tag)"
+  },
+  {
+    "id": "livecodebench-runner",
+    "title": "LiveCodeBench code generation with release version and date window",
+    "tool": "LiveCodeBench",
+    "stage": "eval",
+    "language": "bash",
+    "code": "git clone https://github.com/LiveCodeBench/LiveCodeBench.git && cd LiveCodeBench\npip install -e .   # or: uv pip install -e .\n\n# generate + evaluate on a fine-grained release (contamination control by release)\npython -m lcb_runner.runner.main --model {model_name} --scenario codegeneration \\\n    --evaluate --release_version release_v6\n\n# re-score only problems released after a cutoff date (YYYY-MM-DD)\npython -m lcb_runner.evaluation.compute_scores --eval_all_file {saved_eval_all_file} --start_date 2023-09-01",
+    "notes": "Flags per the README: --release_version (default release_latest; also v1, v2, v1_v3, v4_v5 style), --evaluate, and compute_scores --start_date/--end_date. {model_name} must be listed in lcb_runner/lm_styles.py; local models take --local_model_path. Uses vllm for open models. Not run locally. The README example uses release_v2 and start_date 2023-09-01 (for DeepSeek); pick a cutoff after your model's training cutoff. Code is executed on the host: run in a container.",
+    "source_urls": [
+      "https://raw.githubusercontent.com/LiveCodeBench/LiveCodeBench/main/README.md"
+    ],
+    "verified_how": "matched official docs on 2026-11-24",
+    "tool_version_seen": "LiveCodeBench main (pyproject 0.1.0, Python >=3.10)"
+  },
+  {
+    "id": "bigcode-eval-harness",
+    "title": "bigcode-evaluation-harness generation plus evaluation",
+    "tool": "bigcode-evaluation-harness",
+    "stage": "eval",
+    "language": "bash",
+    "code": "git clone https://github.com/bigcode-project/bigcode-evaluation-harness.git && cd bigcode-evaluation-harness\npip install -e .\n\n# WARNING: --allow_code_execution runs untrusted model-generated code on this machine.\n# Prefer generate-only here, then execute in the provided Docker image.\naccelerate launch main.py \\\n  --model <MODEL_NAME> \\\n  --tasks humaneval \\\n  --max_length_generation 512 \\\n  --temperature 0.2 --do_sample True \\\n  --n_samples 20 --batch_size 10 \\\n  --precision bf16 \\\n  --generation_only --save_generations\n\n# evaluate saved generations (executes code; the harness raises an error and prints a warning unless this flag is set)\naccelerate launch main.py --tasks humaneval --load_generations_path generations.json \\\n  --model <MODEL_NAME> --n_samples 20 --allow_code_execution",
+    "notes": "Flags from the README (--tasks, --n_samples, --batch_size, --allow_code_execution, --load_generations_path, --generation_only, --save_generations). Task name humaneval is in the task registry source; the README example uses mbpp. In source (evaluator.py) execution tasks raise ValueError with a !!!WARNING!!! block that says the code_eval metric executes untrusted model-generated code, unless allow_code_execution is true. batch_size must be <= n_samples. Not run locally (GPU).",
+    "source_urls": [
+      "https://raw.githubusercontent.com/bigcode-project/bigcode-evaluation-harness/main/README.md",
+      "https://raw.githubusercontent.com/bigcode-project/bigcode-evaluation-harness/main/bigcode_eval/evaluator.py",
+      "https://raw.githubusercontent.com/bigcode-project/bigcode-evaluation-harness/main/bigcode_eval/tasks/__init__.py"
+    ],
+    "verified_how": "matched official docs on 2026-11-24",
+    "tool_version_seen": "main branch, no version tag checked"
+  },
+  {
+    "id": "lm-eval-humaneval-mbpp",
+    "title": "lm-evaluation-harness HumanEval and MBPP",
+    "tool": "lm-evaluation-harness",
+    "stage": "eval",
+    "language": "bash",
+    "code": "pip install lm-eval\n\nexport HF_ALLOW_CODE_EVAL=1   # required by the HF \"code_eval\" metric these tasks use\nlm_eval --model hf \\\n    --model_args pretrained=Qwen/Qwen2.5-Coder-1.5B \\\n    --tasks humaneval,mbpp \\\n    --confirm_run_unsafe_code \\\n    --batch_size 8 \\\n    --output_path results/ --log_samples",
+    "notes": "Task names humaneval (pass@1), humaneval_instruct, humaneval_64, mbpp are in the task READMEs and humaneval.yaml/mbpp.yaml, both tagged unsafe_code: true. evaluator.py raises unless --confirm_run_unsafe_code is passed. HF_ALLOW_CODE_EVAL=1 comes from the evaluate code_eval source (it raises without it); humaneval/utils.py loads code_eval at import. Instruct models: use humaneval_instruct plus --apply_chat_template (flag not verified here). Not run locally.",
+    "source_urls": [
+      "https://raw.githubusercontent.com/EleutherAI/lm-evaluation-harness/main/lm_eval/tasks/humaneval/README.md",
+      "https://raw.githubusercontent.com/EleutherAI/lm-evaluation-harness/main/docs/interface.md",
+      "https://raw.githubusercontent.com/huggingface/evaluate/main/metrics/code_eval/code_eval.py"
+    ],
+    "verified_how": "matched official docs on 2026-11-24",
+    "tool_version_seen": "lm-eval 0.4.14.dev0 (main)"
+  },
+  {
+    "id": "swebench-eval",
+    "title": "SWE-bench evaluation of a predictions file",
+    "tool": "SWE-bench",
+    "stage": "eval",
+    "language": "bash",
+    "code": "pip install swebench   # Python >=3.10, needs Docker; Linux x86_64 images are easiest\n\n# predictions.jsonl: one JSON object per line\n# {\"instance_id\": \"sympy__sympy-20590\", \"model_name_or_path\": \"my-model\", \"model_patch\": \"diff --git ...\"}\n\n# current v5 CLI (README)\nswebench eval verified -p predictions.jsonl --run-id my_run -j 8\n\n# older module form, still supported per README\npython -m swebench.harness.run_evaluation \\\n    --dataset_name SWE-bench/SWE-bench_Lite \\\n    --predictions_path predictions.jsonl \\\n    --max_workers 8 \\\n    --run_id my_run",
+    "notes": "Both forms confirmed in the README and run_evaluation.py argparse (-d/--dataset_name default SWE-bench/SWE-bench_Lite, -p/--predictions_path required, --max_workers default 4, -id/--run_id required). Results go to logs/evaluation/<run_id>/results.json. Results are cached by run_id plus instance_id, so use a fresh run_id per prediction set. Builds many Docker images (hundreds of GB for the full set). Not run locally.",
+    "source_urls": [
+      "https://raw.githubusercontent.com/SWE-bench/SWE-bench/main/README.md",
+      "https://raw.githubusercontent.com/SWE-bench/SWE-bench/main/swebench/harness/run_evaluation.py",
+      "https://raw.githubusercontent.com/SWE-bench/SWE-bench/main/docs/guides/evaluation.md"
+    ],
+    "verified_how": "matched official docs on 2026-11-24",
+    "tool_version_seen": "swebench 5.0.2 (main)"
+  },
+  {
+    "id": "harbor-terminal-bench",
+    "title": "Harbor running Terminal-Bench 2.0",
+    "tool": "Harbor",
+    "stage": "eval",
+    "language": "bash",
+    "code": "uv tool install harbor    # or: pip install harbor\n\nexport ANTHROPIC_API_KEY=<YOUR-KEY>\nharbor run --dataset terminal-bench@2.0 \\\n   --agent claude-code \\\n   --model anthropic/claude-opus-5-5 \\\n   --n-concurrent 4\n\nharbor run --help        # all agents and options\nharbor datasets list     # other benchmarks, e.g. SWE-bench, Aider Polyglot",
+    "notes": "Copied from the Harbor README (runs locally in Docker by default; --env daytona etc. for cloud providers). Swap in any agent/model your account has. Not run locally (needs API key and Docker capacity).",
+    "source_urls": [
+      "https://raw.githubusercontent.com/laude-institute/harbor/main/README.md"
+    ],
+    "verified_how": "matched official docs on 2026-11-24",
+    "tool_version_seen": "harbor 0.27.0 (latest release tag)"
+  },
+  {
+    "id": "terminal-bench-tb",
+    "title": "Terminal-Bench legacy tb CLI",
+    "tool": "Terminal-Bench",
+    "stage": "eval",
+    "language": "bash",
+    "code": "uv tool install terminal-bench    # or: pip install terminal-bench\n\ntb run --help\ntb run \\\n    --agent terminus \\\n    --model anthropic/claude-3-7-latest \\\n    --dataset-name terminal-bench-core \\\n    --dataset-version 0.1.1 \\\n    --n-concurrent 8",
+    "notes": "From the terminal-bench README; its own example is missing line-continuation backslashes, added here. The README says Harbor is the official harness for Terminal-Bench 2.0, so prefer the Harbor snippet for new work. Model name in the example is old; substitute a current one. Not run.",
+    "source_urls": [
+      "https://raw.githubusercontent.com/laude-institute/terminal-bench/main/README.md",
+      "https://raw.githubusercontent.com/laude-institute/harbor/main/README.md"
+    ],
+    "verified_how": "matched official docs on 2026-11-24",
+    "tool_version_seen": "terminal-bench README at main"
+  },
+  {
+    "id": "inspect-evals-code",
+    "title": "Inspect AI with inspect_evals HumanEval and MBPP",
+    "tool": "Inspect AI",
+    "stage": "eval",
+    "language": "bash",
+    "code": "pip install inspect-evals    # Python 3.11 or 3.12 recommended\n\ninspect eval inspect_evals/humaneval --model openai/gpt-5-nano\ninspect eval inspect_evals/mbpp --model openai/gpt-5-nano --limit 10\n\n# local open model served by vLLM\ninspect eval inspect_evals/humaneval --model vllm/Qwen/Qwen2.5-Coder-1.5B-Instruct",
+    "notes": "Task names inspect_evals/humaneval and inspect_evals/mbpp and flags --limit, --temperature, --max-connections are from the per-eval READMEs. The default sandbox for both is docker, which gives isolation for generated code (needs Docker). The vllm/ model provider line is from general Inspect usage and was not confirmed in this pass; treat it as unverified. Not run locally.",
+    "source_urls": [
+      "https://raw.githubusercontent.com/UKGovernmentBEIS/inspect_evals/main/README.md",
+      "https://raw.githubusercontent.com/UKGovernmentBEIS/inspect_evals/main/src/inspect_evals/humaneval/README.md",
+      "https://raw.githubusercontent.com/UKGovernmentBEIS/inspect_evals/main/src/inspect_evals/mbpp/README.md"
+    ],
+    "verified_how": "matched official docs on 2026-11-24 (vllm/ provider line unconfirmed)",
+    "tool_version_seen": "inspect_ai 0.3.292 (latest release tag)"
+  },
+  {
+    "id": "datatrove-minhash",
+    "title": "datatrove MinHash dedup of code, local executor",
+    "tool": "datatrove",
+    "stage": "data",
+    "language": "python",
+    "code": "from datatrove.executor import LocalPipelineExecutor\nfrom datatrove.pipeline.dedup import MinhashDedupSignature\nfrom datatrove.pipeline.dedup.minhash import (\n    MinhashConfig, MinhashDedupBuckets, MinhashDedupCluster, MinhashDedupFilter,\n)\nfrom datatrove.pipeline.readers import JsonlReader\nfrom datatrove.pipeline.writers.jsonl import JsonlWriter\nfrom datatrove.utils.hashing import HashConfig\n\ncfg = MinhashConfig(hash_config=HashConfig(precision=64), num_buckets=14, hashes_per_bucket=8)\nBASE, LOGS, TASKS = \"work/minhash\", \"work/logs\", 8\nreader = JsonlReader(\"data/raw_jsonl/\", text_key=\"content\")  # code field name in your files\n\ns1 = LocalPipelineExecutor(\n    pipeline=[reader, MinhashDedupSignature(output_folder=f\"{BASE}/sigs\", config=cfg)],\n    tasks=TASKS, logging_dir=f\"{LOGS}/s1\")\ns2 = LocalPipelineExecutor(\n    pipeline=[MinhashDedupBuckets(input_folder=f\"{BASE}/sigs\", output_folder=f\"{BASE}/buckets\", config=cfg)],\n    tasks=cfg.num_buckets, logging_dir=f\"{LOGS}/s2\", depends=s1)\ns3 = LocalPipelineExecutor(\n    pipeline=[MinhashDedupCluster(input_folder=f\"{BASE}/buckets\", output_folder=f\"{BASE}/remove_ids\", config=cfg)],\n    tasks=1, logging_dir=f\"{LOGS}/s3\", depends=s2)\ns4 = LocalPipelineExecutor(\n    pipeline=[reader, MinhashDedupFilter(input_folder=f\"{BASE}/remove_ids\"),\n              JsonlWriter(f\"{BASE}/deduplicated\")],\n    tasks=TASKS, logging_dir=f\"{LOGS}/s4\", depends=s3)  # same TASKS and reader as stage 1\ns4.run()",
+    "notes": "Adapted from datatrove examples/minhash_deduplication.py (which uses SlurmPipelineExecutor): same four stages and MinhashConfig values; swapped to LocalPipelineExecutor (signature confirmed in executor/local.py) and added text_key. Class names and args confirmed from source. Not run: datatrove needs Python >=3.11. MinhashDedupSignature has language=Languages.english by default, whose word tokenizer is tuned for prose, so for code consider a custom shingling or a different near-dedup tool and validate on a sample. Decontaminate against eval sets (HumanEval, MBPP, LiveCodeBench) separately. LICENSE: keep per-file license metadata and filter to permissive licenses (for example by SPDX id) before training; The Stack v2 does this by file license detection. PII: scrub emails, keys, and IPs (datatrove has PII/formatting filters; BigCode used StarPII) and honor opt-out lists.",
+    "source_urls": [
+      "https://raw.githubusercontent.com/huggingface/datatrove/main/examples/minhash_deduplication.py",
+      "https://raw.githubusercontent.com/huggingface/datatrove/main/src/datatrove/pipeline/dedup/minhash.py",
+      "https://raw.githubusercontent.com/huggingface/datatrove/main/src/datatrove/executor/local.py"
+    ],
+    "verified_how": "matched official docs on 2026-11-24 (source of example and classes); not executed",
+    "tool_version_seen": "datatrove 0.10.1 (main)"
+  },
+  {
+    "id": "llamafactory-sft-yaml",
+    "title": "LLaMA-Factory LoRA SFT config",
+    "tool": "LLaMA-Factory",
+    "stage": "sft",
+    "language": "yaml",
+    "code": "# train.yaml  ->  llamafactory-cli train train.yaml\n### model\nmodel_name_or_path: Qwen/Qwen3-4B-Instruct-2507\ntrust_remote_code: true\n\n### method\nstage: sft\ndo_train: true\nfinetuning_type: lora\nlora_rank: 8\nlora_target: all\n\n### dataset  (name must exist in data/dataset_info.json or your custom entry)\ndataset: alpaca_en_demo\ntemplate: qwen3_nothink\ncutoff_len: 2048\nmax_samples: 1000\n\n### output\noutput_dir: saves/qwen3-4b/lora/sft\nlogging_steps: 10\nsave_steps: 500\noverwrite_output_dir: true\nreport_to: none\n\n### train\nper_device_train_batch_size: 1\ngradient_accumulation_steps: 8\nlearning_rate: 1.0e-4\nnum_train_epochs: 3.0\nlr_scheduler_type: cosine\nwarmup_ratio: 0.1\nbf16: true",
+    "notes": "Keys are a trimmed copy of examples/train_lora/qwen3_lora_sft.yaml; the CLI form llamafactory-cli train --stage sft ... appears in qwen3_lora_sft.sh. To train on code, register your dataset in data/dataset_info.json (not shown here, format not fetched). Not run locally (GPU).",
+    "source_urls": [
+      "https://github.com/hiyouga/LLaMA-Factory/blob/main/examples/train_lora/qwen3_lora_sft.yaml",
+      "https://github.com/hiyouga/LLaMA-Factory/blob/main/examples/train_lora/qwen3_lora_sft.sh"
+    ],
+    "verified_how": "matched official docs on 2026-11-24",
+    "tool_version_seen": "LLaMA-Factory 0.9.6.dev0 (main)"
+  },
+  {
+    "id": "verl-grpo-code-reward",
+    "title": "verl GRPO launch with a custom code reward",
+    "tool": "verl",
+    "stage": "rl",
+    "language": "bash",
+    "code": "# my_reward.py must define: def compute_score(data_source, solution_str, ground_truth, extra_info=None) -> float\npython3 -m verl.trainer.main_ppo \\\n    algorithm.adv_estimator=grpo \\\n    data.train_files=$HOME/data/code/train.parquet \\\n    data.val_files=$HOME/data/code/test.parquet \\\n    data.train_batch_size=512 \\\n    data.max_prompt_length=1024 \\\n    data.max_response_length=2048 \\\n    data.filter_overlong_prompts=True \\\n    data.truncation='error' \\\n    actor_rollout_ref.model.path=Qwen/Qwen3-4B \\\n    actor_rollout_ref.model.use_remove_padding=True \\\n    actor_rollout_ref.model.enable_gradient_checkpointing=True \\\n    actor_rollout_ref.actor.optim.lr=1e-6 \\\n    actor_rollout_ref.actor.ppo_mini_batch_size=256 \\\n    actor_rollout_ref.actor.ppo_micro_batch_size_per_gpu=2 \\\n    actor_rollout_ref.actor.use_kl_loss=True \\\n    actor_rollout_ref.actor.kl_loss_coef=0.001 \\\n    actor_rollout_ref.actor.kl_loss_type=low_var_kl \\\n    actor_rollout_ref.rollout.name=vllm \\\n    actor_rollout_ref.rollout.tensor_model_parallel_size=2 \\\n    actor_rollout_ref.rollout.gpu_memory_utilization=0.6 \\\n    actor_rollout_ref.rollout.n=5 \\\n    reward.custom_reward_function.path=/abs/path/my_reward.py \\\n    reward.custom_reward_function.name=compute_score \\\n    trainer.n_gpus_per_node=8 trainer.nnodes=1 \\\n    trainer.total_epochs=15 trainer.logger='[\"console\"]'",
+    "notes": "Keys taken from examples/grpo_trainer/run_qwen3_4b_fsdp.sh plus reward.custom_reward_function.path/name from docs/preparation/reward_function.rst and verl/trainer/config/reward/reward.yaml (name defaults to compute_score). Data must be parquet with data_source, prompt (chat messages), ability, reward_model.ground_truth, extra_info. The official script launches via uv run --frozen with extras; this is the plain-python form and the repo script is the safer starting point. Not run (multi-GPU).",
+    "source_urls": [
+      "https://github.com/volcengine/verl/blob/main/examples/grpo_trainer/run_qwen3_4b_fsdp.sh",
+      "https://github.com/volcengine/verl/blob/main/docs/preparation/reward_function.rst",
+      "https://github.com/volcengine/verl/blob/main/verl/trainer/config/reward/reward.yaml"
+    ],
+    "verified_how": "matched official docs on 2026-11-24",
+    "tool_version_seen": "verl 0.10.0.dev (main)"
+  },
+  {
+    "id": "docker-hardened-sandbox",
+    "title": "Hardened Docker run for untrusted generated code",
+    "tool": "Docker",
+    "stage": "sandbox",
+    "language": "bash",
+    "code": "docker run --rm \\\n  --network none \\\n  --read-only \\\n  --memory 256m --memory-swap 256m \\\n  --cpus 1 \\\n  --pids-limit 64 \\\n  --cap-drop ALL \\\n  --security-opt no-new-privileges \\\n  --user 65534:65534 \\\n  --tmpfs /tmp:rw,noexec,nosuid,size=16m \\\n  -v \"$PWD/job:/work:ro\" -w /work \\\n  python:3.12-slim timeout 10 python candidate.py",
+    "notes": "Every flag exists in docker/cli container opts source (network, read-only, memory, pids-limit, cap-drop, security-opt, user, tmpfs, cpus). A near-identical command was run on Docker 29.1.3 with python:3.12-slim: the script ran as uid 65534, outbound socket failed, writes to the read-only mount failed, and writes to /tmp worked. Kernel shared with host: for adversarial code add gVisor/Firecracker and seccomp. The timeout is the coreutils one inside the image (not separately tested); also enforce a wall-clock kill from the outside (docker kill).",
+    "source_urls": [
+      "https://github.com/docker/cli/blob/master/cli/command/container/opts.go",
+      "https://docs.docker.com/reference/cli/docker/container/run/"
+    ],
+    "verified_how": "ran locally (Docker 29.1.3); flags checked in docker/cli source",
+    "tool_version_seen": "Docker 29.1.3, python:3.12-slim"
+  },
+  {
+    "id": "pass-at-k-unbiased",
+    "title": "Unbiased pass@k estimator",
+    "tool": "Codex paper (Chen et al. 2021)",
+    "stage": "eval",
+    "language": "python",
+    "code": "import numpy as np\n\n\ndef pass_at_k(n, c, k):\n    \"\"\"Unbiased pass@k estimator (Chen et al. 2021, Codex paper).\n\n    n: samples generated per problem, c: samples that passed, k: budget.\n    Computes 1 - C(n-c, k) / C(n, k) in a numerically stable product form.\n    \"\"\"\n    if n - c < k:\n        return 1.0\n    return 1.0 - np.prod(1.0 - k / np.arange(n - c + 1, n + 1))\n\n\nif __name__ == \"__main__\":\n    from math import comb\n    # tiny check against the exact combinatorial definition\n    for n, c, k in [(10, 3, 1), (10, 3, 5), (200, 37, 10), (20, 0, 5), (20, 20, 5), (5, 1, 5)]:\n        exact = 1.0 - comb(n - c, k) / comb(n, k) if n - c >= k else 1.0\n        assert abs(pass_at_k(n, c, k) - exact) < 1e-12, (n, c, k)\n    assert abs(pass_at_k(10, 3, 1) - 0.3) < 1e-12  # pass@1 is c/n\n    print(\"ok\", round(pass_at_k(200, 37, 10), 6))",
+    "notes": "Ran locally on Python 3.9 with numpy: matches the exact 1 - C(n-c,k)/C(n,k) definition for six cases, pass@1 equals c/n, and the check prints ok. Average the result over problems. Needs n >= k.",
+    "source_urls": [
+      "https://arxiv.org/abs/2107.03374"
+    ],
+    "verified_how": "ran locally",
+    "tool_version_seen": "Python 3.9.6, numpy"
+  },
+  {
+    "id": "code-reward-subprocess",
+    "title": "Reward function: run code plus tests in a subprocess with limits",
+    "tool": "stdlib",
+    "stage": "rl",
+    "language": "python",
+    "code": "import os\nimport subprocess\nimport sys\nimport tempfile\n\ntry:\n    import resource  # POSIX only\nexcept ImportError:  # pragma: no cover\n    resource = None\n\n\ndef _limits(cpu_seconds, mem_bytes):\n    def apply():\n        if resource is None:\n            return\n        os.setsid()\n        resource.setrlimit(resource.RLIMIT_CPU, (cpu_seconds, cpu_seconds))\n        resource.setrlimit(resource.RLIMIT_FSIZE, (1 << 20, 1 << 20))\n        resource.setrlimit(resource.RLIMIT_CORE, (0, 0))\n        if sys.platform.startswith(\"linux\"):  # RLIMIT_AS is unreliable on macOS\n            resource.setrlimit(resource.RLIMIT_AS, (mem_bytes, mem_bytes))\n            resource.setrlimit(resource.RLIMIT_NPROC, (64, 64))\n    return apply\n\n\ndef run_tests(code, tests, timeout=5.0, mem_mb=512):\n    \"\"\"Return 1.0 if `code` followed by `tests` exits 0 within `timeout` seconds, else 0.0.\n\n    NOT a security sandbox: no network or filesystem isolation. Use Docker/gVisor for untrusted code.\n    \"\"\"\n    program = code + \"\\n\\n\" + tests + \"\\n\"\n    with tempfile.TemporaryDirectory() as tmp:\n        path = os.path.join(tmp, \"main.py\")\n        with open(path, \"w\") as f:\n            f.write(program)\n        try:\n            proc = subprocess.run(\n                [sys.executable, \"-I\", path], cwd=tmp, stdin=subprocess.DEVNULL,\n                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=timeout,\n                env={\"PATH\": os.environ.get(\"PATH\", \"\"), \"PYTHONHASHSEED\": \"0\"},\n                preexec_fn=_limits(int(timeout) + 1, mem_mb << 20),\n            )\n        except subprocess.TimeoutExpired:\n            return 0.0\n        return 1.0 if proc.returncode == 0 else 0.0\n\n\nif __name__ == \"__main__\":\n    tests = \"assert add(2, 3) == 5\"\n    assert run_tests(\"def add(a, b):\\n    return a + b\", tests) == 1.0\n    assert run_tests(\"def add(a, b):\\n    return a * b\", tests) == 0.0\n    assert run_tests(\"while True:\\n    pass\", tests, timeout=1.0) == 0.0\n    assert run_tests(\"def add(a, b:\\n\", tests) == 0.0  # syntax error\n    print(\"ok: pass=1.0 fail=0.0 timeout=0.0 syntax-error=0.0\")",
+    "notes": "Ran locally on Python 3.9 (macOS): passing example returns 1.0, failing 0.0, infinite loop 0.0 (timeout), syntax error 0.0. NOT a security sandbox: no network or filesystem isolation, and memory/process rlimits are applied only on Linux. Use inside a container (see docker-hardened-sandbox) for untrusted code.",
+    "source_urls": [],
+    "verified_how": "ran locally",
+    "tool_version_seen": "Python 3.9.6"
+  },
+  {
+    "id": "hf-datasets-streaming",
+    "title": "Stream a non-gated code dataset with datasets",
+    "tool": "Hugging Face datasets",
+    "stage": "data",
+    "language": "python",
+    "code": "from datasets import load_dataset\n\nds = load_dataset(\"google-research-datasets/mbpp\", \"full\", split=\"train\", streaming=True)\nfor i, ex in enumerate(ds.take(2)):\n    print(ex[\"task_id\"], ex[\"text\"][:60])",
+    "notes": "Ran locally with datasets 4.5.0 on Python 3.9: printed task 601 and 602 without downloading the full set. For gated sets like bigcode/the-stack-v2-dedup you must accept the terms and log in first (and its files are fetched from Software Heritage S3 separately), so it was not tested.",
+    "source_urls": [
+      "https://huggingface.co/docs/datasets/stream",
+      "https://huggingface.co/datasets/google-research-datasets/mbpp"
+    ],
+    "verified_how": "ran locally",
+    "tool_version_seen": "datasets 4.5.0"
+  }
+]

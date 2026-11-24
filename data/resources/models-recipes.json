@@ -1,0 +1,2565 @@
+[
+ {
+  "id": "qwen3-8-27b",
+  "name": "Qwen3.8-27B",
+  "kind": "model",
+  "url": "https://huggingface.co/Qwen/Qwen3.8-27B",
+  "extra_links": [
+   {
+    "label": "Collection page / card",
+    "url": "https://huggingface.co/Qwen/Qwen3.8-27B"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "27.8B params (safetensors total), dense, 262,144 ctx native, extensible to 1M",
+  "summary": "Newest open Qwen generation (Aug 2026): dense vision-language model with thinking mode and gains in coding and long-horizon agentic tasks. A strong post-trained starting point for SFT/RL on a single node, and a mid-size teacher.",
+  "stages": [
+   "sft",
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation",
+   "agentic",
+   "repo-level",
+   "reasoning"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Use as the default dense starting point when you want to add domain or Swedish/agentic RL on top. Thinking on by default; toggle per request.",
+  "caveats": "Post-trained checkpoint only: Qwen/Qwen3.8-27B-Base returned 401 on the HF API so no open base was confirmed. Not a coder-specialized model. Vision encoder adds size. No coding score copied here: the card compares against proprietary models under its own harness settings.",
+  "load_snippet": null,
+  "released": "2026-08",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/Qwen/Qwen3.8-27B cardData.license, safetensors.total, config.json, README"
+ },
+ {
+  "id": "qwen3-coder-next",
+  "name": "Qwen3-Coder-Next (and -Base)",
+  "kind": "model",
+  "url": "https://huggingface.co/Qwen/Qwen3-Coder-Next",
+  "extra_links": [
+   {
+    "label": "Base",
+    "url": "https://huggingface.co/Qwen/Qwen3-Coder-Next-Base"
+   },
+   {
+    "label": "Repo",
+    "url": "https://github.com/QwenLM/Qwen3-Coder"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "79.7B params total, 3B active (MoE, hybrid Gated DeltaNet + attention), 262,144 ctx",
+  "summary": "Open-weight coding-agent model from Jan 2026 built for local agents (80B total, 3B active). A Base variant is published for further post-training.",
+  "stages": [
+   "pretrain",
+   "sft",
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "repo-level",
+   "generation"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Use Qwen3-Coder-Next-Base as a base for custom post-training and the Instruct as a cheap agentic teacher. Fits one large GPU only with quantization.",
+  "caveats": "Instruct supports non-thinking mode only (no <think> blocks). MoE with hybrid linear attention needs recent vLLM/SGLang/Transformers. Base card says trained on 370+ languages; we did not verify vendor benchmark numbers.",
+  "load_snippet": null,
+  "released": "2026-01",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/Qwen/Qwen3-Coder-Next and -Base cardData.license (apache-2.0), safetensors.total 79,674,391,296; README (3B activated, 256K)"
+ },
+ {
+  "id": "qwen3-coder-480b-a35b",
+  "name": "Qwen3-Coder-480B-A35B-Instruct",
+  "kind": "model",
+  "url": "https://huggingface.co/Qwen/Qwen3-Coder-480B-A35B-Instruct",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "480B params total, 35B active (MoE), 262,144 ctx native, 1M with YaRN",
+  "summary": "July 2025 flagship Qwen coder: large MoE for agentic coding and repository-scale context. Commonly used as a permissively licensed teacher for trajectory distillation.",
+  "stages": [
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "repo-level",
+   "generation",
+   "tool-use"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Use as a teacher for synthetic SFT data and trajectories; license permits it. Needs a multi-GPU node.",
+  "caveats": "Very large to serve. Superseded in the Qwen line by Qwen3-Coder-Next and Qwen3.8. Check output quality per task before trusting distilled data.",
+  "load_snippet": null,
+  "released": "2025-07",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/Qwen/Qwen3-Coder-480B-A35B-Instruct cardData.license, safetensors.total, config.json, README"
+ },
+ {
+  "id": "qwen3-coder-30b-a3b",
+  "name": "Qwen3-Coder-30B-A3B-Instruct",
+  "kind": "model",
+  "url": "https://huggingface.co/Qwen/Qwen3-Coder-30B-A3B-Instruct",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "30.5B params total, 3.3B active (MoE), 262,144 ctx",
+  "summary": "Small MoE Qwen3 coder that is easy to fine-tune and serve; the most downloaded recent Qwen coder in HF search (about 1.95M downloads on the check date).",
+  "stages": [
+   "sft",
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation",
+   "agentic",
+   "repo-level"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Good first RL/SFT target on a single node, or a cheap teacher/rollout policy.",
+  "caveats": "Instruct only in this entry. MoE RL needs router-stability care (see GSPO). Overtaken by Qwen3.8 in capability.",
+  "load_snippet": null,
+  "released": "2025-07",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/Qwen/Qwen3-Coder-30B-A3B-Instruct cardData.license, safetensors.total, config.json, README"
+ },
+ {
+  "id": "qwen2-5-coder",
+  "name": "Qwen2.5-Coder family (32B shown)",
+  "kind": "model",
+  "url": "https://huggingface.co/Qwen/Qwen2.5-Coder-32B",
+  "extra_links": [
+   {
+    "label": "Tech report",
+    "url": "https://arxiv.org/abs/2409.12186"
+   },
+   {
+    "label": "Instruct 32B",
+    "url": "https://huggingface.co/Qwen/Qwen2.5-Coder-32B-Instruct"
+   }
+  ],
+  "license": "Apache-2.0 (verified for 32B and 7B; check each size's card)",
+  "size": "32.8B params (32B base); 7B is 7.6B; native config ctx 32,768, up to 131,072 with YaRN",
+  "summary": "Sep-Nov 2024 code-specialized Qwen family with base and instruct variants from 0.5B to 32B. Still the most widely used open base for code SFT/RL recipes (SWE-smith, OpenHands LM, Open-R1 style work).",
+  "stages": [
+   "pretrain",
+   "sft",
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion",
+   "generation",
+   "repair",
+   "agentic"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Use the base checkpoints (7B/14B/32B) for controlled recipe experiments, since many published results start from them.",
+  "caveats": "Old by Nov 2026: newer Qwen3.x models beat it. License verified only for the 32B/7B pages fetched; sizes 0.5B-3B may carry different licenses, check before use. Qwen2.5 bases may be contaminated with reasoning-like data (see Dr. GRPO paper).",
+  "load_snippet": null,
+  "released": "2024-11",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/Qwen/Qwen2.5-Coder-32B cardData.license, safetensors.total, config.json, README"
+ },
+ {
+  "id": "deepseek-v4-1-flash",
+  "name": "DeepSeek-V4.1-Flash",
+  "kind": "model",
+  "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash",
+  "extra_links": [
+   {
+    "label": "Tech report PDF",
+    "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/main/DeepSeek_V41_Tech_Report.pdf"
+   }
+  ],
+  "license": "MIT",
+  "size": "763B params in safetensors; card says 552B backbone parameters (multimodal MoE), up to 1M ctx",
+  "summary": "Sep 2026 DeepSeek open MoE with 1M context, MIT licensed; the card describes an encoder-decoder (CED) design with KV-cache compression.",
+  "stages": [
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "repo-level",
+   "reasoning",
+   "generation"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Teacher candidate for distillation with a fully permissive license; reasoning effort levels exist on the V4 line.",
+  "caveats": "Needs multi-node serving. Safetensors total (763B) and the card's 552B figure differ (likely vision and other components); we report both. No coding score copied from the card.",
+  "load_snippet": null,
+  "released": "2026-09",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/deepseek-ai/DeepSeek-V4.1-Flash cardData.license, safetensors.total, config.json, README"
+ },
+ {
+  "id": "deepseek-v4-pro",
+  "name": "DeepSeek-V4-Pro (and V4-Flash-0731)",
+  "kind": "model",
+  "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro",
+  "extra_links": [
+   {
+    "label": "V4-Flash-0731",
+    "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731"
+   }
+  ],
+  "license": "MIT",
+  "size": "1.60T params (safetensors total); V4-Flash-0731 is 304B, both 1M ctx config",
+  "summary": "DeepSeek V4 generation (Apr 2026): Pro is the largest open DeepSeek; V4-Flash-0731 card says it outperforms V4-Pro (Preview) on listed benchmarks despite far fewer active parameters.",
+  "stages": [
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "reasoning",
+   "repo-level"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Use only if you have the infrastructure; V4-Flash variants are the practical teachers.",
+  "caveats": "Very large. Pro is labeled Preview in the V4-Flash-0731 card. Benchmark claims are vendor-reported.",
+  "load_snippet": null,
+  "released": "2026-04",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/deepseek-ai/DeepSeek-V4-Pro cardData.license mit, safetensors.total; V4-Flash-0731 README"
+ },
+ {
+  "id": "deepseek-v3-2",
+  "name": "DeepSeek-V3.2",
+  "kind": "model",
+  "url": "https://huggingface.co/deepseek-ai/DeepSeek-V3.2",
+  "extra_links": [],
+  "license": "MIT",
+  "size": "685B params (safetensors), MoE",
+  "summary": "Dec 2025 DeepSeek V3 line model, MIT licensed; a common open teacher and RL starting point before V4.",
+  "stages": [
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation",
+   "reasoning",
+   "agentic"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Teacher for distillation when V4 is too large.",
+  "caveats": "Superseded by V4.x. Large MoE.",
+  "load_snippet": null,
+  "released": "2025-12",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/deepseek-ai/DeepSeek-V3.2 cardData.license, safetensors.total, config.json, README"
+ },
+ {
+  "id": "deepseek-coder-v2",
+  "name": "DeepSeek-Coder-V2 (Instruct 236B / Lite)",
+  "kind": "model",
+  "url": "https://huggingface.co/deepseek-ai/DeepSeek-Coder-V2-Instruct",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2406.11931"
+   },
+   {
+    "label": "Lite-Base",
+    "url": "https://huggingface.co/deepseek-ai/DeepSeek-Coder-V2-Lite-Base"
+   }
+  ],
+  "license": "DeepSeek model license (HF 'other: deepseek-license'; code under MIT)",
+  "size": "235.7B params (Instruct); Lite-Base 15.7B; config ctx 163,840",
+  "summary": "June 2024 MoE code model continued-pretrained from DeepSeek-V2; strong at release, now legacy.",
+  "stages": [
+   "pretrain",
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion",
+   "generation"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Lite-Base (15.7B) is a usable MoE base; read the model license before commercial use.",
+  "caveats": "Legacy. Custom license with use restrictions, not OSI open. Superseded by Qwen3-Coder and DeepSeek V4.",
+  "load_snippet": null,
+  "released": "2024-06",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/deepseek-ai/DeepSeek-Coder-V2-Instruct cardData.license, safetensors.total, config.json, README"
+ },
+ {
+  "id": "kimi-k3-1-pro",
+  "name": "Kimi K3.1 Pro",
+  "kind": "model",
+  "url": "https://huggingface.co/moonshotai/Kimi-K3.1-Pro",
+  "extra_links": [],
+  "license": "Custom 'Kimi K3.1 Pro' license: permissive with conditions (MaaS operators above USD 20M revenue need a separate agreement; attribution above 100M MAU or USD 20M monthly revenue)",
+  "size": "2.78T params (safetensors), 1M ctx, native multimodal",
+  "summary": "Nov 2026 open-weight agentic model post-trained from Kimi K3 with large-scale joint RL; the largest open model checked here.",
+  "stages": [
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "repo-level",
+   "reasoning"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Teacher for agentic trajectories only if you can host it; read the license terms on distilling and commercial use first.",
+  "caveats": "Not OSI open. Enormous. Vendor benchmark tables mix harnesses; we copied no scores. License text read from the LICENSE file on the check date.",
+  "load_snippet": null,
+  "released": "2026-11",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/moonshotai/Kimi-K3.1-Pro safetensors.total; raw/main/LICENSE; README intro"
+ },
+ {
+  "id": "glm-5-3",
+  "name": "GLM-5.3",
+  "kind": "model",
+  "url": "https://huggingface.co/zai-org/GLM-5.3",
+  "extra_links": [],
+  "license": "Custom 'glm-5.3' license: MIT-like with Model-as-a-Service revenue condition (security review above USD 10B revenue)",
+  "size": "753B params (safetensors), 1M ctx",
+  "summary": "Aug 2026 Z.ai open model; card says it uses the GLM-5.2 base with gains from post-training only, and claims open-source SOTA on Terminal Bench 3.0.",
+  "stages": [
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "terminal",
+   "repo-level"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Strong open teacher for terminal/agentic data under a mostly permissive license.",
+  "caveats": "Card tables are vendor-run and include proprietary baselines; not independently verified. Large MoE.",
+  "load_snippet": null,
+  "released": "2026-08",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/zai-org/GLM-5.3 safetensors.total; raw/main/LICENSE; README"
+ },
+ {
+  "id": "glm-5-3-flash",
+  "name": "GLM-5.3-Flash",
+  "kind": "model",
+  "url": "https://huggingface.co/zai-org/GLM-5.3-Flash",
+  "extra_links": [],
+  "license": "MIT",
+  "size": "321B params (safetensors); card: 320B total, 18B active; 1M ctx",
+  "summary": "Aug 2026 smaller GLM-5.3 with new base model, hybrid sparse/linear attention and native multimodality; MIT licensed.",
+  "stages": [
+   "sft",
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "repo-level",
+   "terminal"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Most practical MIT-licensed GLM for teacher or starting-point use.",
+  "caveats": "Still needs a multi-GPU node. Vendor-reported benchmarks only.",
+  "load_snippet": null,
+  "released": "2026-08",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/zai-org/GLM-5.3-Flash cardData.license, safetensors.total, config.json, README"
+ },
+ {
+  "id": "starcoder2-15b",
+  "name": "StarCoder2-15B",
+  "kind": "model",
+  "url": "https://huggingface.co/bigcode/starcoder2-15b",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2402.19173"
+   },
+   {
+    "label": "Instruct (self-aligned)",
+    "url": "https://huggingface.co/bigcode/starcoder2-15b-instruct-v0.1"
+   }
+  ],
+  "license": "BigCode OpenRAIL-M (use restrictions apply)",
+  "size": "16.0B params, config ctx 16,384 (sliding window 4,096), 600+ languages",
+  "summary": "Open pretrained code model trained on The Stack v2 with opt-outs excluded; the data and training are documented.",
+  "stages": [
+   "pretrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion",
+   "generation"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use when provenance matters (permissive-or-no-license data, opt-out respected) or to study pretraining.",
+  "caveats": "2024 vintage, far behind current models. OpenRAIL-M carries behavioral use restrictions. Can emit verbatim training code (card warning).",
+  "load_snippet": null,
+  "released": "2024-02",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/bigcode/starcoder2-15b cardData.license, safetensors.total, config.json, README"
+ },
+ {
+  "id": "opencoder-8b",
+  "name": "OpenCoder-8B (Base/Instruct)",
+  "kind": "model",
+  "url": "https://huggingface.co/infly/OpenCoder-8B-Base",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2411.04905"
+   },
+   {
+    "label": "Instruct",
+    "url": "https://huggingface.co/infly/OpenCoder-8B-Instruct"
+   }
+  ],
+  "license": "'inf' license (HF other); card says commercial use supported",
+  "size": "7.77B params, ctx 8,192",
+  "summary": "Fully transparent code LLM: weights plus data pipeline, ablations and training protocol released. Best choice for studying code pretraining and annealing recipes end to end.",
+  "stages": [
+   "pretrain",
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion",
+   "generation"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use as a research base or to reproduce the recipe; do not expect current frontier capability.",
+  "caveats": "8K context is short for agentic work. Custom license, read it. 2024 vintage.",
+  "load_snippet": null,
+  "released": "2024-11",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/infly/OpenCoder-8B-Base cardData.license, safetensors.total, config.json, README"
+ },
+ {
+  "id": "seed-coder-8b",
+  "name": "Seed-Coder-8B (Base/Instruct/Reasoning)",
+  "kind": "model",
+  "url": "https://huggingface.co/ByteDance-Seed/Seed-Coder-8B-Base",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2506.03524"
+   },
+   {
+    "label": "Reasoning",
+    "url": "https://huggingface.co/ByteDance-Seed/Seed-Coder-8B-Reasoning"
+   },
+   {
+    "label": "Repo",
+    "url": "https://github.com/ByteDance-Seed/Seed-Coder"
+   }
+  ],
+  "license": "MIT",
+  "size": "8.25B params, ctx 32,768",
+  "summary": "ByteDance Seed (2025) family built from model-curated pretraining data; base, instruct and RL-trained reasoning variants in one permissive license.",
+  "stages": [
+   "pretrain",
+   "sft",
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion",
+   "generation",
+   "reasoning"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use the base for a small MIT-licensed code starting point and the Reasoning model as a small teacher.",
+  "caveats": "Data pipeline relies on LLM filtering; training data itself is not released. Mid-2025 vintage.",
+  "load_snippet": null,
+  "released": "2025-04",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/ByteDance-Seed/Seed-Coder-8B-Base cardData.license, safetensors.total, config.json, README"
+ },
+ {
+  "id": "granite-8b-code-base",
+  "name": "Granite Code 8B Base",
+  "kind": "model",
+  "url": "https://huggingface.co/ibm-granite/granite-8b-code-base-4k",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "8.05B params, ctx 4,096",
+  "summary": "IBM enterprise-oriented code model trained on license-permissive data; legacy but cleanly licensed.",
+  "stages": [
+   "pretrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion",
+   "generation"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Only if license provenance is the top constraint.",
+  "caveats": "4K context, April 2024, outclassed. Newer IBM Granite 4.0 models are general-purpose (granite-4.0-h-small, 32.2B, Apache-2.0, verified in API) and not code-specialized.",
+  "load_snippet": null,
+  "released": "2024-04",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/ibm-granite/granite-8b-code-base-4k cardData.license, safetensors.total, config.json, README"
+ },
+ {
+  "id": "codestral-22b",
+  "name": "Codestral-22B-v0.1",
+  "kind": "model",
+  "url": "https://huggingface.co/mistralai/Codestral-22B-v0.1",
+  "extra_links": [],
+  "license": "Mistral Non-Production License (MNPL-0.1)",
+  "size": "22.2B params, config ctx 32,768",
+  "summary": "Mistral's 2024 code model; weights open for research and testing only.",
+  "stages": [
+   "pretrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion",
+   "generation"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Not for commercial training pipelines.",
+  "caveats": "MNPL forbids production/commercial use; prefer Devstral Small (Apache) or Qwen coders.",
+  "load_snippet": null,
+  "released": "2024-05",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/mistralai/Codestral-22B-v0.1 cardData.license, safetensors.total, config.json, README"
+ },
+ {
+  "id": "devstral-small-2",
+  "name": "Devstral Small 2 (24B)",
+  "kind": "model",
+  "url": "https://huggingface.co/mistralai/Devstral-Small-2-24B-Instruct-2512",
+  "extra_links": [
+   {
+    "label": "Devstral 2 (123B)",
+    "url": "https://huggingface.co/mistralai/Devstral-2-123B-Instruct-2512"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "24.0B params, 256k ctx (card)",
+  "summary": "Dec 2025 Mistral agentic coding model, Apache licensed; earlier Devstral-Small-2505 and 2507 are also Apache-2.0 (verified).",
+  "stages": [
+   "sft",
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "repo-level"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Good Apache-licensed 24B starting point for SWE-agent style SFT/RL.",
+  "caveats": "Instruct-only; no base released in what we checked. Card says it performs 'remarkably' on SWE-bench but we copied no number.",
+  "load_snippet": null,
+  "released": "2025-11",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/mistralai/Devstral-Small-2-24B-Instruct-2512 cardData.license, safetensors.total, config.json, README"
+ },
+ {
+  "id": "devstral-2-123b",
+  "name": "Devstral 2 (123B)",
+  "kind": "model",
+  "url": "https://huggingface.co/mistralai/Devstral-2-123B-Instruct-2512",
+  "extra_links": [],
+  "license": "Modified MIT License (see LICENSE file; third-party-rights restriction in card)",
+  "size": "125.0B params, 256k ctx",
+  "summary": "Larger Dec 2025 Devstral for agentic coding under a modified MIT license.",
+  "stages": [
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "repo-level"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Teacher candidate; read the LICENSE for restrictions.",
+  "caveats": "Modified MIT: the exact modification was not fully read beyond the card line. Dense 123B is expensive to serve.",
+  "load_snippet": null,
+  "released": "2025-11",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/mistralai/Devstral-2-123B-Instruct-2512 cardData.license, safetensors.total, config.json, README"
+ },
+ {
+  "id": "codellama-70b",
+  "name": "Code Llama 70B (legacy)",
+  "kind": "model",
+  "url": "https://huggingface.co/codellama/CodeLlama-70b-hf",
+  "extra_links": [],
+  "license": "Llama 2 community license (custom Meta license)",
+  "size": "69.0B params, config ctx 16,384",
+  "summary": "Meta's 2024 code Llama; included for historical comparison only.",
+  "stages": [
+   "pretrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion",
+   "generation"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Do not choose for new work.",
+  "caveats": "Legacy, license has usage conditions, far behind current open models.",
+  "load_snippet": null,
+  "released": "2024-01",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/codellama/CodeLlama-70b-hf cardData.license, safetensors.total, config.json, README"
+ },
+ {
+  "id": "kimi-dev-72b",
+  "name": "Kimi-Dev-72B",
+  "kind": "model",
+  "url": "https://huggingface.co/moonshotai/Kimi-Dev-72B",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2509.23045"
+   },
+   {
+    "label": "Repo",
+    "url": "https://github.com/MoonshotAI/Kimi-Dev"
+   }
+  ],
+  "license": "MIT",
+  "size": "72.7B params, config ctx 131,072",
+  "summary": "Qwen2.5-72B-based SWE model trained with Agentless-style RL; card reports 60.4% on SWE-bench Verified (Moonshot-reported, workflow approach).",
+  "stages": [
+   "sft",
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "repair",
+   "repo-level",
+   "agentic"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use the recipe (Agentless skill prior then agent SFT) more than the weights.",
+  "caveats": "Score is vendor-reported on the card, not independently reproduced here. Mid-2025; surpassed by newer models.",
+  "load_snippet": null,
+  "released": "2025-06",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/moonshotai/Kimi-Dev-72B cardData.license, safetensors.total, config.json, README"
+ },
+ {
+  "id": "swe-agent-lm-32b",
+  "name": "SWE-agent-LM-32B",
+  "kind": "model",
+  "url": "https://huggingface.co/SWE-bench/SWE-agent-LM-32B",
+  "extra_links": [
+   {
+    "label": "Trajectories dataset",
+    "url": "https://huggingface.co/datasets/SWE-bench/SWE-smith-trajs-250429"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "32.8B params, config ctx 32,768",
+  "summary": "SWE-smith showcase: Qwen2.5-Coder-32B-Instruct fine-tuned on 5k SWE-agent trajectories generated with Claude 3.7 Sonnet.",
+  "stages": [
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "repair"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Use as a reproducible SFT baseline for SWE-smith data.",
+  "caveats": "Training trajectories came from a proprietary model, so check that provider's terms before reusing the data commercially. We did not verify the resolve rate in the card.",
+  "load_snippet": null,
+  "released": "2025-04",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/SWE-bench/SWE-agent-LM-32B cardData.license, safetensors.total, config.json, README"
+ },
+ {
+  "id": "deepswe-preview",
+  "name": "DeepSWE-Preview",
+  "kind": "model",
+  "url": "https://huggingface.co/agentica-org/DeepSWE-Preview",
+  "extra_links": [
+   {
+    "label": "Blog",
+    "url": "https://together.ai/blog/deepswe"
+   },
+   {
+    "label": "rLLM",
+    "url": "https://github.com/rllm-org/rllm"
+   }
+  ],
+  "license": "MIT",
+  "size": "32.8B params, config ctx 40,960",
+  "summary": "RL-only coding agent trained on Qwen3-32B with 4.5K R2E-Gym problems (sympy-like repos shared with SWE-bench Verified filtered out); card reports SWE-bench Verified rising from 23% to 42% in 200 RL steps.",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "repair"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Reference for pure-RL SWE training with rLLM; reuse data filtering idea.",
+  "caveats": "Numbers are from the model card (agentica-org). Config context is 40,960 although agent runs use longer contexts via scaffolding. Preview release.",
+  "load_snippet": null,
+  "released": "2025-07",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/agentica-org/DeepSWE-Preview cardData.license, safetensors.total, config.json, README"
+ },
+ {
+  "id": "openhands-lm-32b",
+  "name": "OpenHands LM 32B v0.1",
+  "kind": "model",
+  "url": "https://huggingface.co/OpenHands/openhands-lm-32b-v0.1",
+  "extra_links": [],
+  "license": "MIT",
+  "size": "32B params (Qwen2.5-Coder-32B-Instruct base); API total not fetched",
+  "summary": "Qwen2.5-Coder-32B-Instruct tuned on SWE-Gym-derived data for the OpenHands agent; card reports 37.2% SWE-bench Verified resolve rate.",
+  "stages": [
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "repair"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Baseline for open SWE-agent SFT.",
+  "caveats": "Early 2025 and outclassed. Repo moved from all-hands/ to OpenHands/ (redirect). Param total not verified via API.",
+  "load_snippet": null,
+  "released": "2025-03",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/OpenHands/openhands-lm-32b-v0.1 README (license mit, base_model, 37.2%)"
+ },
+ {
+  "id": "deepcoder-14b-preview",
+  "name": "DeepCoder-14B-Preview",
+  "kind": "model",
+  "url": "https://huggingface.co/agentica-org/DeepCoder-14B-Preview",
+  "extra_links": [
+   {
+    "label": "Blog (Notion)",
+    "url": "https://pretty-radio-b75.notion.site/DeepCoder-A-Fully-Open-Source-14B-Coder-at-O3-mini-Level-1cf81902c14680b3bee5eb349a512a51"
+   }
+  ],
+  "license": "MIT",
+  "size": "14.77B params",
+  "summary": "RL fine-tune of DeepSeek-R1-Distill-Qwen-14B for code reasoning; card reports 60.6% Pass@1 on LiveCodeBench v5 (8/1/24-2/1/25), versus 53.0 for the base distill.",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "competitive",
+   "reasoning"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Reference artifact for the open code-RL recipe (GRPO+, iterative context lengthening, overlong filtering).",
+  "caveats": "Preview; numbers are from the card. LiveCodeBench versions are now partly contaminated for newer models.",
+  "load_snippet": null,
+  "released": "2025-04",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/agentica-org/DeepCoder-14B-Preview cardData.license; README"
+ },
+ {
+  "id": "opencodereasoning-nemotron-32b",
+  "name": "OpenCodeReasoning-Nemotron-32B",
+  "kind": "model",
+  "url": "https://huggingface.co/nvidia/OpenCodeReasoning-Nemotron-32B",
+  "extra_links": [
+   {
+    "label": "Paper (data)",
+    "url": "https://arxiv.org/abs/2504.01943"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "32.8B params, ctx 32,768",
+  "summary": "NVIDIA reasoning code model distilled via SFT only from the OpenCodeReasoning dataset on Qwen2.5-32B-Instruct.",
+  "stages": [
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "competitive",
+   "reasoning"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Strong open SFT-only reference for competitive-programming distillation.",
+  "caveats": "Competitive-programming focus, not repo-level. Teacher outputs came from DeepSeek-R1 (check the dataset card for terms).",
+  "load_snippet": null,
+  "released": "2025-04",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/nvidia/OpenCodeReasoning-Nemotron-32B cardData.license, safetensors.total, config.json, README"
+ },
+ {
+  "id": "nemotron-cascade-14b",
+  "name": "Nemotron-Cascade-14B-Thinking",
+  "kind": "model",
+  "url": "https://huggingface.co/nvidia/Nemotron-Cascade-14B-Thinking",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2512.13607"
+   }
+  ],
+  "license": "NVIDIA Open Model License",
+  "size": "14.77B params, ctx 32,768 (YaRN to 90K used for SWE Verified Agentless)",
+  "summary": "Dec 2025 NVIDIA reasoning model trained with cascaded domain-wise RL (including SWE).",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "reasoning",
+   "repair",
+   "competitive"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Study the cascaded-RL recipe; check NVIDIA license for use.",
+  "caveats": "NVIDIA license, not OSI. Paper: arXiv 2512.13607.",
+  "load_snippet": null,
+  "released": "2025-12",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/nvidia/Nemotron-Cascade-14B-Thinking cardData.license, safetensors.total, config.json, README"
+ },
+ {
+  "id": "nemotron-3-ultra",
+  "name": "NVIDIA Nemotron 3 Ultra 550B-A55B",
+  "kind": "model",
+  "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B-BF16",
+  "extra_links": [],
+  "license": "OpenMDW-1.1",
+  "size": "560.5B params in safetensors; card: 550B total, 55B active; 262,144 ctx",
+  "summary": "Jun 2026 hybrid Mamba-2 plus MoE general model whose card includes SWE-bench Verified and LiveCodeBench rows; a permissively licensed (OpenMDW) very large teacher.",
+  "stages": [
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "reasoning"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Teacher option with a permissive open-model-and-data license; read OpenMDW terms.",
+  "caveats": "General model, not coder-specific. Card scores compare against other models with its own settings; none copied.",
+  "load_snippet": null,
+  "released": "2026-06",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B-BF16 cardData.license, safetensors.total, config.json, README"
+ },
+ {
+  "id": "olmo-3-32b",
+  "name": "Olmo 3 32B (Base/Think)",
+  "kind": "model",
+  "url": "https://huggingface.co/allenai/Olmo-3-1125-32B",
+  "extra_links": [
+   {
+    "label": "Think 32B (3.1)",
+    "url": "https://huggingface.co/allenai/Olmo-3.1-32B-Think"
+   }
+  ],
+  "license": "Apache-2.0",
+  "size": "32.2B params, config ctx 65,536",
+  "summary": "Fully open (weights, data, checkpoints incl. stage1/2/3) Allen AI model suite with Base, Instruct and Think; best for transparent post-training research. No dedicated 'OLMo-Coder' was found.",
+  "stages": [
+   "pretrain",
+   "sft",
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation",
+   "reasoning"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use for fully reproducible experiments with intermediate checkpoints; pair with Open-Instruct.",
+  "caveats": "General model, coding strength below dedicated coders. A 7B is also available (allenai/Olmo-3-1025-7B, Apache-2.0).",
+  "load_snippet": null,
+  "released": "2025-11",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/allenai/Olmo-3-1125-32B cardData.license, safetensors.total, config.json, README"
+ },
+ {
+  "id": "smollm3-3b",
+  "name": "SmolLM3-3B",
+  "kind": "model",
+  "url": "https://huggingface.co/HuggingFaceTB/SmolLM3-3B",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "3.08B params, 65,536 ctx (128K via YaRN)",
+  "summary": "Fully open 3B model with dual-mode reasoning; handy as a tiny testbed for code recipes (see smollm repo).",
+  "stages": [
+   "pretrain",
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": "intermediate",
+  "how_to_use": "Use for cheap ablations of SFT/RL pipelines.",
+  "caveats": "Small and general; not a competitive coder.",
+  "load_snippet": null,
+  "released": "2025-07",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/HuggingFaceTB/SmolLM3-3B cardData.license, safetensors.total, config.json, README"
+ },
+ {
+  "id": "gpt-oss-120b",
+  "name": "gpt-oss-120b",
+  "kind": "model",
+  "url": "https://huggingface.co/openai/gpt-oss-120b",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "116.8B params (MoE)",
+  "summary": "Aug 2025 OpenAI open-weight reasoning model with an Apache license; a permissive teacher/baseline.",
+  "stages": [
+   "sft",
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "reasoning",
+   "tool-use",
+   "agentic"
+  ],
+  "difficulty": "frontier",
+  "how_to_use": "Permissively licensed teacher; fits a single 80GB-class GPU only with quantization.",
+  "caveats": "Not coder-specific; no score copied here since the card was not read for coding rows.",
+  "load_snippet": null,
+  "released": "2025-08",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/openai/gpt-oss-120b cardData.license, safetensors.total"
+ },
+ {
+  "id": "skywork-or1-32b",
+  "name": "Skywork-OR1-32B (and 7B)",
+  "kind": "model",
+  "url": "https://huggingface.co/Skywork/Skywork-OR1-32B",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2505.22312"
+   },
+   {
+    "label": "Repo",
+    "url": "https://github.com/SkyworkAI/Skywork-OR1"
+   }
+  ],
+  "license": "Apache-2.0 per GitHub repo (HF card license field not set)",
+  "size": "32.8B params",
+  "summary": "RL on DeepSeek-R1-Distill-Qwen-32B for math and code; paper reports LiveCodeBench-comparable to R1 and Qwen3-32B.",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "competitive",
+   "reasoning"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Reference weights for the Skywork-OR1 RL recipe.",
+  "caveats": "Evaluated on AIME and LiveCodeBench only; HF API had no license field, repo license from GitHub.",
+  "load_snippet": null,
+  "released": "2025-05",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/Skywork/Skywork-OR1-32B cardData.license, safetensors.total, config.json, README"
+ },
+ {
+  "id": "acereason-nemotron-14b",
+  "name": "AceReason-Nemotron-14B",
+  "kind": "model",
+  "url": "https://huggingface.co/nvidia/AceReason-Nemotron-14B",
+  "extra_links": [
+   {
+    "label": "Paper",
+    "url": "https://arxiv.org/abs/2505.16400"
+   }
+  ],
+  "license": "NVIDIA Open Model License",
+  "size": "14.77B params",
+  "summary": "RL-only (math then code) from DeepSeek-R1-Distill-Qwen-14B; card reports LiveCodeBench avg@8.",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "competitive",
+   "reasoning"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Reference for the math-then-code staged RL recipe.",
+  "caveats": "Competitive coding only; NVIDIA license.",
+  "load_snippet": null,
+  "released": "2025-05",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/api/models/nvidia/AceReason-Nemotron-14B cardData.license, safetensors.total, config.json, README"
+ },
+ {
+  "id": "paper-magicoder",
+  "name": "Magicoder: OSS-Instruct",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2312.02120",
+  "extra_links": [
+   {
+    "label": "Repo",
+    "url": "https://github.com/ise-uiuc/magicoder"
+   }
+  ],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Seeds an LLM with real open-source snippets to generate 75K diverse, realistic instruction pairs; 7B models beat larger ones at release.",
+  "stages": [
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Use OSS-Instruct style seeding for synthetic SFT data; combine with Evol-Instruct.",
+  "caveats": "Teacher was an OpenAI model, so terms-of-use apply. Dec 2023; evaluated on HumanEval/MBPP-era benchmarks.",
+  "load_snippet": null,
+  "released": "2023-12",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2312.02120 (title, date, abstract)"
+ },
+ {
+  "id": "paper-wizardcoder",
+  "name": "WizardCoder: Evol-Instruct for code",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2306.08568",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Adapts Evol-Instruct to progressively harder code instructions and fine-tunes StarCoder.",
+  "stages": [
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Evolve instructions toward difficulty, then filter by execution.",
+  "caveats": "Uses proprietary-model-generated data; 2023 benchmarks.",
+  "load_snippet": null,
+  "released": "2023-06",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2306.08568 (title, date, abstract)"
+ },
+ {
+  "id": "paper-octopack",
+  "name": "OctoPack: Instruction Tuning Code LLMs",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2308.07124",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "CommitPack: 4 TB of Git commits across 350 languages used as natural code-instruction data; 46.2% HumanEval pass@1 for StarCoder-16B tuned without OpenAI outputs (abstract).",
+  "stages": [
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation",
+   "repair"
+  ],
+  "difficulty": null,
+  "how_to_use": "Commits are a permissive, non-distilled source of instruction data; use for repair/edit skills.",
+  "caveats": "Abstract numbers are 2023 vintage; also introduces HumanEvalPack.",
+  "load_snippet": null,
+  "released": "2023-08",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2308.07124 (title, date, abstract)"
+ },
+ {
+  "id": "paper-starcoder2",
+  "name": "StarCoder 2 and The Stack v2",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2402.19173",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Documents the open data, opt-out and training for StarCoder2 on The Stack v2.",
+  "stages": [
+   "pretrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion"
+  ],
+  "difficulty": null,
+  "how_to_use": "Reference for data governance (licenses, opt-out) in code pretraining.",
+  "caveats": "Models and data are from early 2024.",
+  "load_snippet": null,
+  "released": "2024-02",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2402.19173 (title, date, abstract)"
+ },
+ {
+  "id": "paper-opencoder",
+  "name": "OpenCoder: The Open Cookbook",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2411.04905",
+  "extra_links": [
+   {
+    "label": "Repo",
+    "url": "https://github.com/OpenCoder-llm/OpenCoder-llm"
+   }
+  ],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Releases weights plus reproducible data pipeline, ablations and training protocol for a top-tier code LLM at its release.",
+  "stages": [
+   "pretrain",
+   "midtrain",
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion",
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Best single paper for recipe transparency in code pretraining, annealing and SFT data.",
+  "caveats": "Smaller scale (1.5B/8B) and 2024 vintage.",
+  "load_snippet": null,
+  "released": "2024-11",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2411.04905 (title, date, abstract)"
+ },
+ {
+  "id": "paper-qwen2-5-coder",
+  "name": "Qwen2.5-Coder Technical Report",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2409.12186",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Describes data, training and evaluation for the Qwen2.5-Coder family.",
+  "stages": [
+   "pretrain",
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion",
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Read for data-mixing and code-vs-text ratio decisions in a leading open recipe.",
+  "caveats": "Data is not released; vendor evaluation.",
+  "load_snippet": null,
+  "released": "2024-09",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2409.12186 (title, date, abstract)"
+ },
+ {
+  "id": "paper-deepseek-coder",
+  "name": "DeepSeek-Coder",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2401.14196",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Repo-level pretraining data construction (dependency-ordered files) and fill-in-the-middle for code models.",
+  "stages": [
+   "pretrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion",
+   "repo-level"
+  ],
+  "difficulty": null,
+  "how_to_use": "Order files by dependency and use FIM for repo-level pretraining.",
+  "caveats": "Early 2024.",
+  "load_snippet": null,
+  "released": "2024-01",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2401.14196 (title, date, abstract)"
+ },
+ {
+  "id": "paper-deepseek-coder-v2",
+  "name": "DeepSeek-Coder-V2",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2406.11931",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Continued pretraining of a MoE on code and math tokens to reach closed-model-level code results at release.",
+  "stages": [
+   "pretrain",
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion",
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Evidence that continued pretraining on code-heavy mixes lifts a general MoE.",
+  "caveats": "Mid-2024; benchmarks since saturated.",
+  "load_snippet": null,
+  "released": "2024-06",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2406.11931 (title, date, abstract)"
+ },
+ {
+  "id": "paper-coderl",
+  "name": "CodeRL",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2207.01780",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "First widely cited framework using unit-test signals and an actor-critic to train code LMs with RL.",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Historical context for execution-based reward.",
+  "caveats": "2022 models and benchmarks; superseded by GRPO-style RL.",
+  "load_snippet": null,
+  "released": "2022-07",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2207.01780 (title, date, abstract)"
+ },
+ {
+  "id": "paper-rltf",
+  "name": "RLTF: Reinforcement Learning from Unit Test Feedback",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2307.04349",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Online RL with multi-granularity unit-test feedback (including error locations) to refine code LLMs.",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Fine-grained failure signals can augment pass/fail reward.",
+  "caveats": "2023, small models.",
+  "load_snippet": null,
+  "released": "2023-07",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2307.04349 (title, date, abstract)"
+ },
+ {
+  "id": "paper-ppocoder",
+  "name": "PPOCoder",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2301.13816",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Combines pretrained code LMs with PPO using compiler/execution and structure-alignment feedback.",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Early example of non-differentiable execution rewards.",
+  "caveats": "Early work; models are tiny relative to today.",
+  "load_snippet": null,
+  "released": "2023-01",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2301.13816 (title, date, abstract)"
+ },
+ {
+  "id": "paper-deepseek-r1",
+  "name": "DeepSeek-R1",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2501.12948",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Shows reasoning can be incentivized with pure RL on verifiable rewards, including coding competitions.",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "reasoning",
+   "competitive"
+  ],
+  "difficulty": null,
+  "how_to_use": "Foundation for RL with verifiable reward; start from a strong base, reward = tests pass.",
+  "caveats": "Full data and code not released; replicate via open-r1.",
+  "load_snippet": null,
+  "released": "2025-01",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2501.12948 (title, date, abstract)"
+ },
+ {
+  "id": "paper-ace-reason",
+  "name": "AceReason-Nemotron",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2505.16400",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Systematic RL ablations: math-only RL first then code-only RL; shows math RL also helps code.",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "competitive",
+   "reasoning"
+  ],
+  "difficulty": null,
+  "how_to_use": "Stage math then code, filter prompts, scale RL on distilled bases.",
+  "caveats": "Competitive coding only.",
+  "load_snippet": null,
+  "released": "2025-05",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2505.16400 (title, date, abstract)"
+ },
+ {
+  "id": "paper-skywork-or1",
+  "name": "Skywork Open Reasoner 1",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2505.22312",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Open RL implementation on R1-distill models; abstract reports average accuracy on AIME24, AIME25 and LiveCodeBench rising from 57.8% to 72.8% for 32B; includes ablations on core RL components.",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "competitive",
+   "reasoning"
+  ],
+  "difficulty": null,
+  "how_to_use": "Read ablations on data mixing, filtering, entropy control.",
+  "caveats": "Competitive programming only.",
+  "load_snippet": null,
+  "released": "2025-05",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2505.22312 (title, date, abstract)"
+ },
+ {
+  "id": "paper-swe-gym",
+  "name": "SWE-Gym",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2412.21139",
+  "extra_links": [
+   {
+    "label": "Repo",
+    "url": "https://github.com/SWE-Gym/SWE-Gym"
+   }
+  ],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "First environment for training SWE agents: 2,438 real Python tasks with executable runtimes; up to 19% absolute gains on SWE-bench Verified/Lite via SFT, plus trained verifiers (abstract).",
+  "stages": [
+   "sft",
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "repair"
+  ],
+  "difficulty": null,
+  "how_to_use": "Use as the baseline executable training environment and trajectory source.",
+  "caveats": "Only 2,438 tasks from a small set of repos, Python only.",
+  "load_snippet": null,
+  "released": "2024-12",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2412.21139 (title, date, abstract)"
+ },
+ {
+  "id": "paper-swe-smith",
+  "name": "SWE-smith",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2504.21798",
+  "extra_links": [
+   {
+    "label": "Repo",
+    "url": "https://github.com/SWE-bench/SWE-smith"
+   }
+  ],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Pipeline that turns any Python repo into an execution environment and synthesizes 100s-1000s of task instances by breaking tests; builds a 50k-instance dataset from 128 repos (abstract).",
+  "stages": [
+   "sft",
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "repair"
+  ],
+  "difficulty": null,
+  "how_to_use": "Scalable data generator for SWE tasks; start from the released dataset and trajectories.",
+  "caveats": "Synthetic bugs differ from real issues; Python only; trajectories used Claude 3.7 Sonnet (terms).",
+  "load_snippet": null,
+  "released": "2025-04",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2504.21798 (title, date, abstract)"
+ },
+ {
+  "id": "paper-r2e-gym",
+  "name": "R2E-Gym",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2504.07164",
+  "extra_links": [
+   {
+    "label": "Repo",
+    "url": "https://github.com/R2E-Gym/R2E-Gym"
+   }
+  ],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Procedural SWE environment of 8.7K tasks via test generation and back-translation from commits; 34.4% on SWE-bench Verified with a 32B model; hybrid test-time scaling (abstract).",
+  "stages": [
+   "sft",
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "repair"
+  ],
+  "difficulty": null,
+  "how_to_use": "Source of RL tasks (used by DeepSWE); hybrid verifiers help test-time scaling.",
+  "caveats": "Synthesized issues may be noisy; Python.",
+  "load_snippet": null,
+  "released": "2025-04",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2504.07164 (title, date, abstract)"
+ },
+ {
+  "id": "paper-swe-rl",
+  "name": "SWE-RL (Meta)",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2502.18449",
+  "extra_links": [
+   {
+    "label": "Repo",
+    "url": "https://github.com/facebookresearch/swe-rl"
+   }
+  ],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Scales RL for real-world software engineering with a lightweight rule-based reward (similarity to ground-truth patch) on open software evolution data.",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "repair",
+   "repo-level"
+  ],
+  "difficulty": null,
+  "how_to_use": "Cheap reward that avoids execution; consider as a pre-stage before execution-based RL.",
+  "caveats": "Similarity reward is a proxy and can reward style over correctness; repo code license NOASSERTION.",
+  "load_snippet": null,
+  "released": "2025-02",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2502.18449 (title, date, abstract)"
+ },
+ {
+  "id": "paper-kimi-dev",
+  "name": "Kimi-Dev: Agentless Training as Skill Prior",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2509.23045",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Argues Agentless-style training induces localization/edit/reflection priors; the abstract reports 60.4% on SWE-bench Verified (workflow mode) and 48.6% pass@1 as an agent after SFT on 5k public trajectories.",
+  "stages": [
+   "sft",
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "repair",
+   "agentic"
+  ],
+  "difficulty": null,
+  "how_to_use": "Train single-turn verifiable steps first, then adapt to agents with small trajectory SFT.",
+  "caveats": "Numbers are authors' own.",
+  "load_snippet": null,
+  "released": "2025-09",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2509.23045 (title, date, abstract)"
+ },
+ {
+  "id": "paper-agentless",
+  "name": "Agentless",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2407.01489",
+  "extra_links": [
+   {
+    "label": "Repo",
+    "url": "https://github.com/OpenAutoCoder/Agentless"
+   }
+  ],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "A simple localize-repair-validate pipeline without autonomous agents that is competitive on SWE-bench.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "repair"
+  ],
+  "difficulty": null,
+  "how_to_use": "Strong cheap baseline and a template for structured single-turn training tasks.",
+  "caveats": "Mid-2024 numbers.",
+  "load_snippet": null,
+  "released": "2024-07",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2407.01489 (title, date, abstract)"
+ },
+ {
+  "id": "paper-selfcodealign",
+  "name": "SelfCodeAlign",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2410.24198",
+  "extra_links": [
+   {
+    "label": "Repo",
+    "url": "https://github.com/bigcode-project/selfcodealign"
+   }
+  ],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Self-alignment pipeline: model extracts concepts, generates tasks, samples responses with tests, keeps passing examples; 74k pairs from CodeQwen1.5-7B (abstract).",
+  "stages": [
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Distillation-free, execution-validated SFT data generation; good when teacher licenses are a concern.",
+  "caveats": "Gains shown on HumanEval-era benchmarks; compute-heavy sampling.",
+  "load_snippet": null,
+  "released": "2024-10",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2410.24198 (title, date, abstract)"
+ },
+ {
+  "id": "paper-textbooks",
+  "name": "Textbooks Are All You Need (phi-1)",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2306.11644",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "1.3B model trained on 6B tokens of filtered web 'textbook quality' code plus 1B tokens of synthetic textbooks reaches 50.6% HumanEval (abstract).",
+  "stages": [
+   "pretrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Quality filtering plus synthetic textbook data beats raw scale for small models.",
+  "caveats": "Synthetic data from GPT-3.5; HumanEval is contaminated-prone; model not released fully at the time.",
+  "load_snippet": null,
+  "released": "2023-06",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2306.11644 (title, date, abstract)"
+ },
+ {
+  "id": "paper-smollm2",
+  "name": "SmolLM2 (Stack-Edu)",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2502.02737",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Data-centric small-model training; introduces Stack-Edu (education-quality code filter), FineMath, SmolTalk and manual mix refinement.",
+  "stages": [
+   "pretrain",
+   "midtrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion"
+  ],
+  "difficulty": null,
+  "how_to_use": "Use educational-quality classifiers to filter code; refine mixture per stage.",
+  "caveats": "Small scale (1.7B).",
+  "load_snippet": null,
+  "released": "2025-02",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2502.02737 (title, date, abstract)"
+ },
+ {
+  "id": "paper-seed-coder",
+  "name": "Seed-Coder",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2506.03524",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Model-centric pipeline: LLMs score and filter code pretraining data instead of hand rules.",
+  "stages": [
+   "pretrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion"
+  ],
+  "difficulty": null,
+  "how_to_use": "Use LLM scorers for code-quality filtering across languages.",
+  "caveats": "Data not released.",
+  "load_snippet": null,
+  "released": "2025-06",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2506.03524 (title, date, abstract)"
+ },
+ {
+  "id": "paper-rho-1",
+  "name": "Rho-1: Not All Tokens Are What You Need",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2404.07965",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Selective language modeling: train on tokens with high excess loss versus a reference model.",
+  "stages": [
+   "pretrain",
+   "midtrain"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "completion"
+  ],
+  "difficulty": null,
+  "how_to_use": "Token-level quality filtering for continued pretraining.",
+  "caveats": "Evaluated mostly on math in the paper; code transfer is less established.",
+  "load_snippet": null,
+  "released": "2024-04",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2404.07965 (title, date, abstract)"
+ },
+ {
+  "id": "paper-lima",
+  "name": "LIMA: Less Is More for Alignment",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2305.11206",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "About 1,000 curated examples can align a model, arguing for quality over quantity in SFT.",
+  "stages": [
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Basis for small high-quality SFT sets; code transfer is an inference, not shown in the paper.",
+  "caveats": "Not a code paper; verify on code benchmarks.",
+  "load_snippet": null,
+  "released": "2023-05",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2305.11206 (title, date, abstract)"
+ },
+ {
+  "id": "paper-opencodereasoning",
+  "name": "OpenCodeReasoning",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2504.01943",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "SFT-only distillation dataset for competitive coding; abstract reports 61.8% LiveCodeBench and 24.6% CodeContests and analyzes execution filtering.",
+  "stages": [
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "competitive",
+   "reasoning"
+  ],
+  "difficulty": null,
+  "how_to_use": "Shows distillation SFT can match RL for coding; ablate execution filtering.",
+  "caveats": "Teacher outputs from DeepSeek-R1; competitive-programming scope.",
+  "load_snippet": null,
+  "released": "2025-04",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2504.01943 (title, date, abstract)"
+ },
+ {
+  "id": "paper-coderm",
+  "name": "Dynamic Scaling of Unit Tests for Code Reward Modeling (CodeRM)",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2501.01054",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "More generated unit tests give better reward signals, especially on hard problems; proposes CodeRM-8B.",
+  "stages": [
+   "rl",
+   "preference"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "testing",
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Scale generated tests per problem for reward quality; use a trained test generator.",
+  "caveats": "LLM-generated tests are themselves unreliable.",
+  "load_snippet": null,
+  "released": "2025-01",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2501.01054 (title, date, abstract)"
+ },
+ {
+  "id": "paper-acecoder",
+  "name": "AceCoder",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2502.01718",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Automated test-case synthesis creates (question, tests) pairs for reward models and RL; best-of-32 gains of about 5 to 10 points reported.",
+  "stages": [
+   "rl",
+   "preference"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "testing",
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Synthesize tests at scale and use pass rates for rewards.",
+  "caveats": "Synthetic tests can be wrong; evaluated on 7-8B models.",
+  "load_snippet": null,
+  "released": "2025-02",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2502.01718 (title, date, abstract)"
+ },
+ {
+  "id": "paper-dapo",
+  "name": "DAPO",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2503.14476",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Open RL system with decoupled clip, dynamic sampling, token-level loss and overlong handling; 50 on AIME 2024 with Qwen2.5-32B base.",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "reasoning"
+  ],
+  "difficulty": null,
+  "how_to_use": "Adopt clip-higher, dynamic sampling and overlong filtering for GRPO variants.",
+  "caveats": "Math evaluated; code reuse (DeepCoder) is secondary.",
+  "load_snippet": null,
+  "released": "2025-03",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2503.14476 (title, date, abstract)"
+ },
+ {
+  "id": "paper-dr-grpo",
+  "name": "Understanding R1-Zero-Like Training (Dr. GRPO)",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2503.20783",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Finds GRPO length bias that inflates incorrect responses and proposes Dr. GRPO; also notes Qwen2.5 bases show strong reasoning without templates.",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "reasoning"
+  ],
+  "difficulty": null,
+  "how_to_use": "Remove length and std normalization biases; be wary of base-model pretraining effects.",
+  "caveats": "Math-centered experiments.",
+  "load_snippet": null,
+  "released": "2025-03",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2503.20783 (title, date, abstract)"
+ },
+ {
+  "id": "paper-gspo",
+  "name": "Group Sequence Policy Optimization (GSPO)",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2507.18071",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Sequence-level importance ratios stabilize RL for MoE models.",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "reasoning"
+  ],
+  "difficulty": null,
+  "how_to_use": "Try GSPO for MoE coders if token-level GRPO is unstable.",
+  "caveats": "Qwen-team method; evidence is mostly vendor-internal.",
+  "load_snippet": null,
+  "released": "2025-07",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2507.18071 (title, date, abstract)"
+ },
+ {
+  "id": "paper-prorl",
+  "name": "ProRL: Prolonged RL",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2505.24864",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Long RL runs expand reasoning boundaries beyond the base model.",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "reasoning"
+  ],
+  "difficulty": null,
+  "how_to_use": "Budget for long RL runs with KL control and resets.",
+  "caveats": "Mostly math/reasoning.",
+  "load_snippet": null,
+  "released": "2025-05",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2505.24864 (title, date, abstract)"
+ },
+ {
+  "id": "paper-reward-hack-audit",
+  "name": "Auditing Reward Hackability in Code RL Environments",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2606.16062",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Abstract reports 22.4% of 49 SWE-bench Verified tasks accept a patch that differs from the gold patch (57.8% with a stronger attacker).",
+  "stages": [
+   "rl",
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "testing",
+   "repair"
+  ],
+  "difficulty": null,
+  "how_to_use": "Audit and harden tests before using SWE tasks as RL rewards.",
+  "caveats": "49-task sample, single study, June 2026 preprint.",
+  "load_snippet": null,
+  "released": "2026-06",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2606.16062 (title, date, abstract)"
+ },
+ {
+  "id": "paper-evilgenie",
+  "name": "EvilGenie: A Reward Hacking Benchmark",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2511.21654",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Benchmark on LiveCodeBench problems where hacking is easy; LLM judges detect obvious hacks, held-out tests help only slightly.",
+  "stages": [
+   "eval",
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "testing"
+  ],
+  "difficulty": null,
+  "how_to_use": "Use judges plus test-file edit detection to monitor RL rollouts.",
+  "caveats": "Observes hacking in Codex and Claude Code; benchmark scope is small.",
+  "load_snippet": null,
+  "released": "2025-11",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2511.21654 (title, date, abstract)"
+ },
+ {
+  "id": "paper-coding-or-cheating",
+  "name": "Coding or Cheating?",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2611.10404",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Frontier models try to recover answers from repo history and filesystems in hardened SWE environments.",
+  "stages": [
+   "rl",
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic"
+  ],
+  "difficulty": null,
+  "how_to_use": "Sandbox git history, object store and filesystem in RL environments.",
+  "caveats": "Nov 2026 preprint.",
+  "load_snippet": null,
+  "released": "2026-11",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2611.10404 (title, date, abstract)"
+ },
+ {
+  "id": "paper-livecodebench",
+  "name": "LiveCodeBench",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2403.07974",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Time-stamped contamination-free evaluation for code LLMs via continuously collected problems.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "competitive",
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Use release-date windows after a model's cutoff for clean evaluation.",
+  "caveats": "Windows are static once published; newer models age past them.",
+  "load_snippet": null,
+  "released": "2024-03",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2403.07974 (title, date, abstract)"
+ },
+ {
+  "id": "paper-rephrased-contamination",
+  "name": "Rethinking Benchmark and Contamination (rephrased samples)",
+  "kind": "paper",
+  "url": "https://arxiv.org/abs/2311.04850",
+  "extra_links": [],
+  "license": "arXiv preprint (paper); check repo for code/data licenses",
+  "size": "paper",
+  "summary": "Shows rephrased benchmark samples evade n-gram decontamination and inflate scores.",
+  "stages": [
+   "eval"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Use embedding-based decontamination, not only n-gram overlap.",
+  "caveats": "General LLM paper, not code-specific.",
+  "load_snippet": null,
+  "released": "2023-11",
+  "checked": "2026-11-24",
+  "evidence": "export.arxiv.org/api/query?id_list=2311.04850 (title, date, abstract)"
+ },
+ {
+  "id": "recipe-deepcoder",
+  "name": "DeepCoder RL recipe (GRPO+)",
+  "kind": "recipe",
+  "url": "https://pretty-radio-b75.notion.site/DeepCoder-A-Fully-Open-Source-14B-Coder-at-O3-mini-Level-1cf81902c14680b3bee5eb349a512a51",
+  "extra_links": [
+   {
+    "label": "Model",
+    "url": "https://huggingface.co/agentica-org/DeepCoder-14B-Preview"
+   }
+  ],
+  "license": "MIT (released model); blog",
+  "size": "blog post + model card",
+  "summary": "Open code-RL recipe: GRPO+ (DAPO ideas: clip-high, no KL loss), iterative context lengthening 16K to 32K, DAPO overlong filtering, and offline difficulty filtering of coding problems, on R1-Distill-Qwen-14B.",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "competitive",
+   "reasoning"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Replicate with verl or rLLM; keep problems with reliable tests, filter by difficulty, mask truncated sequences.",
+  "caveats": "Details taken from the HF model card; the Notion blog resolved HTTP 200 but was not parsed. Results are on LiveCodeBench v5 only.",
+  "load_snippet": null,
+  "released": "2025-04",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/agentica-org/DeepCoder-14B-Preview README; blog URL HTTP 200"
+ },
+ {
+  "id": "recipe-deepswe",
+  "name": "DeepSWE RL recipe (rLLM)",
+  "kind": "recipe",
+  "url": "https://together.ai/blog/deepswe",
+  "extra_links": [
+   {
+    "label": "Model",
+    "url": "https://huggingface.co/agentica-org/DeepSWE-Preview"
+   }
+  ],
+  "license": "MIT (model); blog",
+  "size": "blog post + model card",
+  "summary": "Pure-RL SWE-agent recipe on Qwen3-32B with 4.5K R2E-Gym problems, repos overlapping SWE-bench Verified filtered out, built on rLLM.",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "agentic",
+   "repair"
+  ],
+  "difficulty": "hard",
+  "how_to_use": "Reuse the contamination filter by repository and the Docker-per-task setup.",
+  "caveats": "Numbers (23 to 42% in 200 steps) from the model card; blog resolved HTTP 200.",
+  "load_snippet": null,
+  "released": "2025-07",
+  "checked": "2026-11-24",
+  "evidence": "huggingface.co/agentica-org/DeepSWE-Preview README; together.ai/blog/deepswe HTTP 200"
+ },
+ {
+  "id": "open-r1",
+  "name": "Open-R1",
+  "kind": "recipe",
+  "url": "https://github.com/huggingface/open-r1",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "GitHub repo",
+  "summary": "Hugging Face's open reproduction of DeepSeek-R1: SFT, GRPO training scripts, code-reward environments and datasets.",
+  "stages": [
+   "sft",
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Start here for an end-to-end GRPO-with-code-execution reference using TRL.",
+  "caveats": "Reference-quality code, not a turnkey frontier recipe. Activity per GitHub API on 2026-11-24: 26.5k stars, last push 2026-10-26, not archived",
+  "load_snippet": null,
+  "released": "2025",
+  "checked": "2026-11-24",
+  "evidence": "api.github.com/repos/huggingface/open-r1 license, stargazers_count, pushed_at, archived"
+ },
+ {
+  "id": "opencoder-repo",
+  "name": "OpenCoder repo",
+  "kind": "recipe",
+  "url": "https://github.com/OpenCoder-llm/OpenCoder-llm",
+  "extra_links": [],
+  "license": "MIT",
+  "size": "GitHub repo",
+  "summary": "Code, data-processing pipeline and training recipe behind OpenCoder.",
+  "stages": [
+   "pretrain",
+   "midtrain",
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Use for code pretraining data cleaning (dedup, filtering) reference.",
+  "caveats": "Stale: last push 2024-12-08. Activity per GitHub API on 2026-11-24: 2.1k stars, last push 2024-12-08, not archived",
+  "load_snippet": null,
+  "released": "2024",
+  "checked": "2026-11-24",
+  "evidence": "api.github.com/repos/OpenCoder-llm/OpenCoder-llm license, stargazers_count, pushed_at, archived"
+ },
+ {
+  "id": "open-instruct",
+  "name": "Open-Instruct (Ai2)",
+  "kind": "recipe",
+  "url": "https://github.com/allenai/open-instruct",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "GitHub repo",
+  "summary": "Ai2's post-training codebase (SFT, DPO, RL with verifiable rewards) behind Tulu/Olmo.",
+  "stages": [
+   "sft",
+   "preference",
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Use for reproducible post-training with RLVR including code rewards; pairs with Olmo 3.",
+  "caveats": "Large, fast-moving codebase. Activity per GitHub API on 2026-11-24: 3.9k stars, last push 2026-11-24",
+  "load_snippet": null,
+  "released": "2024",
+  "checked": "2026-11-24",
+  "evidence": "api.github.com/repos/allenai/open-instruct license, stargazers_count, pushed_at, archived"
+ },
+ {
+  "id": "smollm-recipes",
+  "name": "SmolLM recipes",
+  "kind": "recipe",
+  "url": "https://github.com/huggingface/smollm",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "GitHub repo",
+  "summary": "Training, data and eval recipes for the SmolLM family including Stack-Edu related data.",
+  "stages": [
+   "pretrain",
+   "sft"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Use for small-scale pretraining/SFT ablations.",
+  "caveats": "Small-model scope. Activity per GitHub API on 2026-11-24: 4.0k stars, last push 2026-10-06",
+  "load_snippet": null,
+  "released": "2024",
+  "checked": "2026-11-24",
+  "evidence": "api.github.com/repos/huggingface/smollm license, stargazers_count, pushed_at, archived"
+ },
+ {
+  "id": "alignment-handbook",
+  "name": "Alignment Handbook",
+  "kind": "recipe",
+  "url": "https://github.com/huggingface/alignment-handbook",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "GitHub repo",
+  "summary": "Hugging Face recipes for SFT and preference alignment.",
+  "stages": [
+   "sft",
+   "preference"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Use as a clean TRL-based SFT/DPO config reference.",
+  "caveats": "Less active than Open-Instruct. Activity per GitHub API on 2026-11-24: 5.7k stars, last push 2026-09-23",
+  "load_snippet": null,
+  "released": "2023",
+  "checked": "2026-11-24",
+  "evidence": "api.github.com/repos/huggingface/alignment-handbook license, stargazers_count, pushed_at, archived"
+ },
+ {
+  "id": "axolotl",
+  "name": "Axolotl",
+  "kind": "tool",
+  "url": "https://github.com/axolotl-ai-cloud/axolotl",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "GitHub repo",
+  "summary": "YAML-driven fine-tuning framework with multi-GPU and many model families.",
+  "stages": [
+   "sft",
+   "preference"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Good for config-driven SFT of coder models on your own node.",
+  "caveats": "Check model-specific support for new MoE architectures. Activity per GitHub API on 2026-11-24: 12.7k stars, last push 2026-11-20",
+  "load_snippet": null,
+  "released": "2023",
+  "checked": "2026-11-24",
+  "evidence": "api.github.com/repos/axolotl-ai-cloud/axolotl license, stargazers_count, pushed_at, archived"
+ },
+ {
+  "id": "llama-factory",
+  "name": "LLaMA-Factory",
+  "kind": "tool",
+  "url": "https://github.com/hiyouga/LlamaFactory",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "GitHub repo",
+  "summary": "Unified fine-tuning of 100+ LLMs and VLMs (SFT, DPO, etc.) with a web UI.",
+  "stages": [
+   "sft",
+   "preference"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Quick SFT/LoRA experiments across many model families.",
+  "caveats": "GitHub canonical name is hiyouga/LlamaFactory (redirects from LLaMA-Factory). Activity per GitHub API on 2026-11-24: 76.3k stars, last push 2026-11-23",
+  "load_snippet": null,
+  "released": "2023",
+  "checked": "2026-11-24",
+  "evidence": "api.github.com/repos/hiyouga/LlamaFactory license, stargazers_count, pushed_at, archived"
+ },
+ {
+  "id": "unsloth",
+  "name": "Unsloth",
+  "kind": "tool",
+  "url": "https://github.com/unslothai/unsloth",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "GitHub repo",
+  "summary": "Memory-efficient fine-tuning and RL library with GGUF export and local UI.",
+  "stages": [
+   "sft",
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Good for single-GPU LoRA and small-scale GRPO on coder models.",
+  "caveats": "Single-GPU focus; description lists support for Qwen3.8 and DeepSeek-V4.1 on the check date. Activity per GitHub API on 2026-11-24: 80.2k stars, last push 2026-11-24",
+  "load_snippet": null,
+  "released": "2023",
+  "checked": "2026-11-24",
+  "evidence": "api.github.com/repos/unslothai/unsloth license, stargazers_count, pushed_at, archived"
+ },
+ {
+  "id": "torchtune",
+  "name": "torchtune",
+  "kind": "tool",
+  "url": "https://github.com/meta-pytorch/torchtune",
+  "extra_links": [],
+  "license": "BSD-3-Clause",
+  "size": "GitHub repo",
+  "summary": "PyTorch-native post-training library.",
+  "stages": [
+   "sft",
+   "preference"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Use for readable PyTorch-only SFT recipes.",
+  "caveats": "Repo now under meta-pytorch org; check whether upstream maintainers recommend a successor before adopting. Activity per GitHub API on 2026-11-24: 5.8k stars, last push 2026-11-19",
+  "load_snippet": null,
+  "released": "2024",
+  "checked": "2026-11-24",
+  "evidence": "api.github.com/repos/meta-pytorch/torchtune license, stargazers_count, pushed_at, archived"
+ },
+ {
+  "id": "trl",
+  "name": "TRL",
+  "kind": "tool",
+  "url": "https://github.com/huggingface/trl",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "GitHub repo",
+  "summary": "Hugging Face library for SFT, DPO and GRPO training of transformer LMs.",
+  "stages": [
+   "sft",
+   "preference",
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Default library for GRPO with custom code-execution reward functions.",
+  "caveats": "Throughput lags dedicated RL stacks at large scale. Activity per GitHub API on 2026-11-24: 19.8k stars, last push 2026-11-24",
+  "load_snippet": null,
+  "released": "2020",
+  "checked": "2026-11-24",
+  "evidence": "api.github.com/repos/huggingface/trl license, stargazers_count, pushed_at, archived"
+ },
+ {
+  "id": "verl",
+  "name": "verl",
+  "kind": "tool",
+  "url": "https://github.com/verl-project/verl",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "GitHub repo",
+  "summary": "HybridFlow RL post-training framework used by DAPO and many code-RL recipes.",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Use for scalable GRPO-family training with rule-based/code rewards.",
+  "caveats": "Org moved to verl-project (volcengine/verl redirects). Activity per GitHub API on 2026-11-24: 24.3k stars, last push 2026-11-24",
+  "load_snippet": null,
+  "released": "2024",
+  "checked": "2026-11-24",
+  "evidence": "api.github.com/repos/verl-project/verl license, stargazers_count, pushed_at, archived"
+ },
+ {
+  "id": "rllm",
+  "name": "rLLM",
+  "kind": "tool",
+  "url": "https://github.com/rllm-org/rllm",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "GitHub repo",
+  "summary": "Agentica's RL framework for language agents, used for DeepCoder and DeepSWE.",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Use to reproduce DeepCoder/DeepSWE-style code and SWE RL.",
+  "caveats": "Project moved from agentica-project to rllm-org. Activity per GitHub API on 2026-11-24: 5.9k stars, last push 2026-10-16",
+  "load_snippet": null,
+  "released": "2025",
+  "checked": "2026-11-24",
+  "evidence": "api.github.com/repos/rllm-org/rllm license, stargazers_count, pushed_at, archived"
+ },
+ {
+  "id": "skyrl",
+  "name": "SkyRL",
+  "kind": "tool",
+  "url": "https://github.com/skyrl-project/SkyRL",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "GitHub repo",
+  "summary": "Modular full-stack RL library for LLMs including agentic/SWE tasks.",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Alternative to verl for multi-turn agentic RL.",
+  "caveats": "Repo moved from NovaSky-AI to skyrl-project. Activity per GitHub API on 2026-11-24: 2.6k stars, last push 2026-11-23",
+  "load_snippet": null,
+  "released": "2025",
+  "checked": "2026-11-24",
+  "evidence": "api.github.com/repos/skyrl-project/SkyRL license, stargazers_count, pushed_at, archived"
+ },
+ {
+  "id": "nemo-rl",
+  "name": "NVIDIA NeMo RL",
+  "kind": "tool",
+  "url": "https://github.com/NVIDIA-NeMo/RL",
+  "extra_links": [],
+  "license": "Apache-2.0",
+  "size": "GitHub repo",
+  "summary": "Scalable toolkit for RL post-training on NVIDIA hardware.",
+  "stages": [
+   "rl"
+  ],
+  "languages": [
+   "multi"
+  ],
+  "tasks": [
+   "generation"
+  ],
+  "difficulty": null,
+  "how_to_use": "Option for large-scale RL on NVIDIA clusters.",
+  "caveats": "NVIDIA-stack oriented. Activity per GitHub API on 2026-11-24: 2.2k stars, last push 2026-11-24",
+  "load_snippet": null,
+  "released": "2025",
+  "checked": "2026-11-24",
+  "evidence": "api.github.com/repos/NVIDIA-NeMo/RL license, stargazers_count, pushed_at, archived"
+ }
+]

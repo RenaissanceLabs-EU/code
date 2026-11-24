@@ -1,0 +1,1104 @@
+{
+ "inputs": {
+  "goal": {
+   "options": [
+    {
+     "id": "generate",
+     "label": "Write functions from descriptions",
+     "default": true
+    },
+    {
+     "id": "complete",
+     "label": "Complete code (autocomplete, fill-in-the-middle)"
+    },
+    {
+     "id": "reason",
+     "label": "Hard reasoning (competitive programming)"
+    },
+    {
+     "id": "swe",
+     "label": "Repository and agent work (SWE, terminal)"
+    },
+    {
+     "id": "sql",
+     "label": "SQL"
+    },
+    {
+     "id": "formal",
+     "label": "Formal and verified code (Lean)"
+    }
+   ]
+  },
+  "start": {
+   "options": [
+    {
+     "id": "instruct",
+     "label": "An instruct or chat model",
+     "default": true
+    },
+    {
+     "id": "base",
+     "label": "A pretrained base model"
+    },
+    {
+     "id": "scratch",
+     "label": "From scratch"
+    }
+   ]
+  },
+  "size": {
+   "options": [
+    {
+     "id": "s",
+     "label": "Up to 3B"
+    },
+    {
+     "id": "m",
+     "label": "7B to 14B",
+     "default": true
+    },
+    {
+     "id": "l",
+     "label": "24B to 32B"
+    },
+    {
+     "id": "xl",
+     "label": "70B or larger / big MoE"
+    }
+   ]
+  },
+  "budget": {
+   "options": [
+    {
+     "id": "tiny",
+     "label": "One GPU (LoRA)"
+    },
+    {
+     "id": "node",
+     "label": "One 8-GPU node",
+     "default": true
+    },
+    {
+     "id": "cluster",
+     "label": "Multi-node cluster"
+    }
+   ]
+  },
+  "languages": {
+   "options": [
+    {
+     "id": "python",
+     "label": "Python",
+     "default": true
+    },
+    {
+     "id": "jsts",
+     "label": "JavaScript / TypeScript"
+    },
+    {
+     "id": "java",
+     "label": "Java"
+    },
+    {
+     "id": "cpp",
+     "label": "C / C++"
+    },
+    {
+     "id": "gorust",
+     "label": "Go / Rust"
+    },
+    {
+     "id": "other",
+     "label": "Other"
+    }
+   ]
+  },
+  "data": {
+   "options": [
+    {
+     "id": "tests",
+     "label": "Tasks with unit tests"
+    },
+    {
+     "id": "repos",
+     "label": "Repos with CI tests"
+    },
+    {
+     "id": "private",
+     "label": "A private code corpus"
+    }
+   ]
+  }
+ },
+ "checks": [
+  {
+   "level": "warn",
+   "when": {
+    "size": [
+     "xl"
+    ],
+    "budget": [
+     "tiny"
+    ]
+   },
+   "text": "A 70B+ model on one GPU is not a training plan. Use a smaller model, or use the large model only as a teacher or a baseline."
+  },
+  {
+   "level": "warn",
+   "when": {
+    "start": [
+     "scratch"
+    ],
+    "not_budget": [
+     "cluster"
+    ]
+   },
+   "text": "Pretraining from scratch needs a cluster and weeks. For your budget, start from an open base model and continue from there."
+  },
+  {
+   "level": "warn",
+   "when": {
+    "goal": [
+     "swe"
+    ],
+    "size": [
+     "s"
+    ]
+   },
+   "text": "Repository-level tasks are demanding for small models. Check that your baseline solves a non-trivial share of tasks before you spend on RL, and consider function-level goals first."
+  },
+  {
+   "level": "note",
+   "when": {
+    "languages": [
+     "jsts",
+     "java",
+     "cpp",
+     "gorust",
+     "other"
+    ]
+   },
+   "text": "Many execution-verified RL task sets in this catalog are Python-centric. Check the languages field of each pick, and expect to lean on SFT and multi-language evals such as MultiPL-E for other languages."
+  },
+  {
+   "level": "note",
+   "when": {
+    "goal": [
+     "complete"
+    ],
+    "start": [
+     "instruct"
+    ]
+   },
+   "text": "Instruction tuning can change how a model handles fill-in-the-middle prompts. Evaluate completion directly (SAFIM, CrossCodeEval) before and after."
+  },
+  {
+   "level": "note",
+   "when": {
+    "data": [
+     "private"
+    ]
+   },
+   "text": "Private code: scan for secrets and personal data, check licenses and your own policy, and never put it in a shared dataset or an eval you publish."
+  }
+ ],
+ "steps": [
+  {
+   "id": "measure",
+   "stage": "eval",
+   "title": "Measure first",
+   "body": [
+    "Score the model you have, before you change anything. Freeze prompt, temperature, number of samples and harness version, and report pass@1 from several samples.",
+    "Add one private eval of 50 to 200 tasks from your own domain, with tests, that never enters training."
+   ],
+   "picks": [
+    {
+     "id": "livecodebench",
+     "why": "Dated problems: score only those published after the model's training cutoff.",
+     "when": {
+      "goal": [
+       "reason",
+       "generate",
+       "complete"
+      ]
+     }
+    },
+    {
+     "id": "evalplus-humanevalplus",
+     "why": "Quick smoke test for function writing. Classic and likely contaminated, so never your only number.",
+     "when": {
+      "goal": [
+       "generate",
+       "reason",
+       "complete"
+      ]
+     }
+    },
+    {
+     "id": "bigcodebench",
+     "why": "Harder function-level tasks that call real libraries.",
+     "when": {
+      "goal": [
+       "generate"
+      ]
+     }
+    },
+    {
+     "id": "multipl-e",
+     "why": "HumanEval and MBPP translated into many languages.",
+     "when": {
+      "languages": [
+       "jsts",
+       "java",
+       "cpp",
+       "gorust",
+       "other"
+      ]
+     }
+    },
+    {
+     "id": "canitedit",
+     "why": "Instructional code editing.",
+     "when": {
+      "goal": [
+       "generate"
+      ]
+     }
+    },
+    {
+     "id": "safim",
+     "why": "Syntax-aware fill-in-the-middle.",
+     "when": {
+      "goal": [
+       "complete"
+      ]
+     }
+    },
+    {
+     "id": "crosscodeeval",
+     "why": "Cross-file completion.",
+     "when": {
+      "goal": [
+       "complete"
+      ]
+     }
+    },
+    {
+     "id": "swe-bench-live",
+     "why": "Refreshing real-issue tasks, a better gate against memorization than the original.",
+     "when": {
+      "goal": [
+       "swe"
+      ]
+     }
+    },
+    {
+     "id": "swe-bench-verified",
+     "why": "Still the common reference point, but OpenAI stopped reporting it after finding many flawed tests (see its page). Use it to compare with published numbers, not as your only gate.",
+     "when": {
+      "goal": [
+       "swe"
+      ]
+     }
+    },
+    {
+     "id": "terminal-bench-2",
+     "why": "Terminal tasks with tests.",
+     "when": {
+      "goal": [
+       "swe"
+      ]
+     }
+    },
+    {
+     "id": "aider-polyglot",
+     "why": "Edit-and-run tasks across several languages.",
+     "when": {
+      "goal": [
+       "swe",
+       "generate"
+      ],
+      "languages": [
+       "jsts",
+       "java",
+       "cpp",
+       "gorust",
+       "other"
+      ]
+     }
+    },
+    {
+     "id": "spider2",
+     "why": "Enterprise-style SQL workflows.",
+     "when": {
+      "goal": [
+       "sql"
+      ]
+     }
+    },
+    {
+     "id": "bird-mini-dev",
+     "why": "Text-to-SQL with execution match.",
+     "when": {
+      "goal": [
+       "sql"
+      ]
+     }
+    },
+    {
+     "id": "minif2f",
+     "why": "Formal Olympiad-style statements in Lean.",
+     "when": {
+      "goal": [
+       "formal"
+      ]
+     }
+    },
+    {
+     "id": "putnambench",
+     "why": "Harder formal problems from the Putnam competition.",
+     "when": {
+      "goal": [
+       "formal"
+      ]
+     }
+    }
+   ],
+   "snips": [
+    "pass-at-k-unbiased",
+    "evalplus-vllm-hf"
+   ],
+   "pitfalls": [
+    {
+     "t": "Compare like with like. Different harnesses and prompts give different scores for the same model."
+    }
+   ]
+  },
+  {
+   "id": "clean",
+   "stage": "tooling",
+   "title": "Fix data quality before adding more data",
+   "body": [
+    "Deduplicate, decontaminate against your evals, and filter by license. Do this to every dataset you plan to mix, not only your own.",
+    {
+     "t": "Private corpus: also redact secrets and personal data.",
+     "when": {
+      "data": [
+       "private"
+      ]
+     }
+    }
+   ],
+   "picks": [
+    {
+     "id": "datatrove",
+     "why": "MinHash dedup and filtering pipelines that run locally or on a cluster."
+    },
+    {
+     "id": "decon",
+     "why": "Decontamination against eval sets."
+    },
+    {
+     "id": "scancode-toolkit",
+     "why": "License detection for source files.",
+     "when": {
+      "data": [
+       "private"
+      ]
+     }
+    },
+    {
+     "id": "presidio",
+     "why": "PII detection and redaction (a general tool, check it fits source code).",
+     "when": {
+      "data": [
+       "private"
+      ]
+     }
+    }
+   ],
+   "snips": [
+    "datatrove-minhash"
+   ],
+   "pitfalls": [
+    {
+     "t": "Plain n-gram decontamination misses rephrased copies. Keep a private eval and a time-windowed one."
+    }
+   ]
+  },
+  {
+   "id": "base",
+   "stage": "pretrain",
+   "title": "Choose the starting model",
+   "when": {
+    "not_start": [
+     "scratch"
+    ]
+   },
+   "body": [
+    "Start from the strongest open model you can afford to train, whose license fits your use. A strong base carries most of the signal, so your job is to add to it, not to rebuild it.",
+    {
+     "t": "You chose a base model: continue with SFT. A base model needs a chat template and instruction data first.",
+     "when": {
+      "start": [
+       "base"
+      ]
+     }
+    }
+   ],
+   "picks": [
+    {
+     "id": "smollm3-3b",
+     "why": "Small, Apache-2.0, with an open recipe.",
+     "when": {
+      "size": [
+       "s"
+      ]
+     }
+    },
+    {
+     "id": "qwen2-5-coder",
+     "why": "Code-specialized family. License verified for the 7B and 32B sizes only.",
+     "when": {
+      "size": [
+       "m",
+       "l"
+      ]
+     }
+    },
+    {
+     "id": "seed-coder-8b",
+     "why": "8B code model, MIT.",
+     "when": {
+      "size": [
+       "m"
+      ]
+     }
+    },
+    {
+     "id": "opencoder-8b",
+     "why": "Open data and recipe. Check its license terms.",
+     "when": {
+      "size": [
+       "m"
+      ]
+     }
+    },
+    {
+     "id": "granite-8b-code-base",
+     "why": "Apache-2.0 base.",
+     "when": {
+      "size": [
+       "m"
+      ]
+     }
+    },
+    {
+     "id": "deepcoder-14b-preview",
+     "why": "14B reasoning model already RL-tuned on code, MIT.",
+     "when": {
+      "size": [
+       "m"
+      ],
+      "goal": [
+       "reason"
+      ]
+     }
+    },
+    {
+     "id": "qwen3-coder-30b-a3b",
+     "why": "MoE with 3B active parameters. Only trainable at this size with an MoE-capable framework.",
+     "when": {
+      "size": [
+       "l"
+      ]
+     }
+    },
+    {
+     "id": "devstral-small-2",
+     "why": "Agent-oriented, Apache-2.0.",
+     "when": {
+      "size": [
+       "l"
+      ],
+      "goal": [
+       "swe"
+      ]
+     }
+    },
+    {
+     "id": "olmo-3-32b",
+     "why": "Fully open, Apache-2.0.",
+     "when": {
+      "size": [
+       "l"
+      ]
+     }
+    },
+    {
+     "id": "qwen3-coder-next",
+     "why": "80B MoE (3B active), Apache-2.0.",
+     "when": {
+      "size": [
+       "xl"
+      ]
+     }
+    },
+    {
+     "id": "gpt-oss-120b",
+     "why": "Open-weight reasoning model with tool use, Apache-2.0.",
+     "when": {
+      "size": [
+       "xl"
+      ]
+     }
+    }
+   ],
+   "pitfalls": [
+    {
+     "t": "Check the license on the model page, not only here. Some open-weight licenses have revenue or production conditions."
+    }
+   ]
+  },
+  {
+   "id": "pretrain",
+   "stage": "pretrain",
+   "title": "Pretrain or continue pretraining",
+   "when": {
+    "start": [
+     "scratch"
+    ]
+   },
+   "body": [
+    "This is the expensive stage. Quality filtering has repeatedly beaten raw volume. Deduplicate at file and repository level, and keep license metadata.",
+    "Most of these corpora are metadata or gated: expect to fetch contents from Software Heritage or GitHub and to accept terms."
+   ],
+   "picks": [
+    {
+     "id": "the-stack-v3-train",
+     "why": "Largest open, ungated option in this catalog."
+    },
+    {
+     "id": "stack-edu",
+     "why": "Educational-quality subset, a strong quality-filter reference."
+    },
+    {
+     "id": "opencoder-repo",
+     "why": "Most transparent end-to-end recipe."
+    },
+    {
+     "id": "opc-annealing-corpus",
+     "why": "High-quality data for the final annealing phase."
+    }
+   ]
+  },
+  {
+   "id": "midtrain",
+   "stage": "pretrain",
+   "title": "Optional: continue pretraining on your own code",
+   "when": {
+    "data": [
+     "private"
+    ],
+    "not_start": [
+     "scratch"
+    ],
+    "not_budget": [
+     "tiny"
+    ]
+   },
+   "body": [
+    "If you have a large private corpus in a language or framework the base model knows less well, a short continued-pretraining run on a mix of your code and general code can help. Mix in general code to limit forgetting, and re-run your evals, including a general one."
+   ],
+   "picks": [
+    {
+     "id": "the-stack-v3-train",
+     "why": "Use as the general-code share of the mix."
+    }
+   ]
+  },
+  {
+   "id": "sft",
+   "stage": "sft",
+   "title": "Teach the format with SFT",
+   "body": [
+    "Start small: tens of thousands of checked examples have competed with much larger sets in published work. Train on the response tokens only, use one chat template, and run your evals after.",
+    {
+     "t": "One GPU: use LoRA and a small slice of the data. Learning rates and ranks are yours to tune; there is no universal setting.",
+     "when": {
+      "budget": [
+       "tiny"
+      ]
+     }
+    }
+   ],
+   "picks": [
+    {
+     "id": "magicoder-oss-instruct-75k",
+     "why": "Seeded from real code snippets. Written by an OpenAI model, so check terms.",
+     "when": {
+      "goal": [
+       "generate",
+       "complete"
+      ]
+     }
+    },
+    {
+     "id": "opencodeinstruct",
+     "why": "5M examples with quality scores: take the best slice.",
+     "when": {
+      "goal": [
+       "generate"
+      ]
+     }
+    },
+    {
+     "id": "commitpackft",
+     "why": "Human commits as instructions, no LLM teacher.",
+     "when": {
+      "goal": [
+       "generate",
+       "complete"
+      ]
+     }
+    },
+    {
+     "id": "self-oss-instruct-sc2-exec-filter-50k",
+     "why": "Self-generated and execution-filtered.",
+     "when": {
+      "goal": [
+       "generate"
+      ]
+     }
+    },
+    {
+     "id": "opencodereasoning",
+     "why": "Distilled reasoning traces for competitive problems (teacher: DeepSeek-R1).",
+     "when": {
+      "goal": [
+       "reason"
+      ]
+     }
+    },
+    {
+     "id": "openthoughts3-1.2m",
+     "why": "Large reasoning set with math, code and science.",
+     "when": {
+      "goal": [
+       "reason"
+      ],
+      "budget": [
+       "node",
+       "cluster"
+      ]
+     }
+    },
+    {
+     "id": "codeforces-cots",
+     "why": "Codeforces problems with reasoning traces.",
+     "when": {
+      "goal": [
+       "reason"
+      ]
+     }
+    },
+    {
+     "id": "swe-smith-trajectories",
+     "why": "Agent trajectories on synthetic SWE tasks. Small sets can matter.",
+     "when": {
+      "goal": [
+       "swe"
+      ]
+     }
+    },
+    {
+     "id": "nebius-swe-rebench-openhands-trajectories",
+     "why": "OpenHands trajectories on real tasks.",
+     "when": {
+      "goal": [
+       "swe"
+      ]
+     }
+    },
+    {
+     "id": "openthoughts-agent-v1-sft",
+     "why": "Terminal agent traces.",
+     "when": {
+      "goal": [
+       "swe"
+      ]
+     }
+    },
+    {
+     "id": "gretel-synthetic-text-to-sql",
+     "why": "Synthetic text-to-SQL.",
+     "when": {
+      "goal": [
+       "sql"
+      ]
+     }
+    },
+    {
+     "id": "synsql-2.5m",
+     "why": "Large synthetic text-to-SQL corpus.",
+     "when": {
+      "goal": [
+       "sql"
+      ],
+      "budget": [
+       "node",
+       "cluster"
+      ]
+     }
+    },
+    {
+     "id": "lean-workbook",
+     "why": "Formalized problems in Lean.",
+     "when": {
+      "goal": [
+       "formal"
+      ]
+     }
+    },
+    {
+     "id": "numinamath-lean",
+     "why": "Lean statements with proofs.",
+     "when": {
+      "goal": [
+       "formal"
+      ]
+     }
+    }
+   ],
+   "snips": [
+    "trl-sft-python",
+    "llamafactory-sft-yaml"
+   ],
+   "pitfalls": [
+    {
+     "t": "Many synthetic sets inherit a teacher's terms and some are non-commercial. Check each pick's license before you train a model you will ship."
+    }
+   ]
+  },
+  {
+   "id": "preference",
+   "stage": "preference",
+   "title": "Optional: preference optimization",
+   "when": {
+    "goal": [
+     "generate",
+     "reason",
+     "complete"
+    ],
+    "not_budget": [
+     "tiny"
+    ]
+   },
+   "body": [
+    "Only if SFT has plateaued. Pairs where one answer passes tests and the other fails are far more reliable than model-judged pairs. If you can run tests, building on-policy pairs from your own model is often better than any public set. Control for length."
+   ],
+   "picks": [
+    {
+     "id": "acecode-v2-122k",
+     "why": "Questions with test cases, usable to build pairs and rewards."
+    },
+    {
+     "id": "ling-coder-dpo",
+     "why": "Pairs from competitive problems, with pass rates."
+    },
+    {
+     "id": "codeultrafeedback",
+     "why": "Judged by a model: useful for style, weaker on correctness."
+    }
+   ]
+  },
+  {
+   "id": "rl-light",
+   "stage": "rl",
+   "title": "On one GPU: rejection sampling instead of full RL",
+   "when": {
+    "budget": [
+     "tiny"
+    ]
+   },
+   "body": [
+    "Full RL needs many rollouts and a trainer you can keep fed. A cheap alternative: sample several solutions per task from your model, run the tests, keep the passing ones, and SFT on them. Repeat once or twice, and re-measure each round.",
+    "If you want to try GRPO on one GPU with a small model, the TRL example below shows a unit-test reward on a small dataset."
+   ],
+   "picks": [
+    {
+     "id": "acecode-v2-122k",
+     "why": "Tasks with tests for filtering samples.",
+     "when": {
+      "goal": [
+       "generate",
+       "reason",
+       "complete"
+      ]
+     }
+    },
+    {
+     "id": "deepcoder-preview",
+     "why": "Competitive problems with tests.",
+     "when": {
+      "goal": [
+       "reason"
+      ]
+     }
+    }
+   ],
+   "snips": [
+    "code-reward-subprocess",
+    "trl-grpo-unit-test-reward"
+   ],
+   "pitfalls": [
+    {
+     "t": "A subprocess with a timeout is not a security boundary. Run generated code in a container."
+    }
+   ]
+  },
+  {
+   "id": "rl",
+   "stage": "rl",
+   "title": "Reward what passes: RL with verifiable rewards",
+   "when": {
+    "not_budget": [
+     "tiny"
+    ]
+   },
+   "body": [
+    "Sample several solutions per task, run the tests, reward passes. The open frameworks below support this. Start from a model that already solves a fair share of tasks, and filter tasks to a middle band of pass rate: tasks the model always or never solves give no signal.",
+    "Use the same eval as in step 1 to decide whether it worked, and add a general-coding regression check.",
+    {
+     "t": "Repository tasks need a container image per task and a verifier that applies the tests after the agent finishes.",
+     "when": {
+      "goal": [
+       "swe"
+      ]
+     }
+    }
+   ],
+   "picks": [
+    {
+     "id": "deepcoder-preview",
+     "why": "Competitive problems with tests.",
+     "when": {
+      "goal": [
+       "reason"
+      ]
+     }
+    },
+    {
+     "id": "skywork-or1-rl-data",
+     "why": "Ships per-model difficulty fields for filtering. Check the license, which the API does not list.",
+     "when": {
+      "goal": [
+       "reason"
+      ]
+     }
+    },
+    {
+     "id": "code-contests-plus",
+     "why": "Competitive problems with improved test cases.",
+     "when": {
+      "goal": [
+       "reason"
+      ]
+     }
+    },
+    {
+     "id": "acecode-v2-122k",
+     "why": "Function problems with test cases.",
+     "when": {
+      "goal": [
+       "generate",
+       "complete"
+      ]
+     }
+    },
+    {
+     "id": "kodcode",
+     "why": "Pytest-verified tasks with pass-rate fields. Non-commercial license.",
+     "when": {
+      "goal": [
+       "generate"
+      ]
+     }
+    },
+    {
+     "id": "swe-gym",
+     "why": "Real tasks with environments.",
+     "when": {
+      "goal": [
+       "swe"
+      ]
+     }
+    },
+    {
+     "id": "swe-smith",
+     "why": "Large synthetic task set.",
+     "when": {
+      "goal": [
+       "swe"
+      ]
+     }
+    },
+    {
+     "id": "r2e-gym",
+     "why": "Executable environments with synthetic tests.",
+     "when": {
+      "goal": [
+       "swe"
+      ]
+     }
+    },
+    {
+     "id": "swe-rebench",
+     "why": "Large, refreshing set of real tasks.",
+     "when": {
+      "goal": [
+       "swe"
+      ]
+     }
+    },
+    {
+     "id": "harbor",
+     "why": "Task format and runner for terminal and agent tasks.",
+     "when": {
+      "goal": [
+       "swe"
+      ]
+     }
+    },
+    {
+     "id": "multi-swe-rl",
+     "why": "Multi-language repository RL tasks.",
+     "when": {
+      "goal": [
+       "swe"
+      ],
+      "languages": [
+       "jsts",
+       "java",
+       "cpp",
+       "gorust",
+       "other"
+      ]
+     }
+    },
+    {
+     "id": "bird-mini-dev",
+     "why": "SQL with execution match.",
+     "when": {
+      "goal": [
+       "sql"
+      ]
+     }
+    },
+    {
+     "id": "kimina-prover-promptset",
+     "why": "Lean statements for prover RL (checked by the Lean compiler).",
+     "when": {
+      "goal": [
+       "formal"
+      ]
+     }
+    },
+    {
+     "id": "fw-verl",
+     "why": "Widely used RL framework with code-reward support.",
+     "when": {
+      "budget": [
+       "node",
+       "cluster"
+      ]
+     }
+    },
+    {
+     "id": "fw-skyrl",
+     "why": "Built for multi-turn agent RL.",
+     "when": {
+      "goal": [
+       "swe"
+      ]
+     }
+    },
+    {
+     "id": "fw-prime-rl",
+     "why": "Large-scale async RL.",
+     "when": {
+      "budget": [
+       "cluster"
+      ]
+     }
+    },
+    {
+     "id": "prime-verifiers",
+     "why": "Library for defining environments and rewards.",
+     "when": {
+      "goal": [
+       "swe",
+       "generate",
+       "reason"
+      ]
+     }
+    }
+   ],
+   "snips": [
+    "code-reward-subprocess",
+    "verl-grpo-code-reward"
+   ],
+   "pitfalls": [
+    {
+     "t": "Reward hacking is documented: reading git history for the fix, editing tests, fetching solutions from the web. Strip history, hide the tests, and block the network."
+    },
+    {
+     "t": "Check every task with a reference solution. It must pass, and the unfixed code must fail."
+    }
+   ]
+  },
+  {
+   "id": "sandbox",
+   "stage": "tooling",
+   "title": "Run generated code in a sandbox",
+   "when": {
+    "not_budget": [
+     "tiny"
+    ]
+   },
+   "body": [
+    "Every reward and every eval runs code a model wrote. Run it in a container or VM with no network, a read-only filesystem and limits on memory, CPU and processes. On a shared cluster, use rootless containers and ask your admins."
+   ],
+   "picks": [
+    {
+     "id": "sb-docker",
+     "why": "The default for a single machine or node."
+    },
+    {
+     "id": "sb-apptainer",
+     "why": "For HPC clusters where Docker is not allowed."
+    },
+    {
+     "id": "sb-sandboxfusion",
+     "why": "A ready-made code-execution service for RL rewards."
+    },
+    {
+     "id": "sb-gvisor",
+     "why": "Stronger isolation for containers."
+    }
+   ],
+   "snips": [
+    "docker-hardened-sandbox"
+   ]
+  },
+  {
+   "id": "remeasure",
+   "stage": "eval",
+   "title": "Measure again, and keep what helped",
+   "body": [
+    "Run the same evals with the same settings. Look at the target score, a general-coding regression check, and a few outputs by eye. If something got worse, undo the last change before adding another.",
+    "Write down what each stage changed. Your private eval is the tiebreaker."
+   ]
+  }
+ ]
+}

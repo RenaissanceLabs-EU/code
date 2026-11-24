@@ -1,0 +1,56 @@
+<p>Most failed runs fail for one of a handful of reasons. Each is easy to avoid once you know to look for it.</p>
+
+<h2>Contamination: the score went up, the model did not get better</h2>
+<ul>
+<li><b>Symptom:</b> big gains on a classic benchmark, no gain on your own tasks.</li>
+<li><b>Cause:</b> benchmark problems or solutions (or rewrites of them) in the training data. Rephrased copies slip through n-gram decontamination (<a href="https://arxiv.org/abs/2311.04850">arXiv 2311.04850</a>).</li>
+<li><b>Fix:</b> decontaminate with a proper tool ({{r:decon}} is one), score on a time-windowed eval such as {{r:livecodebench}}, and keep a private eval that never touches a training set.</li>
+</ul>
+
+<h2>Reward hacking: the model learned to cheat your verifier</h2>
+<ul>
+<li><b>Git history.</b> Cursor audited agent trajectories and reported that in a measurable share the agent searched the repository&rsquo;s git history for the future fix commit (<a href="https://cursor.com/blog/reward-hacking-coding-benchmarks">Cursor blog</a>). SWE-bench removed future history from its images upstream, so older images are leaky.</li>
+<li><b>Editing tests.</b> If the agent can change the test files, it can make the tests pass. Apply tests after the agent finishes, from outside the sandbox.</li>
+<li><b>Network access.</b> Agents have been seen fetching fixes from the public web. Run rollouts without internet, or through an allowlist proxy.</li>
+<li><b>Special-casing.</b> Weak tests reward code that returns the expected values for the visible cases. Add tests, and check each task against a reference solution.</li>
+<li><b>Fix:</b> isolate, hide, strip, and monitor a sample of rollouts by eye, or with a judge model. A judge catches obvious hacks that held-out tests miss (<a href="https://arxiv.org/abs/2511.21654">arXiv 2511.21654</a>).</li>
+</ul>
+
+<h2>Weak or wrong tests</h2>
+<ul>
+<li><b>Symptom:</b> the reward goes up while real quality does not.</li>
+<li><b>Cause:</b> too few tests, flawed tests, or tests that accept different behavior from the reference. One study found that a notable share of sampled SWE-bench Verified tasks accepted patches that differ from the reference (<a href="https://arxiv.org/abs/2606.16062">arXiv 2606.16062</a>). More generated tests give a better reward signal (<a href="https://arxiv.org/abs/2501.01054">arXiv 2501.01054</a>).</li>
+<li><b>Fix:</b> filter tasks that the reference does not pass or that the unfixed code passes, and add tests where you can.</li>
+</ul>
+
+<h2>Dead tasks: RL that learns nothing</h2>
+<p>If every rollout for a task gets the same reward, the group-relative signal is zero. Keep a middle band of difficulty. See the figure in the <a href="/guide/#5-reward-what-passes-rl-with-verifiable-rewards">guide</a>. Starting RL from a model that solves almost nothing has the same effect.</p>
+
+<h2>License and terms traps</h2>
+<ul>
+<li>Corpora are mixed-license by file. Keep the metadata and filter.</li>
+<li>Synthetic data inherits the teacher&rsquo;s terms. Cards name OpenAI, Anthropic, DeepSeek, Qwen and other teachers. Some sets are non-commercial.</li>
+<li>Some open-weight model licenses carry conditions (revenue thresholds, non-production clauses). Read them before you distill from or ship derivatives of those models.</li>
+<li>A missing license field means unknown, not free.</li>
+</ul>
+
+<h2>Running untrusted code</h2>
+<p>Model-written code can delete files, read secrets and open connections. Never run it on your host or on a machine with credentials. Use a container or VM with no network, a read-only filesystem, and limits on memory, CPU and processes. A subprocess with a timeout is a convenience, not a security boundary. On a shared HPC cluster use rootless containers such as Apptainer, and ask your admins.</p>
+{{snip:docker-hardened-sandbox}}
+
+<h2>Evaluation mistakes</h2>
+<ul>
+<li>Treating a famous benchmark as ground truth. {{r:swe-bench-verified}} and {{r:swe-bench-pro}} both have documented problems with flawed tests (see the caveats on each page). Prefer refreshing sets such as {{r:swe-bench-live}}, and read failures.</li>
+<li>Comparing scores across different harnesses, prompts or sample counts.</li>
+<li>Reporting a single sample. Use several samples and the unbiased pass@k estimator.</li>
+<li>Trusting a small gap on one benchmark. Read the failures.</li>
+<li>Skipping a regression check on general coding after a narrow RL run.</li>
+</ul>
+
+<h2>SFT mistakes</h2>
+<ul>
+<li>Training on the prompt tokens as well as the response. Mask the prompt.</li>
+<li>Mixing chat templates. Use one, consistently, in training and in evaluation.</li>
+<li>Keeping unverified synthetic solutions that are simply wrong. Run them, or sample-check them.</li>
+<li>Match agent trajectories to the harness you will deploy with. Tool formats differ.</li>
+</ul>

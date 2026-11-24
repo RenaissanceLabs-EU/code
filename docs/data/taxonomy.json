@@ -1,0 +1,214 @@
+{
+ "stages": [
+  {
+   "id": "pretrain",
+   "n": "01",
+   "title": "Data: pretrain and mid-train",
+   "short": "Data",
+   "tagline": "Raw code, cleaned and mixed. Where a model learns what code looks like.",
+   "who": "Most useful if you train from scratch or continue pretraining. If you only have a few GPUs, you will mostly use this stage to borrow a filtered subset or to understand what your base model already saw.",
+   "decide": [
+    "Continue pretraining a good open base model, or start from scratch. For almost everyone the first option wins on cost: a strong open code base model already carries most of the signal.",
+    "How much to filter. Quality filters (educational or textbook-style classifiers, license filters, deduplication) usually pay back more than adding raw volume.",
+    "Whether to add a short high-quality annealing or mid-training phase (synthetic, reasoning-heavy, repo-level data) at the end of pretraining."
+   ],
+   "pitfalls": [
+    "Near-duplicate files inflate benchmark scores and waste tokens. Deduplicate at file and repository level before you train.",
+    "Benchmark contamination: remove problems and solutions from your eval sets from the training mix, then confirm with a held-out or post-cutoff eval.",
+    "Licenses are per file. A corpus being open to download does not mean every file in it is permissively licensed. Read the card and keep the license metadata."
+   ]
+  },
+  {
+   "id": "sft",
+   "n": "02",
+   "title": "SFT: instructions, reasoning, trajectories",
+   "short": "SFT",
+   "tagline": "Teach the format: follow instructions, explain, edit, call tools, solve step by step.",
+   "who": "The first thing most teams run on an existing base model. Cheap, fast to iterate, and the stage where data quality is most visible in the numbers.",
+   "decide": [
+    "Instruction data versus reasoning traces versus agent trajectories. Pick by the goal: short answers and edits need instructions; competitive programming benefits from long reasoning traces; repository tasks need multi-turn trajectories.",
+    "Teacher model and license: synthetic datasets inherit the terms of the model that wrote them. Check each card.",
+    "How much data. Several published recipes get strong results with a few tens of thousands of carefully filtered examples, so start small and measure."
+   ],
+   "pitfalls": [
+    "Training on data generated from the benchmark's own problems (or paraphrases) gives inflated scores and a model that is no better in practice.",
+    "Unverified synthetic code often contains wrong solutions. Execute it or test it, and drop what fails.",
+    "Mixing too many styles can degrade formatting. Keep a chat template and a loss mask on responses only, and check outputs by eye."
+   ]
+  },
+  {
+   "id": "preference",
+   "n": "03",
+   "title": "Preference and reward data",
+   "short": "Preference",
+   "tagline": "Teach what better means: pairs and judgments that rank code, ideally grounded in tests.",
+   "who": "Useful when SFT has plateaued and you want a cheap alignment step before (or instead of) full RL. Pairs derived from test results are far more reliable than pairs judged by another model alone.",
+   "decide": [
+    "Execution-grounded pairs (passes tests versus fails tests) versus LLM-judged pairs. Prefer the first where you can get it.",
+    "Whether to train a reward model or skip it. For code, tests are often a better reward than a learned model, so verifiable-reward RL can replace this stage.",
+    "DPO versus other offline methods. Use the simplest one your trainer supports and compare on a held-out eval."
+   ],
+   "pitfalls": [
+    "LLM-judged preferences reward style and length. Control for length, or your model learns to write longer code.",
+    "Pairs where both samples pass (or both fail) carry little signal. Filter to pairs with a clear outcome gap.",
+    "Preference data built from a benchmark's tests can leak that benchmark into training."
+   ]
+  },
+  {
+   "id": "rl",
+   "n": "04",
+   "title": "RL with verifiable rewards",
+   "short": "RL",
+   "tagline": "Let the model try, run the tests, reward what passes. Environments, task sets, and verifiers.",
+   "who": "For teams that can afford many rollouts and have a trustworthy verifier. It is the stage that most often moves hard-reasoning and agentic scores, and the stage where mistakes in the verifier become reward hacking.",
+   "decide": [
+    "Which task source: unit-tested function problems, competitive programming with test cases, repository issues with containerized tests, terminal tasks, SQL with execution match, or formal proofs checked by a proof assistant.",
+    "Which filter on difficulty. Tasks the model always solves or never solves give no learning signal, so keep a middle band of pass rates.",
+    "Which framework runs the rollouts and where the sandbox lives."
+   ],
+   "pitfalls": [
+    "Reward hacking: models edit or special-case tests, read hidden tests from disk, or use the network when it is on. Isolate the sandbox and keep tests out of reach.",
+    "Weak or sparse tests reward wrong code. Add test cases, or check them with a reference solution before using a task.",
+    "Run RL after the model already solves a fair share of tasks. From a weak start, most rollouts fail and the signal is thin."
+   ]
+  },
+  {
+   "id": "eval",
+   "n": "05",
+   "title": "Evaluation",
+   "short": "Eval",
+   "tagline": "Benchmarks and harnesses. How you know whether anything worked.",
+   "who": "Everyone. Run a small fixed set of evals before you change anything and after every stage. Prefer evals that refresh or are hard to contaminate, and keep one private set of your own.",
+   "decide": [
+    "A fast smoke test (minutes) and a slower gate (hours) so you can iterate without waiting on the expensive one.",
+    "At least one execution-based eval that matches your goal: function-level, repository-level, terminal, or SQL.",
+    "How to report: pass@1 with a fixed sampling setup, the number of samples, and the seed or a confidence interval."
+   ],
+   "pitfalls": [
+    "Saturated or contaminated benchmarks make every model look good. Track a time-sliced or private eval next to the classic ones.",
+    "Different harnesses give different scores for the same model. Pin the harness version and prompt format, and compare like with like.",
+    "Some benchmark instances have flawed tests or ambiguous statements. Read failures by hand before you trust a small difference."
+   ]
+  },
+  {
+   "id": "tooling",
+   "n": "06",
+   "title": "Tools: data pipelines, sandboxes, trainers",
+   "short": "Tools",
+   "tagline": "Dedup, decontamination, sandboxes, and the frameworks that run the training.",
+   "who": "The supporting cast. Pick tools by what you already run: a single GPU box, an HPC cluster with Apptainer, or a managed cloud.",
+   "decide": [
+    "Data tooling: how you deduplicate, decontaminate, filter licenses, and remove personal data.",
+    "Sandbox: Docker with strict flags on one machine, rootless containers on a cluster, or a hosted sandbox service.",
+    "Trainer: a simple SFT trainer first, an RL framework only when you are ready for rollouts."
+   ],
+   "pitfalls": [
+    "Running model-generated code on your host. Always use a container or VM with no network and limited memory, CPU, and processes.",
+    "Rolling your own dedup or decontamination without testing it on known duplicates.",
+    "Choosing an RL framework before you have a verifier. The verifier is the hard part."
+   ]
+  }
+ ],
+ "tasks": [
+  {
+   "id": "completion",
+   "label": "Completion and fill-in-the-middle"
+  },
+  {
+   "id": "generation",
+   "label": "Function generation"
+  },
+  {
+   "id": "repair",
+   "label": "Bug fixing and repair"
+  },
+  {
+   "id": "repo-level",
+   "label": "Repository-level"
+  },
+  {
+   "id": "agentic",
+   "label": "Agentic (multi-step, tools)"
+  },
+  {
+   "id": "terminal",
+   "label": "Terminal and shell"
+  },
+  {
+   "id": "testing",
+   "label": "Test writing"
+  },
+  {
+   "id": "review",
+   "label": "Code review and edit"
+  },
+  {
+   "id": "sql",
+   "label": "SQL"
+  },
+  {
+   "id": "reasoning",
+   "label": "Reasoning-heavy"
+  },
+  {
+   "id": "competitive",
+   "label": "Competitive programming"
+  },
+  {
+   "id": "formal",
+   "label": "Formal and verified code"
+  },
+  {
+   "id": "tool-use",
+   "label": "Tool use"
+  }
+ ],
+ "kinds": [
+  {
+   "id": "dataset",
+   "label": "Dataset"
+  },
+  {
+   "id": "benchmark",
+   "label": "Benchmark"
+  },
+  {
+   "id": "environment",
+   "label": "Environment"
+  },
+  {
+   "id": "tool",
+   "label": "Tool"
+  },
+  {
+   "id": "model",
+   "label": "Model"
+  },
+  {
+   "id": "recipe",
+   "label": "Recipe"
+  },
+  {
+   "id": "paper",
+   "label": "Paper"
+  }
+ ],
+ "difficulty": [
+  {
+   "id": "intro",
+   "label": "Intro"
+  },
+  {
+   "id": "intermediate",
+   "label": "Intermediate"
+  },
+  {
+   "id": "hard",
+   "label": "Hard"
+  },
+  {
+   "id": "frontier",
+   "label": "Frontier"
+  }
+ ]
+}

@@ -1,0 +1,6 @@
+{
+  "name": "code-site-tools",
+  "private": true,
+  "description": "Headless Chrome tooling for the build: page checks and social preview rendering.",
+  "dependencies": { "puppeteer-core": "^23.11.1" }
+}

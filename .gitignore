@@ -1,0 +1,4 @@
+__pycache__/
+tools/node/node_modules
+notes/og-run.log
+.DS_Store

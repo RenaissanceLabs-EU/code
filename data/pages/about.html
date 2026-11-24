@@ -1,0 +1,22 @@
+<h2>What this is</h2>
+<p>Renaissance Labs Code is a catalog of the things you need to train and evaluate a coding model: pretraining corpora, instruction and reasoning data, preference data, environments with verifiable rewards, benchmarks, models, papers, and tools. It is built to be used, so each entry says what it is for, which stage it fits, and what can go wrong. The <a href="/recipe/">recipe builder</a> and the <a href="/guide/">guide</a> turn the catalog into a plan.</p>
+<h2>How entries were verified</h2>
+<p>Every entry was checked against a primary source on the date shown on its page. Licenses, sizes and activity come from the Hugging Face API, dataset and model cards, the GitHub API, papers and official documentation. When a field could not be confirmed, it is left empty and the caveats say so. Nothing in the catalog was filled in from memory.</p>
+<ul>
+<li><b>Links</b>: every external link in the data files was requested before release. The result is recorded in the repository (<code>notes/link-report.json</code>).</li>
+<li><b>Snippets</b>: commands and code on this site were matched to the tool's current documentation or run locally. Each one says how it was verified and which version was seen. Anything that could not be confirmed was left out.</li>
+<li><b>Scores</b>: this site does not publish leaderboards. Where a number appears, it names its source in the entry. Scores change quickly: go to the benchmark's own leaderboard.</li>
+</ul>
+<h2>What it does not cover</h2>
+<ul>
+<li>It is a curated selection, not every dataset on the Hub. Counts on the home page describe this catalog, not the field.</li>
+<li>Licenses are summarized, not interpreted. The license family shown in filters is derived from the license text and is only a hint. Read the source license, and ask a lawyer when it matters.</li>
+<li>Training advice is a starting point. Data mixes and hyperparameters that work for one base model can fail on another. Your own measurements decide.</li>
+<li>Safety: running model-written code is dangerous. The sandbox snippets reduce risk and are not a substitute for a reviewed isolation setup.</li>
+</ul>
+<h2>Data and reuse</h2>
+<p>The catalog is available as <a href="/data/resources.json">JSON</a>, <a href="/data/resources.csv">CSV</a>, <a href="/data/taxonomy.json">taxonomy</a> and <a href="/data/snippets.json">snippets</a>, and as <a href="/llms.txt">llms.txt</a> for language models. The schema is documented in the repository under <code>data/SCHEMA.md</code>. Site text and data are released under CC BY 4.0, and the generator code under MIT. Linked resources keep their own licenses.</p>
+<h2>Corrections</h2>
+<p>If an entry is wrong, stale or missing, open an issue or pull request on the repository. Include the primary source. Entries are re-checked from time to time and each shows its check date.</p>
+<h2>Who</h2>
+<p>Made by <a href="https://renaissancelabs.eu">Renaissance Labs</a>, the group behind the <a href="https://math.renaissancelabs.eu">Mathematics map</a> and the <a href="https://practice.renaissancelabs.eu">Open Environments Index</a>.</p>
