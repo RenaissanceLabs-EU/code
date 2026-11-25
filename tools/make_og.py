@@ -79,7 +79,12 @@ def jobs(only):
     add("languages", art("%d languages, placed on the <em>stack</em>" % len(B.LANGLIST), "Where each sits between machine and person, the same program in each, and what exists to train on it.", "code.renaissancelabs.eu/languages"))
     add("world", art("What the world <em>runs on</em>", "Sourced facts about the code under payments, aircraft, medicine and the internet.", "code.renaissancelabs.eu/world"))
     add("intelligence", art("Code and <em>intelligence</em>", "What can be computed, what cannot, and what changes when programs are learned.", "code.renaissancelabs.eu/intelligence"))
-    add("train", simple("Teaching a model to <em>write</em> code", "%d verified datasets, benchmarks, environments and tools. A recipe builder. An honest guide." % n, "code.renaissancelabs.eu/train"))
+    add("train", simple("How to train language models for <em>code</em>", "A learning path: capability, data, datasets, building a dataset, tools, a first run, evaluation.", "code.renaissancelabs.eu/train"))
+    for k, h, t, d in B.PATH:
+        add("train-" + k, simple(e(t), d[:120].rsplit(" ", 1)[0] + ("..." if len(d) > 120 else ""), "code.renaissancelabs.eu" + h.rstrip("/")))
+    add("train-how", simple("How a code model is <em>trained</em>", "Pretraining, fill-in-the-middle, instruction data, preference pairs, RL with test rewards, evaluation.", "code.renaissancelabs.eu/train/how"))
+    add("train-models", simple("How the open code models were <em>trained</em>", "Data, stages and rewards, read from each model's own report and compared.", "code.renaissancelabs.eu/train/models"))
+    add("train-reading", simple("How code models are trained: a <em>reading list</em>", "Papers, reports, posts and courses, in learning order, with what you take away.", "code.renaissancelabs.eu/train/reading"))
     add("catalog", simple("%d resources, <em>checked</em> at the source" % n, "License, size, caveats and date checked for every entry.", "code.renaissancelabs.eu/catalog"))
     add("recipe", simple("Tell us what you have. Get an <em>ordered plan</em>.", "Model size, compute, languages and goal in. Datasets, evals, verifiers and pitfalls out.", "code.renaissancelabs.eu/recipe"))
     add("guide", simple("How to improve <em>any</em> model at coding", "Measure, fix the data, SFT, reward what passes, measure again.", "code.renaissancelabs.eu/guide"))

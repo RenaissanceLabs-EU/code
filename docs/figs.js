@@ -504,6 +504,44 @@
     inp.addEventListener('input', draw); draw();
   };
 
+  // ---------------------------------------------------------------- training: fill in the middle
+  F.fim = function (fig) {
+    var SRC = "def gcd(a, b):\n    while b != 0:\n        a, b = b, a % b\n    return a\n";
+    var ta = editor(fig, SRC, 6), sl = el('div', 'ctl'), a = el('input'), b = el('input'), mode = el('select', 'f');
+    a.type = b.type = 'range'; a.min = b.min = 0; a.step = b.step = 1; a.value = 34; b.value = 58;
+    sl.innerHTML = '<label>Hole starts at <b class="av"></b></label>'; sl.appendChild(a); sl.appendChild(el('label', '', 'ends at <b class="bv"></b>')); sl.appendChild(b);
+    ['Prefix, suffix, middle (PSM)', 'Suffix first, then prefix (SPM)'].forEach(function (t, i) { var o = el('option', '', t); o.value = i; mode.appendChild(o); }); mode.setAttribute('aria-label', 'Arrangement');
+    sl.appendChild(mode);
+    var out = el('div', 'fimout'), sum = el('p', 'lab-sum'); fig.insertBefore(sl, ta.nextSibling); fig.appendChild(out); fig.appendChild(sum);
+    function draw() {
+      var t = ta.value; a.max = b.max = t.length; var i = Math.min(+a.value, t.length), j = Math.max(i, Math.min(+b.value, t.length));
+      sl.querySelector('.av').textContent = i; sl.querySelector('.bv').textContent = j;
+      var pre = t.slice(0, i), mid = t.slice(i, j), suf = t.slice(j), P = '<i class="sent">&lt;fim_prefix&gt;</i>', S = '<i class="sent">&lt;fim_suffix&gt;</i>', M = '<i class="sent">&lt;fim_middle&gt;</i>';
+      var input = mode.value === '0' ? P + '<span class="pre">' + esc(pre) + '</span>' + S + '<span class="suf">' + esc(suf) + '</span>' + M : P + S + '<span class="suf">' + esc(suf) + '</span>' + M + '<span class="pre">' + esc(pre) + '</span>';
+      out.innerHTML = '<div><h4>The file, with a hole</h4><pre class="fimpre"><span class="pre">' + esc(pre) + '</span><span class="hole">' + (esc(mid) || ' ') + '</span><span class="suf">' + esc(suf) + '</span></pre></div>' +
+        '<div><h4>What the model is trained on</h4><pre class="fimpre">' + input + '</pre><h4 style="margin-top:12px">What it must produce next</h4><pre class="fimpre"><span class="hole">' + (esc(mid) || ' ') + '</span></pre></div>';
+      sum.textContent = 'An ordinary language model only writes forward. Cutting a hole in the file and moving the end of it in front of the hole turns "fill in the middle" into the same next-token task, so one model can complete code between two existing pieces. The sentinel names here follow StarCoder; each model family chooses its own. StarCoder trained on two orders: the one above, and one in which the prefix sentinel comes first, then the suffix sentinel and suffix, then the middle sentinel and the prefix text.';
+    }
+    [ta, a, b].forEach(function (x) { x.addEventListener('input', draw); }); mode.addEventListener('change', draw); draw();
+  };
+
+  // ---------------------------------------------------------------- evaluation: pass@k
+  F.passk = function (fig) {
+    var ctl = el('div', 'ctl', '<label>Samples drawn per problem n = <b class="nv">20</b></label>'), n = el('input'), c = el('input'); n.type = c.type = 'range'; n.min = 1; n.max = 100; n.value = 20; c.min = 0; c.step = 1; c.type = 'range'; c.value = 4;
+    ctl.appendChild(n); ctl.appendChild(el('label', '', 'of which correct c = <b class="cv">4</b>')); ctl.appendChild(c);
+    var cv = el('div', 'pkout'), sum = el('p', 'lab-sum'); fig.appendChild(ctl); fig.appendChild(cv); fig.appendChild(sum);
+    function comb(N, K) { if (K < 0 || K > N) return 0; var r = 1; for (var i = 1; i <= K; i++) r = r * (N - K + i) / i; return r; }
+    function pk(N, C, K) { if (N - C < K) return 1; var r = 1; for (var i = N - C + 1; i <= N; i++) r *= (1 - K / i); return 1 - r; }   // 1 - C(n-c,k)/C(n,k), the stable product form
+    function draw() {
+      var N = +n.value; c.max = N; var C = Math.min(+c.value, N); ctl.querySelector('.nv').textContent = N; ctl.querySelector('.cv').textContent = C;
+      var ks = [1, 2, 5, 10, 20, 50, 100].filter(function (k) { return k <= N; }), W = 560, h = '<svg viewBox="0 0 ' + W + ' 190" role="img" aria-label="pass@k for each k"><line x1="30" y1="150" x2="' + (W - 10) + '" y2="150" stroke="var(--rule-strong)"/>';
+      ks.forEach(function (k, i) { var v = pk(N, C, k), x = 50 + i * ((W - 90) / Math.max(1, ks.length - 1)), ht = v * 120; h += '<rect x="' + (x - 22) + '" y="' + (150 - ht) + '" width="44" height="' + ht + '" rx="5" fill="var(--accent)"/><text x="' + x + '" y="' + (145 - ht) + '" text-anchor="middle" font-size="12" fill="var(--ink)" font-family="var(--mono)">' + (100 * v).toFixed(0) + '%</text><text x="' + x + '" y="170" text-anchor="middle" font-size="12" fill="var(--ink-faint)" font-family="var(--mono)">k = ' + k + '</text>'; });
+      cv.innerHTML = h + '</svg>';
+      sum.innerHTML = 'The model solved ' + C + ' of ' + N + ' sampled attempts at one problem. The unbiased estimate that at least one of k attempts passes is <b>1 &minus; C(n&minus;c, k) / C(n, k)</b>: pass@1 here is ' + (100 * pk(N, C, 1)).toFixed(1) + '% and pass@' + ks[ks.length - 1] + ' is ' + (100 * pk(N, C, ks[ks.length - 1])).toFixed(1) + '%. Report which k you used. A model that solves a problem 1 time in 5 looks very different at k = 1 and at k = 10.';
+    }
+    n.addEventListener('input', draw); c.addEventListener('input', draw); draw();
+  };
+
   // ---------------------------------------------------------------- home: one program, every form it takes
   F.home = function (fig) {
     var wrap = el('div', 'homefig'), left = el('div', 'hf-l'), right = el('div', 'hf-r'); wrap.appendChild(left); wrap.appendChild(right); fig.appendChild(wrap);

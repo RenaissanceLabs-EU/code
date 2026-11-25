@@ -1,0 +1,33 @@
+{
+  "eval_file": "eval_probe.jsonl",
+  "eval_ids_with_ngrams": [
+    "probe-01",
+    "probe-02",
+    "probe-03"
+  ],
+  "eval_ngrams_indexed": 444,
+  "files_in_by_split": {
+    "test": 49,
+    "train": 524,
+    "validation": 16
+  },
+  "files_out_by_split": {
+    "test": 49,
+    "train": 523,
+    "validation": 16
+  },
+  "ngram_tokens": 13,
+  "overlap_in_validation_or_test_kept": [],
+  "removed": [
+    {
+      "eval_ids": [
+        "probe-02"
+      ],
+      "example_ngram": "maxc = max ( r , g , b ) minc = min",
+      "overlapping_ngrams": 220,
+      "path": "colorsys.py"
+    }
+  ],
+  "stage": "decontaminate",
+  "train_files_removed": 1
+}

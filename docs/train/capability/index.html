@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Choose the capability and approach for training a code model | Renaissance Labs Code</title>
+<meta name="description" content="Completion, instruction following, repair, repository editing, test generation and tool use compared, with pretraining, continued pretraining, SFT, preference tuning and RL, and how to choose by objective, data and compute.">
+<link rel="canonical" href="https://code.renaissancelabs.eu/train/capability/">
+<meta property="og:title" content="Choose the capability and approach for training a code model | Renaissance Labs Code"><meta property="og:description" content="Completion, instruction following, repair, repository editing, test generation and tool use compared, with pretraining, continued pretraining, SFT, preference tuning and RL, and how to choose by objective, data and compute."><meta property="og:url" content="https://code.renaissancelabs.eu/train/capability/"><meta property="og:type" content="website">
+<meta property="og:image" content="https://code.renaissancelabs.eu/assets/og/train-capability.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Choose the capability and approach for training a code model | Renaissance Labs Code"><meta property="og:site_name" content="Renaissance Labs Code">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://code.renaissancelabs.eu/assets/og/train-capability.jpg"><meta name="twitter:title" content="Choose the capability and approach for training a code model | Renaissance Labs Code"><meta name="twitter:description" content="Completion, instruction following, repair, repository editing, test generation and tool use compared, with pretraining, continued pretraining, SFT, preference tuning and RL, and how to choose by objective, data and compute."><meta name="theme-color" content="#121311">
+<link rel="icon" href="/assets/favicon.png">
+<link rel="stylesheet" href="/styles.css?v=a11fdfbf">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+  <a class="brand" href="/"><img src="/assets/mark.png" alt=""><span>Renaissance Labs &middot; Code</span></a>
+  <nav><a href="/program/">Program</a><a href="/stack/">Stack</a><a href="/languages/">Languages</a><a href="/world/">World</a><a href="/intelligence/">Intelligence</a><a href="/train/" aria-current="page">Train</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
+  <button class="theme" id="theme" type="button" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+</header>
+<main id="main">
+<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/train/">Train</a> / Step 1</div><span class="eyebrow">Step 1 of 7</span><h1>Choose the <em>capability</em> you want to train</h1><p class="lede">Start from one sentence: a model that does X, measured by Y. Then pick the approach that fits it, your data and your budget.</p></div><div class="pathbar"><span class="eyebrow">Part two: how to train language models for code</span><ol><li class="cur"><a href="/train/capability/"><span>1</span>Choose the capability</a></li><li><a href="/train/data/"><span>2</span>Choose the data</a></li><li><a href="/train/datasets/"><span>3</span>Find datasets</a></li><li><a href="/train/build-dataset/"><span>4</span>Build a dataset</a></li><li><a href="/train/tools/"><span>5</span>Pick tools</a></li><li><a href="/train/first-run/"><span>6</span>Run a first experiment</a></li><li><a href="/train/evaluate/"><span>7</span>Evaluate</a></li></ol></div><div class="prose wide"><p>Training starts with one sentence: <em>I want a model that does X, and I will know it works when Y improves.</em> Everything else, the data, the method and the compute, follows from X and Y. This page helps you write that sentence, then pick the approach that fits it, your data and your budget.</p>
+<p>Each entry is tagged with how settled the practice is. <span class="tag est">Established</span> means it is widely used and has been stable for years. <span class="tag emg">Emerging</span> means it appears in recent open recipes but is still changing. <span class="tag exp">Experimental</span> means there is little independent evidence yet.</p>
+
+<h2>1. Pick the capability</h2>
+<p>"Good at code" is several different skills. They need different signals, different data and different tests, so the choice matters more than any hyperparameter.</p>
+<div class="cmpwrap"><table class="cmp">
+<thead><tr><th>Capability</th><th>What the model must do</th><th>What teaches it</th><th>Data to look at</th><th>Usual approach</th><th>How you measure it</th></tr></thead>
+<tbody>
+<tr><th>Completion and fill-in-the-middle <span class="tag est">Established</span></th><td>Continue code at the cursor, or fill a gap between code before and after, using nearby files as context.</td><td>Next-token prediction on real code, with the fill-in-the-middle transform.</td><td>Raw code at scale: <a href="/r/the-stack-v2/">The Stack v2</a>, <a href="/r/starcoderdata/">StarCoderData</a>, <a href="/r/stack-edu/">Stack-Edu</a>.</td><td>Continued pretraining of a code base model; pretraining from scratch only with a large budget.</td><td><a href="/r/safim/">SAFIM (Syntax-Aware Fill-in-the-Middle)</a>, <a href="/r/repobench/">RepoBench</a>, <a href="/r/crosscodeeval/">CrossCodeEval</a>.</td></tr>
+<tr><th>Instruction following <span class="tag est">Established</span></th><td>Write, explain or edit code from a request in plain language.</td><td>Examples of a request and a good response.</td><td><a href="/r/magicoder-oss-instruct-75k/">Magicoder OSS-Instruct 75K</a>, <a href="/r/opencodeinstruct/">OpenCodeInstruct (NVIDIA)</a>, <a href="/r/kodcode/">KodCode-V1</a>.</td><td>Supervised fine-tuning, often with LoRA. Preference tuning is optional.</td><td><a href="/r/evalplus-humanevalplus/">HumanEval+ (EvalPlus)</a>, <a href="/r/bigcodebench/">BigCodeBench</a>, <a href="/r/livecodebench/">LiveCodeBench</a>.</td></tr>
+<tr><th>Debugging and repair <span class="tag est">Established</span> for SFT, <span class="tag emg">Emerging</span> for RL</th><td>Read a failing test, an error or a diff, and produce a fix.</td><td>Pairs of broken and fixed code, and the test result that tells them apart.</td><td><a href="/r/commitpackft/">CommitPackFT</a>, <a href="/r/code-feedback/">Code-Feedback (OpenCodeInterpreter)</a>, bug-injection sets such as <a href="/r/swe-smith/">SWE-smith</a>.</td><td>SFT on fixes, then optionally RL with the tests as reward.</td><td><a href="/r/humanevalpack/">HumanEvalPack (OctoPack)</a> (its fix tasks), <a href="/r/canitedit/">CanItEdit</a> (instructional editing), <a href="/r/swe-bench-verified/">SWE-bench Verified</a>.</td></tr>
+<tr><th>Repository-level editing <span class="tag emg">Emerging</span></th><td>Navigate many files, run commands and tests, and produce a patch that resolves an issue.</td><td>Whole working sessions (read, search, edit, run) and outcomes decided by the project's own tests.</td><td><a href="/r/swe-gym/">SWE-Gym</a>, <a href="/r/swe-smith-trajectories/">SWE-smith trajectories</a>, <a href="/r/multi-swe-rl/">Multi-SWE-RL</a>, <a href="/r/r2e-gym/">R2E-Gym (Subset)</a>.</td><td>SFT on agent trajectories, then RL inside per-task containers.</td><td><a href="/r/swe-bench-verified/">SWE-bench Verified</a>, <a href="/r/swe-bench-multilingual/">SWE-bench Multilingual</a>, <a href="/r/swe-bench-live/">SWE-bench-Live</a>.</td></tr>
+<tr><th>Test generation <span class="tag emg">Emerging</span></th><td>Write tests that pass on correct code and fail on buggy code.</td><td>Code paired with the tests that exercise it, and execution results such as coverage or whether a planted bug is caught.</td><td><a href="/r/kodcode/">KodCode-V1</a> and <a href="/r/acecode-v2-122k/">AceCode-V2-122K (TIGER-Lab)</a> ship tests with each problem; you turn the tests into targets yourself.</td><td>SFT on code-to-test pairs, with execution-based filtering or reward.</td><td><a href="/r/testgeneval/">TestGenEval</a>, <a href="/r/swt-bench/">SWT-Bench</a>.</td></tr>
+<tr><th>Tool use and terminal work <span class="tag emg">Emerging</span> to <span class="tag exp">Experimental</span></th><td>Choose commands or API calls, read what comes back, recover from errors.</td><td>Sequences of calls and results, and a check on the final state of the system.</td><td><a href="/r/nemotron-agentic-v1/">Nemotron-Agentic-Tool-Use-v1</a>, <a href="/r/nemotron-sft-opencode-v1/">Nemotron-SFT-OpenCode-v1</a>, <a href="/r/nl2sh-alfa/">NL2SH-ALFA</a>.</td><td>SFT on trajectories, then RL on tasks that have a checkable end state.</td><td><a href="/r/terminal-bench-2/">Terminal-Bench 2.0</a>, <a href="/r/intercode/">InterCode</a>.</td></tr>
+</tbody></table></div>
+
+<h2>2. Pick the approach</h2>
+<p>Five approaches cover almost every project. They differ in what they change in the model, how much data they need and how much computing they cost. The figures in the third column are examples from published work, not rules.</p>
+<div class="cmpwrap"><table class="cmp">
+<thead><tr><th>Approach</th><th>What it changes</th><th>Scale in published examples</th><th>Choose it when</th><th>Main risk</th></tr></thead>
+<tbody>
+<tr><th>Pretraining from scratch <span class="tag est">Established</span></th><td>Everything. The model learns code, language and general knowledge from nothing.</td><td>StarCoder2 was trained on 3.3 to 4.3 trillion tokens, counting repeated passes over a smaller dataset (<a href="/r/paper-starcoder2/">StarCoder 2 and The Stack v2</a>).</td><td>You need a new tokenizer, a new architecture, a clean-room license or full control of the data, and you have a large budget.</td><td>Cost. A mistake found late is expensive.</td></tr>
+<tr><th>Continued pretraining <span class="tag est">Established</span></th><td>What the model knows about a domain, such as a language, a library or a codebase.</td><td>Code Llama continued from Llama 2 with 500 billion to 1 trillion tokens; the <a href="/train/models/">model recipes</a> show other cases.</td><td>The base model is strong but weak in your language or domain, and you have many tokens of it.</td><td>Forgetting general ability. Mix general data back in.</td></tr>
+<tr><th>Supervised fine-tuning <span class="tag est">Established</span></th><td>How the model responds: format, style, which task it attempts.</td><td>From about a thousand carefully chosen examples (<a href="/r/paper-lima/">LIMA: Less Is More for Alignment</a>, a general instruction-tuning study) to tens of thousands (the OSS-Instruct set has about 75,000 rows) and millions (OpenCodeInstruct has 5 million).</td><td>The model has the knowledge but does not follow your instructions or format. The cheapest first step.</td><td>Teaching the style of the teacher, errors included.</td></tr>
+<tr><th>Preference tuning <span class="tag est">Established</span> for DPO</th><td>Which of two answers the model favors.</td><td>Thousands to hundreds of thousands of pairs (see <a href="/r/acecodepair-300k/">AceCodePair-300K (TIGER-Lab)</a>).</td><td>SFT has plateaued and you can build pairs from test results.</td><td>Rewarding length or style when pairs come from a judge model.</td></tr>
+<tr><th>Execution-based reinforcement learning <span class="tag emg">Emerging</span></th><td>Whether the model's code actually works, learned by trying.</td><td>DeepCoder-14B trained on about 24,000 problems; see <a href="/r/recipe-deepcoder/">DeepCoder RL recipe (GRPO+)</a>.</td><td>Your model already solves some tasks, you have a trustworthy verifier, and you can afford many rollouts.</td><td>Reward hacking when the tests are weak or reachable.</td></tr>
+</tbody></table></div>
+
+<h2>3. Match approach to objective, data and compute</h2>
+<p>Read down the left column for what you have. The right column is where to start, and the place to go next if the first step is not enough.</p>
+<div class="cmpwrap"><table class="cmp">
+<thead><tr><th>If you have</th><th>Start with</th><th>Then</th></tr></thead>
+<tbody>
+<tr><th>One GPU, a few thousand good examples, a model that is close to what you want</th><td>LoRA supervised fine-tuning of a small instruct model. Follow the <a href="/train/first-run/">first training run</a>.</td><td>Measure. Add examples where it fails. Add execution-checked filtering.</td></tr>
+<tr><th>A private codebase or an unusual language, and many tokens of it</th><td>Continued pretraining on it, mixed with general code to limit forgetting, then a short SFT.</td><td>Evaluate on held-out files from the same codebase, not only on public benchmarks.</td></tr>
+<tr><th>A model that writes code but fails the tests</th><td>Execution-filtered SFT, then RL with unit-test rewards on tasks the model sometimes solves.</td><td>Keep a held-out test set. Watch for reward hacking.</td></tr>
+<tr><th>An agent that must work in repositories</th><td>SFT on trajectories from the harness you will deploy, using an open set such as <a href="/r/swe-smith-trajectories/">SWE-smith trajectories</a>.</td><td>RL in containers if you can afford it. Match tool format to the harness.</td></tr>
+<tr><th>A cluster and a new language or architecture</th><td>Pretraining from scratch, using the recipes in the <a href="/train/models/">model comparison</a> as a template.</td><td>Mid-training on cleaner data, then SFT and RL as above.</td></tr>
+</tbody></table></div>
+<p>For a plan with specific resources for your size, budget and languages, use the <a href="/recipe/">recipe builder</a>. For the reasoning behind each stage, read <a href="/train/how/">how a code model is trained</a>.</p>
+
+<h2>4. Write the sentence down</h2>
+<p>Before you collect anything, fill in four blanks. If you cannot, the project is not yet defined.</p>
+<ul>
+<li><b>Capability:</b> one row of the first table.</li>
+<li><b>Measurement:</b> one benchmark or private test set that fits it, and the number you start from.</li>
+<li><b>Data:</b> where the examples come from and what license each carries.</li>
+<li><b>Budget:</b> the largest run you are willing to pay for, and the smaller run that tells you whether to start it.</li>
+</ul>
+<p>The next step is <a href="/train/data/">choosing the data</a> that gives the signal your capability needs.</p>
+</div><div class="cta-row" style="margin-top:34px"><a class="btn" href="/train/">&larr; The path</a><a class="btn primary" href="/train/data/">Choose the data &rarr;</a></div></div></div>
+</main>
+<footer class="wrap foot">
+  <a class="brand" href="https://renaissancelabs.eu"><img src="/assets/mark.png" alt="">Renaissance Labs</a>
+  <div class="foot-links"><a href="/catalog/">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
+</footer>
+<script src="/app.js?v=a11fdfbf" defer></script>
+<script src="/lang.js?v=a11fdfbf" defer></script><script src="/figs.js?v=a11fdfbf" defer></script></body>
+</html>

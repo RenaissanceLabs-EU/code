@@ -1,0 +1,53 @@
+<p>A model learns what its data and its feedback reward. So the choice of data is the choice of behavior: raw code teaches what code looks like, instruction pairs teach how to answer a request, tests teach what works. This page lays out the main kinds of data side by side, says what each one teaches, and shows how the conceptual forms of a program on this site map onto training signals.</p>
+
+<h2>1. Seven kinds of data, and what each teaches</h2>
+<div class="cmpwrap"><table class="cmp">
+<thead><tr><th>Kind of data</th><th>What a record holds</th><th>What it teaches</th><th>Behavior you get</th><th>Where it goes wrong</th><th>Examples</th></tr></thead>
+<tbody>
+<tr><th>Raw source code <span class="tag est">Established</span></th><td>A file, with its path, language and license.</td><td>Syntax, idiom, library use, style across languages. No notion of a request.</td><td>Completion and fill-in-the-middle. A model that continues code but does not follow instructions.</td><td>Duplicates, generated files, secrets, mixed licenses, benchmark leakage.</td><td>{{r:the-stack-v2}}, {{r:starcoderdata}}, {{r:stack-edu}}</td></tr>
+<tr><th>Documentation and Q&amp;A <span class="tag est">Established</span></th><td>Natural language about code: reference pages, tutorials, forum answers.</td><td>How people describe code and ask for it. The link between words and programs.</td><td>Better reading of requests and error messages; explanations.</td><td>Outdated advice, wrong accepted answers, licenses that differ from code licenses.</td><td>{{r:stack-exchange-preferences}}</td></tr>
+<tr><th>Instruction and response pairs <span class="tag est">Established</span></th><td>A request and a solution, often with an explanation.</td><td>The format of a helpful answer. Which task the user wants.</td><td>Chat-style coding assistants.</td><td>Style of the writer, wrong solutions, narrow task range, terms of the model that wrote them.</td><td>{{r:magicoder-oss-instruct-75k}}, {{r:opencodeinstruct}}, {{r:evol-codealpaca-v1}}</td></tr>
+<tr><th>Issue and patch pairs <span class="tag est">Established</span> for SFT</th><td>A problem statement or commit message, the code before, the change made.</td><td>How real changes look: small, local, tied to a reason. How to read before editing.</td><td>Editing, repair, repository-level tasks.</td><td>Vague messages, noisy commits, history that includes the benchmark's own repositories.</td><td>{{r:commitpackft}}, {{r:swe-gym}}, {{r:swe-smith}}</td></tr>
+<tr><th>Tests <span class="tag est">Established</span></th><td>Executable checks paired with a problem, usually inputs and expected outputs or unit tests.</td><td>A definition of correct that a machine can apply. Pass or fail, not style.</td><td>Reliable code. The reward for RL and the filter for SFT.</td><td>Weak tests accept wrong code; tests can be read, edited or gamed.</td><td>{{r:kodcode}}, {{r:acecode-v2-122k}}, {{r:deepcoder-preview}}</td></tr>
+<tr><th>Execution traces and trajectories <span class="tag emg">Emerging</span></th><td>What happened when code ran, or a full session of commands, observations and edits.</td><td>What code does, not only what it says; how to recover from errors; how to act in a loop.</td><td>Agents, debugging, output prediction.</td><td>Trajectories encode one harness's tool format; long and expensive to produce; failed runs mixed in.</td><td>{{r:swe-smith-trajectories}}, {{r:nemotron-agentic-v1}}</td></tr>
+<tr><th>Synthetic examples <span class="tag est">Established</span> for SFT, <span class="tag emg">Emerging</span> for reasoning</th><td>Problems, solutions, tests or reasoning written by another model.</td><td>Whatever the writer can produce, at scale, in the shape you ask for.</td><td>Coverage of tasks that real data lacks; reasoning traces for harder problems.</td><td>Errors and blind spots of the writer, low diversity, licensing of the writer, collapse on the writer's habits.</td><td>{{r:magicoder-oss-instruct-75k}}, {{r:opencodereasoning}}, {{r:kodcode}}</td></tr>
+</tbody></table></div>
+
+<h2>2. The tradeoffs, one by one</h2>
+<p>Every dataset decision trades five things against each other. Name which one you are paying for.</p>
+<div class="cmpwrap"><table class="cmp narrow">
+<thead><tr><th>Quality you want</th><th>What buying it costs</th><th>What to do</th></tr></thead>
+<tbody>
+<tr><th>Volume</th><td>More tokens means more compute, and past a point repeats and near-copies dominate. Volume alone does not teach tasks that the data does not contain.</td><td>Deduplicate first. For fine-tuning, start with thousands of examples, not millions, and add more only where evaluation shows a gap.</td></tr>
+<tr><th>Quality</th><td>Filtering throws data away, and strict filters can remove the variety that makes a model robust. The OpenCoder study trained two 1.5B models and found that keeping only repositories with at least 5 stars did worse than keeping all of them, which the authors attribute to lost diversity.</td><td>Filter for defects you can name (broken, generated, unsafe, duplicated). Check what the filter removed by reading samples.</td></tr>
+<tr><th>Diversity</th><td>Wide coverage costs effort to collect and can dilute a narrow target.</td><td>Diversity of <em>problems</em> can matter more than verifying each solution. The OpenCodeReasoning authors found that, in one setup, filtering to solutions that pass tests scored lower than keeping all of them, and that adding more unique questions gave the largest gains.</td></tr>
+<tr><th>Difficulty</th><td>Hard problems are costly to write and to check, and with group-based RL such as GRPO, a model that fails every sample learns nothing from that problem.</td><td>For RL, keep a middle band the model sometimes solves. For SFT, mix easy and hard, since the easy ones set the format.</td></tr>
+<tr><th>Relevance</th><td>Data close to your target helps most and is least available. Data far from it is plentiful and may do nothing for the task.</td><td>Evaluate on data like your target. Spend your effort on a small set that matches it.</td></tr>
+</tbody></table></div>
+
+<h2>3. Make the connection explicit</h2>
+<p>Write one line for each data source you consider: <em>this data gives the model this signal, which I expect to improve this behavior, and I will check it with this test.</em> If any part of the sentence is missing, you do not yet know why the data is in the mix.</p>
+<ul>
+<li><b>Examples:</b> "Function-level instruction pairs with unit tests teach the model to write complete, runnable functions; I expect HumanEval+ to rise; I will also check that a held-out set of my own tasks improves."</li>
+<li>"Issue-patch pairs teach small, local edits tied to a reason; I expect repair benchmarks to improve and long-context completion to be unchanged; I will check both."</li>
+<li>"Reasoning traces from a stronger model teach longer working before the answer; I expect hard-problem accuracy to rise and answers to get longer; I will check cost per answer."</li>
+</ul>
+
+<h2>4. From part one: what each form of a program gives you</h2>
+<p>The <a href="/program/">eight forms of a program</a> are also eight places to collect data and eight kinds of feedback. This is how the conceptual map turns into training decisions.</p>
+<div class="cmpwrap"><table class="cmp">
+<thead><tr><th>Form of a program</th><th>Training data it gives</th><th>Feedback signal</th><th>Typical stage</th><th>Take care that</th></tr></thead>
+<tbody>
+<tr><th><a href="/program/text/">Text</a></th><td>Source files and their metadata: path, language, license, repository.</td><td>Next-token prediction.</td><td>Pretraining, mid-training</td><td>License, duplicates and secrets are handled before training.</td></tr>
+<tr><th><a href="/program/tokens/">Tokens</a></th><td>The model's own tokenization of the text; fill-in-the-middle splits the text at random character positions before tokenization (some recipes use whole lines).</td><td>Completion at the cursor, in context.</td><td>Pretraining</td><td>Special tokens match the model's template; formatting is normalized, so the same code is not many different inputs.</td></tr>
+<tr><th><a href="/program/tree/">Structure</a></th><td>Parsed trees: function and class boundaries, comments, signatures, docstring and body pairs.</td><td>Output that parses; completions that respect syntax.</td><td>Data preparation; constrained decoding at inference</td><td>The parser matches the language version; broken files are dropped or flagged.</td></tr>
+<tr><th><a href="/program/types/">Types</a></th><td>Type annotations, type-checker errors, inferred types.</td><td>Code that type-checks; type prediction tasks.</td><td>SFT, RL (compile-and-fix loops)</td><td>Type annotations are common mainly in Python and TypeScript code; most other languages have little type-prediction data.</td></tr>
+<tr><th><a href="/program/execution/">Execution</a></th><td>Outputs, errors, traces and sandboxed runs of code.</td><td>Does it run; what does it print; what state results.</td><td>SFT on traces, RL with execution rewards</td><td>Runs are isolated; timeouts and resource limits are enforced.</td></tr>
+<tr><th><a href="/program/tests/">Tests</a></th><td>Unit tests, input-output cases, test-to-code pairs.</td><td>Pass or fail, the standard reward for code.</td><td>SFT filtering, preference pairs, RL</td><td>Tests are strong enough to reject wrong code and are kept out of reach.</td></tr>
+<tr><th><a href="/program/proof/">Proof</a></th><td>Formal statements and checked proofs; verified programs with specifications.</td><td>Accepted or rejected by a proof checker.</td><td>RL and SFT for formal code</td><td>The statement says what you meant; the checker's guarantees are understood.</td></tr>
+<tr><th><a href="/program/change/">Change</a></th><td>Commits, diffs, reviews, issues, repository histories.</td><td>The edit that resolved the issue; the review comment; whether tests still pass.</td><td>SFT on diffs, agent trajectories, RL on repository tasks</td><td>Repositories used for training do not overlap the benchmarks you will evaluate on.</td></tr>
+</tbody></table></div>
+<p>The stack levels matter too. Data is plentiful for languages and applications and thin for hardware, machine code and infrastructure, as the <a href="/stack/">stack map</a> shows in its resource counts. If your target is low in the stack, plan to build your own data.</p>
+
+<h2>Next</h2>
+<p>With a capability and a data plan, look at <a href="/train/datasets/">the datasets directory</a> for starting points, or go straight to <a href="/train/build-dataset/">building your own dataset</a>.</p>

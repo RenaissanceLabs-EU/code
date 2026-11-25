@@ -1,0 +1,614 @@
+[
+ {
+  "id": "starcoder2-15b",
+  "name": "StarCoder2 (3B, 7B, 15B)",
+  "org": "BigCode (Hugging Face, ServiceNow, NVIDIA and others)",
+  "released": "2024-02",
+  "open": "weights and data",
+  "sources": [
+   "https://arxiv.org/abs/2402.19173",
+   "https://huggingface.co/bigcode/starcoder2-15b"
+  ],
+  "base": "no earlier checkpoint named in the report",
+  "size": "3B, 7B and 15B parameters, dense",
+  "pretrain": {
+   "tokens": "3.1T (3B), 3.5T (7B) and 4.1T (15B) tokens at 4,096 context, then 200B more tokens at 16,384 context; the abstract states 3.3 to 4.3 trillion tokens in total",
+   "code_share": null,
+   "languages": "600+ programming languages in The Stack v2 (Software Heritage archive spanning 619 languages)",
+   "data_sources": "The Stack v2 built on the Software Heritage archive, plus GitHub issues and pull requests, Kaggle and Jupyter notebooks, code documentation, intermediate representations and small math and code datasets; about 900B+ unique tokens",
+   "notes": "Repository-context, file-level fill-in-the-middle: a repository is a FIM candidate with 50% chance, then each file chunk is transformed with 50% probability. Data is repeated for around four to five epochs, and the long-context stage uses a 16,384 window with a sliding window of 4,096."
+  },
+  "sft": {
+   "summary": "The report releases base models only and leaves instruction tuning and preference alignment to future work.",
+   "teacher": null
+  },
+  "preference_or_rl": {
+   "method": null,
+   "reward": null,
+   "environments": null,
+   "notes": "No instruction tuning or RL stage is reported."
+  },
+  "eval_headline": "In Table 9 (greedy pass@1, report dated February 2024), StarCoder2-15B scores 46.3 on HumanEval, against 37.8 for CodeLlama-13B.",
+  "lesson": "Release the training data as Software Heritage persistent identifiers (SWHIDs) so others can rebuild the same corpus and check for contamination.",
+  "checked": "2026-11-25",
+  "evidence": "Abstract; section 1; section 2 (data sources); section 3 (preprocessing, near-deduplication); section 5.1 (repository context and FIM); section 6 (Tables 7 and 8, training details, long context); Table 9; arXiv PDF text read in full for these parts; HF API for release date."
+ },
+ {
+  "id": "codellama-70b",
+  "name": "Code Llama (7B, 13B, 34B, 70B; Base, Python, Instruct)",
+  "org": "Meta",
+  "released": "2023-08",
+  "open": "weights",
+  "sources": [
+   "https://arxiv.org/abs/2308.12950",
+   "https://huggingface.co/codellama/CodeLlama-70b-hf"
+  ],
+  "base": "continued from Llama 2",
+  "size": "7B, 13B, 34B and 70B parameters, dense",
+  "pretrain": {
+   "tokens": "500B tokens for 7B, 13B and 34B; 1T tokens for 70B; Code Llama - Python adds 100B tokens; a long-context stage then uses 16,384-token sequences",
+   "code_share": "85% code, 8% natural language related to code, 7% natural language",
+   "languages": null,
+   "data_sources": "A near-deduplicated dataset of publicly available code, plus 8% of samples from natural language datasets related to code and a small share of general natural language",
+   "notes": "The 7B, 13B and 70B models are trained with infilling: documents are split at the character level into prefix, middle and suffix, applied with probability 0.9, half in PSM and half in SPM format. Long-context fine-tuning raises sequence length from 4,096 to 16,384 tokens."
+  },
+  "sft": {
+   "summary": "Code Llama - Instruct uses Llama 2's 'RLHF V5' instruction set (thousands of SFT and millions of rejection-sampling examples) plus about 14,000 self-instruct question, test and solution triplets, with 6% code and 2% natural language rehearsal data.",
+   "teacher": "Llama 2 70B wrote 62,000 interview-style questions (about 52,000 after de-duplication); Code Llama 7B wrote the unit tests and ten Python solutions per question"
+  },
+  "preference_or_rl": {
+   "method": null,
+   "reward": "Unit tests: the first of ten sampled solutions that passes the generated tests is kept",
+   "environments": null,
+   "notes": "The report states that execution feedback, not human feedback, is used to select the self-instruct data."
+  },
+  "eval_headline": "The abstract states scores of up to 67% on HumanEval and 65% on MBPP (arXiv v3, January 2024).",
+  "lesson": "Fine-tuning Llama 2 on 500B code tokens beats an identical 7B model trained from scratch on the same mix: the scratch model's loss matches Code Llama's at about half of training, with 240B fewer tokens, and the gap grows.",
+  "checked": "2026-11-25",
+  "evidence": "Abstract; section 2 (dataset, infilling, long-context fine-tuning, instruction fine-tuning, training details); section 3.4.1 (fine-tuning Llama 2 versus training from scratch); arXiv v3 PDF text; HF API for the 70B card."
+ },
+ {
+  "id": "deepseek-coder",
+  "name": "DeepSeek-Coder (1.3B to 33B)",
+  "org": "DeepSeek-AI",
+  "released": "2023-10",
+  "open": "weights",
+  "sources": [
+   "https://arxiv.org/abs/2401.14196",
+   "https://huggingface.co/deepseek-ai/deepseek-coder-33b-base"
+  ],
+  "base": "trained from scratch",
+  "size": "1.3B to 33B parameters, dense",
+  "pretrain": {
+   "tokens": "2 trillion tokens; context extended to 16K with an extra 1000 training steps",
+   "code_share": "87% source code, 10% English code-related natural language, 3% code-unrelated Chinese natural language",
+   "languages": "87 programming languages",
+   "data_sources": "GitHub code (798 GB after cleaning), GitHub Markdown and StackExchange, and Chinese articles; project-level corpus organized by dependency parsing",
+   "notes": "Near-deduplication is applied at the repository level, treating the concatenated repository as one sample. FIM uses a 0.5 rate in PSM mode; a 100% FIM rate gave the best HumanEval-FIM score but the weakest code completion."
+  },
+  "sft": {
+   "summary": "Instruction tuning on helpful human instructions in the Alpaca instruction format, with a 4M-token batch and 2B tokens in total.",
+   "teacher": null
+  },
+  "preference_or_rl": {
+   "method": null,
+   "reward": null,
+   "environments": null,
+   "notes": null
+  },
+  "eval_headline": "The report states that DeepSeek-Coder-Instruct 33B surpasses OpenAI GPT-3.5 Turbo in the majority of the evaluation benchmarks (report of January 2024).",
+  "lesson": "A 50% FIM rate in PSM mode balances infilling and completion, because a 100% FIM rate gave the best HumanEval-FIM score but the weakest code completion.",
+  "checked": "2026-11-25",
+  "evidence": "Abstract; sections 1 and 2 (data collection, dependency parsing, repo-level deduplication); section 3 (FIM ablation, long context, instruction tuning); arXiv PDF text; HF API for the repository date (the arXiv report is dated January 2024)."
+ },
+ {
+  "id": "deepseek-coder-v2",
+  "name": "DeepSeek-Coder-V2 (Lite 16B and 236B)",
+  "org": "DeepSeek-AI",
+  "released": "2024-06",
+  "open": "weights",
+  "sources": [
+   "https://arxiv.org/abs/2406.11931",
+   "https://huggingface.co/deepseek-ai/DeepSeek-Coder-V2-Instruct"
+  ],
+  "base": "continued from an intermediate checkpoint of DeepSeek-V2 (trained on 4.2T tokens)",
+  "size": "16B total with 2.4B active, and 236B total with 21B active (mixture of experts)",
+  "pretrain": {
+   "tokens": "6 trillion additional tokens, for 10.2T tokens in total (4.2T from the DeepSeek-V2 checkpoint plus 6T)",
+   "code_share": "60% source code, 10% math, 30% natural language",
+   "languages": "338 (up from 86)",
+   "data_sources": "1,170B code-related tokens from GitHub and CommonCrawl, 221B math tokens from CommonCrawl, and natural language sampled from the DeepSeek-V2 corpus",
+   "notes": "FIM at a 0.5 rate in PSM mode is used for the 16B model only; the 236B model uses next-token prediction only. Context grows to 128K with YaRN in two stages of 1000 steps each, at 32K and then 128K."
+  },
+  "sft": {
+   "summary": "A 300M-token instruction set built from 20k code instructions, 30k math instructions and some DeepSeek-V2 instruction data; 1B tokens of training.",
+   "teacher": null
+  },
+  "preference_or_rl": {
+   "method": "GRPO",
+   "reward": "A reward model trained on compiler feedback (0 or 1 for passing all test cases), used instead of the raw compiler signal",
+   "environments": "About 40k prompts of code and math, each code prompt with test cases",
+   "notes": "The report states raw 0-1 compiler feedback can be noisy when a prompt has few test cases, and that the reward model generalized better on in-house LeetCode test sets."
+  },
+  "eval_headline": "The report states 90.2% on HumanEval, 76.2% on MBPP and 43.4% on LiveCodeBench (questions from December 2023 to June 2024).",
+  "lesson": "Train a reward model on compiler pass/fail data and use it for RL, because raw test-case feedback is noisy when prompts have few tests.",
+  "checked": "2026-11-25",
+  "evidence": "Abstract; sections 1 (introduction, summary of evaluations), 2 (data), 3.1 to 3.5 (pretraining policy, FIM, long context, SFT, RL); arXiv PDF text."
+ },
+ {
+  "id": "qwen2-5-coder",
+  "name": "Qwen2.5-Coder (0.5B to 32B)",
+  "org": "Alibaba Qwen",
+  "released": "2024-09",
+  "open": "weights",
+  "sources": [
+   "https://arxiv.org/abs/2409.12186",
+   "https://huggingface.co/Qwen/Qwen2.5-Coder-32B"
+  ],
+  "base": "continued from Qwen2.5",
+  "size": "0.5B, 1.5B, 3B, 7B, 14B and 32B parameters, dense",
+  "pretrain": {
+   "tokens": "Over 5.5 trillion tokens: 5.2T at file level (8,192 context) and about 300B of long-context repository-level code",
+   "code_share": "70% code, 20% text, 10% math",
+   "languages": "92",
+   "data_sources": "Public GitHub repositories created before February 2024, pull requests, commits, Jupyter notebooks and Kaggle datasets; Common Crawl text-code grounding data; synthetic code from CodeQwen1.5 kept only if an executor ran it; Qwen2.5-Math and Qwen2.5 text data",
+   "notes": "On Qwen2.5-Coder-7B a 7:2:1 code, text and math ratio beat both 100:0:0 and 85:10:5. Repository-level training extends context from 8,192 to 32,768 tokens, with YaRN allowing up to 131,072."
+  },
+  "sft": {
+   "summary": "Coarse-to-fine SFT: tens of millions of low-quality but diverse synthetic instruction samples first, then millions of high-quality samples chosen by rejection sampling; multilingual instruction data from language-specific agents, checklist scoring, a multilingual execution sandbox, and a small share of FIM-format instruction samples.",
+   "teacher": null
+  },
+  "preference_or_rl": {
+   "method": "Offline DPO",
+   "reward": "Execution feedback from a multilingual code sandbox with generated test cases for self-contained code; LLM-as-a-judge for other code",
+   "environments": "Algorithm-like and self-contained snippets in Python, Java and other languages, plus other code snippets judged by an LLM",
+   "notes": "Code DPO data is combined with common data for offline DPO training."
+  },
+  "eval_headline": "The report states Qwen2.5-Coder-32B-Instruct is the current SOTA open-source code model, matching the coding capabilities of GPT-4o (report v3, November 2024).",
+  "lesson": "A 70% code, 20% text, 10% math mixture beat a 100% code mixture on Qwen2.5-Coder-7B, so keep text and math in code pretraining.",
+  "checked": "2026-11-25",
+  "evidence": "Abstract; sections 1 and 2 (architecture, tokens); section 3.1 (data composition, mixture); section 3.2 (file-level and repo-level pretraining); section 4 (instruction data, training policy, DPO); arXiv v3 PDF text; HF API (base_model Qwen2.5-32B)."
+ },
+ {
+  "id": "opencoder-8b",
+  "name": "OpenCoder (1.5B and 8B)",
+  "org": "INF and M-A-P (Nanjing University)",
+  "released": "2024-11",
+  "open": "weights, data and code",
+  "sources": [
+   "https://arxiv.org/abs/2411.04905",
+   "https://huggingface.co/infly/OpenCoder-8B-Base"
+  ],
+  "base": "trained from scratch",
+  "size": "1.5B and 8B parameters, dense",
+  "pretrain": {
+   "tokens": "8B: 2.5 trillion tokens (3.5 epochs) plus a 100B-token annealing phase; 1.5B: 2 trillion tokens over four epochs plus 100B annealing",
+   "code_share": "RefineCode (960B tokens): GitHub code 78.4%, The Stack v2 12.5%, Jupyter notebooks 1.1%; the rest is code-related web and open-source data",
+   "languages": "607",
+   "data_sources": "RefineCode plus code-related web data; annealing mix of 83.94B RefineCode tokens, 12.44B algorithmic corpus, 2.71B high-quality code snippets and 0.91B code textbooks",
+   "notes": "Exact deduplication followed by file-level fuzzy deduplication is aggressive and CPU-saving; the report finds file-level beats repository-level and chunk-level deduplication adds nothing. High-quality synthetic data in the annealing stage improved results in the report's ablation."
+  },
+  "sft": {
+   "summary": "Two stages: stage 1 about 4M theory-focused examples (0.7M RealUser-Instruct, 2.3M Large-scale Diverse-Instruct, 1.0M filtered Infinity-Instruct); stage 2 about 367K code examples (36K McEval-Instruct, 111K Evol-Instruct, 110K Educational-Instruct, 110K Package-Instruct), with synthetic code kept only if generated test cases passed.",
+   "teacher": null
+  },
+  "preference_or_rl": {
+   "method": null,
+   "reward": null,
+   "environments": null,
+   "notes": "No RL or preference stage is reported."
+  },
+  "eval_headline": "In Table 1 of the report (version of March 2025), OpenCoder-8B chat scores 83.5 pass@1 on HumanEval after 2.5T training tokens.",
+  "lesson": "Run exact deduplication and then file-level fuzzy deduplication on GitHub code: file-level deduplication removed about 68 billion more tokens (68.4%) after repository-level deduplication.",
+  "checked": "2026-11-25",
+  "evidence": "Abstract; sections 2.1 and 2.2 (RefineCode, annealing data); section 3 (architecture, training); section 4 (instruction tuning, Table 5); sections 6.1 to 6.4 (ablations); Tables 1 to 4; arXiv v3 PDF text."
+ },
+ {
+  "id": "seed-coder-8b",
+  "name": "Seed-Coder (8B Base, Instruct, Reasoning)",
+  "org": "ByteDance Seed",
+  "released": "2025-04",
+  "open": "weights",
+  "sources": [
+   "https://arxiv.org/abs/2506.03524",
+   "https://huggingface.co/ByteDance-Seed/Seed-Coder-8B-Base"
+  ],
+  "base": "no earlier checkpoint named in the report",
+  "size": "8.2B parameters, dense",
+  "pretrain": {
+   "tokens": "6 trillion tokens: 1T of code-related and math-related web data, 4T of curated code, then 400B and 600B tokens of continued pretraining on high-quality and long-context data",
+   "code_share": null,
+   "languages": "89 (GitHub corpus)",
+   "data_sources": "GitHub code filtered by LLM quality scores, 74 million commits from 140K repositories (about 100B tokens), and code-related web data (about 1.2T tokens)",
+   "notes": "FIM ratio is 0.5 in regular pretraining and 0.1 in continued pretraining, and SPM mode performed slightly better than PSM. Context grows from 8K to 32K over about 1T training tokens."
+  },
+  "sft": {
+   "summary": "Instruct: about 3 million instruction-response pairs, 3 epochs, built from GitHub snippets and style-augmented public instructions, filtered with Tree-sitter and a model scorer, with sandbox self-correction against generated unit tests.",
+   "teacher": "Unnamed LLMs for the instruct data; DeepSeek-R1 for the Reasoning model's long chain-of-thought warmup solutions"
+  },
+  "preference_or_rl": {
+   "method": "DPO for the Instruct model; GRPO (verl, DAPO-style changes) for the Reasoning model",
+   "reward": "Instruct: on-policy responses scored by generated unit tests in a sandbox. Reasoning: verifiable correctness plus a format reward (the correctness check is not detailed)",
+   "environments": "Instruct: about 20,000 preference pairs. Reasoning: CodeContests, ICPC problems, open-r1/codeforces-cots and LiveCodeBench data before August 2024",
+   "notes": "The Reasoning RL runs 90 steps at 16K with 16 samples per prompt, then 160 steps at 32K with 32 samples, and filters problems with correctness above 87.5%."
+  },
+  "eval_headline": "The report states Seed-Coder-8B-Instruct reaches 36.2% pass@1 on MHPP, surpassing all other roughly 8B models (report of June 2025).",
+  "lesson": "Start long chain-of-thought RL from the base model plus a small warmup set rather than from the instruct model, because the instruct model collapsed into SFT data patterns during RL.",
+  "checked": "2026-11-25",
+  "evidence": "Abstract; section 2 (pretraining data pipeline, commits, web data, long context, FIM, pretraining policy); sections 3.1 and 3.2 (instruct and reasoning training); arXiv v2 PDF text; HF API for repository date."
+ },
+ {
+  "id": "granite-8b-code-base",
+  "name": "Granite Code (3B, 8B, 20B, 34B)",
+  "org": "IBM",
+  "released": "2024-04",
+  "open": "weights",
+  "sources": [
+   "https://arxiv.org/abs/2405.04324",
+   "https://huggingface.co/ibm-granite/granite-8b-code-base-4k"
+  ],
+  "base": "trained from scratch",
+  "size": "3B, 8B, 20B and 34B parameters, dense (34B built by depth upscaling of the 20B model)",
+  "pretrain": {
+   "tokens": "Phase 1: 4T tokens of code for 3B and 8B, 3T for 20B, and 1.4T for 34B after upscaling a 1.6T-token 20B checkpoint; phase 2: 500B tokens; 3.5T to 4.5T in total",
+   "code_share": "Phase 1 is code only; phase 2 is 80% code and 20% language data",
+   "languages": "116",
+   "data_sources": "Permissively licensed GitHub code, GitHub issues, and in phase 2 technical, mathematics and web documents",
+   "notes": "Training mixes causal language modeling and FIM with weight alpha 0.5, in both PSM and SPM modes. Exact and fuzzy deduplication run before training, and files are kept only with permissive licenses."
+  },
+  "sft": {
+   "summary": "Instruct models use a filtered CommitPackFT (92 languages), math sets (MathInstruct, MetaMathQA), code instruction sets (Glaive-Code-Assistant-v3, Self-OSS-Instruct-SC2, Glaive-Function-Calling-v2, NL2SQL) and language sets (HelpSteer, a license-filtered Platypus).",
+   "teacher": null
+  },
+  "preference_or_rl": {
+   "method": null,
+   "reward": null,
+   "environments": null,
+   "notes": "No RL or preference stage is reported."
+  },
+  "eval_headline": "The report states Granite-8B-Code-Base outperforms CodeGemma-8B by almost 12 points on HumanEvalPack (33.2% vs 21.3%) with fewer tokens (4.5T vs 7.5T) (report of May 2024).",
+  "lesson": "Train on code only for 3T to 4T tokens, then spend a final 500B tokens on 80% code and 20% high-quality language data to improve reasoning and problem solving.",
+  "checked": "2026-11-25",
+  "evidence": "Abstract; sections 1 and 2 (data crawling, deduplication, filtering); section 3 (architecture, depth upscaling); section 4 (two-phase training, FIM objective); section 5 (instruction tuning); arXiv PDF text; HF API for repository date."
+ },
+ {
+  "id": "opencodereasoning-nemotron-32b",
+  "name": "OpenCodeReasoning-Nemotron (7B, 14B, 32B)",
+  "org": "NVIDIA",
+  "released": "2025-04",
+  "open": "weights and data",
+  "sources": [
+   "https://arxiv.org/abs/2504.01943",
+   "https://huggingface.co/nvidia/OpenCodeReasoning-Nemotron-32B"
+  ],
+  "base": "fine-tuned from Qwen2.5 base and instruct models (HF card base_model for the 32B: Qwen2.5-32B-Instruct)",
+  "size": "7B, 14B and 32B parameters, dense",
+  "pretrain": {
+   "tokens": null,
+   "code_share": null,
+   "languages": null,
+   "data_sources": null,
+   "notes": null
+  },
+  "sft": {
+   "summary": "736,712 Python samples with reasoning traces over 28,904 unique competitive-programming questions (from TACO, APPS, CodeContests and CodeForces via OpenR1, among others), 3 epochs, max sequence length 32,768.",
+   "teacher": "DeepSeek-R1"
+  },
+  "preference_or_rl": {
+   "method": null,
+   "reward": null,
+   "environments": null,
+   "notes": "SFT only. The abstract states these distilled models surpass alternatives trained with reinforcement learning."
+  },
+  "eval_headline": "The abstract states the SFT-only models reach 61.8% on LiveCodeBench and 24.6% on CodeContests (LiveCodeBench problems dated 2408 to 2502; arXiv v2, August 2025).",
+  "lesson": "Execution filtering of distilled solutions lowered benchmark accuracy, so prioritize instruction diversity over solution correctness.",
+  "checked": "2026-11-25",
+  "evidence": "Abstract; section 1; section 2 (dataset construction, scaling analysis); section 3 (training and results); arXiv v2 PDF text; HF API for the 32B card base model."
+ },
+ {
+  "id": "skywork-or1-32b",
+  "name": "Skywork-OR1 (7B and 32B)",
+  "org": "Skywork (Kunlun)",
+  "released": "2025-05",
+  "open": "weights, data and code",
+  "sources": [
+   "https://arxiv.org/abs/2505.22312",
+   "https://huggingface.co/Skywork/Skywork-OR1-32B"
+  ],
+  "base": "fine-tuned from DeepSeek-R1-Distill-Qwen-32B and DeepSeek-R1-Distill-Qwen-7B",
+  "size": "7B and 32B parameters, dense",
+  "pretrain": {
+   "tokens": null,
+   "code_share": null,
+   "languages": null,
+   "data_sources": null,
+   "notes": null
+  },
+  "sft": {
+   "summary": null,
+   "teacher": null
+  },
+  "preference_or_rl": {
+   "method": "MAGIC, a modified GRPO (Multi-stage Adaptive entropy scheduling for GRPO In Convergence)",
+   "reward": "Binary 0 or 1 from a rule-based verifier; code is checked by unit tests in a local sandbox",
+   "environments": "About 13.7K code questions (2.7K LeetCode, 11K TACO), alongside about 105K math problems",
+   "notes": "Prompts that the base model always or never solves are removed before training, and prompts the actor solved fully in the previous stage are dropped during training. Context length grows over several stages and the KL loss is omitted."
+  },
+  "eval_headline": "The report states Skywork-OR1-32B scores 63.0 on LiveCodeBench (2024-08 to 2025-02) (report of May 2025).",
+  "lesson": "Filter RL prompts offline and online so training stays on problems that are neither always solved nor never solved, and keep only groups with non-zero advantage in each batch.",
+  "checked": "2026-11-25",
+  "evidence": "Abstract; sections 1 and 3 (MAGIC, data collection, multi-stage training, rejection sampling); sections 6 and 7 (data preparation, sandbox); arXiv v2 PDF text."
+ },
+ {
+  "id": "acereason-nemotron-14b",
+  "name": "AceReason-Nemotron (7B and 14B)",
+  "org": "NVIDIA",
+  "released": "2025-05",
+  "open": "weights",
+  "sources": [
+   "https://arxiv.org/abs/2505.16400",
+   "https://huggingface.co/nvidia/AceReason-Nemotron-14B"
+  ],
+  "base": "fine-tuned from DeepSeek-R1-Distill-Qwen-7B and DeepSeek-R1-Distill-Qwen-14B",
+  "size": "7B and 14B parameters, dense",
+  "pretrain": {
+   "tokens": null,
+   "code_share": null,
+   "languages": null,
+   "data_sources": null,
+   "notes": null
+  },
+  "sft": {
+   "summary": null,
+   "teacher": null
+  },
+  "preference_or_rl": {
+   "method": "GRPO run strictly on-policy (one gradient update per rollout batch, KL term removed)",
+   "reward": "Binary: 1 only if the extracted code passes all test cases within the time limit",
+   "environments": "Math-only prompts first, then code-only: 8,520 competitive-programming problems after filtering, with difficulty scored by DeepSeek-R1-671B over 8 rollouts and unsolvable problems removed",
+   "notes": "Response length is extended in stages from 8K to 16K, 24K and 32K. The report states math-only RL raised LiveCodeBench v5 to 44.4% (7B) and 58.9% (14B) before any code RL."
+  },
+  "eval_headline": "The report states AceReason-Nemotron-14B improves from 53.1% and 47.9% to 61.1% and 54.9% on LiveCodeBench v5 and v6 (arXiv v3, June 2025).",
+  "lesson": "Train on math-only prompts first, then code-only prompts, because math-only RL already improved code reasoning and code RL then adds further gains with minimal math degradation.",
+  "checked": "2026-11-25",
+  "evidence": "Abstract; sections 1, 3.1 to 3.3 (setup, math-only RL, code-only RL), 4.2 (main results), 4.3 (analysis headings); arXiv v3 PDF text."
+ },
+ {
+  "id": "kimi-dev-72b",
+  "name": "Kimi-Dev-72B",
+  "org": "Moonshot AI",
+  "released": "2025-06",
+  "open": "weights",
+  "sources": [
+   "https://arxiv.org/abs/2509.23045",
+   "https://huggingface.co/moonshotai/Kimi-Dev-72B"
+  ],
+  "base": "continued from Qwen2.5-72B-Base",
+  "size": "72B parameters, dense",
+  "pretrain": {
+   "tokens": "About 150B tokens of mid-training (about 50B Agentless-form diff patches, about 20B curated PR commit packs, about 20B synthetic reasoning and agentic data upsampled 4 times)",
+   "code_share": null,
+   "languages": null,
+   "data_sources": "Millions of GitHub issues and PR commits, with every repository of the SWE-bench Verified test set excluded",
+   "notes": "The report states mid-training strengthens knowledge of practical bug fixes and unit tests, giving a better starting point for later stages."
+  },
+  "sft": {
+   "summary": "A cold-start SFT set of reasoning trajectories built on SWE-Gym and SWE-bench-extra, where the teacher acts as both BugFixer and TestWriter; a later agent adaptation uses 5k public trajectories.",
+   "teacher": "DeepSeek-R1 (20250120 version)"
+  },
+  "preference_or_rl": {
+   "method": "Kimi k1.5 policy optimization (REINFORCE-style policy gradient with group-mean rewards)",
+   "reward": "Outcome only, 0 or 1: a BugFixer patch must pass all ground-truth unit tests; a TestWriter test must fail without the fix and pass with it",
+   "environments": "Code-edit stage only, on prompts with executable environments; 1,200 problems at pass@16 above 0, with 500 previously excluded prompts re-added every 100 steps",
+   "notes": "RL targets only the code-edit stage because localization is already strong after mid-training and cold start. Positive samples from recent iterations are added to later batches."
+  },
+  "eval_headline": "The abstract states Kimi-Dev reaches 60.4% on SWE-bench Verified, the best among workflow approaches (arXiv v3, December 2025).",
+  "lesson": "Train Agentless skills (localization, code edit, test writing) first: this skill prior let 5k public trajectories lift the model to 48.6% pass@1 as a SWE-agent.",
+  "checked": "2026-11-25",
+  "evidence": "Abstract; sections 1 to 3.3 (recipe, mid-training and cold start, reinforcement learning), Table 1; arXiv v3 PDF text; HF API for base model."
+ },
+ {
+  "id": "olmo-3-32b",
+  "name": "Olmo 3 (7B and 32B; Base, Think, Instruct)",
+  "org": "Allen Institute for AI (Ai2)",
+  "released": "2025-11",
+  "open": "weights, data and code",
+  "sources": [
+   "https://arxiv.org/abs/2512.13961",
+   "https://huggingface.co/allenai/Olmo-3-1125-32B"
+  ],
+  "base": "no earlier checkpoint named in the report",
+  "size": "7B and 32B parameters, dense",
+  "pretrain": {
+   "tokens": "Up to 5.9T tokens of pretraining (Dolma 3 Mix, called 6T), 100B tokens of midtraining, and 50B (7B) or 100B (32B) tokens of long-context extension",
+   "code_share": "Stack-Edu (rebalanced) is 409B tokens, 6.89% of the 6T pretraining mix",
+   "languages": null,
+   "data_sources": "Dolma 3 Mix: web pages, olmOCR science PDFs, Stack-Edu GitHub code, arXiv, FineMath; midtraining adds Stack-Edu (FIM) and CraneCode",
+   "notes": "Midtraining uses a Stack-Edu variant in which 50% of documents get a fill-in-the-middle transform (StarCoder2 procedure), plus 18.8B tokens of rewritten Python (CraneCode). Long-context extension supports up to 65K context."
+  },
+  "sft": {
+   "summary": "Think SFT code prompts come from AceCoder, The Algorithms (Python), Llama Nemotron post-training and OpenCodeReasoning, with up to 16 responses per prompt kept only if they pass synthetic test cases, plus OpenThoughts 3 code.",
+   "teacher": "QwQ-32B (responses); GPT-4.1 (test cases)"
+  },
+  "preference_or_rl": {
+   "method": "DPO with delta-learning pairs, then OlmoRL (GRPO with DAPO and Dr GRPO changes)",
+   "reward": "Code: a test-case verifier, tried as percent of tests passed and as all-or-nothing",
+   "environments": "Code prompts from AceCoder, Klear-Reasoner Code, Nemotron Post-training Code, SYNTHETIC-2 and OpenCodeReasoner; synthetic (problem, solution, tests) triplets kept if solutions pass more than 80% of tests",
+   "notes": "DPO pairs use Qwen 3 32B (thinking) as chosen and Qwen 3 0.6B (thinking) as rejected. Code execution for rewards runs on AWS Lambda."
+  },
+  "eval_headline": "The report states Olmo 3 Base 32B achieves double-digit improvements on Math and Code composites over the other fully-open 32B models (report v2, April 2026).",
+  "lesson": "Build RL code data by generating (problem, solution, tests) triplets, executing the tests, and keeping only examples whose solutions pass more than 80% of them.",
+  "checked": "2026-11-25",
+  "evidence": "Abstract and section 1; section 2 (model flow); sections 3.1 and 3.4 to 3.6 (pretraining table, midtraining code data, long context); sections 4.2 to 4.4 (SFT, delta-learning DPO, OlmoRL, code verifier); appendix A.7 code data; arXiv v2 PDF text. General-purpose model: code is one domain among several."
+ },
+ {
+  "id": "swe-agent-lm-32b",
+  "name": "SWE-agent-LM (7B and 32B), trained on SWE-smith",
+  "org": "Stanford University, Princeton University and collaborators",
+  "released": "2025-04",
+  "open": "weights, data and code",
+  "sources": [
+   "https://arxiv.org/abs/2504.21798",
+   "https://huggingface.co/SWE-bench/SWE-agent-LM-32B"
+  ],
+  "base": "fine-tuned from Qwen2.5-Coder-Instruct 7B and 32B",
+  "size": "7B and 32B parameters, dense",
+  "pretrain": {
+   "tokens": null,
+   "code_share": null,
+   "languages": null,
+   "data_sources": null,
+   "notes": null
+  },
+  "sft": {
+   "summary": "5,016 expert trajectories on SWE-smith task instances (50k instances from 128 repositories exist), kept through rejection sampling on resolved instances and capped at 3 trajectories per instance.",
+   "teacher": "Claude 3.7 Sonnet"
+  },
+  "preference_or_rl": {
+   "method": null,
+   "reward": null,
+   "environments": null,
+   "notes": "SFT only. Task instances come from LM rewrite, procedural modification, combined bugs and mirrored pull requests; PR Mirror and LM Rewrite instances gave the most effective trajectories."
+  },
+  "eval_headline": "The abstract states SWE-agent-LM-32B reaches 40.2% Pass@1 on SWE-bench Verified, state of the art among open source models (arXiv v2, May 2025).",
+  "lesson": "Limit how often a repeatedly solved, easy task instance appears in the training set (3 trajectories), because easier trajectories degraded model performance.",
+  "checked": "2026-11-25",
+  "evidence": "Abstract; sections 1, 2 (SWE-smith task construction), 3 (rejection-sampling SFT setup), 4 (results, training set curation); arXiv v2 PDF text; HF API for base model."
+ },
+ {
+  "id": "deepcoder-14b-preview",
+  "name": "DeepCoder-14B-Preview",
+  "org": "Agentica and Together AI",
+  "released": "2025-04",
+  "open": "weights, data and code",
+  "sources": [
+   "https://www.together.ai/blog/deepcoder",
+   "https://huggingface.co/agentica-org/DeepCoder-14B-Preview"
+  ],
+  "base": "fine-tuned from DeepSeek-R1-Distill-Qwen-14B",
+  "size": "14B parameters, dense",
+  "pretrain": {
+   "tokens": null,
+   "code_share": null,
+   "languages": null,
+   "data_sources": null,
+   "notes": null
+  },
+  "sft": {
+   "summary": null,
+   "teacher": null
+  },
+  "preference_or_rl": {
+   "method": "GRPO+, a stabilized GRPO (no entropy loss, no KL loss, overlong filtering, clip high)",
+   "reward": "Sparse outcome reward: 1 if the code passes all sampled unit tests (the 15 hardest by input length), 0 otherwise; no partial credit",
+   "environments": "24K verified problems: 7.5K TACO Verified, 16K PrimeIntellect SYNTHETIC-1, 600 LiveCodeBench problems from 2023-05-01 to 2024-07-31",
+   "notes": "Context is lengthened from 16K to 32K during training and the model is evaluated at 64K. Training took 2.5 weeks on 32 H100s. The blog is dated 2025-04-08; the catalog links the same text on a Notion page."
+  },
+  "eval_headline": "The blog states 60.6% Pass@1 on LiveCodeBench (8/1/24 to 2/1/25) at 64K context, matching o3-mini (low) (blog of April 2025).",
+  "lesson": "Require at least 5 unit tests per problem and a passing official solution, because problems with fewer tests encourage reward hacking by printing memorized answers.",
+  "checked": "2026-11-25",
+  "evidence": "Full blog text: dataset curation, code sandbox, reward function, GRPO+ and iterative context lengthening, evaluation; HF API for base model."
+ },
+ {
+  "id": "deepswe-preview",
+  "name": "DeepSWE-Preview",
+  "org": "Agentica and Together AI",
+  "released": "2025-07",
+  "open": "weights, data and code",
+  "sources": [
+   "https://www.together.ai/blog/deepswe",
+   "https://huggingface.co/agentica-org/DeepSWE-Preview"
+  ],
+  "base": "fine-tuned from Qwen3-32B",
+  "size": "32B parameters, dense",
+  "pretrain": {
+   "tokens": null,
+   "code_share": null,
+   "languages": null,
+   "data_sources": null,
+   "notes": null
+  },
+  "sft": {
+   "summary": null,
+   "teacher": null
+  },
+  "preference_or_rl": {
+   "method": "GRPO++ (clip high, no KL loss, no reward standard deviation, length normalization, leave-one-out advantage, compact filtering, no entropy loss), extended to multi-turn by masking environment observations",
+   "reward": "Sparse outcome: 1 if the patch passes the selected Pass2Pass and Fail2Pass tests within 5 minutes, 0 otherwise",
+   "environments": "About 4.5K R2E-Gym problems, with repositories shared with SWE-Bench Verified removed; six days on 64 H100 GPUs",
+   "notes": "Compact filtering masks trajectories that hit max context, max steps or timeout, which the blog says delays reward collapse. No SFT or distillation stage is used."
+  },
+  "eval_headline": "The blog states 42.2% Pass@1 on SWE-Bench-Verified (averaged over 16 runs) and 59% with hybrid test-time scaling (blog of July 2025).",
+  "lesson": "Mask the loss on trajectories that hit max context, max steps or a timeout (compact filtering), so reward is assigned only when the agent deliberately submits.",
+  "checked": "2026-11-25",
+  "evidence": "Full blog text: background, dataset, environment, reward, GRPO++, compact filtering, test-time scaling, evaluation; HF API for base model."
+ },
+ {
+  "id": "qwen3-coder-480b-a35b",
+  "name": "Qwen3-Coder (480B-A35B-Instruct announced first)",
+  "org": "Alibaba Qwen",
+  "released": "2025-07",
+  "open": "weights",
+  "sources": [
+   "https://qwenlm.github.io/blog/qwen3-coder/",
+   "https://huggingface.co/Qwen/Qwen3-Coder-480B-A35B-Instruct"
+  ],
+  "base": null,
+  "size": "480B total with 35B active (mixture of experts)",
+  "pretrain": {
+   "tokens": "7.5T tokens",
+   "code_share": "70% code ratio",
+   "languages": null,
+   "data_sources": "Not itemized in the blog; Qwen2.5-Coder was used to clean and rewrite noisy data",
+   "notes": "The model natively supports 256K context and extends to 1M with YaRN, and the blog says it is optimized for repo-scale and pull request data."
+  },
+  "sft": {
+   "summary": null,
+   "teacher": null
+  },
+  "preference_or_rl": {
+   "method": null,
+   "reward": "Execution-driven: test cases are scaled automatically for diverse coding tasks; agent RL gets feedback from running environments",
+   "environments": "A broader set of real-world coding tasks than competitive programming; long-horizon agent RL on SWE-Bench-style tasks across 20,000 independent environments in parallel",
+   "notes": "The blog states code RL improved code execution success rates and also helped other tasks, and calls the target 'hard to solve, easy to verify'. Algorithm names are not given."
+  },
+  "eval_headline": "The blog states Qwen3-Coder achieves state-of-the-art performance among open-source models on SWE-Bench Verified without test-time scaling (blog of July 22, 2025).",
+  "lesson": "Scale code RL by automatically generating test cases for many kinds of real-world coding tasks, choosing tasks that are hard to solve and easy to verify.",
+  "checked": "2026-11-25",
+  "evidence": "Full blog text (pretraining, code RL, long-horizon RL sections); HF API for release date and license. A blog only: no technical report was read."
+ },
+ {
+  "id": "smollm3-3b",
+  "name": "SmolLM3-3B",
+  "org": "Hugging Face",
+  "released": "2025-07",
+  "open": "weights, data and code",
+  "sources": [
+   "https://huggingface.co/blog/smollm3",
+   "https://huggingface.co/HuggingFaceTB/SmolLM3-3B"
+  ],
+  "base": "no earlier checkpoint named in the blog",
+  "size": "3B parameters, dense",
+  "pretrain": {
+   "tokens": "11.2T tokens in three stages (0 to 8T, 8T to 10T, 10T to 11.1T), then 100B tokens of context extension",
+   "code_share": "Code 12% in stage 1, 15% in stage 2, 24% in stage 3",
+   "languages": "16 programming languages from The Stack v2 in stage 1",
+   "data_sources": "Stage 1: The Stack v2, StarCoder2 pull requests, Jupyter and Kaggle notebooks, GitHub issues, StackExchange; stage 2 adds Stack-Edu; stage 3 upsamples high-quality code",
+   "notes": "Context extension runs two stages of 50B tokens each, from 4k to 32k and then 32k to 64k, upsampling math, code and reasoning data; YaRN allows 128k at inference."
+  },
+  "sft": {
+   "summary": "A 1.8B-token SFT set (1B non-reasoning, 0.8B reasoning), 4 epochs, after a 140B-token general reasoning mid-training stage; reasoning traces for thin domains were generated by prompting Qwen3-32B.",
+   "teacher": "Qwen3-32B"
+  },
+  "preference_or_rl": {
+   "method": "APO (Anchored Preference Optimization, a variant of DPO)",
+   "reward": "Preference pairs with Qwen3-32B responses as chosen and Qwen3-0.6B responses as rejected; no verifiable reward",
+   "environments": "Not applicable: no RL stage is described",
+   "notes": "A linear merge of the APO model soup (0.9) with a mid-training checkpoint (0.1) recovered the long-context RULER score lost during reasoning mid-training and alignment."
+  },
+  "eval_headline": "The blog states LiveCodeBench rises from 15.2% to 30.0% with extended thinking enabled (blog of July 2025).",
+  "lesson": "Merge the aligned model soup with a mid-training checkpoint (0.9 and 0.1) to recover long-context performance lost during reasoning mid-training.",
+  "checked": "2026-11-25",
+  "evidence": "Blog text: pretraining stages and mixtures, context extension, reasoning mid-training, SFT, APO, merging, evaluation; HF API for release date. General-purpose model: code is one domain among several. Reader comments on the page were ignored."
+ }
+]

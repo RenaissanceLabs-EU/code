@@ -1,0 +1,1876 @@
+[
+ {
+  "id": "the-stack-v1",
+  "name": "The Stack v1",
+  "kind": "dataset",
+  "purpose": "raw-code-pretraining",
+  "stage": [
+   "pretrain"
+  ],
+  "contains": "One record is a permissively licensed source file from GitHub with its text, size, language, extension and the star, fork and issue counts and licenses of the repository it came from.",
+  "supports": [
+   "completion",
+   "fim"
+  ],
+  "languages": "358 languages (card)",
+  "format": "Gated HF dataset with no splits (loads as train); parquet files in one folder per language under data/, loaded with datasets.load_dataset(\"bigcode/the-stack\", data_dir=\"data/dockerfile\", split=\"train\"); fields include content, size, lang, ext, avg_line_length, max_line_length, alphanum_fraction, hexsha and max_stars/forks/issues repo path, name, head hexsha and licenses.",
+  "size": "Over 6 TB per the card (catalog: 6.4 TB full, 2.9 TB near-deduplicated, about 200B training tokens, taken from the Stack v3 card table)",
+  "license": "Gated: acceptance of the BigCode Terms of Use is required; license:other, with permissive per-file licenses recorded in the license fields",
+  "limitations": "The card warns that the dataset contains a lot of near-duplicates which can cause leakage into any custom test split. The card also says license attribution is limited by the accuracy of GHArchive and go-license-detector, and that the training data could contain malicious code.",
+  "links": {
+   "source": "https://huggingface.co/datasets/bigcode/the-stack",
+   "huggingface": "https://huggingface.co/datasets/bigcode/the-stack",
+   "paper": "https://arxiv.org/abs/2211.15533",
+   "code": null
+  },
+  "popularity": {
+   "hf_downloads_30d": 115392,
+   "hf_likes": 1118,
+   "used_by": [],
+   "note": "The download figure is for the bigcode/the-stack repo. No recipe in data/model-recipes.json names v1.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "established",
+  "checked": "2026-11-25",
+  "evidence": "Read the gated card (README via resolve/main, 2026-11-25): summary, data fields, data splits, limitations; HF API for downloads and likes; sizes from the catalog entry (v3 card table). Maturity: released 2022-11, still the reference baseline and cited in later BigCode releases. No model-recipes entry names it, so used_by is empty."
+ },
+ {
+  "id": "the-stack-v2",
+  "name": "The Stack v2",
+  "kind": "dataset",
+  "purpose": "raw-code-pretraining",
+  "stage": [
+   "pretrain"
+  ],
+  "contains": "One record is a pointer to a source file in the Software Heritage archive (blob id, repository, path, detected licenses, license type, commit and snapshot ids, GitHub star and fork counts) whose text is fetched separately from the Software Heritage S3 bucket.",
+  "supports": [
+   "completion",
+   "fim"
+  ],
+  "languages": "658 languages (card)",
+  "format": "Gated HF dataset of metadata only (parquet under data/<language>/, one train split); one config per language plus a default config; fields blob_id, directory_id, path, content_id, detected_licenses, license_type, repo_name, snapshot_id, revision_id, branch_name, visit_date, revision_date, committer_date, github_id, star_events_count, fork_events_count, gha_license_id, gha_event_created_at, gha_created_at, gha_language, language, src_encoding, is_vendor, is_generated, length_bytes, extension; file contents are downloaded from s3://softwareheritage using the blob ids.",
+  "size": "67.53 TB uncompressed total, 3.28B unique files from 104.2M GitHub repositories (card); catalog records 32.1 TB deduplicated and a 2.0 TB, about 550B-token training subset",
+  "license": "Gated: BigCode terms plus the Software Heritage and Inria agreement for bulk content download; license:other, per-file licenses in detected_licenses and license_type",
+  "limitations": "The card says file contents are stored in the Software Heritage S3 bucket and bulk download requires an agreement with Software Heritage and Inria. The card also warns that the dataset contains many near-duplicates that can cause leakage into a custom test split.",
+  "links": {
+   "source": "https://huggingface.co/datasets/bigcode/the-stack-v2",
+   "huggingface": "https://huggingface.co/datasets/bigcode/the-stack-v2",
+   "paper": "https://arxiv.org/abs/2402.19173",
+   "code": "https://github.com/bigcode-project/starcoder2"
+  },
+  "popularity": {
+   "hf_downloads_30d": 12960,
+   "hf_likes": 733,
+   "used_by": [
+    "starcoder2-15b",
+    "opencoder-8b",
+    "smollm3-3b"
+   ],
+   "note": "Software Heritage related: the corpus is a view of the Software Heritage archive (2023-09-06 graph), see also catalog entry software-heritage-graph. opencoder-8b used it as 12.5% of RefineCode.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "established",
+  "checked": "2026-11-25",
+  "evidence": "Read the gated card (README via resolve/main, 2026-11-25): summary, languages, data fields, data collection (3.28B files, 104.2M repos, 67.53 TB), download section; HF API for stats; data/model-recipes.json entries starcoder2-15b, opencoder-8b, smollm3-3b name it. Maturity: released 2024-02 and used by three 2024 to 2025 recipes."
+ },
+ {
+  "id": "starcoderdata",
+  "name": "StarCoderData",
+  "kind": "dataset",
+  "purpose": "raw-code-pretraining",
+  "stage": [
+   "pretrain"
+  ],
+  "contains": "One record is a cleaned, decontaminated, PII-redacted source file, GitHub issue thread, Jupyter notebook parsed into script or text-code form, or git commit from the StarCoder (v1) training mix.",
+  "supports": [
+   "completion",
+   "fim"
+  ],
+  "languages": "86 programming languages (card)",
+  "format": "Gated HF dataset with one data_dir per language (for example load_dataset(\"bigcode/starcoderdata\", data_dir=\"python\", split=\"train\")) and four separate folders for jupyter-scripts-dedup-filtered, jupyter-structured-clean-dedup, github-issues-filtered-structured and git-commits-cleaned; the issues, commits and notebooks use different columns, so load them separately.",
+  "size": "783 GB of code in 86 languages plus 54 GB GitHub issues, 13 GB Jupyter notebooks and 32 GB GitHub commits, about 250 billion tokens (card)",
+  "license": "Gated: BigCode terms of use; license:other, permissively licensed source",
+  "limitations": "The card says loading the entire dataset at once may fail because issues, commits and notebooks have different columns than the language folders. The data is a 2022-era snapshot of The Stack, so overlap with benchmarks published after that date was not removed.",
+  "links": {
+   "source": "https://huggingface.co/datasets/bigcode/starcoderdata",
+   "huggingface": "https://huggingface.co/datasets/bigcode/starcoderdata",
+   "paper": "https://arxiv.org/abs/2305.06161",
+   "code": null
+  },
+  "popularity": {
+   "hf_downloads_30d": 20849,
+   "hf_likes": 592,
+   "used_by": [],
+   "note": "No recipe in data/model-recipes.json names this exact dataset.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "established",
+  "checked": "2026-11-25",
+  "evidence": "Read the gated card (README via resolve/main, 2026-11-25): description, creation, usage, subset folder names; HF API for stats. The last limitation sentence is the catalog caveat on the 2022 cutoff (data/resources catalog id starcoderdata) rather than card text. Maturity: released 2023-05, a standard baseline."
+ },
+ {
+  "id": "starcoder2data-extras",
+  "name": "StarCoder2 data extras",
+  "kind": "dataset",
+  "purpose": "docs-and-text",
+  "stage": [
+   "pretrain"
+  ],
+  "contains": "One record is a text document with a single content field, taken from one of twelve non-code or code-adjacent sources: arXiv, code documentation, GitHub issues, Kaggle notebooks, LLVM IR, Stack Overflow, Wikipedia, OpenWebMath and others.",
+  "supports": [
+   "completion",
+   "reasoning"
+  ],
+  "languages": null,
+  "format": "HF datasets with 12 configs (arxiv, documentation, ir_cpp, ir_low_resource, ir_python, ir_rust, issues, kaggle, lhq, owm, stackoverflow, wikipedia), each a train split with a single string column content (verified on the arxiv config with the datasets-server first-rows API).",
+  "size": "Rows per config: arxiv 1,558,306; documentation 59,733; ir_cpp 2,916,655; ir_low_resource 393,988; ir_python 154,507; ir_rust 32,720; issues 15,549,682; kaggle 580,195; lhq 7,037,500; owm 6,315,233; stackoverflow 10,404,628; wikipedia 6,630,651 (card dataset_info)",
+  "license": "Not stated at dataset level (HF license field unset); components carry their own terms, for example Stack Overflow under CC-BY-SA",
+  "limitations": "The dataset-level license is unset, so each component (arXiv, Stack Overflow, Wikipedia, Kaggle) has to be cleared separately. Stack Overflow text is CC-BY-SA, which requires attribution and share-alike.",
+  "links": {
+   "source": "https://huggingface.co/datasets/bigcode/starcoder2data-extras",
+   "huggingface": "https://huggingface.co/datasets/bigcode/starcoder2data-extras",
+   "paper": "https://arxiv.org/abs/2402.19173",
+   "code": null
+  },
+  "popularity": {
+   "hf_downloads_30d": 4592,
+   "hf_likes": 15,
+   "used_by": [
+    "starcoder2-15b"
+   ],
+   "note": "This is the documentation and Q&A source in the starter list: the documentation and stackoverflow configs hold library documentation and Stack Overflow text.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "established",
+  "checked": "2026-11-25",
+  "evidence": "HF API cardData.dataset_info (config names and row counts) and datasets-server first-rows (field name content), fetched 2026-11-25; catalog caveats; data/model-recipes.json starcoder2-15b lists issues, pull requests, Kaggle and Jupyter notebooks, documentation and intermediate representations as sources. Maturity: released 2024-02, a documented component of StarCoder2."
+ },
+ {
+  "id": "stack-edu",
+  "name": "Stack-Edu",
+  "kind": "dataset",
+  "purpose": "raw-code-pretraining",
+  "stage": [
+   "pretrain"
+  ],
+  "contains": "One record is a pointer to an educational-quality source file (blob id, repository name, path, language, encoding, byte length, classifier score and integer score, detected licenses, license type) whose text is fetched from Software Heritage.",
+  "supports": [
+   "completion",
+   "fim"
+  ],
+  "languages": "15 programming languages (one config each)",
+  "format": "HF datasets with one config per language (C, CSharp, Cpp, Go, Java, JavaScript, Markdown, PHP, Python, Ruby, Rust, SQL, Shell, Swift, TypeScript), each a train split; fields blob_id, language, repo_name, path, src_encoding, length_bytes, score, int_score, detected_licenses, license_type; file contents are downloaded from the Software Heritage S3 bucket.",
+  "size": "167,063,359 rows across 15 configs (summed from the card dataset_info); for example Java 44,990,158, Python 25,286,019, Cpp 16,246,746",
+  "license": "Not stated on the card (HF license field unset); underlying files come from the permissively licensed StarCoder2Data, with per-file licenses in detected_licenses and license_type",
+  "limitations": "The dataset ships blob ids and metadata only, so the file text must be downloaded from Software Heritage. Educational scores come from language-specific classifiers trained on LLM annotations, so labels near the score threshold are noisy.",
+  "links": {
+   "source": "https://huggingface.co/datasets/HuggingFaceTB/stack-edu",
+   "huggingface": "https://huggingface.co/datasets/HuggingFaceTB/stack-edu",
+   "paper": "https://arxiv.org/abs/2502.02737",
+   "code": null
+  },
+  "popularity": {
+   "hf_downloads_30d": 8050,
+   "hf_likes": 85,
+   "used_by": [
+    "olmo-3-32b",
+    "smollm3-3b"
+   ],
+   "note": null,
+   "as_of": "2026-11-25"
+  },
+  "maturity": "emerging",
+  "checked": "2026-11-25",
+  "evidence": "HF API cardData.dataset_info (all 15 configs), datasets-server first-rows (field names), catalog caveats, fetched 2026-11-25; data/model-recipes.json olmo-3-32b and smollm3-3b name Stack-Edu. Maturity: released 2025-03 and used by two 2025 recipes."
+ },
+ {
+  "id": "commitpack",
+  "name": "CommitPack",
+  "kind": "dataset",
+  "purpose": "raw-code-pretraining",
+  "stage": [
+   "pretrain",
+   "sft"
+  ],
+  "contains": "One record is a single-file commit from a permissively licensed GitHub repository with the file before and after the commit, the commit subject and message, language, repository license and repository name.",
+  "supports": [
+   "debugging-repair",
+   "repo-level-editing",
+   "instruction-following"
+  ],
+  "languages": "350 languages (card)",
+  "format": "HF dataset with a commitpack.py loading script and per-language folders under data/, fields commit, old_file, new_file, old_contents, new_contents, subject, message, lang, license, repos, returncode, stderr.",
+  "size": "4 TB; 57,700,105 samples, 3,709,175.78 MB in the card table (largest languages by rows: markdown 7.6M, python 6.2M, javascript 5.4M)",
+  "license": "MIT (card); each sample comes from a permissively licensed repository and carries its license in the license field",
+  "limitations": "It is very large and noisy, and the card describes it as the unfiltered source from which CommitPackFT was derived. Commit messages are often not written as instructions, which is why the filtered CommitPackFT exists.",
+  "links": {
+   "source": "https://huggingface.co/datasets/bigcode/commitpack",
+   "huggingface": "https://huggingface.co/datasets/bigcode/commitpack",
+   "paper": "https://arxiv.org/abs/2308.07124",
+   "code": "https://github.com/bigcode-project/octopack"
+  },
+  "popularity": {
+   "hf_downloads_30d": 21121,
+   "hf_likes": 82,
+   "used_by": [],
+   "note": "The viewer is unavailable for this repo, so field names come from the card, not the datasets-server.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "established",
+  "checked": "2026-11-25",
+  "evidence": "Read the card (README via resolve/main, 2026-11-25): summary, data fields, data splits table, licensing; HF API for stats. The second limitation sentence combines the card description of CommitPackFT as filtered for messages resembling instructions with the catalog caveat. Maturity: released 2023 and stable."
+ },
+ {
+  "id": "github-code",
+  "name": "GitHub Code (CodeParrot)",
+  "kind": "dataset",
+  "purpose": "raw-code-pretraining",
+  "stage": [
+   "pretrain"
+  ],
+  "contains": "One record is a source file from GitHub with its code, repository name, path, language, repository license and size in bytes.",
+  "supports": [
+   "completion"
+  ],
+  "languages": "30 to 32 languages (the card says 32 in the description and 30 in the Languages section)",
+  "format": "HF dataset of parquet shards (data/train-*.parquet; streaming recommended), single train split; fields code, repo_name, path, language, license, size; load_dataset(\"codeparrot/github-code\", streaming=True, split=\"train\", languages=[\"Dockerfile\"]) filters by language.",
+  "size": "115M files, about 1 TB (card)",
+  "license": "license:other; each file keeps the license of its repository, a mix of permissive and copyleft",
+  "limitations": "The files include copyleft licenses such as GPL, so a permissive-only policy needs filtering on the license field. The data was built from the public GitHub dataset on Google BigQuery and is not deduplicated, so benchmark contamination is likely.",
+  "links": {
+   "source": "https://huggingface.co/datasets/codeparrot/github-code",
+   "huggingface": "https://huggingface.co/datasets/codeparrot/github-code",
+   "paper": null,
+   "code": null
+  },
+  "popularity": {
+   "hf_downloads_30d": 50832,
+   "hf_likes": 437,
+   "used_by": [],
+   "note": "There is also codeparrot/github-code-clean, a cleaned variant, in the catalog.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "established",
+  "checked": "2026-11-25",
+  "evidence": "Read the card (README via resolve/main, 2026-11-25): description, usage, data fields, languages; HF API for stats. Contamination sentence is the catalog caveat. Maturity: released 2022, superseded by The Stack but still a common baseline."
+ },
+ {
+  "id": "refinecode-meta",
+  "name": "RefineCode (metadata)",
+  "kind": "dataset",
+  "purpose": "raw-code-pretraining",
+  "stage": [
+   "pretrain"
+  ],
+  "contains": "One record is a metadata row for a file in the OpenCoder RefineCode corpus (repository name, sub path, file name, extension, size in bytes, line count, language, programming language and document type) that points back into The Stack v2.",
+  "supports": [
+   "completion",
+   "fim"
+  ],
+  "languages": "607 languages (per data/model-recipes.json opencoder-8b)",
+  "format": "HF dataset with one split named The_Stack_V2 and fields repo_name, sub_path, file_name, file_ext, file_size_in_byte, line_count, lang, program_lang, doc_type; code text must be fetched from Software Heritage.",
+  "size": "336,845,710 files in the The_Stack_V2 split (HF dataset_info)",
+  "license": "MIT for the metadata; underlying code keeps its per-repository licenses",
+  "limitations": "Only the Stack v2 half of RefineCode is covered, because the GitHub half was withheld for legal reasons according to the card. You still need Stack v2 and Software Heritage access to obtain any code text.",
+  "links": {
+   "source": "https://huggingface.co/datasets/OpenCoder-LLM/RefineCode-code-corpus-meta",
+   "huggingface": "https://huggingface.co/datasets/OpenCoder-LLM/RefineCode-code-corpus-meta",
+   "paper": "https://arxiv.org/abs/2411.04905",
+   "code": "https://github.com/OpenCoder-llm/OpenCoder-llm"
+  },
+  "popularity": {
+   "hf_downloads_30d": 688,
+   "hf_likes": 38,
+   "used_by": [
+    "opencoder-8b"
+   ],
+   "note": "Used_by cites OpenCoder, which trained on the full RefineCode, of which this is the Stack v2 metadata half.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "emerging",
+  "checked": "2026-11-25",
+  "evidence": "HF API dataset_info and license, datasets-server first-rows field names, catalog caveats, fetched 2026-11-25; data/model-recipes.json opencoder-8b (RefineCode 960B tokens). Maturity: released 2024-11, one recipe."
+ },
+ {
+  "id": "nemotron-pretraining-code-v1",
+  "name": "Nemotron-Pretraining-Code-v1",
+  "kind": "dataset",
+  "purpose": "raw-code-pretraining",
+  "stage": [
+   "pretrain"
+  ],
+  "contains": "The Synthetic-Code config holds LLM-written code question and answer text in 11 programming languages, and the Nemotron-Code-Metadata config holds per-file metadata used to rebuild a filtered GitHub code corpus.",
+  "supports": [
+   "completion",
+   "instruction-following"
+  ],
+  "languages": "Synthetic code in 11 programming languages (card)",
+  "format": "Gated (manual approval) HF dataset with two configs, Synthetic-Code and Nemotron-Code-Metadata, stored as parquet parts; the public card does not list column names and the viewer is blocked for gated repos.",
+  "size": "174.9B tokens of synthetic code (card table) plus metadata to reproduce a 747.4B-token curated code dataset; the card calls the release 8/18/2025",
+  "license": "NVIDIA Data Agreement for Model Training (license:other); the card says synthetic data from Mixtral-8x22B-v0.1 and other listed models may bring Qwen and DeepSeek license redistribution requirements to a model trained on it",
+  "limitations": "Access is gated with manual approval and the agreement limits use to model training. The GitHub part is metadata only, so the files must be fetched again from their sources.",
+  "links": {
+   "source": "https://huggingface.co/datasets/nvidia/Nemotron-Pretraining-Code-v1",
+   "huggingface": "https://huggingface.co/datasets/nvidia/Nemotron-Pretraining-Code-v1",
+   "paper": "https://arxiv.org/abs/2508.14444",
+   "code": null
+  },
+  "popularity": {
+   "hf_downloads_30d": 2999,
+   "hf_likes": 87,
+   "used_by": [],
+   "note": "v2 and v3 successors are in the catalog (nemotron-pretraining-code-v2, nemotron-pretraining-code-v3).",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "emerging",
+  "checked": "2026-11-25",
+  "evidence": "Read the gated card (README via resolve/main, 2026-11-25): categories, data distribution table, models used, license section; HF API file list (Nemotron-Code-Metadata parquet parts) and stats. Column names not stated on the card. Maturity: released 2025-08, no recipe in data/model-recipes.json names it."
+ },
+ {
+  "id": "common-pile-stackv2",
+  "name": "Common Pile: Stack v2 (openly licensed)",
+  "kind": "dataset",
+  "purpose": "raw-code-pretraining",
+  "stage": [
+   "pretrain"
+  ],
+  "contains": "One record is a source file from The Stack v2 whose detected licenses are all on the Blue Oak Council list, with id, text, source, added and created dates and a metadata object holding the per-document license.",
+  "supports": [
+   "completion"
+  ],
+  "languages": null,
+  "format": "HF dataset, default config, fields id, text, source, added, created, metadata (metadata.license holds the per-document license); sharded text files.",
+  "size": "218,364,133 documents, 4,774.7 GB UTF-8 (card statistics); the edu-filtered sibling has 69,588,607 documents and 255 GB",
+  "license": "Per-document licenses in metadata.license; only Blue Oak Council certified licenses are kept; the HF license field is unset",
+  "limitations": "License detection is inherited from The Stack v2 and can be wrong, and the card warns that license laundering exists. The full set is about 4.8 TB of text, so streaming or sharded processing is required.",
+  "links": {
+   "source": "https://huggingface.co/datasets/common-pile/stackv2",
+   "huggingface": "https://huggingface.co/datasets/common-pile/stackv2",
+   "paper": "https://arxiv.org/abs/2506.05209",
+   "code": null
+  },
+  "popularity": {
+   "hf_downloads_30d": 8545,
+   "hf_likes": 0,
+   "used_by": [],
+   "note": "Common Pile is the openly licensed pretraining collection; this entry is its code slice. 0 likes recorded on the HF page.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "emerging",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats and arxiv tags, datasets-server first-rows (field names), catalog README statistics, fetched 2026-11-25. Maturity: released 2025-06, part of Common Pile v0.1; no recipe in data/model-recipes.json names it."
+ },
+ {
+  "id": "opc-fineweb-code-corpus",
+  "name": "OpenCoder FineWeb code corpus",
+  "kind": "dataset",
+  "purpose": "docs-and-text",
+  "stage": [
+   "pretrain"
+  ],
+  "contains": "One record is a code-related web page recalled from FineWeb, with its url, tag, extracted text, file path, Common Crawl dump, size in bytes and line count.",
+  "supports": [
+   "completion",
+   "instruction-following"
+  ],
+  "languages": null,
+  "format": "HF dataset, default config, one train split of parquet shards; fields url, tag, text, file_path, dump, file_size_in_byte, line_count.",
+  "size": "100,920,235 rows (HF dataset_info train split)",
+  "license": "MIT on the dataset (cardData.license); the scraped web pages keep their own rights",
+  "limitations": "The MIT label applies to the dataset, not to the scraped pages. Recall quality of the code-page classifier was not independently evaluated here.",
+  "links": {
+   "source": "https://huggingface.co/datasets/OpenCoder-LLM/opc-fineweb-code-corpus",
+   "huggingface": "https://huggingface.co/datasets/OpenCoder-LLM/opc-fineweb-code-corpus",
+   "paper": "https://arxiv.org/abs/2411.04905",
+   "code": "https://github.com/OpenCoder-llm/OpenCoder-llm"
+  },
+  "popularity": {
+   "hf_downloads_30d": 11151,
+   "hf_likes": 70,
+   "used_by": [],
+   "note": "Code-related web text, a documentation and tutorial source.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "emerging",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, dataset_info and license, datasets-server first-rows (field names), catalog caveats, fetched 2026-11-25. Maturity: released 2024-11, tied to the OpenCoder recipe (which does not name this repo explicitly)."
+ },
+ {
+  "id": "nemotron-cc-code-v1",
+  "name": "Nemotron-CC-Code-v1",
+  "kind": "dataset",
+  "purpose": "docs-and-text",
+  "stage": [
+   "pretrain"
+  ],
+  "contains": "One record is a Common Crawl code page rendered with Lynx and cleaned by an LLM, stored as a text field with metadata (WARC id, WARC filename, category cc-code, model used) and a uuid.",
+  "supports": [
+   "completion",
+   "reasoning"
+  ],
+  "languages": null,
+  "format": "Gated (manual approval) HF dataset, one data config of parquet shards; fields text, metadata (warc_id, warc_filename, category, models_used) and uuid.",
+  "size": "427.9B tokens, 216.3M records, 563 GB downloaded (card)",
+  "license": "NVIDIA Data Agreement for Model Training; card tags cc-by-4.0, cc-by-sa-4.0, gfdl and other",
+  "limitations": "Access is gated with manual approval and the agreement limits use to model training. The mixed CC-BY-SA and GFDL licenses carry attribution and share-alike obligations.",
+  "links": {
+   "source": "https://huggingface.co/datasets/nvidia/Nemotron-CC-Code-v1",
+   "huggingface": "https://huggingface.co/datasets/nvidia/Nemotron-CC-Code-v1",
+   "paper": "https://arxiv.org/abs/2508.15096",
+   "code": null
+  },
+  "popularity": {
+   "hf_downloads_30d": 47416,
+   "hf_likes": 38,
+   "used_by": [],
+   "note": "The paper link is the Nemotron-CC-Math paper (2508.15096), whose Lynx plus LLM pipeline the card says it reuses.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "experimental",
+  "checked": "2026-11-25",
+  "evidence": "Read the gated card (README via resolve/main, 2026-11-25): dataset details, columns, format, quantification; HF API stats and tags. Maturity: created 2025-12, no independent use in data/model-recipes.json."
+ },
+ {
+  "id": "magicoder-oss-instruct-75k",
+  "name": "Magicoder OSS-Instruct 75K",
+  "kind": "dataset",
+  "purpose": "instruction-sft",
+  "stage": [
+   "sft"
+  ],
+  "contains": "One record is a coding problem and solution written by gpt-3.5-turbo-1106 from a random open-source code snippet, stored with the seed snippet, the language, indexes and the OpenAI system fingerprint.",
+  "supports": [
+   "instruction-following",
+   "completion"
+  ],
+  "languages": null,
+  "format": "HF dataset, default config, train split; fields lang, raw_index, index, seed, openai_fingerprint, problem, solution.",
+  "size": "75,197 rows (datasets-server size API)",
+  "license": "MIT (HF card tag); the card tells users to follow the OpenAI usage policy",
+  "limitations": "The card states the data was generated by gpt-3.5-turbo-1106 and warns users to follow the OpenAI usage policy. Solutions were not checked by execution in the released data.",
+  "links": {
+   "source": "https://huggingface.co/datasets/ise-uiuc/Magicoder-OSS-Instruct-75K",
+   "huggingface": "https://huggingface.co/datasets/ise-uiuc/Magicoder-OSS-Instruct-75K",
+   "paper": "https://arxiv.org/abs/2312.02120",
+   "code": "https://github.com/ise-uiuc/magicoder"
+  },
+  "popularity": {
+   "hf_downloads_30d": 52206,
+   "hf_likes": 185,
+   "used_by": [],
+   "note": "No recipe in data/model-recipes.json names this dataset. CodeFeedback-Filtered-Instruction draws on it (catalog summary).",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "established",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats and license, datasets-server first-rows (field names) and size, catalog caveats from the card, fetched 2026-11-25.  GitHub repo ise-uiuc/magicoder checked with the GitHub API. Maturity: released 2023-12 and widely reused as seed data in later sets."
+ },
+ {
+  "id": "magicoder-evol-instruct-110k",
+  "name": "Magicoder Evol-Instruct 110K",
+  "kind": "dataset",
+  "purpose": "instruction-sft",
+  "stage": [
+   "sft"
+  ],
+  "contains": "One record is an instruction and a response produced by evolving Code Alpaca prompts with GPT-4, decontaminated against the StarCoder and BigCode benchmark list.",
+  "supports": [
+   "instruction-following",
+   "completion"
+  ],
+  "languages": null,
+  "format": "HF dataset, default config, train split; fields instruction and response.",
+  "size": "111,183 rows (datasets-server size API)",
+  "license": "Apache-2.0 (HF card tag); generated with GPT-4 models, so OpenAI terms apply per the parent card",
+  "limitations": "The parent dataset evol-codealpaca-v1 states that gpt-4-0314 and gpt-4-0613 produced the evolutions and answers, so OpenAI terms apply. Decontamination covers older benchmarks, so check overlap with newer evaluations.",
+  "links": {
+   "source": "https://huggingface.co/datasets/ise-uiuc/Magicoder-Evol-Instruct-110K",
+   "huggingface": "https://huggingface.co/datasets/ise-uiuc/Magicoder-Evol-Instruct-110K",
+   "paper": "https://arxiv.org/abs/2312.02120",
+   "code": null
+  },
+  "popularity": {
+   "hf_downloads_30d": 24911,
+   "hf_likes": 198,
+   "used_by": [],
+   "note": "The row count 111,183 equals the evol_instruct config of opc-sft-stage2; the two may overlap (see that entry).",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "established",
+  "checked": "2026-11-25",
+  "evidence": "HF API, datasets-server first-rows and size, catalog caveats (read from both cards), fetched 2026-11-25. Maturity: released 2023-12, widely reused."
+ },
+ {
+  "id": "evol-codealpaca-v1",
+  "name": "Evol-CodeAlpaca v1",
+  "kind": "dataset",
+  "purpose": "instruction-sft",
+  "stage": [
+   "sft"
+  ],
+  "contains": "One record is an evolved coding instruction and its output, built from Code Alpaca prompts with ten augmentation strategies and answered by GPT-4.",
+  "supports": [
+   "instruction-following",
+   "completion"
+  ],
+  "languages": null,
+  "format": "HF dataset, default config, train split; fields instruction and output.",
+  "size": "111,272 rows (datasets-server size API); the Tulu 3 card lists 107,276 prompts from it",
+  "license": "Apache-2.0 (HF card tag); OpenAI terms apply to the GPT-4 outputs",
+  "limitations": "The card says gpt-4-0314 and gpt-4-0613 produced the evolutions and answers, so OpenAI terms apply. This original form is not decontaminated against modern benchmarks.",
+  "links": {
+   "source": "https://huggingface.co/datasets/theblackcat102/evol-codealpaca-v1",
+   "huggingface": "https://huggingface.co/datasets/theblackcat102/evol-codealpaca-v1",
+   "paper": "https://arxiv.org/abs/2306.08568",
+   "code": null
+  },
+  "popularity": {
+   "hf_downloads_30d": 9392,
+   "hf_likes": 194,
+   "used_by": [],
+   "note": "Used inside the Tulu 3 SFT mixture (see that entry).",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "established",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, datasets-server first-rows and size, catalog caveats, Tulu 3 card (lists Evol CodeAlpaca, 107,276 prompts), fetched 2026-11-25. Paper link is the WizardCoder paper whose Evol-Instruct method this recreates (title confirmed on arXiv). Maturity: released 2023-07, a staple of code SFT."
+ },
+ {
+  "id": "opencodeinstruct",
+  "name": "OpenCodeInstruct (NVIDIA)",
+  "kind": "dataset",
+  "purpose": "instruction-sft",
+  "stage": [
+   "sft"
+  ],
+  "contains": "One record is a coding question, a model-written solution, generated unit tests, their execution status and average pass score, and an LLM quality judgement.",
+  "supports": [
+   "instruction-following",
+   "test-generation",
+   "completion"
+  ],
+  "languages": "Python-centric (per catalog)",
+  "format": "HF dataset, one train config; fields id, input, output, domain, generation_algorithm, llm_judgement, unit_tests, tests_execution_status, average_test_score.",
+  "size": "5,000,000 rows (card dataset_info)",
+  "license": "CC-BY-4.0; per the paper, outputs came from Qwen2.5-Coder-32B-Instruct, so Qwen license terms apply",
+  "limitations": "Per the paper, solutions, tests and judgments came from Qwen2.5-Coder-32B-Instruct. The tests are model-written, so a passing row is not guaranteed correct.",
+  "links": {
+   "source": "https://huggingface.co/datasets/nvidia/OpenCodeInstruct",
+   "huggingface": "https://huggingface.co/datasets/nvidia/OpenCodeInstruct",
+   "paper": "https://arxiv.org/abs/2504.04030",
+   "code": null
+  },
+  "popularity": {
+   "hf_downloads_30d": 60240,
+   "hf_likes": 122,
+   "used_by": [],
+   "note": null,
+   "as_of": "2026-11-25"
+  },
+  "maturity": "emerging",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats and dataset_info, datasets-server first-rows, catalog caveats from card and paper, fetched 2026-11-25. Maturity: released 2025-04; no recipe in data/model-recipes.json names it."
+ },
+ {
+  "id": "kodcode",
+  "name": "KodCode-V1",
+  "kind": "dataset",
+  "purpose": "instruction-sft",
+  "stage": [
+   "sft"
+  ],
+  "contains": "One record is a synthetic coding question with a solution, pytest-style tests, a difficulty rating, trial pass statistics and a benchmark-similarity score used for decontamination.",
+  "supports": [
+   "instruction-following",
+   "test-generation"
+  ],
+  "languages": "Python (per catalog)",
+  "format": "HF dataset, default config, train and use_with_caution splits; fields version, style, subset, question_id, question, solution, test, test_info, gpt_pass_sequence, gpt_pass_trial_num, gpt_difficulty, gpt_pass_percentage, trials, chosen_trial, metadata, benchmark_similarity, benchmark_instruction, benchmark_task_id, filter_reason.",
+  "size": "484,097 train rows plus 3,335 rows in the use_with_caution split (card)",
+  "license": "CC-BY-NC-4.0 (non-commercial); generated with GPT-4 family models, so OpenAI terms may apply",
+  "limitations": "The license is non-commercial, which rules out use in a commercial model. Questions and solutions come from GPT-4 family models, so OpenAI terms may apply, and the problems are easier than competition sets.",
+  "links": {
+   "source": "https://huggingface.co/datasets/KodCode/KodCode-V1",
+   "huggingface": "https://huggingface.co/datasets/KodCode/KodCode-V1",
+   "paper": "https://arxiv.org/abs/2503.02951",
+   "code": "https://github.com/KodCode-AI/KodCode"
+  },
+  "popularity": {
+   "hf_downloads_30d": 33332,
+   "hf_likes": 121,
+   "used_by": [],
+   "note": "Related sets in the catalog: KodCode-V1-SFT-R1 and KodCode-Light-RL-10K.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "emerging",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, dataset_info and field names, catalog caveats, fetched 2026-11-25. Maturity: released 2025-03; no recipe in data/model-recipes.json names it."
+ },
+ {
+  "id": "opencodereasoning",
+  "name": "OpenCodeReasoning",
+  "kind": "dataset",
+  "purpose": "reasoning-traces",
+  "stage": [
+   "sft"
+  ],
+  "contains": "One record is a competitive-programming question id and a DeepSeek-R1 reasoning output with its extracted solution, source dataset, license and difficulty.",
+  "supports": [
+   "reasoning",
+   "competitive-programming"
+  ],
+  "languages": "Python (per paper; not re-read on the card)",
+  "format": "HF dataset with two configs, split_0 and split_1; fields id, input, output, source, license, dataset, split, difficulty, solution; in split_1 the question text is empty and must be reconstructed from the source datasets.",
+  "size": "735,255 rows: split_0 567,850 and split_1 167,405 (card dataset_info)",
+  "license": "CC-BY-4.0",
+  "limitations": "In split_1 the question text is missing and must be rebuilt from the source datasets named in each row. The reasoning outputs are generated by DeepSeek-R1, so correctness is not guaranteed by execution on every row.",
+  "links": {
+   "source": "https://huggingface.co/datasets/nvidia/OpenCodeReasoning",
+   "huggingface": "https://huggingface.co/datasets/nvidia/OpenCodeReasoning",
+   "paper": "https://arxiv.org/abs/2504.01943",
+   "code": null
+  },
+  "popularity": {
+   "hf_downloads_30d": 33343,
+   "hf_likes": 577,
+   "used_by": [
+    "opencodereasoning-nemotron-32b",
+    "olmo-3-32b"
+   ],
+   "note": "OpenCodeReasoning-2 (catalog id opencodereasoning-2) is the larger successor.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "emerging",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, dataset_info, first-rows field names, catalog caveat, fetched 2026-11-25; data/model-recipes.json opencodereasoning-nemotron-32b and olmo-3-32b name it. Maturity: released 2025-04, used by two 2025 recipes. The language and teacher notes follow the catalog entry and recipe text."
+ },
+ {
+  "id": "codefeedback-filtered-instruction",
+  "name": "CodeFeedback-Filtered-Instruction",
+  "kind": "dataset",
+  "purpose": "instruction-sft",
+  "stage": [
+   "sft"
+  ],
+  "contains": "One record is a single-turn code query with its answer, the resource it came from and a language label, kept after a complexity filter.",
+  "supports": [
+   "instruction-following"
+  ],
+  "languages": null,
+  "format": "HF dataset, default config, train split; fields query, answer, resource, lang.",
+  "size": "156,526 rows (datasets-server size API; the card says 156K)",
+  "license": "Apache-2.0 (HF card tag)",
+  "limitations": "The card warns that part of the data was generated by OpenAI models. The filter used a model-assigned complexity score rather than execution, and the set overlaps heavily with Magicoder data.",
+  "links": {
+   "source": "https://huggingface.co/datasets/m-a-p/CodeFeedback-Filtered-Instruction",
+   "huggingface": "https://huggingface.co/datasets/m-a-p/CodeFeedback-Filtered-Instruction",
+   "paper": "https://arxiv.org/abs/2402.14658",
+   "code": null
+  },
+  "popularity": {
+   "hf_downloads_30d": 28625,
+   "hf_likes": 224,
+   "used_by": [],
+   "note": null,
+   "as_of": "2026-11-25"
+  },
+  "maturity": "established",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, datasets-server first-rows and size, catalog caveats (card and paper), fetched 2026-11-25. Maturity: released 2024-02, common in 2024 SFT mixes though no recipe here names it."
+ },
+ {
+  "id": "code-feedback",
+  "name": "Code-Feedback (OpenCodeInterpreter)",
+  "kind": "dataset",
+  "purpose": "instruction-sft",
+  "stage": [
+   "sft"
+  ],
+  "contains": "One record is a multi-turn conversation as a list of messages in which a model writes code, receives execution feedback or follow-up feedback and refines it.",
+  "supports": [
+   "instruction-following",
+   "debugging-repair",
+   "tool-use"
+  ],
+  "languages": null,
+  "format": "HF dataset, default config, train split; fields id and messages.",
+  "size": "66,383 rows (datasets-server size API); the paper abstract says 68K multi-turn interactions",
+  "license": "Apache-2.0 (HF card tag)",
+  "limitations": "The card says part of it was generated by GPT-4-0613 and GPT-3.5-turbo-0613, so the OpenAI usage policy applies. The paper reports its headline result with synthesized GPT-4 feedback at inference time.",
+  "links": {
+   "source": "https://huggingface.co/datasets/m-a-p/Code-Feedback",
+   "huggingface": "https://huggingface.co/datasets/m-a-p/Code-Feedback",
+   "paper": "https://arxiv.org/abs/2402.14658",
+   "code": null
+  },
+  "popularity": {
+   "hf_downloads_30d": 1943,
+   "hf_likes": 251,
+   "used_by": [],
+   "note": null,
+   "as_of": "2026-11-25"
+  },
+  "maturity": "established",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, datasets-server first-rows and size, catalog caveats, fetched 2026-11-25. Maturity: released 2024-02."
+ },
+ {
+  "id": "commitpackft",
+  "name": "CommitPackFT",
+  "kind": "dataset",
+  "purpose": "instruction-sft",
+  "stage": [
+   "sft"
+  ],
+  "contains": "One record is a single-file commit whose message resembles a natural-language instruction, with the file before and after the commit, the subject and message, language, license and repository name.",
+  "supports": [
+   "instruction-following",
+   "debugging-repair",
+   "repo-level-editing"
+  ],
+  "languages": "277 languages (card)",
+  "format": "HF dataset with a commitpackft.py loading script and files at data/<language>/data.jsonl; fields commit, old_file, new_file, old_contents, new_contents, subject, message, lang, license, repos.",
+  "size": "2 GB per the card; 702,062 samples, 1,545.02 MB in the card table",
+  "license": "MIT (card); per-sample repository license in the license field (permissive)",
+  "limitations": "Commit messages are noisy even after filtering. The data predates modern evaluations, so contamination with benchmark repositories should be checked.",
+  "links": {
+   "source": "https://huggingface.co/datasets/bigcode/commitpackft",
+   "huggingface": "https://huggingface.co/datasets/bigcode/commitpackft",
+   "paper": "https://arxiv.org/abs/2308.07124",
+   "code": "https://github.com/bigcode-project/octopack"
+  },
+  "popularity": {
+   "hf_downloads_30d": 68229,
+   "hf_likes": 117,
+   "used_by": [
+    "granite-8b-code-base"
+   ],
+   "note": "Includes edit-style data (before and after files), useful for editing and repair.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "established",
+  "checked": "2026-11-25",
+  "evidence": "Read the card (README via resolve/main, 2026-11-25): summary, fields, splits table; HF API file list and stats; data/model-recipes.json granite-8b-code-base uses a filtered CommitPackFT. Maturity: released 2023-06, used by a 2024 recipe. xP3x, the other OctoPack source, is not a coding set and is not listed."
+ },
+ {
+  "id": "opc-sft-stage2",
+  "name": "OpenCoder opc-sft-stage2",
+  "kind": "dataset",
+  "purpose": "instruction-sft",
+  "stage": [
+   "sft"
+  ],
+  "contains": "One record is a code instruction with its output, extracted code, entry point and test case, drawn from one of four subsets (educational, evolved, McEval-style multilingual, package usage).",
+  "supports": [
+   "instruction-following",
+   "test-generation"
+  ],
+  "languages": "Includes multilingual McEval-style data (languages not listed on the card read)",
+  "format": "HF dataset with 4 configs (educational_instruct, evol_instruct, mceval_instruct, package_instruct), each a train split; fields seq_id, instruction, output, code, entry_point, testcase.",
+  "size": "436,347 rows: educational_instruct 118,278, evol_instruct 111,183, mceval_instruct 35,943, package_instruct 170,943 (card dataset_info)",
+  "license": "MIT (HF card tag)",
+  "limitations": "The card read does not name the teacher model for each subset. The evol_instruct config has 111,183 rows, the same count as Magicoder-Evol-Instruct-110K, so overlap between the two sets should be checked.",
+  "links": {
+   "source": "https://huggingface.co/datasets/OpenCoder-LLM/opc-sft-stage2",
+   "huggingface": "https://huggingface.co/datasets/OpenCoder-LLM/opc-sft-stage2",
+   "paper": "https://arxiv.org/abs/2411.04905",
+   "code": "https://github.com/OpenCoder-llm/OpenCoder-llm"
+  },
+  "popularity": {
+   "hf_downloads_30d": 36671,
+   "hf_likes": 109,
+   "used_by": [
+    "opencoder-8b"
+   ],
+   "note": null,
+   "as_of": "2026-11-25"
+  },
+  "maturity": "emerging",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, dataset_info, first-rows field names, catalog caveats, fetched 2026-11-25; data/model-recipes.json opencoder-8b describes stage 2 as about 367K examples across 36K McEval, 111K Evol, 110K Educational and 110K Package instruct. The recipe counts are rounded and differ from the released config sizes. Maturity: released 2024-11, one recipe."
+ },
+ {
+  "id": "self-oss-instruct-sc2-exec-filter-50k",
+  "name": "self-oss-instruct-sc2-exec-filter-50k (SelfCodeAlign)",
+  "kind": "dataset",
+  "purpose": "instruction-sft",
+  "stage": [
+   "sft"
+  ],
+  "contains": "One record is a Python instruction and response generated by StarCoder2-15B from a seed snippet and extracted concepts, kept only if the response passed execution tests.",
+  "supports": [
+   "instruction-following",
+   "test-generation"
+  ],
+  "languages": "Python only",
+  "format": "HF dataset, default config, train split; fields fingerprint, sha1, seed, response, concepts, prompt, instruction, id.",
+  "size": "50,661 rows (card dataset_info)",
+  "license": "ODC-By (HF card tag)",
+  "limitations": "The data is Python only. Per the paper the pipeline avoids a stronger teacher model, so quality is bounded by the StarCoder2-15B base model that generated it.",
+  "links": {
+   "source": "https://huggingface.co/datasets/bigcode/self-oss-instruct-sc2-exec-filter-50k",
+   "huggingface": "https://huggingface.co/datasets/bigcode/self-oss-instruct-sc2-exec-filter-50k",
+   "paper": "https://arxiv.org/abs/2410.24198",
+   "code": null
+  },
+  "popularity": {
+   "hf_downloads_30d": 38464,
+   "hf_likes": 112,
+   "used_by": [
+    "granite-8b-code-base"
+   ],
+   "note": null,
+   "as_of": "2026-11-25"
+  },
+  "maturity": "emerging",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, dataset_info, first-rows field names, catalog caveats (card and paper), fetched 2026-11-25; data/model-recipes.json granite-8b-code-base lists Self-OSS-Instruct-SC2 among its SFT sets (matched by name). Maturity: released 2024-04."
+ },
+ {
+  "id": "tulu-3-sft-mixture",
+  "name": "Tulu 3 SFT Mixture (code parts)",
+  "kind": "dataset",
+  "purpose": "instruction-sft",
+  "stage": [
+   "sft"
+  ],
+  "contains": "One record is a chat conversation as a list of messages with an id and the name of its source set, in a general mixture whose code parts are Tulu 3 Persona Python and Evol CodeAlpaca.",
+  "supports": [
+   "instruction-following",
+   "completion"
+  ],
+  "languages": null,
+  "format": "HF dataset, default config, train split; fields id, messages, source; select code rows by filtering on source.",
+  "size": "939,343 rows in total (dataset_info); code parts per the card: Tulu 3 Persona Python 34,999 prompts and Evol CodeAlpaca 107,276 prompts",
+  "license": "ODC-BY-1.0 for the collection; different licenses apply to subsets and some portions are non-commercial (card)",
+  "limitations": "The card says different licenses apply to subsets and that some portions are non-commercial. The card presents the mixture as a research artifact.",
+  "links": {
+   "source": "https://huggingface.co/datasets/allenai/tulu-3-sft-mixture",
+   "huggingface": "https://huggingface.co/datasets/allenai/tulu-3-sft-mixture",
+   "paper": "https://arxiv.org/abs/2411.15124",
+   "code": null
+  },
+  "popularity": {
+   "hf_downloads_30d": 32236,
+   "hf_likes": 287,
+   "used_by": [],
+   "note": "Shown as a template for how much code to blend into a general assistant mix.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "emerging",
+  "checked": "2026-11-25",
+  "evidence": "Read the card (README via resolve/main, 2026-11-25): composition list, fields, license note; HF API stats; arXiv title confirmed. Maturity: released 2024-11; no recipe in data/model-recipes.json names it."
+ },
+ {
+  "id": "codeforces-cots",
+  "name": "open-r1 CodeForces-CoTs",
+  "kind": "dataset",
+  "purpose": "reasoning-traces",
+  "stage": [
+   "sft"
+  ],
+  "contains": "One record is a Codeforces problem statement with a DeepSeek-R1 reasoning trace and solution in C++ or Python, plus the problem metadata, editorial and chat messages.",
+  "supports": [
+   "reasoning",
+   "competitive-programming"
+  ],
+  "languages": "C++ and Python",
+  "format": "HF dataset with 11 configs (solutions, solutions_py, solutions_decontaminated, solutions_w_editorials, solutions_short_and_long_decontaminated, checker_interactor and others); fields include id, contest_id, title, description, input_format, output_format, examples, editorial, prompt, generation, finish_reason, messages.",
+  "size": "The solutions config has 47,780 rows and solutions_py 9,556 rows; about 10K problems with up to 5 traces each (catalog)",
+  "license": "CC-BY-4.0",
+  "limitations": "Traces are generated by DeepSeek-R1 and not every trace is verified correct. Use the decontaminated configs to avoid overlap with evaluation sets.",
+  "links": {
+   "source": "https://huggingface.co/datasets/open-r1/codeforces-cots",
+   "huggingface": "https://huggingface.co/datasets/open-r1/codeforces-cots",
+   "paper": null,
+   "code": "https://github.com/huggingface/open-r1"
+  },
+  "popularity": {
+   "hf_downloads_30d": 13645,
+   "hf_likes": 234,
+   "used_by": [
+    "seed-coder-8b"
+   ],
+   "note": null,
+   "as_of": "2026-11-25"
+  },
+  "maturity": "emerging",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, dataset_info configs, first-rows field names, catalog caveats, fetched 2026-11-25; data/model-recipes.json seed-coder-8b names open-r1/codeforces-cots. Maturity: released 2025-02, one recipe. The decontamination sentence follows from the config names, not a card statement I read."
+ },
+ {
+  "id": "swe-smith-trajectories",
+  "name": "SWE-smith trajectories",
+  "kind": "dataset",
+  "purpose": "agent-trajectories",
+  "stage": [
+   "sft"
+  ],
+  "contains": "One record is a SWE-agent trajectory by Claude 3.7 Sonnet on a SWE-smith task, with the message list, instance id, whether it resolved, model name, trajectory id and final patch.",
+  "supports": [
+   "repo-level-editing",
+   "tool-use",
+   "debugging-repair"
+  ],
+  "languages": "Python only",
+  "format": "HF dataset, default config, three splits tool, xml and ticks (one per tool-call format); fields messages, instance_id, resolved, model, traj_id, patch.",
+  "size": "76,002 rows: tool 24,100, xml 26,076, ticks 25,826 (card dataset_info)",
+  "license": "MIT; the card says trajectories came from Claude 3.7 Sonnet, so Anthropic terms apply to using outputs to train models (catalog)",
+  "limitations": "The trajectories were generated by Claude 3.7 Sonnet through SWE-agent, so provider terms apply to model training. The tasks are Python only and many trajectories are unresolved, so filter on the resolved field.",
+  "links": {
+   "source": "https://huggingface.co/datasets/SWE-bench/SWE-smith-trajectories",
+   "huggingface": "https://huggingface.co/datasets/SWE-bench/SWE-smith-trajectories",
+   "paper": "https://arxiv.org/abs/2504.21798",
+   "code": "https://github.com/SWE-bench/SWE-smith"
+  },
+  "popularity": {
+   "hf_downloads_30d": 14296,
+   "hf_likes": 82,
+   "used_by": [
+    "swe-agent-lm-32b"
+   ],
+   "note": "The recipe used a 5,016-trajectory subset after rejection sampling, not this full dataset.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "emerging",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, dataset_info, first-rows field names, catalog caveats, fetched 2026-11-25; data/model-recipes.json swe-agent-lm-32b trained on 5,016 Claude 3.7 Sonnet trajectories from SWE-smith. The unresolved-trajectories remark follows from the resolved field in the schema. Maturity: released 2025-04."
+ },
+ {
+  "id": "codeultrafeedback",
+  "name": "CodeUltraFeedback",
+  "kind": "dataset",
+  "purpose": "preference",
+  "stage": [
+   "preference"
+  ],
+  "contains": "One record is a coding instruction with four model responses from a pool of 14 LLMs, scored and critiqued on five coding preferences by a GPT-3.5 judge.",
+  "supports": [
+   "instruction-following"
+  ],
+  "languages": null,
+  "format": "HF dataset, default config, train split; fields instruction, preference, models, responses, annotations.",
+  "size": "10,000 instructions with 4 responses each (card, HF dataset_info)",
+  "license": "MIT (HF card tag); responses include GPT-3.5 and GPT-4 outputs (OpenAI terms)",
+  "limitations": "Labels come from a GPT-3.5 judge, so they are noisy and not execution-based. The set is small and the responses include GPT-3.5 and GPT-4 outputs.",
+  "links": {
+   "source": "https://huggingface.co/datasets/coseal/CodeUltraFeedback",
+   "huggingface": "https://huggingface.co/datasets/coseal/CodeUltraFeedback",
+   "paper": "https://arxiv.org/abs/2403.09032",
+   "code": null
+  },
+  "popularity": {
+   "hf_downloads_30d": 279,
+   "hf_likes": 28,
+   "used_by": [],
+   "note": null,
+   "as_of": "2026-11-25"
+  },
+  "maturity": "emerging",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, dataset_info, first-rows field names, catalog caveats (card and paper abstract), fetched 2026-11-25. Maturity: released 2024-03, small independent footprint (279 downloads in 30 days)."
+ },
+ {
+  "id": "acecode-87k",
+  "name": "AceCode-87K (TIGER-Lab)",
+  "kind": "dataset",
+  "purpose": "execution-tasks",
+  "stage": [
+   "preference",
+   "rl"
+  ],
+  "contains": "One record is a coding question rewritten by GPT-4o-mini with synthesized test cases and a list of sampled completions with their pass rates, as used to train reward models and run RL.",
+  "supports": [
+   "test-generation",
+   "instruction-following"
+  ],
+  "languages": "Python (per catalog)",
+  "format": "HF dataset, default config, train split; fields id, source, question, test_cases, inferences, context_messages.",
+  "size": "87,149 questions with about 16 filtered test cases each (card)",
+  "license": "MIT (HF card tag); GPT-4o-mini outputs, so OpenAI terms apply",
+  "limitations": "Questions and test cases were rewritten and synthesized by GPT-4o-mini, so OpenAI terms apply. The synthesized tests are filtered but can still be wrong.",
+  "links": {
+   "source": "https://huggingface.co/datasets/TIGER-Lab/AceCode-87K",
+   "huggingface": "https://huggingface.co/datasets/TIGER-Lab/AceCode-87K",
+   "paper": "https://arxiv.org/abs/2502.01718",
+   "code": null
+  },
+  "popularity": {
+   "hf_downloads_30d": 24818,
+   "hf_likes": 57,
+   "used_by": [
+    "olmo-3-32b"
+   ],
+   "note": "Counted in the reward group of the starter list.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "emerging",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, dataset_info, first-rows field names, catalog caveats, fetched 2026-11-25; data/model-recipes.json olmo-3-32b lists AceCoder as a source of SFT and RL code prompts. Maturity: released 2025-02, one recipe. Purpose is execution-tasks because rows carry tests; it is the reward-model and RL set in the preference group."
+ },
+ {
+  "id": "acecodepair-300k",
+  "name": "AceCodePair-300K (TIGER-Lab)",
+  "kind": "dataset",
+  "purpose": "preference",
+  "stage": [
+   "preference"
+  ],
+  "contains": "One record is a coding instruction with a chosen and a rejected completion, selected from AceCode-87K by test pass rate for Bradley-Terry reward model training.",
+  "supports": [
+   "instruction-following"
+  ],
+  "languages": "Python (per catalog)",
+  "format": "HF dataset with configs default and 32B, train split; fields instruction, input, chosen, rejected, id.",
+  "size": "413,096 rows: default 307,019 and 32B 106,077 (datasets-server size API; the name says 300K)",
+  "license": "MIT (HF card tag)",
+  "limitations": "The pairs inherit the GPT-4o-mini rewritten tests from AceCode-87K, which can be wrong. Pair labels come from pass rates on those synthetic tests, not from human review.",
+  "links": {
+   "source": "https://huggingface.co/datasets/TIGER-Lab/AceCodePair-300K",
+   "huggingface": "https://huggingface.co/datasets/TIGER-Lab/AceCodePair-300K",
+   "paper": "https://arxiv.org/abs/2502.01718",
+   "code": null
+  },
+  "popularity": {
+   "hf_downloads_30d": 348,
+   "hf_likes": 5,
+   "used_by": [],
+   "note": null,
+   "as_of": "2026-11-25"
+  },
+  "maturity": "experimental",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, size API, first-rows field names, catalog caveats, fetched 2026-11-25. Maturity: released 2025-02, 348 downloads in 30 days and no recipe naming it."
+ },
+ {
+  "id": "ling-coder-dpo",
+  "name": "Ling-Coder-DPO",
+  "kind": "dataset",
+  "purpose": "preference",
+  "stage": [
+   "preference"
+  ],
+  "contains": "One record is a code prompt with a chosen and a rejected response and a model id, with pairs selected by test pass rate, perplexity distribution and reward-model score.",
+  "supports": [
+   "instruction-following",
+   "competitive-programming"
+  ],
+  "languages": null,
+  "format": "HF dataset, default config, train split; fields prompt, chosen, rejected, mid.",
+  "size": "252,769 rows (datasets-server size API; the card says 250K)",
+  "license": "Apache-2.0 (HF card tag)",
+  "limitations": "Source problems come from CodeContests, so benchmark overlap with competition-style evaluations is possible. The response-generating models are not named in the card lines read.",
+  "links": {
+   "source": "https://huggingface.co/datasets/inclusionAI/Ling-Coder-DPO",
+   "huggingface": "https://huggingface.co/datasets/inclusionAI/Ling-Coder-DPO",
+   "paper": "https://arxiv.org/abs/2503.17793",
+   "code": null
+  },
+  "popularity": {
+   "hf_downloads_30d": 118,
+   "hf_likes": 16,
+   "used_by": [],
+   "note": null,
+   "as_of": "2026-11-25"
+  },
+  "maturity": "experimental",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, size API, first-rows field names, catalog caveats, fetched 2026-11-25. Maturity: released 2025-03, 118 downloads in 30 days and no recipe naming it. The overlap sentence is implied by the CodeContests source, not a card warning."
+ },
+ {
+  "id": "swe-gym",
+  "name": "SWE-Gym",
+  "kind": "environment",
+  "purpose": "issue-patch",
+  "stage": [
+   "sft",
+   "rl"
+  ],
+  "contains": "One record is a real GitHub issue task from 11 Python repositories with the problem statement, base commit, gold patch, test patch and FAIL_TO_PASS and PASS_TO_PASS test lists.",
+  "supports": [
+   "repo-level-editing",
+   "debugging-repair",
+   "tool-use"
+  ],
+  "languages": "Python only",
+  "format": "HF dataset, default config, train split; fields instance_id, hints_text, patch, test_patch, created_at, problem_statement, repo, base_commit, version, PASS_TO_PASS, FAIL_TO_PASS; execution environments are built or pulled per repository from the SWE-Gym GitHub repo.",
+  "size": "2,438 train instances (card dataset_info); Lite has 230 and Raw 64,689 unvalidated rows (catalog)",
+  "license": "MIT (dataset); Apache-2.0 for the code repo",
+  "limitations": "Only 2,438 tasks are validated, so pass-rate filtering leaves little. Some repositories overlap with SWE-bench test repositories, which is a contamination risk for SWE-bench evaluation.",
+  "links": {
+   "source": "https://huggingface.co/datasets/SWE-Gym/SWE-Gym",
+   "huggingface": "https://huggingface.co/datasets/SWE-Gym/SWE-Gym",
+   "paper": "https://arxiv.org/abs/2412.21139",
+   "code": "https://github.com/SWE-Gym/SWE-Gym"
+  },
+  "popularity": {
+   "hf_downloads_30d": 20822,
+   "hf_likes": 31,
+   "github_stars": 771,
+   "used_by": [
+    "kimi-dev-72b"
+   ],
+   "note": "github_stars is for SWE-Gym/SWE-Gym.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "emerging",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, dataset_info, first-rows field names, catalog caveats, GitHub API (stars, 2026-11-25), arXiv title check; data/model-recipes.json kimi-dev-72b built its cold-start SFT set on SWE-Gym and SWE-bench-extra. Maturity: released 2024-12, one recipe."
+ },
+ {
+  "id": "swe-smith",
+  "name": "SWE-smith",
+  "kind": "environment",
+  "purpose": "issue-patch",
+  "stage": [
+   "sft",
+   "rl"
+  ],
+  "contains": "One record is a synthetic bug task for a repository (bug-injecting patch, FAIL_TO_PASS and PASS_TO_PASS tests, LM-written problem statement, repo and Docker image name).",
+  "supports": [
+   "repo-level-editing",
+   "debugging-repair",
+   "tool-use"
+  ],
+  "languages": "Python (50,908 rows) plus other languages per catalog",
+  "format": "HF dataset, default config, train split; fields instance_id, patch, FAIL_TO_PASS, PASS_TO_PASS, image_name, repo, problem_statement; each task names a Docker image.",
+  "size": "59,136 train task instances; the Python subset has 50,908 (card and catalog)",
+  "license": "MIT",
+  "limitations": "The bugs are synthetic and less natural than real issues, and the problem statements are written by a language model. The FAIL_TO_PASS tests are present in the repository image, so check for test leakage in your setup.",
+  "links": {
+   "source": "https://huggingface.co/datasets/SWE-bench/SWE-smith",
+   "huggingface": "https://huggingface.co/datasets/SWE-bench/SWE-smith",
+   "paper": "https://arxiv.org/abs/2504.21798",
+   "code": "https://github.com/SWE-bench/SWE-smith"
+  },
+  "popularity": {
+   "hf_downloads_30d": 75658,
+   "hf_likes": 70,
+   "github_stars": 837,
+   "used_by": [
+    "swe-agent-lm-32b"
+   ],
+   "note": "github_stars is for SWE-bench/SWE-smith.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "emerging",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, dataset_info, first-rows field names, catalog caveats, GitHub API (stars, 2026-11-25); data/model-recipes.json swe-agent-lm-32b was trained on SWE-smith trajectories. Maturity: released 2025-04, one recipe."
+ },
+ {
+  "id": "r2e-gym",
+  "name": "R2E-Gym (Subset)",
+  "kind": "environment",
+  "purpose": "issue-patch",
+  "stage": [
+   "sft",
+   "rl"
+  ],
+  "contains": "One record is an executable task built from a commit, with the repository, Docker image, commit contents, execution results, a back-translated problem statement and expected test output.",
+  "supports": [
+   "repo-level-editing",
+   "debugging-repair",
+   "tool-use"
+  ],
+  "languages": "Python only",
+  "format": "HF dataset, default config, train split; fields repo_name, docker_image, commit_hash, parsed_commit_content, execution_result_content, modified_files, modified_entity_summaries, relevant_files, num_non_test_files, num_non_test_func_methods, num_non_test_lines, prompt, problem_statement, expected_output_json.",
+  "size": "4,578 train tasks (card dataset_info)",
+  "license": "Apache-2.0",
+  "limitations": "Problem statements are back-translated from commits and the tests are partly written by a language model, so label noise exists. The code repository was last pushed 2025-07-13 and the Lite variant card has no license field.",
+  "links": {
+   "source": "https://huggingface.co/datasets/R2E-Gym/R2E-Gym-Subset",
+   "huggingface": "https://huggingface.co/datasets/R2E-Gym/R2E-Gym-Subset",
+   "paper": "https://arxiv.org/abs/2504.07164",
+   "code": "https://github.com/R2E-Gym/R2E-Gym"
+  },
+  "popularity": {
+   "hf_downloads_30d": 8029,
+   "hf_likes": 29,
+   "github_stars": 353,
+   "used_by": [
+    "deepswe-preview"
+   ],
+   "note": "github_stars is for R2E-Gym/R2E-Gym.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "emerging",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, dataset_info, first-rows field names, catalog caveats, GitHub API (stars, 2026-11-25), arXiv title check; data/model-recipes.json deepswe-preview trained on about 4.5K R2E-Gym problems. Maturity: released 2025-02, one recipe."
+ },
+ {
+  "id": "swe-rebench",
+  "name": "SWE-rebench (Nebius, v1)",
+  "kind": "environment",
+  "purpose": "issue-patch",
+  "stage": [
+   "rl",
+   "eval"
+  ],
+  "contains": "One record is a Python GitHub issue task with the problem statement, base commit, patch, test patch, install configuration, requirements, FAIL_TO_PASS, PASS_TO_PASS and other test lists, license name and Docker image name.",
+  "supports": [
+   "repo-level-editing",
+   "debugging-repair",
+   "tool-use"
+  ],
+  "languages": "Python only",
+  "format": "HF dataset, default config, splits test (21,336) and filtered (6,542); fields instance_id, base_commit, created_at, environment_setup_commit, hints_text, patch, problem_statement, repo, test_patch, meta, version, install_config, requirements, environment, FAIL_TO_PASS, FAIL_TO_FAIL, PASS_TO_PASS, PASS_TO_FAIL, license_name, docker_image, image_name.",
+  "size": "21,336 tasks in the test split and 6,542 in the filtered split (card dataset_info)",
+  "license": "CC-BY-4.0 for the dataset; underlying repository licenses are recorded in license_name",
+  "limitations": "The large test split is unfiltered, so some tasks have ambiguous statements or weak tests. Repository licenses vary per row, and time overlap with your evaluation set needs checking.",
+  "links": {
+   "source": "https://huggingface.co/datasets/nebius/SWE-rebench",
+   "huggingface": "https://huggingface.co/datasets/nebius/SWE-rebench",
+   "paper": "https://arxiv.org/abs/2505.20411",
+   "code": null
+  },
+  "popularity": {
+   "hf_downloads_30d": 50593,
+   "hf_likes": 79,
+   "used_by": [],
+   "note": null,
+   "as_of": "2026-11-25"
+  },
+  "maturity": "emerging",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, dataset_info, first-rows field names, catalog caveats, fetched 2026-11-25. Maturity: released 2025-05; no recipe in data/model-recipes.json names it. The v2 set (catalog id swe-rebench-v2) follows."
+ },
+ {
+  "id": "swe-rebench-v2",
+  "name": "SWE-rebench V2",
+  "kind": "environment",
+  "purpose": "issue-patch",
+  "stage": [
+   "rl"
+  ],
+  "contains": "One record is an issue-linked task from one of 20 languages with a pre-built image name, interface description, PR description, patch, test patch and FAIL_TO_PASS and PASS_TO_PASS test lists.",
+  "supports": [
+   "repo-level-editing",
+   "debugging-repair",
+   "tool-use"
+  ],
+  "languages": "20 languages across 3,617 repositories (catalog)",
+  "format": "HF dataset, default config, train split; fields base_commit, created_at, image_name, instance_id, interface, language, license, patch, pr_description, problem_statement, repo, test_patch, FAIL_TO_PASS, PASS_TO_PASS, install_config, meta.",
+  "size": "32,079 issue-linked tasks (card dataset_info); a companion PR set has 126,300 tasks (catalog)",
+  "license": "CC-BY-4.0 for the dataset; repository licenses recorded in the license column",
+  "limitations": "The images are large, and repository licenses vary per row. The leaderboard is maintained for the Python v1 set only, per a Hugging Face discussion noted in the catalog.",
+  "links": {
+   "source": "https://huggingface.co/datasets/nebius/SWE-rebench-V2",
+   "huggingface": "https://huggingface.co/datasets/nebius/SWE-rebench-V2",
+   "paper": "https://arxiv.org/abs/2602.23866",
+   "code": "https://github.com/SWE-rebench/SWE-rebench-V2"
+  },
+  "popularity": {
+   "hf_downloads_30d": 101465,
+   "hf_likes": 77,
+   "github_stars": 94,
+   "used_by": [],
+   "note": "The 30-day download count may include automated image pulls and bulk copies; the entry makes no claim about why. github_stars is for SWE-rebench/SWE-rebench-V2.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "experimental",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, dataset_info, first-rows field names, catalog caveats, GitHub API (stars, 2026-11-25); no recipe in data/model-recipes.json names it. Maturity: released 2026-02, little independent documented use yet although the HF page shows high downloads."
+ },
+ {
+  "id": "deepcoder-preview",
+  "name": "DeepCoder-Preview-Dataset",
+  "kind": "dataset",
+  "purpose": "execution-tasks",
+  "stage": [
+   "rl"
+  ],
+  "contains": "One record is a competitive-programming problem statement with a list of test cases, drawn from TACO Verified, PrimeIntellect SYNTHETIC-1 or LiveCodeBench v5.",
+  "supports": [
+   "competitive-programming",
+   "reasoning"
+  ],
+  "languages": "Python (per catalog)",
+  "format": "HF dataset with 4 configs (codeforces, lcbv5, primeintellect, taco); fields problem and tests; used with the rLLM training framework.",
+  "size": "About 24K problems (card): primeintellect train 16,252, taco train 7,436, lcbv5 train 599 and test 279, codeforces test 408 (dataset_info)",
+  "license": "MIT",
+  "limitations": "The lcbv5 config contains LiveCodeBench v5 problems, so training on it contaminates LiveCodeBench evaluation. The test lists are verified by a code-execution check, but a reward of pass-all still depends on test quality.",
+  "links": {
+   "source": "https://huggingface.co/datasets/agentica-org/DeepCoder-Preview-Dataset",
+   "huggingface": "https://huggingface.co/datasets/agentica-org/DeepCoder-Preview-Dataset",
+   "paper": null,
+   "code": "https://github.com/rllm-org/rllm"
+  },
+  "popularity": {
+   "hf_downloads_30d": 5813,
+   "hf_likes": 119,
+   "used_by": [
+    "deepcoder-14b-preview"
+   ],
+   "note": "Placed with the interactive-environment group because it is the standard verifiable-test RL pool; it has no containers.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "emerging",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, dataset_info, first-rows field names, catalog caveat, GitHub API (rllm stars 5,934, 2026-11-25); data/model-recipes.json deepcoder-14b-preview trained on 24K verified problems (7.5K TACO Verified, 16K SYNTHETIC-1, 600 LiveCodeBench). Maturity: released 2025-04, used by its own recipe. The second sentence beyond the contamination point is structural, not a card quote."
+ },
+ {
+  "id": "multi-swe-rl",
+  "name": "Multi-SWE-RL",
+  "kind": "environment",
+  "purpose": "issue-patch",
+  "stage": [
+   "rl"
+  ],
+  "contains": "One record is a newly collected, unannotated issue-resolving instance from a multilingual GitHub repository, stored in per-repository JSONL files; a separate JSONL lists instance ids discarded from Multi-SWE-bench.",
+  "supports": [
+   "repo-level-editing",
+   "debugging-repair"
+  ],
+  "languages": "Multiple (C and other languages in per-language folders; full list not read)",
+  "format": "HF dataset repository of 131 files with per-language folders such as data_20240601_20250331/c/<org>__<repo>_dataset.jsonl; the datasets viewer fails, so record field names were not read.",
+  "size": "First batch data_20240601_20250331, 131 files, about 28.7 GB of repository storage (HF API); the card gives no instance count",
+  "license": "CC0 per the card text, subject to the rights of the source open-source projects (HF card tag: other)",
+  "limitations": "The new instances are unannotated, so they need your own validation before use as an RL pool. The card says use of the data must comply with the licenses of the source projects.",
+  "links": {
+   "source": "https://huggingface.co/datasets/ByteDance-Seed/Multi-SWE-RL",
+   "huggingface": "https://huggingface.co/datasets/ByteDance-Seed/Multi-SWE-RL",
+   "paper": "https://arxiv.org/abs/2504.02605",
+   "code": "https://github.com/multi-swe-bench/multi-swe-bench"
+  },
+  "popularity": {
+   "hf_downloads_30d": 3501,
+   "hf_likes": 38,
+   "github_stars": 364,
+   "used_by": [],
+   "note": "github_stars is for multi-swe-bench/multi-swe-bench.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "experimental",
+  "checked": "2026-11-25",
+  "evidence": "Read the card (README via resolve/main, 2026-11-25): overview, download, license; HF API file list, stats, tags; GitHub API (Multi-SWE-bench stars 364). Maturity: first batch 2025-03, no recipe names it."
+ },
+ {
+  "id": "open-r1-codeforces",
+  "name": "open-r1/codeforces",
+  "kind": "dataset",
+  "purpose": "execution-tasks",
+  "stage": [
+   "rl",
+   "sft"
+  ],
+  "contains": "One record is a Codeforces problem with statement, input and output format, examples, editorial, rating, tags, official tests and generated tests, a generated checker and executable flag.",
+  "supports": [
+   "competitive-programming",
+   "reasoning"
+  ],
+  "languages": "Language-agnostic problems; solutions in C++ and Python in the companion CoT set",
+  "format": "HF dataset with configs default, verifiable and verifiable-prompts; splits train and test (default 9,556 and 468; verifiable 8,338 and 422); fields id, contest_id, title, description, input_format, output_format, interaction_format, note, examples, editorial, rating, tags, official_tests, official_tests_complete, generated_checker, executable, generated_tests.",
+  "size": "10,024 problems (9,556 train and 468 test in the default config)",
+  "license": "CC-BY-4.0 per the card; rights to the original Codeforces content were not verified",
+  "limitations": "Grading needs a judge that supports special checkers and interactors. The statements are scraped from codeforces.com, and the card gives CC-BY-4.0 without addressing rights in the original content.",
+  "links": {
+   "source": "https://huggingface.co/datasets/open-r1/codeforces",
+   "huggingface": "https://huggingface.co/datasets/open-r1/codeforces",
+   "paper": null,
+   "code": "https://github.com/huggingface/open-r1"
+  },
+  "popularity": {
+   "hf_downloads_30d": 32508,
+   "hf_likes": 131,
+   "used_by": [],
+   "note": "The companion trace set codeforces-cots is the one seed-coder-8b names.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "emerging",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, dataset_info, first-rows field names, catalog caveats, fetched 2026-11-25. Maturity: released 2025-03; the recipe data names the companion open-r1/codeforces-cots, not this set."
+ },
+ {
+  "id": "humaneval",
+  "name": "HumanEval",
+  "kind": "benchmark",
+  "purpose": "evaluation",
+  "stage": [
+   "eval"
+  ],
+  "contains": "One problem is a hand-written Python function stub with a docstring, a canonical solution, unit tests and an entry point name.",
+  "supports": [
+   "completion",
+   "test-generation"
+  ],
+  "languages": "Python only",
+  "format": "HF dataset openai_humaneval, one test split; fields task_id, prompt, canonical_solution, test, entry_point; scored by executing the unit tests (pass@k).",
+  "size": "164 problems",
+  "license": "MIT",
+  "limitations": "Public since 2021 and widely copied, so contamination is likely in web-scale pretraining data. The original tests are too weak, which is why HumanEval+ exists.",
+  "links": {
+   "source": "https://huggingface.co/datasets/openai/openai_humaneval",
+   "huggingface": "https://huggingface.co/datasets/openai/openai_humaneval",
+   "paper": "https://arxiv.org/abs/2107.03374",
+   "code": "https://github.com/openai/human-eval"
+  },
+  "popularity": {
+   "hf_downloads_30d": 296226,
+   "hf_likes": 420,
+   "github_stars": 3433,
+   "used_by": [
+    "starcoder2-15b",
+    "codellama-70b",
+    "deepseek-coder",
+    "deepseek-coder-v2",
+    "opencoder-8b",
+    "granite-8b-code-base"
+   ],
+   "note": "used_by lists recipes whose entry text reports a HumanEval result. github_stars is for openai/human-eval.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "established",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, dataset_info, first-rows field names, catalog caveats, GitHub API (human-eval 3,433 stars, 2026-11-25); data/model-recipes.json entries report HumanEval in their text. Maturity: released 2021, the longest-running code benchmark."
+ },
+ {
+  "id": "evalplus-humanevalplus",
+  "name": "HumanEval+ (EvalPlus)",
+  "kind": "benchmark",
+  "purpose": "evaluation",
+  "stage": [
+   "eval"
+  ],
+  "contains": "One problem is a HumanEval task with an extended test suite generated by LLM-seeded and mutation-based input generation.",
+  "supports": [
+   "completion",
+   "test-generation"
+  ],
+  "languages": "Python only",
+  "format": "HF dataset, one test split; fields task_id, prompt, canonical_solution, entry_point, test; run with the evalplus package (pip install evalplus, evalplus.evaluate).",
+  "size": "164 problems; per the EvalPlus README, 80 times more tests than HumanEval",
+  "license": "Apache-2.0",
+  "limitations": "The prompts are the same 164 as HumanEval, so prompt-level contamination and saturation remain. It fixes weak tests, not leakage.",
+  "links": {
+   "source": "https://huggingface.co/datasets/evalplus/humanevalplus",
+   "huggingface": "https://huggingface.co/datasets/evalplus/humanevalplus",
+   "paper": "https://arxiv.org/abs/2305.01210",
+   "code": "https://github.com/evalplus/evalplus"
+  },
+  "popularity": {
+   "hf_downloads_30d": 44159,
+   "hf_likes": 24,
+   "github_stars": 1843,
+   "used_by": [],
+   "note": "github_stars is for evalplus/evalplus.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "established",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, dataset_info, first-rows field names, catalog caveats, GitHub API (evalplus 1,843 stars, 2026-11-25). Maturity: released 2023-05, the standard stricter variant. No recipe entry text mentions HumanEval+ or EvalPlus."
+ },
+ {
+  "id": "mbpp",
+  "name": "MBPP (Mostly Basic Python Problems)",
+  "kind": "benchmark",
+  "purpose": "evaluation",
+  "stage": [
+   "eval"
+  ],
+  "contains": "One problem is a crowd-written entry-level Python task description with a reference solution and three assert statements.",
+  "supports": [
+   "completion",
+   "test-generation"
+  ],
+  "languages": "Python only",
+  "format": "HF dataset with configs full and sanitized; splits train, test, validation and prompt; fields task_id, text, code, test_list, test_setup_code, challenge_test_list.",
+  "size": "974 tasks; full config splits train 374, test 500, validation 90, prompt 10 (card dataset_info)",
+  "license": "CC-BY-4.0",
+  "limitations": "Each task has only about three asserts and some items are broken or ambiguous, which is why EvalPlus cleaned it. It is public since 2021, so contamination is likely.",
+  "links": {
+   "source": "https://huggingface.co/datasets/google-research-datasets/mbpp",
+   "huggingface": "https://huggingface.co/datasets/google-research-datasets/mbpp",
+   "paper": "https://arxiv.org/abs/2108.07732",
+   "code": null
+  },
+  "popularity": {
+   "hf_downloads_30d": 294522,
+   "hf_likes": 279,
+   "used_by": [
+    "codellama-70b",
+    "deepseek-coder-v2"
+   ],
+   "note": "used_by lists recipes whose entry text reports an MBPP result.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "established",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, dataset_info, first-rows field names, catalog caveats, fetched 2026-11-25. Maturity: released 2021-08. used_by from data/model-recipes.json text."
+ },
+ {
+  "id": "evalplus-mbppplus",
+  "name": "MBPP+ (EvalPlus)",
+  "kind": "benchmark",
+  "purpose": "evaluation",
+  "stage": [
+   "eval"
+  ],
+  "contains": "One problem is an MBPP task cleaned of broken items, with a code field, prompt, imports and an extended test suite.",
+  "supports": [
+   "completion",
+   "test-generation"
+  ],
+  "languages": "Python only",
+  "format": "HF dataset, one test split; fields task_id, code, prompt, source_file, test_imports, test_list, test; run with the evalplus package.",
+  "size": "378 problems; 35 times more tests than MBPP per the EvalPlus README (catalog)",
+  "license": "Apache-2.0",
+  "limitations": "The EvalPlus README states v0.2.0 trimmed MBPP+ from 399 to 378 tasks by removing broken ones. The problems are entry-level and public, so contamination is possible.",
+  "links": {
+   "source": "https://huggingface.co/datasets/evalplus/mbppplus",
+   "huggingface": "https://huggingface.co/datasets/evalplus/mbppplus",
+   "paper": "https://arxiv.org/abs/2305.01210",
+   "code": "https://github.com/evalplus/evalplus"
+  },
+  "popularity": {
+   "hf_downloads_30d": 51538,
+   "hf_likes": 22,
+   "github_stars": 1843,
+   "used_by": [],
+   "note": "github_stars is for evalplus/evalplus.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "established",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, dataset_info, first-rows field names, catalog caveats (README), fetched 2026-11-25. Maturity: released 2023-05. No recipe entry text mentions it."
+ },
+ {
+  "id": "bigcodebench",
+  "name": "BigCodeBench",
+  "kind": "benchmark",
+  "purpose": "evaluation",
+  "stage": [
+   "eval"
+  ],
+  "contains": "One task is a Python problem that needs calls into many libraries, given as a complete prompt or an instruction prompt with tests, canonical solution and the list of libraries.",
+  "supports": [
+   "completion",
+   "instruction-following",
+   "tool-use"
+  ],
+  "languages": "Python only",
+  "format": "HF dataset, default config, one split per version (v0.1.0_hf through v0.1.4), each 1,140 rows; fields task_id, complete_prompt, instruct_prompt, canonical_solution, code_prompt, test, entry_point, doc_struct, libs; run with the bigcodebench package.",
+  "size": "1,140 tasks per version split; the Hard subset has 148",
+  "license": "Apache-2.0",
+  "limitations": "The GitHub repository was archived when the catalog checked on 2026-11-24, so no further fixes are expected. Tasks are single-file Python and public since 2024, so contamination is possible.",
+  "links": {
+   "source": "https://huggingface.co/datasets/bigcode/bigcodebench",
+   "huggingface": "https://huggingface.co/datasets/bigcode/bigcodebench",
+   "paper": "https://arxiv.org/abs/2406.15877",
+   "code": "https://github.com/bigcode-project/bigcodebench"
+  },
+  "popularity": {
+   "hf_downloads_30d": 179554,
+   "hf_likes": 99,
+   "github_stars": 517,
+   "used_by": [],
+   "note": "github_stars is for bigcode-project/bigcodebench.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "established",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, dataset_info, first-rows field names, catalog caveats, GitHub API (517 stars, archived true, 2026-11-25). Maturity: released 2024-06 and stable; no recipe entry text mentions it."
+ },
+ {
+  "id": "livecodebench",
+  "name": "LiveCodeBench",
+  "kind": "benchmark",
+  "purpose": "evaluation",
+  "stage": [
+   "eval",
+   "rl"
+  ],
+  "contains": "One problem is a LeetCode, AtCoder or Codeforces contest problem with its statement, example and hidden tests, difficulty tag and release date.",
+  "supports": [
+   "competitive-programming",
+   "reasoning",
+   "debugging-repair"
+  ],
+  "languages": "Python (per catalog)",
+  "format": "HF dataset livecodebench/code_generation_lite loaded with a version_tag (release_v1 to release_v5) plus the GitHub runner for generation, self-repair, test output prediction and code execution scenarios.",
+  "size": "release_v5 has 880 problems released May 2023 to Jan 2025 (card); v1 400, v2 511, v3 612, v4 713",
+  "license": "MIT for the GitHub runner; HF card license tag cc",
+  "limitations": "The dataset grows over time, so scores from different release versions are not comparable. Training on problems released after a model cutoff, as DeepCoder did with lcbv5 train, makes those problems unusable for evaluation.",
+  "links": {
+   "source": "https://github.com/LiveCodeBench/LiveCodeBench",
+   "huggingface": "https://huggingface.co/datasets/livecodebench/code_generation_lite",
+   "paper": "https://arxiv.org/abs/2403.07974",
+   "code": "https://github.com/LiveCodeBench/LiveCodeBench"
+  },
+  "popularity": {
+   "hf_downloads_30d": 109663,
+   "hf_likes": 129,
+   "github_stars": 980,
+   "used_by": [
+    "deepseek-coder-v2",
+    "seed-coder-8b",
+    "opencodereasoning-nemotron-32b",
+    "skywork-or1-32b",
+    "acereason-nemotron-14b",
+    "deepcoder-14b-preview",
+    "smollm3-3b"
+   ],
+   "note": "used_by lists recipes whose entry text reports LiveCodeBench. HF numbers are for livecodebench/code_generation_lite. github_stars is for LiveCodeBench/LiveCodeBench.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "established",
+  "checked": "2026-11-25",
+  "evidence": "GitHub API (980 stars, last push 2025-07-16, MIT), HF API for livecodebench/code_generation_lite (downloads and likes, 2026-11-25), card text (release versions, scenarios), catalog caveats. Maturity: released 2024-03 and cited in seven recipe entries. Field names not read because the viewer is unavailable."
+ },
+ {
+  "id": "swe-bench-verified",
+  "name": "SWE-bench Verified",
+  "kind": "benchmark",
+  "purpose": "evaluation",
+  "stage": [
+   "eval"
+  ],
+  "contains": "One instance is a real GitHub issue from a Python repository with the problem statement, base commit, gold patch, test patch, FAIL_TO_PASS and PASS_TO_PASS tests and a human difficulty label.",
+  "supports": [
+   "repo-level-editing",
+   "debugging-repair",
+   "tool-use"
+  ],
+  "languages": "Python only (12 repositories, per catalog)",
+  "format": "HF dataset, one test split; fields repo, instance_id, base_commit, patch, test_patch, problem_statement, hints_text, created_at, version, FAIL_TO_PASS, PASS_TO_PASS, environment_setup_commit, difficulty; scored by running the SWE-bench harness (github.com/SWE-bench/SWE-bench) in per-instance containers.",
+  "size": "500 human-validated instances",
+  "license": "Not stated in the HF metadata; the harness repository is MIT",
+  "limitations": "OpenAI (post dated 2026-02-23) stopped reporting it after finding that 59.4% of 138 audited problems had material test or description issues. The same post found frontier models could reproduce gold patches or verbatim details for some tasks, which suggests training exposure.",
+  "links": {
+   "source": "https://huggingface.co/datasets/princeton-nlp/SWE-bench_Verified",
+   "huggingface": "https://huggingface.co/datasets/princeton-nlp/SWE-bench_Verified",
+   "paper": "https://arxiv.org/abs/2310.06770",
+   "code": "https://github.com/SWE-bench/SWE-bench"
+  },
+  "popularity": {
+   "hf_downloads_30d": 183276,
+   "hf_likes": 411,
+   "github_stars": 6241,
+   "used_by": [
+    "kimi-dev-72b",
+    "swe-agent-lm-32b",
+    "deepswe-preview",
+    "qwen3-coder-480b-a35b"
+   ],
+   "note": "used_by lists recipes whose entry text reports a SWE-bench Verified result. github_stars is for SWE-bench/SWE-bench.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "established",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, dataset_info, first-rows field names, catalog entry (which cites the OpenAI post fetched 2026-11-24), GitHub API (SWE-bench 6,241 stars, 2026-11-25), arXiv title check. Maturity: released 2024-08 and cited in four recipe entries, but its status has weakened."
+ },
+ {
+  "id": "swe-bench-multilingual",
+  "name": "SWE-bench Multilingual",
+  "kind": "benchmark",
+  "purpose": "evaluation",
+  "stage": [
+   "eval"
+  ],
+  "contains": "One instance is a GitHub issue task from a non-Python repository with the problem statement, patches, test lists, a Docker image name, an evaluation script and a log parser.",
+  "supports": [
+   "repo-level-editing",
+   "debugging-repair",
+   "tool-use"
+  ],
+  "languages": "9 languages: C, C++, Go, Java, JavaScript, TypeScript, PHP, Ruby, Rust",
+  "format": "HF dataset, one test split; fields base_commit, created_at, eval_type, image, instance_id, log_parser, repo, version, patch, test_patch, eval_script, problem_statement, hints_text, FAIL_TO_PASS, PASS_TO_PASS; run through the SWE-bench harness.",
+  "size": "300 instances from 41 repositories (card)",
+  "license": "MIT",
+  "limitations": "The pull requests span 2017 to 2025, so older instances may have been seen in training. With only 300 tasks the confidence intervals are wide.",
+  "links": {
+   "source": "https://huggingface.co/datasets/SWE-bench/SWE-bench_Multilingual",
+   "huggingface": "https://huggingface.co/datasets/SWE-bench/SWE-bench_Multilingual",
+   "paper": "https://arxiv.org/abs/2310.06770",
+   "code": "https://github.com/SWE-bench/SWE-bench"
+  },
+  "popularity": {
+   "hf_downloads_30d": 40463,
+   "hf_likes": 32,
+   "github_stars": 6241,
+   "used_by": [],
+   "note": "github_stars is for SWE-bench/SWE-bench.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "emerging",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, dataset_info, first-rows field names, catalog entry (card text fetched 2026-11-24). The paper link is the original SWE-bench paper that the card tags. Maturity: created 2025-04, not named in any recipe entry."
+ },
+ {
+  "id": "aider-polyglot",
+  "name": "Aider Polyglot benchmark",
+  "kind": "benchmark",
+  "purpose": "evaluation",
+  "stage": [
+   "eval"
+  ],
+  "contains": "One exercise is an Exercism programming exercise with instructions, a stub file and tests, in one of six languages, where the model must edit the files in aider format and pass the tests.",
+  "supports": [
+   "repo-level-editing",
+   "instruction-following"
+  ],
+  "languages": "6 languages: C++, Go, Java, JavaScript, Python, Rust",
+  "format": "A Git repository with one top-level folder per language (cpp, go, java, javascript, python, rust) holding the exercise directories; run with the aider benchmark harness.",
+  "size": "225 exercises (catalog)",
+  "license": "The repository has no license field; exercise content is copyright Exercism and used under Exercism open source licenses (README)",
+  "limitations": "The exercises are public and widely seen in training. The tasks are small and the catalog recorded gpt-5 (high) at 88.0% on the aider leaderboard, which indicates near saturation at the top.",
+  "links": {
+   "source": "https://github.com/Aider-AI/polyglot-benchmark",
+   "huggingface": null,
+   "paper": null,
+   "code": "https://github.com/Aider-AI/polyglot-benchmark"
+  },
+  "popularity": {
+   "github_stars": 230,
+   "used_by": [],
+   "note": "Not on Hugging Face. github_stars is for Aider-AI/polyglot-benchmark.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "emerging",
+  "checked": "2026-11-25",
+  "evidence": "GitHub API (230 stars, last push 2024-12-22, 2026-11-25), repository folder listing and README read, catalog entry (leaderboard read 2026-11-24). The blog post is at https://aider.chat/2024/12/21/polyglot.html (named in the README, not fetched). Maturity: released 2024-12, used by many labs, no recipe entry names it."
+ },
+ {
+  "id": "terminal-bench-2",
+  "name": "Terminal-Bench 2.0",
+  "kind": "benchmark",
+  "purpose": "evaluation",
+  "stage": [
+   "eval"
+  ],
+  "contains": "One task is a directory with a natural-language instruction, a Docker environment and tests that check a terminal-based outcome in Harbor format.",
+  "supports": [
+   "tool-use",
+   "repo-level-editing",
+   "debugging-repair"
+  ],
+  "languages": null,
+  "format": "A Git repository (harbor-framework/terminal-bench-2) with one directory per task, mirrored on Hugging Face as a read-only webdataset-style repo; run with the Harbor package (harbor run --dataset terminal-bench@2.0).",
+  "size": "89 task directories in the GitHub repository (GitHub contents API, 2026-11-25)",
+  "license": "Apache-2.0",
+  "limitations": "The Hugging Face repository is a read-only mirror and the card warns that its leaderboard is unofficial. With 89 tasks it is too small to serve as an RL pool.",
+  "links": {
+   "source": "https://github.com/harbor-framework/terminal-bench-2",
+   "huggingface": "https://huggingface.co/datasets/harborframework/terminal-bench-2.0",
+   "paper": "https://arxiv.org/abs/2601.11868",
+   "code": "https://github.com/harbor-framework/terminal-bench-2"
+  },
+  "popularity": {
+   "hf_downloads_30d": 126723,
+   "hf_likes": 62,
+   "github_stars": 451,
+   "used_by": [],
+   "note": "github_stars is for harbor-framework/terminal-bench-2; the earlier harbor-framework/terminal-bench framework repo has 1,133 stars. github_stars is for harbor-framework/terminal-bench-2.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "emerging",
+  "checked": "2026-11-25",
+  "evidence": "Read the HF card (2026-11-25), GitHub contents API (89 directories), GitHub API (451 stars, last push 2026-04-30), HF API stats, arXiv title check. Maturity: HF repo created 2026-02, not named in any recipe entry."
+ },
+ {
+  "id": "multipl-e",
+  "name": "MultiPL-E",
+  "kind": "benchmark",
+  "purpose": "evaluation",
+  "stage": [
+   "eval"
+  ],
+  "contains": "One problem is a HumanEval or MBPP task translated into another programming language, with the prompt, doctests, original task name, tests and stop tokens.",
+  "supports": [
+   "completion",
+   "test-generation"
+  ],
+  "languages": "24 language codes in the HF configs (adb, clj, cpp, cs, d, dart, elixir, go, hs, java, jl, js, lua, ml, php, pl, r, rb, rkt, rs, scala, sh, swift, ts)",
+  "format": "HF dataset with 47 configs named humaneval-<lang> (24) and mbpp-<lang> (23), each a test split; fields name, language, prompt, doctests, original, prompt_terminology, tests, stop_tokens; run with the MultiPL-E evaluation harness.",
+  "size": "12,667 rows across 47 configs (datasets-server size API); about 157 to 161 problems per HumanEval config",
+  "license": "MIT",
+  "limitations": "It inherits the saturation and contamination issues of HumanEval and MBPP, and the translated problems remain simple function-level tasks. Results for low-resource languages are sensitive to translation artifacts.",
+  "links": {
+   "source": "https://huggingface.co/datasets/nuprl/MultiPL-E",
+   "huggingface": "https://huggingface.co/datasets/nuprl/MultiPL-E",
+   "paper": "https://arxiv.org/abs/2208.08227",
+   "code": "https://github.com/nuprl/MultiPL-E"
+  },
+  "popularity": {
+   "hf_downloads_30d": 31845,
+   "hf_likes": 71,
+   "github_stars": 322,
+   "used_by": [],
+   "note": "github_stars is for nuprl/MultiPL-E.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "established",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats and config list, size API, first-rows field names, catalog caveats, GitHub API (322 stars, 2026-11-25). The catalog says translations to 18 additional languages, while the HF configs list 24 codes, so the count here follows the configs. Maturity: released 2022-08. No recipe entry text mentions it."
+ },
+ {
+  "id": "cruxeval",
+  "name": "CRUXEval",
+  "kind": "benchmark",
+  "purpose": "evaluation",
+  "stage": [
+   "eval"
+  ],
+  "contains": "One item is a short Python function with an input and an output, used to ask a model to predict the output for the input or an input for the output.",
+  "supports": [
+   "reasoning"
+  ],
+  "languages": "Python only",
+  "format": "HF dataset, one test split; fields code, input, output, id; scored by executing assertions on the predicted input or output.",
+  "size": "800 Python functions (card dataset_info)",
+  "license": "MIT",
+  "limitations": "The functions are model-generated and public since January 2024, so leakage and saturation by reasoning models are plausible. The paper found that models with high HumanEval scores did not show the same gains on CRUXEval.",
+  "links": {
+   "source": "https://huggingface.co/datasets/cruxeval-org/cruxeval",
+   "huggingface": "https://huggingface.co/datasets/cruxeval-org/cruxeval",
+   "paper": "https://arxiv.org/abs/2401.03065",
+   "code": "https://github.com/facebookresearch/cruxeval"
+  },
+  "popularity": {
+   "hf_downloads_30d": 20638,
+   "hf_likes": 22,
+   "github_stars": 174,
+   "used_by": [],
+   "note": "github_stars is for facebookresearch/cruxeval.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "established",
+  "checked": "2026-11-25",
+  "evidence": "HF API stats, size API, first-rows field names, catalog caveats, GitHub API (174 stars, archived true, 2026-11-25). Maturity: released 2024-01. No recipe entry text mentions it."
+ },
+ {
+  "id": "code-search-net",
+  "name": "CodeSearchNet",
+  "kind": "dataset",
+  "purpose": "docs-and-text",
+  "stage": [
+   "pretrain",
+   "sft"
+  ],
+  "contains": "One record is a documented function from a GitHub library, holding the repository name, file path, function name, the function code, its docstring, the language and tokenizations.",
+  "supports": [
+   "completion",
+   "instruction-following"
+  ],
+  "languages": "6 languages: Go, Java, JavaScript, PHP, Python, Ruby",
+  "format": "HF dataset with configs all, go, java, javascript, php, python, ruby, each with train, test and validation splits; fields repository_name, func_path_in_repository, func_name, whole_func_string, language, func_code_string, func_code_tokens, func_documentation_string, func_documentation_tokens, split_name, func_code_url.",
+  "size": "About 2 million (comment, code) pairs; the all config has 1,880,853 train, 100,529 test and 89,154 validation rows (card dataset_info)",
+  "license": "license:other; the repositories were filtered to licenses that allow redistribution of parts, but per-example license is not included",
+  "limitations": "The card says each example comes from a repository with its own license and that example-level license information is not included. Only functions with documentation are kept, so undocumented code is absent.",
+  "links": {
+   "source": "https://huggingface.co/datasets/code-search-net/code_search_net",
+   "huggingface": "https://huggingface.co/datasets/code-search-net/code_search_net",
+   "paper": "https://arxiv.org/abs/1909.09436",
+   "code": "https://github.com/github/CodeSearchNet"
+  },
+  "popularity": {
+   "hf_downloads_30d": 41187,
+   "hf_likes": 354,
+   "used_by": [],
+   "note": "Added because it is the standard docstring and code pair set for documentation-style training and is not in the catalog.",
+   "as_of": "2026-11-25"
+  },
+  "maturity": "established",
+  "checked": "2026-11-25",
+  "evidence": "Read the card (README via resolve/main, 2026-11-25): summary, languages, fields, source data, licensing; HF API stats; confirmed absent from the catalog by id and url. Maturity: released 2019, a long-standing docstring-code pair set. No recipe entry names it. GitHub API: github/CodeSearchNet, 2,441 stars, archived true."
+ }
+]

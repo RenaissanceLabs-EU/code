@@ -1,0 +1,8 @@
+# Python 3.11 or newer (3.12 recommended). Versions read from PyPI on 2026-11-25.
+# Install the torch build for your platform first (https://pytorch.org); 2.15.0 was the latest on PyPI.
+trl==1.18.2
+peft==0.22.0
+transformers==5.24.1
+datasets==5.2.0
+accelerate==1.16.0
+torch==2.15.0

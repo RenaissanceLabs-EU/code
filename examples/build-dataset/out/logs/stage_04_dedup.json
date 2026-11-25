@@ -1,0 +1,195 @@
+{
+  "after_exact": 633,
+  "clusters": [
+    {
+      "kept": "encodings/big5.py",
+      "pair_jaccard_max": 0.801,
+      "pair_jaccard_min": 0.801,
+      "removed": [
+        "encodings/cp950.py"
+      ],
+      "size": 2
+    },
+    {
+      "kept": "encodings/cp037.py",
+      "pair_jaccard_max": 0.978,
+      "pair_jaccard_min": 0.807,
+      "removed": [
+        "encodings/cp1026.py",
+        "encodings/cp1140.py",
+        "encodings/cp500.py"
+      ],
+      "size": 4
+    },
+    {
+      "kept": "encodings/cp1125.py",
+      "pair_jaccard_max": 0.941,
+      "pair_jaccard_min": 0.941,
+      "removed": [
+        "encodings/cp866.py"
+      ],
+      "size": 2
+    },
+    {
+      "kept": "encodings/cp1251.py",
+      "pair_jaccard_max": 0.893,
+      "pair_jaccard_min": 0.893,
+      "removed": [
+        "encodings/kz1048.py"
+      ],
+      "size": 2
+    },
+    {
+      "kept": "encodings/cp1252.py",
+      "pair_jaccard_max": 0.943,
+      "pair_jaccard_min": 0.815,
+      "removed": [
+        "encodings/cp1254.py",
+        "encodings/cp1258.py",
+        "encodings/iso8859_1.py",
+        "encodings/iso8859_15.py",
+        "encodings/iso8859_9.py",
+        "encodings/palmos.py"
+      ],
+      "size": 7
+    },
+    {
+      "kept": "encodings/cp1257.py",
+      "pair_jaccard_max": 0.803,
+      "pair_jaccard_min": 0.803,
+      "removed": [
+        "encodings/iso8859_13.py"
+      ],
+      "size": 2
+    },
+    {
+      "kept": "encodings/cp437.py",
+      "pair_jaccard_max": 0.96,
+      "pair_jaccard_min": 0.81,
+      "removed": [
+        "encodings/cp860.py",
+        "encodings/cp861.py",
+        "encodings/cp863.py",
+        "encodings/cp865.py"
+      ],
+      "size": 5
+    },
+    {
+      "kept": "encodings/cp850.py",
+      "pair_jaccard_max": 0.98,
+      "pair_jaccard_min": 0.886,
+      "removed": [
+        "encodings/cp857.py",
+        "encodings/cp858.py"
+      ],
+      "size": 3
+    },
+    {
+      "kept": "encodings/cp874.py",
+      "pair_jaccard_max": 0.977,
+      "pair_jaccard_min": 0.822,
+      "removed": [
+        "encodings/iso8859_11.py",
+        "encodings/tis_620.py"
+      ],
+      "size": 3
+    },
+    {
+      "kept": "encodings/cp932.py",
+      "pair_jaccard_max": 0.801,
+      "pair_jaccard_min": 0.801,
+      "removed": [
+        "encodings/euc_jis_2004.py",
+        "encodings/euc_jisx0213.py",
+        "encodings/euc_jp.py",
+        "encodings/shift_jis.py",
+        "encodings/shift_jis_2004.py",
+        "encodings/shift_jisx0213.py"
+      ],
+      "size": 7
+    },
+    {
+      "kept": "encodings/cp949.py",
+      "pair_jaccard_max": 0.801,
+      "pair_jaccard_min": 0.801,
+      "removed": [
+        "encodings/euc_kr.py",
+        "encodings/johab.py"
+      ],
+      "size": 3
+    },
+    {
+      "kept": "encodings/gb18030.py",
+      "pair_jaccard_max": 0.801,
+      "pair_jaccard_min": 0.801,
+      "removed": [
+        "encodings/gb2312.py",
+        "encodings/gbk.py",
+        "encodings/hz.py"
+      ],
+      "size": 4
+    },
+    {
+      "kept": "encodings/iso2022_jp.py",
+      "pair_jaccard_max": 0.801,
+      "pair_jaccard_min": 0.801,
+      "removed": [
+        "encodings/iso2022_jp_1.py",
+        "encodings/iso2022_jp_2.py",
+        "encodings/iso2022_jp_2004.py",
+        "encodings/iso2022_jp_3.py",
+        "encodings/iso2022_jp_ext.py",
+        "encodings/iso2022_kr.py"
+      ],
+      "size": 7
+    },
+    {
+      "kept": "encodings/iso8859_10.py",
+      "pair_jaccard_max": 0.834,
+      "pair_jaccard_min": 0.834,
+      "removed": [
+        "encodings/iso8859_4.py"
+      ],
+      "size": 2
+    },
+    {
+      "kept": "encodings/koi8_r.py",
+      "pair_jaccard_max": 0.923,
+      "pair_jaccard_min": 0.923,
+      "removed": [
+        "encodings/koi8_u.py"
+      ],
+      "size": 2
+    },
+    {
+      "kept": "encodings/mac_croatian.py",
+      "pair_jaccard_max": 0.949,
+      "pair_jaccard_min": 0.843,
+      "removed": [
+        "encodings/mac_iceland.py",
+        "encodings/mac_roman.py",
+        "encodings/mac_romanian.py",
+        "encodings/mac_turkish.py"
+      ],
+      "size": 5
+    }
+  ],
+  "confirmed_pairs": 96,
+  "exact_duplicate_files": [],
+  "exact_duplicates_removed": 0,
+  "files_in": 633,
+  "files_out": 589,
+  "lsh_candidate_pairs": 972,
+  "minhash": {
+    "bands": 16,
+    "confirmation": "exact Jaccard on shingle sets for each LSH candidate pair",
+    "jaccard_threshold": 0.8,
+    "num_perm": 64,
+    "rows_per_band": 4,
+    "seed": 1337,
+    "shingle_tokens": 5
+  },
+  "near_duplicate_clusters": 16,
+  "near_duplicates_removed": 44,
+  "stage": "04_dedup"
+}

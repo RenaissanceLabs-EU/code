@@ -1,0 +1,92 @@
+[
+ {
+  "title": "FIM is standard in code pretraining",
+  "text": "Seven of the reports describe fill-in-the-middle training. StarCoder2 applies it to 50% of repositories and then to each file chunk with 50% probability, DeepSeek-Coder and DeepSeek-Coder-V2 (16B only) use a 0.5 rate, Code Llama uses 0.9, and Seed-Coder uses 0.5 in regular pretraining and 0.1 in continued pretraining.",
+  "evidence_ids": [
+   "starcoder2-15b",
+   "codellama-70b",
+   "deepseek-coder",
+   "deepseek-coder-v2",
+   "seed-coder-8b",
+   "granite-8b-code-base",
+   "olmo-3-32b"
+  ]
+ },
+ {
+  "title": "Context is extended in a short stage after the base run",
+  "text": "Code Llama, DeepSeek-Coder, StarCoder2, Qwen2.5-Coder and SmolLM3 grow context in a separate stage that uses a small share of the budget, for example StarCoder2's 200B tokens at 16,384 or SmolLM3's two 50B-token stages to 32k and 64k. DeepSeek-Coder-V2 reaches 128K in two steps of 1000 training steps each, at 32K and then 128K.",
+  "evidence_ids": [
+   "codellama-70b",
+   "deepseek-coder",
+   "deepseek-coder-v2",
+   "starcoder2-15b",
+   "qwen2-5-coder",
+   "smollm3-3b"
+  ]
+ },
+ {
+  "title": "Many recipes start from an existing model",
+  "text": "Code Llama (500B tokens on Llama 2), DeepSeek-Coder-V2 (6T tokens from a DeepSeek-V2 checkpoint), Qwen2.5-Coder (5.5T tokens on Qwen2.5) and Kimi-Dev (about 150B mid-training tokens on Qwen2.5-72B-Base) all continue from earlier weights. Only Code Llama reports the comparison: an identical 7B model trained from scratch on the same data needed about 240B more tokens to match its loss.",
+  "evidence_ids": [
+   "codellama-70b",
+   "deepseek-coder-v2",
+   "qwen2-5-coder",
+   "kimi-dev-72b"
+  ]
+ },
+ {
+  "title": "Synthetic data is kept only if it executes",
+  "text": "Code Llama keeps the first of ten sampled solutions that passes generated unit tests, Qwen2.5-Coder keeps synthetic pretraining code only if an executor ran it, Seed-Coder and OpenCoder verify synthetic instruction data in a sandbox or with test cases, and Olmo 3 keeps (problem, solution, tests) triplets whose solutions pass more than 80% of tests. OpenCodeReasoning is the counterexample: it found execution filtering lowered benchmark accuracy and preferred instruction diversity.",
+  "evidence_ids": [
+   "codellama-70b",
+   "qwen2-5-coder",
+   "seed-coder-8b",
+   "opencoder-8b",
+   "olmo-3-32b",
+   "opencodereasoning-nemotron-32b"
+  ]
+ },
+ {
+  "title": "RL rewards for code are binary pass or fail on tests",
+  "text": "DeepCoder, AceReason-Nemotron, Skywork-OR1, DeepSWE-Preview and Kimi-Dev all use a 0 or 1 outcome reward, and DeepCoder says it avoids K-of-N partial credit because it can lead to reward hacking. AceReason and DeepCoder reward code only if it passes all tests, and Kimi-Dev requires the patch to pass all ground-truth unit tests.",
+  "evidence_ids": [
+   "deepcoder-14b-preview",
+   "acereason-nemotron-14b",
+   "skywork-or1-32b",
+   "deepswe-preview",
+   "kimi-dev-72b"
+  ]
+ },
+ {
+  "title": "RL prompts are filtered to a difficulty band",
+  "text": "Skywork-OR1 removes prompts the base model always or never solves, AceReason scores difficulty with DeepSeek-R1-671B and drops unsolved problems, Kimi-Dev discards prompts with pass@16 of 0 and re-adds them later, and Seed-Coder's reasoning run filters problems with correctness above 87.5%. Skywork-OR1 and Kimi-Dev state that zero-advantage groups and prompts with pass@16 of 0 do not contribute to the loss.",
+  "evidence_ids": [
+   "skywork-or1-32b",
+   "acereason-nemotron-14b",
+   "kimi-dev-72b",
+   "seed-coder-8b"
+  ]
+ },
+ {
+  "title": "Reasoning RL drops the KL term and grows context in stages",
+  "text": "DeepCoder, DeepSWE, Seed-Coder, Skywork-OR1 and AceReason remove or zero the KL loss, and DeepCoder, DeepSWE and Seed-Coder also use DAPO-style changes such as clip high or overlong filtering. AceReason extends response length from 8K to 32K in stages, Skywork-OR1 uses multi-stage context growth, and DeepCoder lengthens from 16K to 32K.",
+  "evidence_ids": [
+   "deepcoder-14b-preview",
+   "deepswe-preview",
+   "seed-coder-8b",
+   "skywork-or1-32b",
+   "acereason-nemotron-14b"
+  ]
+ },
+ {
+  "title": "A late phase of higher-quality data closes pretraining",
+  "text": "Granite Code ends with 500B tokens of 80% code and 20% language data after 3T to 4T code-only tokens, OpenCoder anneals on 100B tokens that include synthetic code textbooks and algorithmic data, and SmolLM3 raises code from 12% to 24% in its last decay phase. Seed-Coder and Olmo 3 likewise switch to high-quality and task data in continued pretraining and midtraining.",
+  "evidence_ids": [
+   "granite-8b-code-base",
+   "opencoder-8b",
+   "smollm3-3b",
+   "seed-coder-8b",
+   "olmo-3-32b"
+  ]
+ }
+]

@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Evaluating a code model during training | Renaissance Labs Code</title>
+<meta name="description" content="Held-out evaluation, execution-based correctness, repository-level tasks, regression checks, benchmark limits and contamination, and sandboxed execution of generated code.">
+<link rel="canonical" href="https://code.renaissancelabs.eu/train/evaluate/">
+<meta property="og:title" content="Evaluating a code model during training | Renaissance Labs Code"><meta property="og:description" content="Held-out evaluation, execution-based correctness, repository-level tasks, regression checks, benchmark limits and contamination, and sandboxed execution of generated code."><meta property="og:url" content="https://code.renaissancelabs.eu/train/evaluate/"><meta property="og:type" content="website">
+<meta property="og:image" content="https://code.renaissancelabs.eu/assets/og/train-evaluate.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Evaluating a code model during training | Renaissance Labs Code"><meta property="og:site_name" content="Renaissance Labs Code">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://code.renaissancelabs.eu/assets/og/train-evaluate.jpg"><meta name="twitter:title" content="Evaluating a code model during training | Renaissance Labs Code"><meta name="twitter:description" content="Held-out evaluation, execution-based correctness, repository-level tasks, regression checks, benchmark limits and contamination, and sandboxed execution of generated code."><meta name="theme-color" content="#121311">
+<link rel="icon" href="/assets/favicon.png">
+<link rel="stylesheet" href="/styles.css?v=a11fdfbf">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+  <a class="brand" href="/"><img src="/assets/mark.png" alt=""><span>Renaissance Labs &middot; Code</span></a>
+  <nav><a href="/program/">Program</a><a href="/stack/">Stack</a><a href="/languages/">Languages</a><a href="/world/">World</a><a href="/intelligence/">Intelligence</a><a href="/train/" aria-current="page">Train</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
+  <button class="theme" id="theme" type="button" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+</header>
+<main id="main">
+<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/train/">Train</a> / Step 7</div><span class="eyebrow">Step 7 of 7</span><h1><em>Evaluate</em> as part of training</h1><p class="lede">Decide the tests before you train, report results you can trust, know where benchmarks mislead, and run generated code in isolation.</p></div><div class="pathbar"><span class="eyebrow">Part two: how to train language models for code</span><ol><li><a href="/train/capability/"><span>1</span>Choose the capability</a></li><li><a href="/train/data/"><span>2</span>Choose the data</a></li><li><a href="/train/datasets/"><span>3</span>Find datasets</a></li><li><a href="/train/build-dataset/"><span>4</span>Build a dataset</a></li><li><a href="/train/tools/"><span>5</span>Pick tools</a></li><li><a href="/train/first-run/"><span>6</span>Run a first experiment</a></li><li class="cur"><a href="/train/evaluate/"><span>7</span>Evaluate</a></li></ol></div><div class="prose wide"><p>Evaluation is not the last step. It is how every earlier step gets decided. Without a fixed measurement before you start, you cannot say whether a change to the data, the method or the hyperparameters helped. This page lays out what to measure, how to run it safely, and where the standard benchmarks mislead.</p>
+
+<h2>1. Decide the tests before you train</h2>
+<p>Four kinds of check belong in every project. Set them up first, run them on the model you start from, and keep the numbers.</p>
+<div class="cmpwrap"><table class="cmp">
+<thead><tr><th>Check</th><th>Question it answers</th><th>How</th><th>Resources</th></tr></thead>
+<tbody>
+<tr><th>Held-out evaluation</th><td>Does it work on problems it has not seen?</td><td>A split of your own data that was never in training, split by repository or problem group so that related items stay together. Plus a public benchmark that fits your capability.</td><td><a href="/r/evalplus-humanevalplus/">HumanEval+ (EvalPlus)</a>, <a href="/r/livecodebench/">LiveCodeBench</a>, <a href="/r/bigcodebench/">BigCodeBench</a></td></tr>
+<tr><th>Execution-based correctness</th><td>Does the code run and give the right answer?</td><td>Run each generated solution against tests in a sandbox. Report pass@1 with a fixed sampling setup, not one lucky run.</td><td><a href="/r/evalplus-cli/">EvalPlus CLI</a>, <a href="/r/sb-bigcode-eval/">bigcode-evaluation-harness</a></td></tr>
+<tr><th>Repository-level tasks</th><td>Can it work in a real codebase, with several files and its own tests?</td><td>Issues with a container per task. Success means the failing tests now pass and the passing tests still pass.</td><td><a href="/r/swe-bench-verified/">SWE-bench Verified</a>, <a href="/r/swe-bench-multilingual/">SWE-bench Multilingual</a>, <a href="/r/swe-bench-live/">SWE-bench-Live</a></td></tr>
+<tr><th>Regression checks</th><td>Did training break something it used to do?</td><td>Run the base model's strong benchmarks and a small set of general prompts before and after. Compare per-task results, not only averages.</td><td>A frozen private set of 50 to 200 tasks from your own domain, plus a general chat check.</td></tr>
+</tbody></table></div>
+
+<h2>2. Report results so they can be trusted</h2>
+<ul>
+<li><b>Pin everything.</b> Harness version, prompt template, sampling temperature, number of samples, seed, maximum length, dataset version. Different harnesses give different numbers for the same model.</li>
+<li><b>State k.</b> pass@1 and pass@10 are different claims. The estimator is short, and the <a href="/train/how/">figure on the training page</a> lets you see how a solved-1-in-5 problem looks at each k.</li>
+</ul>
+<div class="codebox"><div class="lab"><span>Unbiased pass@k estimator</span><button class="copy" type="button">Copy</button></div><pre><span class="k">import</span> numpy <span class="k">as</span> np
+
+
+<span class="k">def</span> pass_at_k(n, c, k):
+    <span class="s">&quot;&quot;</span>&quot;Unbiased <span class="k">pass</span>@k estimator (Chen et al. <span class="n">2021</span>, Codex paper).
+
+    n: samples generated per problem, c: samples that passed, k: budget.
+    Computes <span class="n">1</span> - C(n-c, k) / C(n, k) <span class="k">in</span> a numerically stable product form.
+    <span class="s">&quot;&quot;</span>&quot;
+    <span class="k">if</span> n - c &lt; k:
+        <span class="k">return</span> <span class="n">1.0</span>
+    <span class="k">return</span> <span class="n">1.0</span> - np.prod(<span class="n">1.0</span> - k / np.arange(n - c + <span class="n">1</span>, n + <span class="n">1</span>))
+
+
+<span class="k">if</span> __name__ == <span class="s">&quot;__main__&quot;</span>:
+    <span class="k">from</span> math <span class="k">import</span> comb
+    <span class="c"># tiny check against the exact combinatorial definition</span>
+    <span class="k">for</span> n, c, k <span class="k">in</span> [(<span class="n">10</span>, <span class="n">3</span>, <span class="n">1</span>), (<span class="n">10</span>, <span class="n">3</span>, <span class="n">5</span>), (<span class="n">200</span>, <span class="n">37</span>, <span class="n">10</span>), (<span class="n">20</span>, <span class="n">0</span>, <span class="n">5</span>), (<span class="n">20</span>, <span class="n">20</span>, <span class="n">5</span>), (<span class="n">5</span>, <span class="n">1</span>, <span class="n">5</span>)]:
+        exact = <span class="n">1.0</span> - comb(n - c, k) / comb(n, k) <span class="k">if</span> n - c &gt;= k <span class="k">else</span> <span class="n">1.0</span>
+        <span class="k">assert</span> abs(pass_at_k(n, c, k) - exact) &lt; <span class="n">1e</span>-<span class="n">12</span>, (n, c, k)
+    <span class="k">assert</span> abs(pass_at_k(<span class="n">10</span>, <span class="n">3</span>, <span class="n">1</span>) - <span class="n">0.3</span>) &lt; <span class="n">1e</span>-<span class="n">12</span>  <span class="c"># pass@1 is c/n</span>
+    print(<span class="s">&quot;ok&quot;</span>, round(pass_at_k(<span class="n">200</span>, <span class="n">37</span>, <span class="n">10</span>), <span class="n">6</span>))</pre></div><p class="snote"><b>Verified:</b> ran locally, version seen: Python 3.9.6, numpy. Ran locally on Python 3.9 with numpy: matches the exact 1 - C(n-c,k)/C(n,k) definition for six cases, pass@1 equals c/n, and the check prints ok. Average the result over problems. Needs n &gt;= k. <a href="https://arxiv.org/abs/2107.03374">source</a></p>
+<ul>
+<li><b>Use more than one sample.</b> Report pass@1 from several samples per problem, and a confidence interval or the spread across seeds. A difference of one or two points on a benchmark with a few hundred problems is within noise.</li>
+<li><b>Read failures by hand.</b> Some benchmark items have flawed tests or ambiguous statements. A sample of failures tells you more than a score.</li>
+<li><b>Compare like with like.</b> Same prompt, same harness, same settings for the base and the tuned model.</li>
+</ul>
+
+<h2>3. Benchmark limits and contamination</h2>
+<p>Public benchmarks are useful and unreliable in known ways.</p>
+<ul>
+<li><b>Contamination.</b> If a benchmark's problems or solutions appear in training data, the score measures memory. This is easy to cause by accident, because benchmark problems are copied across the web and repositories. Remove benchmark problems and near-copies from the training set, and confirm with an evaluation that cannot have been seen, such as <a href="/r/livecodebench/">LiveCodeBench</a>, which records release dates so you can score only problems published after the model's training cutoff.</li>
+<li><b>Rephrased copies slip through.</b> Plain n-gram matching misses paraphrases (<a href="/r/paper-rephrased-contamination/">Rethinking Benchmark and Contamination (rephrased samples)</a>). Use a held-out set of your own as the number you trust most.</li>
+<li><b>Weak tests.</b> The original HumanEval tests accepted wrong programs, which is why <a href="/r/evalplus-humanevalplus/">HumanEval+ (EvalPlus)</a> adds many more. <a href="/r/swe-bench-verified/">SWE-bench Verified</a> is still widely reported, but OpenAI stopped using it in February 2026 because of flawed tests and contamination, so treat its numbers as upper bounds and add a contamination-resistant set such as <a href="/r/swe-bench-live/">SWE-bench-Live</a>.</li>
+<li><b>Saturation.</b> When most models score near the top, the benchmark no longer separates them. Move to a harder one.</li>
+<li><b>Task mismatch.</b> A function-writing benchmark says little about repository work or tool use. Use the benchmark that matches the capability you chose.</li>
+</ul>
+
+<h2>4. Run generated code in isolation</h2>
+<p>Model output is untrusted code. Never run it on your own machine's account. Run it in a container or virtual machine with no network, a read-only file system apart from a scratch directory, limits on memory, processes and time, and no secrets in the environment. Keep the tests out of the model's reach, since a model that can read or edit them will.</p>
+<div class="codebox"><div class="lab"><span>Hardened Docker run for untrusted generated code</span><button class="copy" type="button">Copy</button></div><pre><span class="k">docker</span> <span class="k">run</span> --rm \
+  --network none \
+  --read-only \
+  --memory 256m --memory-swap 256m \
+  --cpus <span class="n">1</span> \
+  --pids-limit <span class="n">64</span> \
+  --cap-drop ALL \
+  --security-opt no-new-privileges \
+  --user <span class="n">65534</span>:<span class="n">65534</span> \
+  --tmpfs /tmp:rw,noexec,nosuid,size=16m \
+  -v <span class="s">&quot;$PWD/job:/work:ro&quot;</span> -w /work \
+  <span class="k">python</span>:<span class="n">3.12</span>-slim timeout <span class="n">10</span> <span class="k">python</span> candidate.py</pre></div><p class="snote"><b>Verified:</b> ran locally (Docker 29.1.3); flags checked in docker/cli source, version seen: Docker 29.1.3, python:3.12-slim. Every flag exists in docker/cli container opts source (network, read-only, memory, pids-limit, cap-drop, security-opt, user, tmpfs, cpus). A near-identical command was run on Docker 29.1.3 with python:3.12-slim: the script ran as uid 65534, outbound socket failed, writes to the read-only mount failed, and writes to /tmp worked. Kernel shared with host: for adversarial code add gVisor/Firecracker and seccomp. The timeout is the coreutils one inside the image (not separately tested); also enforce a wall-clock kill from the outside (docker kill). <a href="https://github.com/docker/cli/blob/master/cli/command/container/opts.go">source</a> <a href="https://docs.docker.com/reference/cli/docker/container/run/">source</a></p>
+<p>A Docker container shares the kernel of the Linux host (or of Docker Desktop's Linux VM), so stronger isolation adds a user-space kernel such as gVisor or a microVM such as Firecracker. The tools directory lists the options. For RL, run the reward function inside the sandbox and return only a number. The snippet below limits time and resources but does not isolate anything by itself:</p>
+<div class="codebox"><div class="lab"><span>Reward function: run code plus tests in a subprocess with limits</span><button class="copy" type="button">Copy</button></div><pre><span class="k">import</span> os
+<span class="k">import</span> subprocess
+<span class="k">import</span> sys
+<span class="k">import</span> tempfile
+
+<span class="k">try</span>:
+    <span class="k">import</span> resource  <span class="c"># POSIX only</span>
+<span class="k">except</span> ImportError:  <span class="c"># pragma: no cover</span>
+    resource = <span class="k">None</span>
+
+
+<span class="k">def</span> _limits(cpu_seconds, mem_bytes):
+    <span class="k">def</span> apply():
+        <span class="k">if</span> resource <span class="k">is</span> <span class="k">None</span>:
+            <span class="k">return</span>
+        os.setsid()
+        resource.setrlimit(resource.RLIMIT_CPU, (cpu_seconds, cpu_seconds))
+        resource.setrlimit(resource.RLIMIT_FSIZE, (<span class="n">1</span> &lt;&lt; <span class="n">20</span>, <span class="n">1</span> &lt;&lt; <span class="n">20</span>))
+        resource.setrlimit(resource.RLIMIT_CORE, (<span class="n">0</span>, <span class="n">0</span>))
+        <span class="k">if</span> sys.platform.startswith(<span class="s">&quot;linux&quot;</span>):  <span class="c"># RLIMIT_AS is unreliable on macOS</span>
+            resource.setrlimit(resource.RLIMIT_AS, (mem_bytes, mem_bytes))
+            resource.setrlimit(resource.RLIMIT_NPROC, (<span class="n">64</span>, <span class="n">64</span>))
+    <span class="k">return</span> apply
+
+
+<span class="k">def</span> run_tests(code, tests, timeout=<span class="n">5.0</span>, mem_mb=<span class="n">512</span>):
+    <span class="s">&quot;&quot;</span>&quot;Return <span class="n">1.0</span> <span class="k">if</span> `code` followed by `tests` exits <span class="n">0</span> within `timeout` seconds, <span class="k">else</span> <span class="n">0.0</span>.
+
+    NOT a security sandbox: no network <span class="k">or</span> filesystem isolation. Use Docker/gVisor <span class="k">for</span> untrusted code.
+    <span class="s">&quot;&quot;</span>&quot;
+    program = code + <span class="s">&quot;\n\n&quot;</span> + tests + <span class="s">&quot;\n&quot;</span>
+    <span class="k">with</span> tempfile.TemporaryDirectory() <span class="k">as</span> tmp:
+        path = os.path.join(tmp, <span class="s">&quot;main.py&quot;</span>)
+        <span class="k">with</span> open(path, <span class="s">&quot;w&quot;</span>) <span class="k">as</span> f:
+            f.write(program)
+        <span class="k">try</span>:
+            proc = subprocess.<span class="k">run</span>(
+                [sys.executable, <span class="s">&quot;-I&quot;</span>, path], cwd=tmp, stdin=subprocess.DEVNULL,
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=timeout,
+                env={<span class="s">&quot;PATH&quot;</span>: os.environ.get(<span class="s">&quot;PATH&quot;</span>, <span class="s">&quot;&quot;</span>), <span class="s">&quot;PYTHONHASHSEED&quot;</span>: <span class="s">&quot;0&quot;</span>},
+                preexec_fn=_limits(int(timeout) + <span class="n">1</span>, mem_mb &lt;&lt; <span class="n">20</span>),
+            )
+        <span class="k">except</span> subprocess.TimeoutExpired:
+            <span class="k">return</span> <span class="n">0.0</span>
+        <span class="k">return</span> <span class="n">1.0</span> <span class="k">if</span> proc.returncode == <span class="n">0</span> <span class="k">else</span> <span class="n">0.0</span>
+
+
+<span class="k">if</span> __name__ == <span class="s">&quot;__main__&quot;</span>:
+    tests = <span class="s">&quot;assert add(2, 3) == 5&quot;</span>
+    <span class="k">assert</span> run_tests(<span class="s">&quot;def add(a, b):\n    return a + b&quot;</span>, tests) == <span class="n">1.0</span>
+    <span class="k">assert</span> run_tests(<span class="s">&quot;def add(a, b):\n    return a * b&quot;</span>, tests) == <span class="n">0.0</span>
+    <span class="k">assert</span> run_tests(<span class="s">&quot;while True:\n    pass&quot;</span>, tests, timeout=<span class="n">1.0</span>) == <span class="n">0.0</span>
+    <span class="k">assert</span> run_tests(<span class="s">&quot;def add(a, b:\n&quot;</span>, tests) == <span class="n">0.0</span>  <span class="c"># syntax error</span>
+    print(<span class="s">&quot;ok: pass=1.0 fail=0.0 timeout=0.0 syntax-error=0.0&quot;</span>)</pre></div><p class="snote"><b>Verified:</b> ran locally, version seen: Python 3.9.6. Ran locally on Python 3.9 (macOS): passing example returns 1.0, failing 0.0, infinite loop 0.0 (timeout), syntax error 0.0. NOT a security sandbox: no network or filesystem isolation, and memory/process rlimits are applied only on Linux. Use inside a container (see docker-hardened-sandbox) for untrusted code. </p>
+
+<h2>5. Evaluation inside the training loop</h2>
+<ol class="steps">
+<li><h3>Baseline</h3><p>Run all four checks on the starting model. Save the outputs, the settings and the harness version.</p></li>
+<li><h3>Small experiment</h3><p>Train on a small slice for a short run. Re-run the fast checks. If nothing moves, the problem is the data or the objective, not the scale.</p></li>
+<li><h3>Compare per task</h3><p>Look at which tasks went from fail to pass and which went the other way. Gains that all come from one task family point to leakage or a narrow fix.</p></li>
+<li><h3>Gate</h3><p>Before any larger run, require the held-out score to improve, regressions to stay within a threshold you set in advance, and a sample of passing outputs to look correct when read.</p></li>
+<li><h3>Repeat with one change</h3><p>Change one thing at a time: the data, the filter, the learning rate. Record each run's settings and results in the experiment tracker.</p></li>
+</ol>
+<p>The <a href="/train/first-run/">first training run</a> applies this loop to a small fine-tune end to end.</p>
+</div><div class="cta-row" style="margin-top:34px"><a class="btn" href="/train/first-run/">&larr; Run a first experiment</a></div></div></div>
+</main>
+<footer class="wrap foot">
+  <a class="brand" href="https://renaissancelabs.eu"><img src="/assets/mark.png" alt="">Renaissance Labs</a>
+  <div class="foot-links"><a href="/catalog/">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
+</footer>
+<script src="/app.js?v=a11fdfbf" defer></script>
+<script src="/lang.js?v=a11fdfbf" defer></script><script src="/figs.js?v=a11fdfbf" defer></script></body>
+</html>

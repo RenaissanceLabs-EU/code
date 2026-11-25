@@ -1,0 +1,36 @@
+{
+  "counts": {
+    "code_corpus": {
+      "test": 49,
+      "train": 523,
+      "validation": 16
+    },
+    "docstring_pairs": {
+      "test": 318,
+      "train": 2909,
+      "validation": 244
+    }
+  },
+  "docstring_filter": {
+    "docstring_chars": [
+      30,
+      1500
+    ],
+    "requires": "function body has a statement besides the docstring; test pairing dropped (no top-level test dir)",
+    "response_lines": [
+      3,
+      60
+    ]
+  },
+  "license_counts_in_corpus": {
+    "Apache-2.0": 2,
+    "MIT OR Apache-2.0": 1,
+    "PSF-2.0": 585
+  },
+  "n_tokens_estimate_by_split": {
+    "test": 207130,
+    "train": 2005781,
+    "validation": 125272
+  },
+  "stage": "06_format"
+}

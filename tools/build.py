@@ -125,7 +125,7 @@ def snippet_html(sid):
 VER = hashlib.md5(b"".join(open(p, "rb").read() for p in [os.path.join(OUT, "styles.css"), os.path.join(ROOT, "site_app.js"), os.path.join(ROOT, "site_recipe.js"), os.path.join(ROOT, "site_lang.js"), os.path.join(ROOT, "site_figs.js")] if os.path.exists(p))).hexdigest()[:8]
 PAGES_OUT, SITEMAP = {}, []
 NAV = [("/program/", "Program", "program"), ("/stack/", "Stack", "stack"), ("/languages/", "Languages", "languages"), ("/world/", "World", "world"), ("/intelligence/", "Intelligence", "intelligence"), ("/train/", "Train", "train"), ("/about/", "About", "about")]
-TRAIN_KEYS = ("catalog", "recipe", "guide", "pitfalls")
+TRAIN_KEYS = ("catalog", "recipe", "guide", "pitfalls", "how", "reading", "models", "capability", "data", "datasets", "tools", "build-dataset", "first-run", "evaluate")
 
 def shell(path, title, desc, body, current="", og=None, extra_head="", extra_foot=""):
     url = SITE + path
@@ -345,7 +345,7 @@ def in_lang(i): return [r for r in RES if i in r["langs"]]
 MEASURED = ("dataset", "benchmark", "environment")
 def lang_counts(i):
     rs = in_lang(i); return {k: sum(1 for r in rs if r["kind"] == k) for k in MEASURED}
-FIG_COUNT = len({d["fig"] for d in PROGRAM + STACK if d.get("fig")}) + 4   # + home, the two on the intelligence page, and the pass-rate figure in the guide
+FIG_COUNT = len({d["fig"] for d in PROGRAM + STACK if d.get("fig")}) + 6   # + home, the two on the intelligence page, and the pass-rate figure in the guide
 
 def fig_html(name, title, cap, attrs=""):
     return ('<figure class="fig live" data-fig="%s"%s><div class="fig-head"><span class="eyebrow">Interactive</span><h3>%s</h3></div>'
@@ -475,7 +475,7 @@ def page_recipe():
 # ---------------------------------------------------------------- the maps: pages
 def res_block(items, link, what, head="<h2>Training resources filed here</h2>"):
     """Resources filed under a form, level or language: counts by kind, the first cards, and a link to the full filtered catalog."""
-    if not items: return head + '<p class="gapnote">Nothing in the catalog is filed here. That is a finding, not an omission we are hiding: we looked, and open material for %s is scarce or absent.</p>' % e(what)
+    if not items: return head + '<p class="gapnote">Nothing in the catalog is filed here yet: open training material for %s is scarce or absent.</p>' % e(what)
     order = {"benchmark": 0, "environment": 1, "dataset": 2, "tool": 3, "model": 4, "recipe": 5, "paper": 6}
     items = sorted(items, key=lambda r: (order.get(r["kind"], 9), r["name"].lower()))
     counts = " ".join('<span class="pill">%d %s%s</span>' % (n, e(KINDS[k].lower()), "" if n == 1 else "s") for k, n in ((k, sum(1 for r in items if r["kind"] == k)) for k in order) if n)
@@ -530,7 +530,7 @@ def page_node(kind, d):
 {('<div class="notice"><b>What to notice</b>%s</div>' % rich(d["notice"])) if d.get("notice") else ""}
 <h2>Central ideas</h2>{ideas_html(d.get("ideas"))}
 {landmarks_html(d["id"])}
-<h2>What this means for training models</h2>{rich(d.get("models"))}
+<h2>What this means for training models</h2>{rich(d.get("models"))}<p class="trainlink">Continue in part two: <a href="/train/data/">which training data and feedback signals this gives</a> &middot; <a href="/train/capability/">choose a capability to train</a> &middot; <a href="/train/evaluate/">how to evaluate</a>.</p>
 {res_block(items, cat, what)}
 {nav}</div></div>
 <aside class="aside"><div class="panel"><h3>{"The forms of a program" if prog else "The stack, top to bottom"}</h3><ol class="sidenav">{side}</ol></div>{extra}</aside></div></div>''')
@@ -651,10 +651,9 @@ def page_world():
     for s in WORLD["systems"]:
         chips = "".join(lang_chip(x, True) for x in s.get("languages") or []) + "".join('<a class="lchip sm lvchip" href="/stack/%s/">%s</a>' % (x, e(LEVEL[x]["title"])) for x in s.get("levels") or [] if x in LEVEL)
         sysh += '<article class="wsys" id="%s"><span class="eyebrow">%s</span><h3>%s</h3><p class="claim">%s</p>%s%s%s</article>' % (
-            e(s["id"]), e(DOMAIN.get(s.get("domain"), s.get("domain") or "")), e(s["title"]), inline(s["claim"]), facts_html(s.get("facts")), ('<div class="chipsrow">%s</div>' % chips) if chips else "", ('<p class="caveat"><b>How solid is this</b> %s</p>' % inline(s["caveat"])) if s.get("caveat") else "")
+            e(s["id"]), e(DOMAIN.get(s.get("domain"), s.get("domain") or "")), e(s["title"]), inline(s["claim"]), facts_html(s.get("facts")), ('<div class="chipsrow">%s</div>' % chips) if chips else "", "")
     fail = "".join('<li id="%s"><span class="yr">%s</span><div><b>%s</b><p>%s</p><p class="lesson">%s <a class="src" href="%s">source</a></p></div></li>' % (e(f["id"]), f["year"], e(f["title"]), inline(f["what"]), inline(f["lesson"]), e(f["url"])) for f in sorted(WORLD["failures"], key=lambda x: x["year"]))
-    liv = "".join('<article class="wsys" id="%s"><h3>%s</h3><p class="claim">%s</p>%s%s</article>' % (e(x["id"]), e(x["title"]), inline(x["text"]), facts_html(x.get("facts")), ('<p class="caveat"><b>How solid is this</b> %s</p>' % inline(x["caveat"])) if x.get("caveat") else "") for x in WORLD["living"])
-    unv = "".join("<li>%s</li>" % inline(x) for x in opt_json("data/world-unverified.json", []))
+    liv = "".join('<article class="wsys" id="%s"><h3>%s</h3><p class="claim">%s</p>%s%s</article>' % (e(x["id"]), e(x["title"]), inline(x["text"]), facts_html(x.get("facts")), "") for x in WORLD["living"])
     body = wrap(f'''<div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / Code in the world</div><span class="eyebrow">Map four</span><h1>What the world <em>runs on</em></h1>
 <p class="lede">Most of the rules a modern society follows are no longer carried out by people. A payment clears, a plane holds its course, a dose is measured, a message finds its way across the planet, and at each step the thing doing the work is a program somebody wrote, often long ago. This page collects what can actually be sourced about that, and says where the popular numbers cannot be.</p></div>
 <div class="prose wide"><h2>Where code holds things up</h2><p>Each claim below links to the document it was read from, with the date. Where a field publishes standards instead of statistics, we cite the standard.</p></div>
@@ -663,22 +662,24 @@ def page_world():
 <ol class="marks fails">{fail}</ol>
 <h2>Why code is never finished</h2><p>A bridge, once built, stays built. Software sits on other software that keeps moving, so a program left alone slowly stops working. Keeping it alive is most of the work.</p></div>
 <div class="wgrid">{liv}</div>
-<div class="prose wide">{('<h2>What we could not verify</h2><p>These claims are repeated widely. We looked for a primary source for each and did not find one we could read, so none of them appears above.</p><ul>%s</ul>' % unv) if unv else ""}
-<h2>What this means for training models</h2><p>Three things follow for anyone teaching a model to write code. Most real code is old, large and written in languages that benchmarks barely touch. The cost of a mistake is set by where the code runs, not by how hard it was to write. And the dominant activity is maintenance: reading and changing what exists. The <a href="/program/change/">change</a> page and the <a href="/languages/">languages map</a> show how far current open training material is from that picture.</p></div></div>''')
+<div class="prose wide"><h2>What this means for training models</h2><p>Three things follow for anyone teaching a model to write code. Most real code is old, large and written in languages that benchmarks barely touch. The cost of a mistake is set by where the code runs, not by how hard it was to write. And the dominant activity is maintenance: reading and changing what exists. The <a href="/program/change/">change</a> page and the <a href="/languages/">languages map</a> show how far current open training material is from that picture.</p></div></div>''')
     shell("/world/", "Code in the world: what civilization runs on | Renaissance Labs Code", "Sourced facts about the software that payments, aviation, medicine, the internet and science depend on, the best documented failures, and why software is never finished.", body, "world", og="world")
 
 def page_train():
+    steps = "".join('<a class="pstep" href="%s"><span class="pn">%d</span><div><h3>%s</h3><p>%s</p></div></a>' % (h, n + 1, e(t), e(d)) for n, (k, h, t, d) in enumerate(PATH))
+    ref = "".join('<a class="path" href="%s"><h3>%s</h3><p>%s</p></a>' % (h, e(t), e(d)) for h, t, d in PATH_REF)
     rail = "".join(f'<a class="node st-{s["id"]}" href="/stage/{s["id"]}/"><span class="n">{s["n"]}</span><h3>{e(s["title"].split(":")[0])}</h3><p>{e(s["tagline"])}</p><span class="ct"><b>{stage_count(s["id"])}</b> resources</span></a>' for s in STAGES)
-    body = wrap(f'''<div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / Train</div><span class="eyebrow">Train</span><h1>Teaching a model to <em>write</em> code</h1>
-<p class="lede">The maps on this site say what code is. This section is the practical side: {len(RES)} verified datasets, benchmarks, environments and tools, a planner that turns your model size and budget into an ordered recipe, and an honest guide to what works.</p>
-<div class="cta-row"><a class="btn primary" href="/recipe/">Build a recipe</a><a class="btn" href="/guide/">Read the guide</a><a class="btn" href="/catalog/">Browse the catalog</a><a class="btn" href="/pitfalls/">Pitfalls</a></div></div>
-<div class="prose"><h2>Why code can be trained on at all</h2><p>A model learns from feedback, and code is unusual in how much feedback a machine can give without a person. Each <a href="/program/">form of a program</a> is a check: it parses or it does not, the types agree or they do not, the tests pass or fail, the proof is accepted or rejected. Training a coding model is the craft of turning those checks into data and rewards without fooling yourself.</p></div>
+    body = wrap(f'''<div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / Train</div><span class="eyebrow">Part two</span><h1>How to train language models for <em>code</em></h1>
+<p class="lede">Part one explained what code is. This part connects that understanding to the practical decisions in training a model: what capability to build, what data to use and why, how to turn it into a documented dataset, which tools to run, and how to tell whether the training worked. Every resource was verified against its source, and each page marks what is established practice and what is still emerging.</p>
+<p class="lede" style="margin-top:10px">Read it in order for a first project, or jump to the step you need. For the end to end picture first, read <a href="/train/how/" style="color:var(--accent)">how a code model is trained</a>.</p></div>
+<div class="pathlist">{steps}</div>
+<section class="blk"><div class="sec-head"><div><span class="eyebrow">Reference</span><h2>Go deeper</h2></div></div><div class="paths four">{ref}</div></section>
 <section class="blk"><div class="sec-head"><div><span class="eyebrow">The pipeline</span><h2>Six stages, one loop</h2><p>Measure first, change one thing, measure again. Each stage has a page with the decisions, the pitfalls and the resources.</p></div></div>
 <div class="rail">{rail}</div>
 <p class="loopnote"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8M21 3v5h-5M21 12a9 9 0 0 1-15.5 6.2L3 16M3 21v-5h5"/></svg>After every stage, go back to Evaluation and measure again with the same settings.</p></section>
 <section class="blk"><div class="sec-head"><div><span class="eyebrow">Taxonomy</span><h2>What exists, by task and stage</h2><p>Click a cell to see the entries. Hatched cells are empty in this catalog.</p></div></div>{matrix_html()}
 <p class="mnote">Counts are entries in this catalog (checked {e(CHECKED)}), not a census of the field.</p></section></div>''')
-    shell("/train/", "Train a coding model: catalog, recipe builder and guide | Renaissance Labs Code", "Verified datasets, RL environments, benchmarks and tools for training coding models, with a recipe builder and a guide.", body, "train", og="train")
+    shell("/train/", "How to train language models for code: a learning path | Renaissance Labs Code", "A structured path from choosing a capability to a first training run: data, datasets, building a documented dataset, tools, recipes and evaluation, with verified resources.", body, "train", og="train")
 
 def page_home():
     nlang = len(LANGLIST)
@@ -695,14 +696,17 @@ def page_home():
 <p>Once written, a program acts alone. It can be copied without loss and run a billion steps a second, for decades, with nobody watching. Knowledge that used to live only in people (how to compute a payroll, route a call, land an aircraft) now exists outside any person and does the work itself. Code is the most general way we have found to put reasoning outside a human head and have it keep working.</p>
 <p>Its nearest relative is mathematics. Mathematics says what is true, and code says what to do. The two meet exactly: a constructive proof can be read as a program, and a program can be proved. Our sister site <a href="https://math.renaissancelabs.eu">maps mathematics</a>. This one maps the half that moves.</p>
 <p>The newest programs were not written at all. A trained model is a program whose behavior was found by a search over numbers, and such models now write code themselves. Code is the best ground for teaching them, for one reason: at many levels, a machine can check the answer.</p></div></div></section>
+<div class="partlabel"><span>Part one</span><h2>What code is</h2><p>Four maps of the subject, from the program down to the transistor and out to the world, with an essay on computation and intelligence.</p></div>
 <section class="blk"><div class="sec-head"><div><span class="eyebrow">Map one</span><h2>What a program is</h2><p>One program, eight forms. Each is a different answer to "what is this?", and each gives a machine a different way to check it.</p></div><a class="btn" href="/program/">Follow the program &rarr;</a></div>{program_strip()}</section>
 <section class="blk"><div class="sec-head"><div><span class="eyebrow">Map two</span><h2>The stack</h2><p>Nine levels, each built entirely from the one below. Intent enters at the top. Physics takes over at the bottom. The count on the right is how much open training material exists at each level.</p></div><a class="btn" href="/stack/">Read the stack &rarr;</a></div>{stack_slabs()}</section>
 <section class="blk"><div class="sec-head"><div><span class="eyebrow">Map three</span><h2>The languages</h2><p>{nlang} languages, from hardware description to proof, each placed on the stack, each showing the same program, each with a count of what exists to train on it.</p></div><a class="btn" href="/languages/">See all {nlang} &rarr;</a></div>
 <div class="timeline">{"".join('<a class="tl fam-%s" href="/languages/%s/"><span>%d</span>%s</a>' % (l["family"], l["id"], l["year"], e(l["name"])) for l in sorted(LANGLIST, key=lambda x: (x["year"], x["name"])))}</div></section>
-<section class="blk"><div class="paths">
+<section class="blk"><div class="paths two">
 <a class="path" href="/world/"><span class="eyebrow">Map four</span><h3>What the world runs on</h3><p>Payments, aircraft, medicine, the internet: sourced facts about the code underneath, the best documented failures, and why software is never finished.</p></a>
-<a class="path" href="/intelligence/"><span class="eyebrow">The idea underneath</span><h3>Code and intelligence</h3><p>What can be computed, what cannot, why a three-line program can defeat prediction, and what changes when programs are learned instead of written.</p></a>
-<a class="path" href="/train/"><span class="eyebrow">The practical side</span><h3>Train a model to code</h3><p>{len(RES)} verified datasets, benchmarks, environments and tools, a recipe builder, and a guide with the caveats left in.</p></a></div></section></div>'''
+<a class="path" href="/intelligence/"><span class="eyebrow">The idea underneath</span><h3>Code and intelligence</h3><p>What can be computed, what cannot, why a three-line program can defeat prediction, and what changes when programs are learned instead of written.</p></a></div></section>
+<div class="partlabel two"><span>Part two</span><h2>How to train language models for code</h2><p>From a capability to a first training run: what to build, which data and tools to use and why, how to make a documented dataset, and how to evaluate it. {len(RES)} verified resources behind it.</p></div>
+<section class="blk"><div class="pathlist">{"".join('<a class="pstep" href="%s"><span class="pn">%d</span><div><h3>%s</h3><p>%s</p></div></a>' % (h, n + 1, e(t), e(d)) for n, (k, h, t, d) in enumerate(PATH))}</div>
+<p style="margin-top:14px"><a class="btn" href="/train/how/">How a code model is trained</a> <a class="btn" href="/train/models/">How open models were trained</a> <a class="btn" href="/train/reading/">Reading list</a> <a class="btn" href="/catalog/">Catalog</a> <a class="btn" href="/recipe/">Recipe builder</a></p></section></div>'''
     shell("/", "Renaissance Labs Code: what code is, mapped from transistors to trained models",
           "What a program is, the stack it runs on, %d languages, what the world runs on, and %d verified resources for training models to write code. With live figures." % (nlang, len(RES)), body, og="home", extra_foot=FIG_JS)
 
@@ -723,7 +727,7 @@ def exports():
     json.dump({"generated": CHECKED, "site": SITE, "count": len(clean), "resources": clean}, open(os.path.join(OUT, "data/resources.json"), "w", encoding="utf-8"), indent=1, ensure_ascii=False)
     json.dump(TAX, open(os.path.join(OUT, "data/taxonomy.json"), "w", encoding="utf-8"), indent=1, ensure_ascii=False)
     json.dump(list(SNIPS.values()), open(os.path.join(OUT, "data/snippets.json"), "w", encoding="utf-8"), indent=1, ensure_ascii=False)
-    for name, obj in (("program", PROGRAM), ("stack", STACK), ("languages", LANGLIST), ("landmarks", LANDMARKS), ("world", WORLD)):
+    for name, obj in (("program", PROGRAM), ("stack", STACK), ("languages", LANGLIST), ("landmarks", LANDMARKS), ("world", WORLD), ("reading", READING), ("model-recipes", MODELREC), ("recipe-patterns", PATTERNS)):
         json.dump(obj, open(os.path.join(OUT, "data/%s.json" % name), "w", encoding="utf-8"), indent=1, ensure_ascii=False)
     if RECIPES: json.dump(RECIPES, open(os.path.join(OUT, "data/recipes.json"), "w", encoding="utf-8"), indent=1, ensure_ascii=False)
     buf = io.StringIO(); w = csv.writer(buf)
@@ -742,9 +746,9 @@ def llms():
     L += ["", "## Languages", "- [Language map](%s/languages/)" % SITE]
     for l in sorted(LANGLIST, key=lambda x: x["name"].lower()): L.append("- [%s](%s/languages/%s/): %d, %s family. %s" % (l["name"], SITE, l["id"], l["year"], FAM[l["family"]][1].lower(), strip_md(first_para(l["what"]))))
     L += ["", "## More", "- [Code in the world](%s/world/): sourced facts, failures, and why software is never finished" % SITE, "- [Code and intelligence](%s/intelligence/): computation, its limits, and learned programs" % SITE,
-          "- [Train](%s/train/): the practical section" % SITE, "- [Catalog](%s/catalog/): all %d resources, filterable" % (SITE, len(RES)), "- [Recipe builder](%s/recipe/): ordered plan from model size, budget, languages and goal" % SITE, "- [Guide: how to improve any model at coding](%s/guide/)" % SITE, "- [Pitfalls](%s/pitfalls/)" % SITE, "- [About and method](%s/about/)" % SITE, "", "## Training stages"]
+          "- [Part two: how to train language models for code](%s/train/): a learning path" % SITE, ] + ["- [%s](%s%s): %s" % (t, SITE, h, d) for k, h, t, d in PATH] + [ "- [How a code model is trained](%s/train/how/): pretraining, fill-in-the-middle, SFT, preference data, RL with test rewards, evaluation" % SITE, "- [How open code models were trained](%s/train/models/): recipes compared side by side" % SITE, "- [Reading list](%s/train/reading/): papers, reports, posts and courses on training code models" % SITE, "- [Catalog](%s/catalog/): all %d resources, filterable" % (SITE, len(RES)), "- [Recipe builder](%s/recipe/): ordered plan from model size, budget, languages and goal" % SITE, "- [Guide: how to improve any model at coding](%s/guide/)" % SITE, "- [Pitfalls](%s/pitfalls/)" % SITE, "- [About and method](%s/about/)" % SITE, "", "## Training stages"]
     for s in STAGES: L.append("- [%s](%s/stage/%s/): %s (%d resources)" % (s["title"], SITE, s["id"], s["tagline"], stage_count(s["id"])))
-    L += ["", "## Data"] + ["- [%s](%s/data/%s)" % (f, SITE, f) for f in ("resources.json", "resources.csv", "program.json", "stack.json", "languages.json", "landmarks.json", "world.json", "taxonomy.json", "snippets.json")] + ["", "## Resources"]
+    L += ["", "## Data"] + ["- [%s](%s/data/%s)" % (f, SITE, f) for f in ("resources.json", "resources.csv", "program.json", "stack.json", "languages.json", "landmarks.json", "world.json", "reading.json", "model-recipes.json", "taxonomy.json", "snippets.json")] + ["", "## Resources"]
     for s in STAGES:
         L += ["", "### " + s["title"]]
         for r in sorted((r for r in RES if r["primary"] == s["id"]), key=lambda r: r["name"].lower()):
@@ -771,8 +775,256 @@ def shell_404():
     shell("/404/", "Not found | Renaissance Labs Code", "Page not found.", wrap('<div class="page"><div class="page-head"><span class="eyebrow">404</span><h1>That page is not on the map.</h1><p class="lede"><a href="/catalog/" style="color:var(--accent)">Browse the catalog</a> or <a href="/" style="color:var(--accent)">go home</a>.</p></div></div>'))
     h = PAGES_OUT.pop("/404/"); SITEMAP.pop(); return h
 
+
+# ---------------------------------------------------------------- Train: how code models are trained
+READING = opt_json("data/reading.json", [])
+MODELREC = opt_json("data/model-recipes.json", [])
+PATTERNS = opt_json("data/recipe-patterns.json", [])
+READ_SECTIONS = {1: "Foundations", 2: "Pretraining data", 3: "Model families", 4: "Instruction data and SFT", 5: "Preference and RL", 6: "Evaluation", 7: "Systems and tooling"}
+READ_TYPES = {"paper": "Paper", "technical-report": "Technical report", "blog": "Blog post", "course": "Course", "talk": "Talk", "book": "Book", "code-walkthrough": "Code walkthrough"}
+LEVEL_LABEL = {"intro": "Intro", "intermediate": "Intermediate", "hard": "Hard"}
+for x in READING:
+    x["stages"] = [t for t in x.get("stages") or [] if t in STAGE] or ["pretrain"]
+    x["catalog_ids"] = [i for i in x.get("catalog_ids") or [] if i in RB]
+    x["primary"] = x["stages"][0]; x["section"] = x.get("section") if x.get("section") in READ_SECTIONS else 7
+def code_token(m):
+    rel, label, rng = m.group(1), m.group(2), (m.group(3) or "").strip()
+    full = os.path.join(ROOT, rel); assert os.path.exists(full), "code token: missing " + rel
+    lines = open(full, encoding="utf-8").read().rstrip("\n").split("\n")
+    if rng:
+        a, b = [int(x) for x in rng.split("-")]; lines = lines[a - 1:b]
+    return plainbox("\n".join(lines), label)
+def expand_fig_tokens(t):
+    t = re.sub(r"\{\{code:([^|}]+)\|([^|}]*)\|([^}]*)\}\}", code_token, t)
+    t = re.sub(r"\{\{fig:(\w+)\|([^|]+)\|([^}]+)\}\}", lambda m: fig_html(m.group(1), m.group(2), m.group(3)), t)
+    return re.sub(r"\{\{marks:(\w+)\|([^}]+)\}\}", lambda m: landmarks_html(m.group(1), m.group(2)), t)
+
+
+# ---------------------------------------------------------------- Part two: the learning path
+PATH = [
+    ("capability", "/train/capability/", "Choose the capability", "Completion, instruction following, repair, repository editing, test generation, tool use. Then the approach: scratch, continued pretraining, SFT, preference, RL."),
+    ("data", "/train/data/", "Choose the data", "What raw code, instruction pairs, patches, tests, traces and synthetic data each teach, the tradeoffs, and how the forms of a program map onto training signals."),
+    ("datasets", "/train/datasets/", "Find datasets", "A curated starting set of training datasets, benchmarks and environments, with contents, languages, format, size, limits and evidence of use."),
+    ("build-dataset", "/train/build-dataset/", "Build a dataset", "A worked, runnable example from source files to a versioned, documented Hugging Face dataset: licenses, filtering, dedup, secrets, splits, contamination."),
+    ("tools", "/train/tools/", "Pick tools", "Collection, processing, tokenization, training, tracking, execution and evaluation tools, with a minimal setup and options for scale."),
+    ("first-run", "/train/first-run/", "Run a first experiment", "Fine-tune a small code model on a prepared dataset: base model, data, config, commands, hardware, evaluation."),
+    ("evaluate", "/train/evaluate/", "Evaluate", "Held-out tests, execution-based checks, repository tasks, regression checks, contamination, and running generated code in isolation."),
+]
+PATH_REF = [("/train/how/", "How a code model is trained", "The stages and why they work, with figures."), ("/train/models/", "How open code models were trained", "Recipes compared, from their own reports."), ("/train/reading/", "Reading list", "Papers, reports and courses in learning order."), ("/catalog/", "Catalog", "All verified datasets, benchmarks, environments and tools."), ("/recipe/", "Recipe builder", "Size, budget and goal in, a plan out."), ("/guide/", "Guide", "The short version, with caveats."), ("/pitfalls/", "Pitfalls", "What goes wrong and how to see it coming.")]
+def path_nav(cur):
+    ids = [x[0] for x in PATH]; i = ids.index(cur) if cur in ids else -1
+    prev_ = PATH[i - 1] if i > 0 else None; next_ = PATH[i + 1] if 0 <= i + 1 < len(PATH) else None
+    steps = "".join('<li%s><a href="%s"><span>%d</span>%s</a></li>' % (' class="cur"' if x[0] == cur else "", x[1], n + 1, e(x[2])) for n, x in enumerate(PATH))
+    return ('<div class="pathbar"><span class="eyebrow">Part two: how to train language models for code</span><ol>%s</ol></div>' % steps,
+            '<div class="cta-row" style="margin-top:34px">%s%s</div>' % (('<a class="btn" href="%s">&larr; %s</a>' % (prev_[1], e(prev_[2]))) if prev_ else '<a class="btn" href="/train/">&larr; The path</a>', ('<a class="btn primary" href="%s">%s &rarr;</a>' % (next_[1], e(next_[2]))) if next_ else ""))
+def page_step(key, h1, lede, title, desc, body_html, extra_foot=""):
+    top, bottom = path_nav(key); n = [x[0] for x in PATH].index(key) + 1
+    body = wrap(f'''<div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/train/">Train</a> / Step {n}</div><span class="eyebrow">Step {n} of {len(PATH)}</span><h1>{h1}</h1><p class="lede">{lede}</p></div>{top}<div class="prose wide">{body_html}</div>{bottom}</div>''')
+    shell("/train/%s/" % key, title + " | Renaissance Labs Code", desc, body, key, og="train-" + key, extra_foot=extra_foot or FIG_JS)
+def page_text_step(key, h1, lede, title, desc):
+    p = os.path.join(ROOT, "data/pages/%s.html" % key)
+    if os.path.exists(p): page_step(key, h1, lede, title, desc, expand_fig_tokens(refs(open(p, encoding="utf-8").read())))
+def page_capability(): page_text_step("capability", "Choose the <em>capability</em> you want to train", "Start from one sentence: a model that does X, measured by Y. Then pick the approach that fits it, your data and your budget.", "Choose the capability and approach for training a code model", "Completion, instruction following, repair, repository editing, test generation and tool use compared, with pretraining, continued pretraining, SFT, preference tuning and RL, and how to choose by objective, data and compute.")
+def page_data(): page_text_step("data", "Choose the <em>data</em>: what each kind teaches", "Raw code, documentation, instruction pairs, patches, tests, traces and synthetic data give a model different signals. Choose by the behavior you want.", "Which data to train a code model on, and why", "Seven kinds of code training data compared by what they teach, with the tradeoffs of volume, quality, diversity, difficulty and relevance, and a map from the forms of a program to training signals.")
+def page_build_dataset(): page_text_step("build-dataset", "Build a documented <em>dataset</em>", "A runnable example from source files to a versioned Hugging Face dataset: provenance, licenses, filtering, deduplication, secrets, splits, contamination, schema, example records and the dataset card.", "Build a code dataset for Hugging Face: a worked example", "A worked, reproducible pipeline from source code to a versioned, documented Hugging Face dataset: licenses, filtering, deduplication, secret removal, group splits, decontamination, schema, records and dataset card.")
+def page_evaluate(): page_text_step("evaluate", "<em>Evaluate</em> as part of training", "Decide the tests before you train, report results you can trust, know where benchmarks mislead, and run generated code in isolation.", "Evaluating a code model during training", "Held-out evaluation, execution-based correctness, repository-level tasks, regression checks, benchmark limits and contamination, and sandboxed execution of generated code.")
+
+
+# ---------------------------------------------------------------- Part two: datasets, tools, first run
+STARTERS = opt_json("data/starter-datasets.json", [])
+_td = opt_json("data/tools-directory.json", {})
+TOOLDIR = _td["tools"] if isinstance(_td, dict) else _td
+SETUPS = opt_json("data/setups.json", [])
+FIRSTRUN = opt_json("data/first-run.json", {})
+PURPOSES = [("raw-code-pretraining", "Raw code for pretraining"), ("docs-and-text", "Documentation and text"), ("instruction-sft", "Instruction and response pairs"), ("reasoning-traces", "Reasoning traces"), ("agent-trajectories", "Agent trajectories"),
+            ("preference", "Preference and reward data"), ("execution-tasks", "Execution-checked tasks"), ("issue-patch", "Issue and patch pairs"), ("evaluation", "Evaluation benchmarks")]
+MATURITY = {"established": ("est", "Established"), "emerging": ("emg", "Emerging"), "experimental": ("exp", "Experimental")}
+def mtag(m): k = MATURITY.get(m); return '<span class="tag %s">%s</span>' % k if k else ""
+def human(n):
+    try: n = int(n)
+    except (TypeError, ValueError): return str(n)
+    return "{:,}".format(n)
+
+def links_html(l):
+    out = []
+    for k, lab in (("source", "Source"), ("huggingface", "Hugging Face"), ("paper", "Paper"), ("code", "Code")):
+        if l.get(k): out.append('<a href="%s">%s</a>' % (e(l[k]), lab))
+    return " &middot; ".join(out)
+def pop_html(pp):
+    pp = pp or {}
+    bits = []
+    if pp.get("hf_downloads_30d") is not None: bits.append("%s downloads in 30 days" % human(pp["hf_downloads_30d"]))
+    if pp.get("hf_likes") is not None: bits.append("%s likes" % human(pp["hf_likes"]))
+    if pp.get("github_stars") is not None: bits.append("%s GitHub stars" % human(pp["github_stars"]))
+    t = ", ".join(bits)
+    if t and pp.get("as_of"): t += " (as of %s)" % e(pp["as_of"])
+    used = [m["name"] for u in pp.get("used_by") or [] for m in MODELREC if m["id"] == u]
+    if used: t += "<br><small>Used in: %s</small>" % e(", ".join(used))
+    return t or "not available"
+
+def page_datasets():
+    if not STARTERS: return
+    chips = "".join('<button type="button" class="chipb" data-k="%s" aria-pressed="false">%s</button>' % (k, e(v)) for k, v in (("dataset", "Training datasets"), ("benchmark", "Evaluation benchmarks"), ("environment", "Interactive environments")))
+    secs = ""
+    for pid, plabel in PURPOSES:
+        rows = [x for x in STARTERS if x.get("purpose") == pid]
+        if not rows: continue
+        tr = ""
+        for x in sorted(rows, key=lambda x: x["name"].lower()):
+            cat = ('<a href="/r/%s/">Catalog entry</a>' % x["id"]) if x["id"] in RB else ""
+            tr += ('<tr class="top" data-kind="%s"><th><b>%s</b><span class="kindpill k-%s">%s</span>%s<small>%s</small></th><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td class="lk">%s%s</td></tr>' % (
+                e(x["kind"]), e(x["name"]), e(x["kind"]), e(KINDS.get(x["kind"], x["kind"])), mtag(x.get("maturity")), e(", ".join(STAGE[t]["short"] for t in x.get("stage") or [] if t in STAGE)),
+                inline(x.get("contains") or ""), e(", ".join(x.get("supports") or [])), e(brief(str(x.get("languages") or "not stated"), 60)), e(brief(x.get("size") or "not stated", 70)),
+                pop_html(x.get("popularity")), links_html(x.get("links") or {}), ("<br>" + cat) if cat else ""))
+            tr += ('<tr class="det" data-kind="%s"><td colspan="7"><div class="ddet"><div><b>Format</b> %s</div><div><b>Limitations</b> %s</div><div><b>License</b> %s &middot; checked %s</div></div></td></tr>' % (
+                e(x["kind"]), inline(x.get("format") or "not stated"), inline(x.get("limitations") or ""), inline(brief(x.get("license") or "not stated", 110)), e(x.get("checked") or "")))
+        secs += ('<section class="dsec" id="%s"><h2>%s <small class="mono" style="color:var(--ink-faint)">%d</small></h2><div class="cmpwrap"><table class="cmp ds"><thead><tr><th>Name</th><th>What it contains</th><th>Supports</th><th>Languages</th><th>Size</th><th>Evidence of use</th><th>Links</th></tr></thead><tbody>%s</tbody></table></div></section>' % (pid, e(plabel), len(rows), tr))
+    n = {k: sum(1 for x in STARTERS if x["kind"] == k) for k in ("dataset", "benchmark", "environment")}
+    body = ('<p>%d resources chosen as a starting point, not a census: %d training datasets, %d evaluation benchmarks and %d interactive environments. Each row says what a record holds, what it can teach, the languages it covers, how it is stored, its size and its limits, with links to the original source and the Hugging Face page. '
+            '<b>Evidence of use</b> is a number and a date from the Hugging Face or GitHub API, plus the open models in our <a href="/train/models/">recipe comparison</a> whose reports say they used it. We do not call anything popular without one of those. Maturity tags: <span class="tag est">Established</span> widely used for years, <span class="tag emg">Emerging</span> in recent open recipes, <span class="tag exp">Experimental</span> new with little independent use.</p>'
+            '<div class="callout"><b>Datasets, benchmarks and environments are different things</b>A <em>training dataset</em> is data you fit a model on. An <em>evaluation benchmark</em> is a held-out test you measure with, and should stay out of training. An <em>interactive environment</em> is a task with a runnable verifier, used for evaluation and for reinforcement learning. The same repository can appear as more than one, so check which role you are using it in.</div>'
+            '<div class="filters" style="position:static;border:0;padding:6px 0"><div class="chips"><span class="lab-lbl">Show</span>%s<button type="button" class="chipb" id="dsreset">All</button></div></div>%s'
+            '<p class="mnote">All %d entries are also in the <a href="/catalog/">full catalog</a> or are marked as additions. Verification date: 2026-11-25.</p>') % (len(STARTERS), n["dataset"], n["benchmark"], n["environment"], chips, secs, len(STARTERS))
+    page_step("datasets", "A starting <em>directory</em> of datasets", "Training datasets, evaluation benchmarks and interactive environments for code, with what each contains, what it supports, its format, size and limits, and the evidence that it is used.", "Datasets for training code models: a curated directory", "A curated starting set of code training datasets, benchmarks and environments with contents, languages, format, size, limitations, links to the source and Hugging Face, and evidence of use.", body, extra_foot="")
+
+def page_tools():
+    if not TOOLDIR: return
+    ROLES = [("collection", "Collection", "Getting code and metadata from where it lives."), ("processing", "Processing", "Filtering, deduplicating, scrubbing, parsing and license checking."), ("tokenization", "Tokenization", "Turning text into the tokens a model reads, including the special tokens for fill-in-the-middle."), ("training", "Training", "The trainers, adapters and sampling engines that update the model."), ("tracking", "Experiment tracking", "Recording what you ran and what it produced."), ("execution", "Execution", "Running untrusted generated code safely."), ("evaluation", "Evaluation", "Harnesses that score a model against tests.")]
+    secs = ""
+    for rid, rlabel, rdesc in ROLES:
+        rows = [x for x in TOOLDIR if x.get("role") == rid]
+        if not rows: continue
+        tr = "".join('<tr><th><a href="%s">%s</a>%s<small>%s</small></th><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' % (
+            e(x["url"]), e(x["name"]), mtag(x.get("maturity")), e((x.get("license") or "license not stated")), inline(x.get("what") or ""), inline(x.get("when") or ""), inline(x.get("connects") or ""), e(x.get("scale") or ""),
+            ("%s<small>%s</small>" % (e((x.get("latest_release") or {}).get("version") or ""), e((x.get("latest_release") or {}).get("date") or ""))) if x.get("latest_release") else "") for x in sorted(rows, key=lambda x: x["name"].lower()))
+        secs += '<section class="dsec" id="%s"><h2>%s</h2><p>%s</p><div class="cmpwrap"><table class="cmp"><thead><tr><th>Tool</th><th>What it does</th><th>When to use it</th><th>How it connects</th><th>Scale</th><th>Latest release</th></tr></thead><tbody>%s</tbody></table></div></section>' % (rid, e(rlabel), e(rdesc), tr)
+    setups = ""
+    for st in SETUPS:
+        steps = "".join('<li><h3>%s</h3>%s%s</li>' % (e(x["label"]), plainbox(x["command"], x.get("lang") or "shell") if x.get("command") else "", ('<p>%s</p>' % inline(x["note"])) if x.get("note") else "") for x in st.get("steps") or [])
+        setups += '<div class="setup"><h3>%s</h3><p class="for">%s</p><ol class="steps">%s</ol><p class="snote"><b>Verified:</b> %s</p></div>' % (e(st["title"]), inline(st.get("for") or ""), steps, inline(st.get("verified_how") or ""))
+    flow = " &rarr; ".join(e(r[1]) for r in ROLES)
+    body = ('<p>%d tools, grouped by the step of the workflow where you use them: %s. Each entry says what the tool does, when to reach for it and how it connects to the steps either side. Versions and dates were read from PyPI or the project\'s releases on 2026-11-25. Maturity: <span class="tag est">Established</span>, <span class="tag emg">Emerging</span>, <span class="tag exp">Experimental</span>.</p>'
+            '<h2>Start here: a minimal setup</h2><p>A newcomer needs very little: one environment, the Hugging Face libraries, a trainer, and an evaluation harness. Then add pieces only when a step becomes the bottleneck.</p>%s'
+            '<h2>The directory</h2>%s<p class="mnote">More tools, with licenses and caveats, are in the <a href="/catalog/#kind=tool">catalog</a>.</p>') % (len(TOOLDIR), flow, setups, secs)
+    page_step("tools", "A <em>directory</em> of tools", "Collection, processing, tokenization, training, tracking, execution and evaluation: what each tool does, when to use it and how the steps connect. With a minimal setup you can follow.", "Tools for training code models, by workflow step", "Tools for collecting, processing, tokenizing, training, tracking, executing and evaluating for code LLMs, with what each does, when to use it, versions, and a minimal setup.", body, extra_foot="")
+
+def page_first_run():
+    f = FIRSTRUN
+    if not f: return
+    def li(items): return "<ul>%s</ul>" % "".join("<li>%s</li>" % inline(x) for x in items)
+    def tbl(head, rows): return '<div class="cmpwrap"><table class="cmp narrow"><thead><tr>%s</tr></thead><tbody>%s</tbody></table></div>' % ("".join("<th>%s</th>" % e(h) for h in head), rows)
+    est = lambda t: inline(t or "")
+    ver, ds, ev, st, mp = f.get("versions") or {}, f.get("dataset") or {}, f.get("evaluation") or {}, f.get("stretch") or {}, f.get("merge_and_publish") or {}
+    files = f.get("files") or {}
+    box = lambda k, lang=None: plainbox(files[k], k) if k in files else ""
+    bm = tbl(["Model", "Role", "Parameters", "Context", "License", "Why", "Memory (estimate)"], "".join("<tr><th>%s</th><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>" % (e(m["id"]), e(m.get("role") or ""), est(brief(m.get("params") or "", 70)), est(brief(m.get("context") or "", 40)), est(brief(m.get("license") or "", 40)), est(m.get("why")), est(m.get("estimated_memory"))) for m in f.get("base_models") or []))
+    notchosen = "".join("<li><b>%s</b>: %s</li>" % (e(x["id"]), est(x.get("note"))) for x in f.get("base_models_considered_not_chosen") or [])
+    hw = tbl(["Tier", "Assumes", "Memory (estimate)", "Time (estimate)", "Basis"], "".join("<tr><th>%s</th><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>" % (e(h["name"]), est(h.get("assumes")), est(h.get("estimated_memory")), est(h.get("estimated_time")), est(h.get("basis"))) for h in f.get("hardware_tiers") or []))
+    hp = tbl(["Setting", "Value", "Why", "Source"], "".join("<tr><th>%s</th><td>%s</td><td>%s</td><td>%s</td></tr>" % (e(h["name"]), est(str(h.get("value"))), est(h.get("why")), ('<a href="%s">source</a>' % e(h["source"])) if str(h.get("source") or "").startswith("http") else est(h.get("source"))) for h in f.get("hyperparameters") or []))
+    base = ev.get("baseline") or {}; rep = base.get("reported_pass_at_1_greedy") or {}; fb = base.get("fallback_model_reported") or {}
+    bt = tbl(["Model", "HumanEval", "HumanEval+", "MBPP", "MBPP+"], "<tr><th>%s</th>%s</tr><tr><th>%s</th>%s</tr>" % (e(base.get("model") or ""), "".join("<td>%s</td>" % e(str(rep.get(k, ""))) for k in ("HumanEval", "HumanEval+", "MBPP", "MBPP+")), e(fb.get("model") or ""), "".join("<td>%s</td>" % e(str(fb.get(k, ""))) for k in ("HumanEval", "HumanEval+", "MBPP", "MBPP+"))))
+    outc = "".join('<li>%s <span class="tag exp">%s</span><br><small>Basis: %s</small></li>' % (est(o.get("claim")), e(o.get("label") or "estimate"), est(o.get("basis"))) for o in f.get("expected_outcomes") or [])
+    codeify = lambda x: re.sub(r"(python \S+(?: --?[\w-]+(?: (?!--)[\w./-]+)?)*|bash \S+|eval\.sh|requirements-(?:train|eval)\.txt|prepare_data\.py|train_sft\.py|merge_push\.py|eval_heldout\.py|trl_sft_cli\.sh|model_card\.md)", lambda m: "`%s`" % m.group(1), x)
+    steps = "".join("<li>%s</li>" % est(codeify(re.sub(r"^\d+\.\s*", "", x))) for x in f.get("steps") or [])
+    pk = ", ".join("%s %s" % (k, v) for k, v in (ver.get("packages") or {}).items())
+    srcs = "".join('<li><a href="%s">%s</a></li>' % (e(x["url"]), e(x["what"])) for x in f.get("sources") or [] if str(x.get("url") or "").startswith("http"))
+    body = (
+        '<div class="callout"><b>Status of this recipe</b>Nothing here was trained or evaluated by the site\'s authors. Versions, settings and commands were checked against each project\'s source and documentation on 2026-11-25. Memory, time and outcome figures are estimates, and each one is labeled and states its basis, so you can replace it with your own measurement. The files are also in <a href="https://github.com/RenaissanceLabs-EU/code/tree/main/examples/first-run">examples/first-run</a>.</div>'
+        '<h2>Objective</h2><p>%s</p>'
+        '<h2>Run it: the steps</h2><ol class="steps plain">%s</ol>'
+        '<h2>Environment</h2><p><b>Python %s</b></p><p>Packages (latest on the check date): %s.</p><p>%s</p>'
+        '<h2>Base model</h2>%s<ul>%s</ul>'
+        '<h2>Dataset</h2><p><b><a href="%s">%s</a></b>, pinned to revision <code>%s</code>.</p><ul><li><b>Subset and filter.</b> %s</li><li><b>Size.</b> %s</li><li><b>Split.</b> %s</li><li><b>Why this dataset.</b> %s</li><li><b>License.</b> %s</li><li><b>Terms of the model that wrote it.</b> %s</li><li><b>Limits.</b> %s</li></ul>'
+        '<h2>Hardware</h2>%s<p>%s</p>'
+        '<h2>The files</h2><p>Save these in one folder. The data step streams and filters the dataset, the training step fits the adapter, then you merge and evaluate.</p>%s%s%s%s%s'
+        '<h2>Settings, and why</h2>%s'
+        '<h2>Evaluate before and after</h2><p>Published baseline (greedy pass@1, read %s):</p>%s<p class="snote">Source: <a href="%s">%s</a>. %s</p><p>%s</p><h3>Procedure</h3><ol>%s</ol>%s%s'
+        '<h3>What counts as success</h3>%s'
+        '<h2>Merge and publish</h2><p>%s</p><p>%s</p>%s'
+        '<h2>What to expect</h2><ul class="est">%s</ul>'
+        '<h2>Stretch: execution-based RL <span class="tag exp">Experimental</span></h2><p>%s</p><p>%s</p><p><b>Task set.</b> %s</p><p><b>Reward.</b> %s</p>%s%s<p><b>Sandbox.</b> %s</p><p><b>Hardware (estimate).</b> %s</p><p><b>Expected outcome.</b> %s</p><h3>Risks</h3>%s'
+        '<h2>Sources</h2><ul>%s</ul><p>Next, <a href="/train/evaluate/">evaluate</a> in depth, and when you have your own data, <a href="/train/build-dataset/">build a dataset</a>.</p>') % (
+        est(f.get("objective")), steps, e(brief(ver.get("python") or "", 60)), e(pk), est(ver.get("environment_note")), bm, notchosen,
+        e(ds.get("url") or ""), e(ds.get("id") or ""), e((ds.get("revision") or "").split(" ")[0]), est(ds.get("subset")), est(ds.get("size")), est(ds.get("split")), est(ds.get("why")), est(ds.get("license")), est(ds.get("generator_terms")), est(ds.get("caveats")),
+        hw, est(f.get("hardware_note")), box("requirements-train.txt"), box("requirements-eval.txt"), box("prepare_data.py"), box("train_sft.py"), box("eval.sh") + box("eval_heldout.py") + box("merge_push.py") + box("trl_sft_cli.sh"),
+        hp, e(base.get("date_read") or ""), bt, e(base.get("url") or ""), e(base.get("source") or "")[:160], est(base.get("caveat")), est(ev.get("noise")), "".join("<li>%s</li>" % est(x) for x in ev.get("procedure") or []), "", "",
+        li(ev.get("success_criteria") or []), est(mp.get("merge")), est(mp.get("push")), box("model_card.md"), outc,
+        est(st.get("status")), est(st.get("objective")), est(st.get("task_set")), est(st.get("reward_function")), box("reward_fn.py"), box("grpo_train.py"), est(st.get("sandbox")), est(st.get("hardware_estimate")), est(st.get("expected_outcome")), li(st.get("risks") or []), srcs)
+    page_step("first-run", "Run a first <em>experiment</em>", "Fine-tune a small existing code model on a small, carefully prepared dataset, and measure whether it helped. Objective, model, data, hardware, configuration, commands and evaluation.", "A first training run: fine-tune a small code model", "A reproducible recipe for LoRA fine-tuning Qwen2.5-Coder-1.5B-Instruct on a filtered execution-checked dataset with TRL, with hardware tiers, settings, commands and a before-and-after evaluation.", body, extra_foot="")
+
+def page_how():
+    p = os.path.join(ROOT, "data/pages/how.html")
+    if not os.path.exists(p): return
+    t = expand_fig_tokens(refs(open(p, encoding="utf-8").read()))
+    side = '<div class="cta-row"><a class="btn" href="/train/models/">Compare open code models</a><a class="btn" href="/train/reading/">Reading list</a><a class="btn" href="/recipe/">Recipe builder</a></div>'
+    body = wrap(f'''<div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/train/">Train</a> / How code models are trained</div><span class="eyebrow">Train</span><h1>How a code model is <em>trained</em></h1>
+<p class="lede">From a pile of public source code to a model that fixes issues in a real repository: the stages, what each one does, where the data comes from and where it goes wrong. With working figures and the resources for each step.</p>{side}</div><div class="prose wide">{t}</div></div>''')
+    shell("/train/how/", "How a code model is trained: pretraining, SFT, preference data and RL | Renaissance Labs Code", "The stages of training a coding model, in plain language: pretraining and fill-in-the-middle, instruction data, preference pairs, reinforcement learning with test rewards, and evaluation. With figures and resources.", body, "how", og="train-how", extra_foot=FIG_JS)
+
+def reading_card(x):
+    ids = "".join('<a class="pill" href="/r/%s/">%s</a>' % (i, e(RB[i]["name"])) for i in x["catalog_ids"][:4])
+    links = "".join('<a href="%s">%s</a>' % (e(l["url"]), e(l["label"])) for l in x.get("extra_links") or [])
+    st = "".join('<span class="pill st st-%s">%s</span>' % (k, e(STAGE[k]["short"])) for k in x["stages"])
+    lvl = LEVEL_LABEL.get(x.get("level"), "")
+    srch = " ".join([x["title"], x.get("authors") or "", x.get("teaches") or "", x.get("venue") or ""]).lower()
+    return (f'<article class="rd st-{x["primary"]}" data-stage="s{x["section"]}" data-type="{e(x.get("type") or "")}" data-level="{e(x.get("level") or "")}" data-s="{e(srch)}">'
+            f'<div class="top"><span class="k">{x["section"]}. {e(READ_SECTIONS[x["section"]])} &middot; {e(READ_TYPES.get(x.get("type"), "Reading"))}</span><span>{x.get("year") or ""} &middot; {e(x.get("venue") or "")}</span></div>'
+            f'<h3><a href="{e(x["url"])}">{e(x["title"])}</a></h3><p class="by">{e(x.get("authors") or "")}</p>'
+            f'<p class="teach">{inline(x.get("teaches") or "")}</p>' + (f'<p class="key"><b>Result</b> {inline(x["key_result"])}</p>' if x.get("key_result") else "") +
+            f'<div class="facts">{st}{("<span class=pill>%s</span>" % e(lvl)) if lvl else ""}</div>' + (f'<div class="rdlinks">{links}{ids}</div>' if (links or ids) else "") + '</article>')
+
+def page_reading():
+    if not READING: return
+    chips = "".join(f'<button type="button" class="chipb" data-stage="s{k}" aria-pressed="false">{k}. {e(v)}</button>' for k, v in READ_SECTIONS.items())
+    types = opts([(k, v) for k, v in READ_TYPES.items() if any(x.get("type") == k for x in READING)], "All types")
+    levels = opts([(k, v) for k, v in LEVEL_LABEL.items() if any(x.get("level") == k for x in READING)], "Any level")
+    items = sorted(READING, key=lambda x: (x["section"], x.get("year") or 0, x["title"].lower()))
+    body = wrap(f'''<div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/train/">Train</a> / Reading list</div><span class="eyebrow">Train</span><h1>How code models are trained: a <em>reading list</em></h1>
+<p class="lede">{len(READING)} papers, technical reports, posts and courses, in the order a practitioner would want them: foundations, data, model reports, instruction data, preference and reinforcement learning, evaluation, tooling. Each one says what you take away from it. Every link was opened and every title, author and year checked on its page.</p></div>
+<div class="filters"><div class="row1"><div class="search"><input id="rq" type="search" placeholder="Search titles, authors, topics..." aria-label="Search the reading list" autocomplete="off"></div><select class="f" id="rf-type" aria-label="Type">{types}</select><select class="f" id="rf-level" aria-label="Level">{levels}</select><span class="count" id="rcnt"></span></div>
+<div class="chips">{chips}<button type="button" class="chipb" id="rreset">Reset</button></div></div>
+<div class="rgrid" id="rgrid">{"".join(reading_card(x) for x in items)}</div><p class="empty" id="rnone" hidden>Nothing matches. Loosen a filter.</p></div>''')
+    shell("/train/reading/", "Reading list: how code LLMs are trained | Renaissance Labs Code", "Papers, technical reports, posts and courses on training LLMs for code, ordered from foundations to the newest reports, each with what you learn from it.", body, "reading", og="train-reading")
+
+def brief(t, n=96):
+    """First clause of a long sentence, cut at a word, for the comparison table. The full text is on the model's card below."""
+    t = (t or "").strip()
+    if len(t) <= n: return t
+    cut = re.split(r"[;(]| then | plus ", t)[0].rstrip(" ,.:")
+    if len(cut) > n: return cut[:n].rsplit(" ", 1)[0].rstrip(",. ") + "\u2026"
+    return cut
+def mrow(label, text):
+    return ('<div class="mr"><dt>%s</dt><dd>%s</dd></div>' % (e(label), inline(text))) if text else ""
+def page_models():
+    if not MODELREC: return
+    def g(m, a, b=None):
+        v = (m.get(a) or {}); return v.get(b) if b else v
+    head = "<tr><th>Model</th><th>Pretraining tokens</th><th>Supervised data</th><th>RL or preference method</th><th>Reward</th></tr>"
+    rows = ""
+    for m in sorted(MODELREC, key=lambda m: m.get("released") or ""):
+        rows += '<tr><th><a href="#%s">%s</a><small>%s &middot; %s</small></th><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' % (
+            e(m["id"]), e(m["name"]), e(m.get("org") or ""), e(m.get("released") or ""), e(brief(g(m, "pretrain", "tokens")) or "n/a"), e(brief(g(m, "sft", "summary"), 80) or "n/a"), e(brief(g(m, "preference_or_rl", "method"), 70) or "none"), e(brief(g(m, "preference_or_rl", "reward"), 80) or "none"))
+    cards = ""
+    for m in sorted(MODELREC, key=lambda m: m.get("released") or "", reverse=True):
+        pt, sf, rl = m.get("pretrain") or {}, m.get("sft") or {}, m.get("preference_or_rl") or {}
+        link = ('<a class="pill" href="/r/%s/">In the catalog</a>' % m["id"]) if m["id"] in RB else ""
+        srcs = " ".join('<a href="%s">source %d</a>' % (e(u), i + 1) for i, u in enumerate(m.get("sources") or []))
+        cards += (f'<article class="mcard" id="{e(m["id"])}"><div class="top"><span>{e(m.get("org") or "")}</span><span>{e(m.get("released") or "")}</span></div><h3>{e(m["name"])}</h3>'
+                  f'<div class="facts"><span class="pill">{e(m.get("size") or "")}</span><span class="pill">{e(m.get("open") or "")}</span>{link}</div><p class="base">{inline(m.get("base") or "")}</p><p class="lesson"><b>Reusable idea</b> {inline(m.get("lesson") or "")}</p><details class="mdet"><summary>Read the full recipe</summary><dl>'
+                  + mrow("Pretraining", " ".join(x for x in [pt.get("tokens") and "%s." % pt["tokens"], pt.get("data_sources") and "%s." % pt["data_sources"].rstrip("."), pt.get("code_share") and "Code share: %s." % pt["code_share"], pt.get("notes")] if x))
+                  + mrow("Supervised", " ".join(x for x in [sf.get("summary"), sf.get("teacher") and "Teacher: %s." % sf["teacher"]] if x))
+                  + mrow("RL or preference", " ".join(x for x in [rl.get("method") and "%s." % rl["method"], rl.get("reward") and "Reward: %s." % rl["reward"], rl.get("environments") and "Tasks: %s." % rl["environments"], rl.get("notes")] if x))
+                  + mrow("Result", m.get("eval_headline")) + f'</dl></details><p class="srcs">{srcs}</p></article>')
+    pats = "".join('<div class="pattern"><h3>%s</h3><p>%s</p><p class="pe">Seen in: %s</p></div>' % (e(x["title"]), inline(x["text"]), ", ".join(e(next((m["name"] for m in MODELREC if m["id"] == i), i)) for i in x.get("evidence_ids") or [])) for x in PATTERNS)
+    body = wrap(f'''<div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/train/">Train</a> / Model recipes</div><span class="eyebrow">Train</span><h1>How the open code models were <em>trained</em></h1>
+<p class="lede">{len(MODELREC)} open code models and what their own reports and model cards say about how they were made: the data, the stages, the reward. Compare them side by side, then take the parts that fit.</p></div>
+{('<section class="blk"><div class="sec-head"><div><span class="eyebrow">Patterns</span><h2>What the recipes have in common</h2></div></div><div class="patterns">%s</div></section>' % pats) if pats else ""}
+<section class="blk"><div class="sec-head"><div><span class="eyebrow">Side by side</span><h2>At a glance</h2><p>Figures are as each report states them. A dash means the report gives none.</p></div></div><div class="matrix mtab"><table><thead>{head}</thead><tbody>{rows}</tbody></table></div></section>
+<section class="blk"><div class="sec-head"><div><span class="eyebrow">In detail</span><h2>Model by model</h2></div></div><div class="mgrid">{cards}</div></section></div>''')
+    shell("/train/models/", "How open code models were trained: recipes compared | Renaissance Labs Code", "Data, stages and rewards behind the leading open code models, read from their own reports and cards and compared side by side.", body, "models", og="train-models")
+
 def main():
-    page_home(); page_program_index(); page_stack_index(); page_languages(); page_world(); page_intelligence(); page_train(); page_catalog()
+    page_how(); page_reading(); page_models(); page_capability(); page_data(); page_evaluate(); page_build_dataset(); page_datasets(); page_tools(); page_first_run(); page_home(); page_program_index(); page_stack_index(); page_languages(); page_world(); page_intelligence(); page_train(); page_catalog()
     for d in PROGRAM: page_node("program", d)
     for d in STACK: page_node("stack", d)
     for l in LANGLIST: page_language(l)

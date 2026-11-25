@@ -1,0 +1,26 @@
+{
+  "ast_parse_ok_after": 633,
+  "ast_parse_ok_before": 633,
+  "files_affected_by_rule": {
+    "aws_access_key_id": 0,
+    "email": 119,
+    "github_token": 0,
+    "ipv4_global": 7,
+    "password_assignment": 1,
+    "private_key_block": 0
+  },
+  "files_changed": 127,
+  "files_in": 633,
+  "hit_log": "logs/scrub_hits.jsonl (rule, path, line; no matched text)",
+  "ipv4_kept_non_global": 80,
+  "newly_unparseable_after_scrub": 0,
+  "replacements_by_rule": {
+    "aws_access_key_id": 0,
+    "email": 163,
+    "github_token": 0,
+    "ipv4_global": 10,
+    "password_assignment": 1,
+    "private_key_block": 0
+  },
+  "stage": "03_scrub"
+}

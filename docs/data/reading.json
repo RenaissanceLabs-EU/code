@@ -1,0 +1,1744 @@
+[
+ {
+  "id": "codex",
+  "title": "Evaluating Large Language Models Trained on Code",
+  "authors": "Mark Chen et al.",
+  "year": 2021,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2107.03374",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "pretrain",
+   "eval"
+  ],
+  "level": "intermediate",
+  "teaches": "Introduces HumanEval, the function-from-docstring test set that later code papers report against, and shows that repeated sampling lifts the solve rate from 28.8% to 70.2% at 100 samples per problem. Lists concrete failures: docstrings that describe long chains of operations and binding operations to variables.",
+  "key_result": "On HumanEval, a new evaluation set we release to measure functional correctness for synthesizing programs from docstrings, our model solves 28.8% of the problems, while GPT-3 solves 0% and GPT-J solves 11.4%.",
+  "catalog_ids": [
+   "humaneval"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2107.03374, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 1,
+  "primary": "pretrain"
+ },
+ {
+  "id": "alphacode",
+  "title": "Competition-Level Code Generation with AlphaCode",
+  "authors": "Yujia Li et al.",
+  "year": 2022,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2203.07814",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "pretrain",
+   "eval"
+  ],
+  "level": "intermediate",
+  "teaches": "Names three components behind the result: a clean competitive programming dataset, large and efficient-to-sample transformer architectures, and large-scale sampling followed by filtering on program behavior down to a small set of submissions. Read it to see that the sampling and filtering stage, not the base model alone, produces the Codeforces ranking.",
+  "key_result": "In simulated evaluations on recent programming competitions on the Codeforces platform, AlphaCode achieved on average a ranking of top 54.3% in competitions with more than 5,000 participants.",
+  "catalog_ids": [
+   "code-contests"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2203.07814, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 1,
+  "primary": "pretrain"
+ },
+ {
+  "id": "incoder",
+  "title": "InCoder: A Generative Model for Code Infilling and Synthesis",
+  "authors": "Daniel Fried et al.",
+  "year": 2022,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2204.05999",
+  "extra_links": [
+   {
+    "label": "Project page",
+    "url": "https://sites.google.com/view/incoder-code-models"
+   }
+  ],
+  "type": "paper",
+  "stages": [
+   "pretrain"
+  ],
+  "level": "intermediate",
+  "teaches": "Shows the training transform: regions of each code file are masked and moved to the end so the model learns infilling with bidirectional context. Evaluates zero-shot infilling on type inference, comment generation, and variable renaming, and finds bidirectional context helps there while left-to-right synthesis stays comparable at similar scale.",
+  "key_result": "We introduce InCoder, a unified generative model that can perform program synthesis (via left-to-right generation) as well as editing (via infilling).",
+  "catalog_ids": [],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2204.05999, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 1,
+  "primary": "pretrain"
+ },
+ {
+  "id": "fill-in-the-middle",
+  "title": "Efficient Training of Language Models to Fill in the Middle",
+  "authors": "Mohammad Bavarian et al.",
+  "year": 2022,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2207.14255",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "pretrain"
+  ],
+  "level": "intermediate",
+  "teaches": "Reports ablations on how often to apply the transformation, the structure of the transformation, and how to pick the infill span, and turns them into default settings. Shows that training with a large fraction of transformed data does not harm left-to-right ability as measured by perplexity and sampling evaluations.",
+  "key_result": "We show that autoregressive language models can learn to infill text after we apply a straightforward transformation to the dataset, which simply moves a span of text from the middle of a document to its end.",
+  "catalog_ids": [],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2207.14255, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 1,
+  "primary": "pretrain"
+ },
+ {
+  "id": "codegen",
+  "title": "CodeGen: An Open Large Language Model for Code with Multi-Turn Program Synthesis",
+  "authors": "Erik Nijkamp et al.",
+  "year": 2022,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2203.13474",
+  "extra_links": [
+   {
+    "label": "Code",
+    "url": "https://github.com/salesforce/CodeGen"
+   }
+  ],
+  "type": "paper",
+  "stages": [
+   "pretrain",
+   "eval"
+  ],
+  "level": "intermediate",
+  "teaches": "Releases models up to 16.1B parameters together with the JAXFORMER training library, so the training setup is readable. Builds the Multi-Turn Programming Benchmark (115 problem sets split into multi-turn prompts) and shows that the same intent given over several turns improves synthesis over a single turn.",
+  "key_result": "To democratize this, we train and release a family of large language models up to 16.1B parameters, called CODEGEN, on natural language and programming language data, and open source the training library JAXFORMER.",
+  "catalog_ids": [],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2203.13474, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 1,
+  "primary": "pretrain"
+ },
+ {
+  "id": "code-llama",
+  "title": "Code Llama: Open Foundation Models for Code",
+  "authors": "Baptiste Rozière et al.",
+  "year": 2023,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2308.12950",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "pretrain",
+   "sft"
+  ],
+  "level": "intermediate",
+  "teaches": "Lays out one recipe producing three flavors from a Llama 2 base: foundation, Python specialization, and instruct, each at 7B, 13B, 34B, and 70B. All models train on 16k-token sequences and improve on inputs up to 100k tokens, and Code Llama - Python 7B beats Llama 2 70B on HumanEval and MBPP.",
+  "key_result": "We release Code Llama, a family of large language models for code based on Llama 2 providing state-of-the-art performance among open models, infilling capabilities, support for large input contexts, and zero-shot instruction following ability for programming tasks.",
+  "catalog_ids": [
+   "codellama-70b"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2308.12950, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 1,
+  "primary": "pretrain"
+ },
+ {
+  "id": "phi-1-textbooks",
+  "title": "Textbooks Are All You Need",
+  "authors": "Suriya Gunasekar et al.",
+  "year": 2023,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2306.11644",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "pretrain",
+   "sft"
+  ],
+  "level": "intermediate",
+  "teaches": "Gives the data budget: 6B tokens of textbook-quality web data plus 1B tokens of GPT-3.5-generated textbooks and exercises, with a finetuning stage on coding exercises. Compares phi-1 with phi-1-base (before the exercise finetuning) and phi-1-small (350M parameters, 45% on HumanEval) to separate the effect of data from the effect of scale.",
+  "key_result": "Despite this small scale, phi-1 attains pass@1 accuracy 50.6% on HumanEval and 55.5% on MBPP.",
+  "catalog_ids": [
+   "paper-textbooks"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2306.11644, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 1,
+  "primary": "pretrain"
+ },
+ {
+  "id": "the-stack",
+  "title": "The Stack: 3 TB of permissively licensed source code",
+  "authors": "Denis Kocetkov et al.",
+  "year": 2022,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2211.15533",
+  "extra_links": [
+   {
+    "label": "Dataset",
+    "url": "https://huggingface.co/bigcode"
+   }
+  ],
+  "type": "paper",
+  "stages": [
+   "pretrain"
+  ],
+  "level": "intermediate",
+  "teaches": "Describes how a 3.1 TB, 30-language dataset is collected, how the permissively licensed subset is built, and the governance plan with an opt-out process and the Am I in The Stack search tool. Trains 350M-parameter decoders on Python subsets to measure the effect of near-deduplication and of license filtering.",
+  "key_result": "We find that (1) near-deduplicating the data significantly boosts performance across all experiments, and (2) it is possible to match previously reported HumanEval and MBPP performance using only permissively licensed data.",
+  "catalog_ids": [
+   "the-stack-v1"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2211.15533, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 2,
+  "primary": "pretrain"
+ },
+ {
+  "id": "santacoder",
+  "title": "SantaCoder: don't reach for the stars!",
+  "authors": "Loubna Ben Allal et al.",
+  "year": 2023,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2301.03988",
+  "extra_links": [],
+  "type": "technical-report",
+  "stages": [
+   "pretrain"
+  ],
+  "level": "intermediate",
+  "teaches": "Reports preprocessing experiments on 1.1B-parameter models trained on the Java, JavaScript, and Python subsets of The Stack and scored on MultiPL-E. Also documents the state of the PII redaction pipeline and the architecture de-risking experiments as of December 2022.",
+  "key_result": "We find that more aggressive filtering of near-duplicates can further boost performance and, surprisingly, that selecting files from repositories with 5+ GitHub stars deteriorates performance significantly.",
+  "catalog_ids": [
+   "starpii"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2301.03988, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 2,
+  "primary": "pretrain"
+ },
+ {
+  "id": "starcoder",
+  "title": "StarCoder: may the source be with you!",
+  "authors": "Raymond Li et al.",
+  "year": 2023,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2305.06161",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "pretrain"
+  ],
+  "level": "intermediate",
+  "teaches": "Specifies the model setup: 15.5B parameters, 8K context, infilling, and multi-query attention for fast large-batch inference, trained on 1 trillion tokens from The Stack. Covers the improved PII redaction pipeline and the attribution tracing tool, and reports StarCoder can be prompted to 40% pass@1 on HumanEval.",
+  "key_result": "We fine-tuned StarCoderBase on 35B Python tokens, resulting in the creation of StarCoder.",
+  "catalog_ids": [
+   "starcoderdata"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2305.06161, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 2,
+  "primary": "pretrain"
+ },
+ {
+  "id": "arctic-snowcoder",
+  "title": "Arctic-SnowCoder: Demystifying High-Quality Data in Code Pretraining",
+  "authors": "Yuxiang Wei et al.",
+  "year": 2024,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2409.02326",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "pretrain"
+  ],
+  "level": "intermediate",
+  "teaches": "Describes a three-phase schedule: 500B standard-quality tokens, then 50B tokens picked by a BERT-style quality annotator plus instruction data, then 5B synthetic tokens from Llama-3.1-70B seeded with phase-two data. The 1.3B model trained on 555B tokens surpasses StarCoder2-3B on HumanEval+, which was pretrained on over 3.3T tokens.",
+  "key_result": "Most importantly, we find that the key to high-quality data is its alignment with the distribution of downstream applications.",
+  "catalog_ids": [],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2409.02326, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 2,
+  "primary": "pretrain"
+ },
+ {
+  "id": "smollm2",
+  "title": "SmolLM2: When Smol Goes Big -- Data-Centric Training of a Small Language Model",
+  "authors": "Loubna Ben Allal et al.",
+  "year": 2025,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2502.02737",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "pretrain"
+  ],
+  "level": "intermediate",
+  "teaches": "Explains why the authors built Stack-Edu and other datasets: existing ones were problematically small or low-quality at certain stages. Shows the method, small-scale ablations plus manual refinement of dataset mixing rates at each stage based on the previous stage's results.",
+  "key_result": "To attain strong performance, we overtrain SmolLM2 on ~11 trillion tokens of data using a multi-stage training process that mixes web text with specialized math, code, and instruction-following data.",
+  "catalog_ids": [
+   "paper-smollm2",
+   "stack-edu"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2502.02737, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 2,
+  "primary": "pretrain"
+ },
+ {
+  "id": "chinchilla",
+  "title": "Training Compute-Optimal Large Language Models",
+  "authors": "Jordan Hoffmann et al.",
+  "year": 2022,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2203.15556",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "pretrain"
+  ],
+  "level": "intermediate",
+  "teaches": "The baseline for token-budget decisions in any pretraining run, including code. It trains over 400 models from 70 million to over 16 billion parameters on 5 to 500 billion tokens and checks the prediction with Chinchilla, a 70B model using 4x more data than Gopher at the same compute. It is not code-specific, so read it before the code scaling paper to see what that paper changes.",
+  "key_result": "By training over 400 language models ranging from 70 million to over 16 billion parameters on 5 to 500 billion tokens, we find that for compute-optimal training, the model size and the number of training tokens should be scaled equally: for every doubling of model size the number of training tokens should also be doubled.",
+  "catalog_ids": [],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2203.15556, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 2,
+  "primary": "pretrain"
+ },
+ {
+  "id": "to-code-or-not",
+  "title": "To Code, or Not To Code? Exploring Impact of Code in Pre-training",
+  "authors": "Viraat Aryabumi et al.",
+  "year": 2024,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2408.10914",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "pretrain"
+  ],
+  "level": "intermediate",
+  "teaches": "Gives measured effects of adding code to pretraining on non-code tasks for models of 470M to 2.8B parameters: up to 8.2% relative gain in natural language reasoning, 4.2% in world knowledge, 6.6% in generative win-rates, and a 12x boost in code performance. Supports keeping a code share in general pretraining mixes and spending effort on code quality.",
+  "key_result": "Across settings, we find a consistent results that code is a critical building block for generalization far beyond coding tasks and improvements to code quality have an outsized impact across all tasks.",
+  "catalog_ids": [],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2408.10914, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 2,
+  "primary": "pretrain"
+ },
+ {
+  "id": "scaling-laws-code",
+  "title": "Scaling Laws for Code: Every Programming Language Matters",
+  "authors": "Jian Yang et al.",
+  "year": 2025,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2512.13472",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "pretrain"
+  ],
+  "level": "hard",
+  "teaches": "Built on 1000+ experiments across model sizes from 0.2B to 14B parameters and datasets up to 1T tokens. Finds that interpreted languages such as Python gain more from added model size and data than compiled languages such as Rust, and that pairing code with its translations (parallel pairing) improves cross-lingual ability.",
+  "key_result": "Finally, a proportion-dependent multilingual scaling law is proposed to optimally allocate training tokens by prioritizing high-utility PLs (e.g., Python), balancing high-synergy pairs (e.g., JavaScript-TypeScript), and reducing allocation to fast-saturating languages (Rust), achieving superior average performance across all PLs compared to uniform distribution under the same compute budget.",
+  "catalog_ids": [],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2512.13472, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 2,
+  "primary": "pretrain"
+ },
+ {
+  "id": "starcoder2",
+  "title": "StarCoder 2 and The Stack v2: The Next Generation",
+  "authors": "Anton Lozhkov et al.",
+  "year": 2024,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2402.19173",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "pretrain"
+  ],
+  "level": "intermediate",
+  "teaches": "Shows how The Stack v2 was built on the Software Heritage archive (619 programming languages) plus pull requests, Kaggle notebooks, and code documentation, giving a training set 4x larger than the first StarCoder dataset. StarCoder2-3B outperforms StarCoderBase-15B, and StarCoder2-15B beats DeepSeekCoder-33B on math and code reasoning benchmarks and several low-resource languages.",
+  "key_result": "We train StarCoder2 models with 3B, 7B, and 15B parameters on 3.3 to 4.3 trillion tokens and thoroughly evaluate them on a comprehensive set of Code LLM benchmarks.",
+  "catalog_ids": [
+   "paper-starcoder2",
+   "starcoder2-15b",
+   "the-stack-v2"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2402.19173, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 3,
+  "primary": "pretrain"
+ },
+ {
+  "id": "deepseek-coder",
+  "title": "DeepSeek-Coder: When the Large Language Model Meets Programming -- The Rise of Code Intelligence",
+  "authors": "Daya Guo et al.",
+  "year": 2024,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2401.14196",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "pretrain"
+  ],
+  "level": "intermediate",
+  "teaches": "Models of 1.3B to 33B parameters are trained from scratch on 2 trillion tokens. The design choices to read are the project-level code corpus (not isolated files) and the fill-in-the-blank objective with a 16K window.",
+  "key_result": "These models are pre-trained on a high-quality project-level code corpus and employ a fill-in-the-blank task with a 16K window to enhance code generation and infilling.",
+  "catalog_ids": [
+   "paper-deepseek-coder"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2401.14196, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 3,
+  "primary": "pretrain"
+ },
+ {
+  "id": "deepseek-coder-v2",
+  "title": "DeepSeek-Coder-V2: Breaking the Barrier of Closed-Source Models in Code Intelligence",
+  "authors": "DeepSeek-AI",
+  "year": 2024,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2406.11931",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "pretrain"
+  ],
+  "level": "intermediate",
+  "teaches": "Shows continued pretraining of a general Mixture-of-Experts model as the route to a code model: coding and math improve while general language performance stays comparable. Language coverage grows from 86 to 338 and context length from 16K to 128K.",
+  "key_result": "DeepSeek-Coder-V2 is further pre-trained from an intermediate checkpoint of DeepSeek-V2 with additional 6 trillion tokens.",
+  "catalog_ids": [
+   "paper-deepseek-coder-v2",
+   "deepseek-coder-v2"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2406.11931, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 3,
+  "primary": "pretrain"
+ },
+ {
+  "id": "qwen2-5-coder",
+  "title": "Qwen2.5-Coder Technical Report",
+  "authors": "Binyuan Hui et al.",
+  "year": 2024,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2409.12186",
+  "extra_links": [],
+  "type": "technical-report",
+  "stages": [
+   "pretrain",
+   "sft",
+   "eval"
+  ],
+  "level": "intermediate",
+  "teaches": "Continues pretraining of Qwen2.5 on over 5.5 trillion tokens across six sizes from 0.5B to 32B parameters. Read it for the three levers the abstract names (data cleaning, scalable synthetic data generation, balanced data mixing) and for evaluation across more than 10 benchmarks covering generation, completion, reasoning, and repair.",
+  "key_result": "Through meticulous data cleaning, scalable synthetic data generation, and balanced data mixing, Qwen2.5-Coder demonstrates impressive code generation capabilities while retaining general and math skills.",
+  "catalog_ids": [
+   "paper-qwen2-5-coder",
+   "qwen2-5-coder"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2409.12186, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 3,
+  "primary": "pretrain"
+ },
+ {
+  "id": "qwen3-coder-next",
+  "title": "Qwen3-Coder-Next Technical Report",
+  "authors": "Ruisheng Cao et al. (Qwen Team)",
+  "year": 2026,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2603.00729",
+  "extra_links": [],
+  "type": "technical-report",
+  "stages": [
+   "pretrain",
+   "rl"
+  ],
+  "level": "hard",
+  "teaches": "An 80B-parameter model that activates 3B parameters per token, built to test how far training recipes can push small active footprints. The training signal comes from synthesized verifiable coding tasks paired with executable environments, used in both mid-training and reinforcement learning, and the model is scored on SWE-Bench and Terminal-Bench.",
+  "key_result": "To achieve this, we perform agentic training through large-scale synthesis of verifiable coding tasks paired with executable environments, allowing learning directly from environment feedback via mid-training and reinforcement learning.",
+  "catalog_ids": [
+   "qwen3-coder-next"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2603.00729, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 3,
+  "primary": "pretrain"
+ },
+ {
+  "id": "qwen3-coder-blog",
+  "title": "Qwen3-Coder: Agentic Coding in the World",
+  "authors": "Qwen Team",
+  "year": 2025,
+  "venue": "Qwen blog",
+  "url": "https://qwenlm.github.io/blog/qwen3-coder/",
+  "extra_links": [],
+  "type": "blog",
+  "stages": [
+   "pretrain",
+   "rl"
+  ],
+  "level": "intermediate",
+  "teaches": "States that Qwen2.5-Coder was used to clean and rewrite noisy training data, and that agent RL ran on a system able to run 20,000 independent environments in parallel. The post gives no volume for the synthetic data and no numbers for the Code RL stage, so treat it as a design outline.",
+  "key_result": "Pretraining scales to 7.5T tokens with a 70% code ratio, and the model is post-trained with Code RL and long-horizon agent RL.",
+  "catalog_ids": [
+   "qwen3-coder-480b-a35b",
+   "qwen3-coder-30b-a3b"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Page qwenlm.github.io/blog/qwen3-coder/ read on 2026-11-25: date July 22, 2025, Qwen Team byline, 7.5T tokens and 70% code ratio, Qwen2.5-Coder data rewriting, 20,000 parallel environments.",
+  "section": 3,
+  "primary": "pretrain"
+ },
+ {
+  "id": "opencoder",
+  "title": "OpenCoder: The Open Cookbook for Top-Tier Code Large Language Models",
+  "authors": "Siming Huang et al.",
+  "year": 2024,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2411.04905",
+  "extra_links": [
+   {
+    "label": "Code",
+    "url": "https://github.com/OpenCoder-llm/OpenCoder-llm"
+   }
+  ],
+  "type": "paper",
+  "stages": [
+   "pretrain",
+   "sft"
+  ],
+  "level": "intermediate",
+  "teaches": "Releases model weights, reproducible training data, the complete data processing pipeline, ablation results, and training protocols, so each claim can be rerun. Read it for the ablations behind the three ingredients rather than for the model scores.",
+  "key_result": "Through this comprehensive release, we identify the key ingredients for building a top-tier code LLM: (1) code optimized heuristic rules for data cleaning and methods for data deduplication, (2) recall of text corpus related to code and (3) high-quality synthetic data in both annealing and supervised fine-tuning stages.",
+  "catalog_ids": [
+   "paper-opencoder",
+   "opencoder-8b",
+   "opencoder-repo",
+   "opc-annealing-corpus",
+   "opc-sft-stage1",
+   "opc-sft-stage2"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2411.04905, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 3,
+  "primary": "pretrain"
+ },
+ {
+  "id": "seed-coder",
+  "title": "Seed-Coder: Let the Code Model Curate Data for Itself",
+  "authors": "ByteDance Seed",
+  "year": 2025,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2506.03524",
+  "extra_links": [],
+  "type": "technical-report",
+  "stages": [
+   "pretrain",
+   "sft",
+   "preference",
+   "rl"
+  ],
+  "level": "intermediate",
+  "teaches": "Replaces hand-written per-language filter rules and human-labeled quality classifiers with LLM scoring and filtering of code data. Covers three 8B variants: base, instruct (supervised fine-tuning plus preference optimization), and reasoning (long chain-of-thought reinforcement learning).",
+  "key_result": "Our code pretraining data is produced by a model-centric data pipeline, which predominantly leverages LLMs for scoring and filtering code data.",
+  "catalog_ids": [
+   "paper-seed-coder",
+   "seed-coder-8b"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2506.03524, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 3,
+  "primary": "pretrain"
+ },
+ {
+  "id": "granite-code",
+  "title": "Granite Code Models: A Family of Open Foundation Models for Code Intelligence",
+  "authors": "Mayank Mishra et al.",
+  "year": 2024,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2405.04324",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "pretrain"
+  ],
+  "level": "intermediate",
+  "teaches": "A family of 3B to 34B decoder-only models trained on code in 116 programming languages and released under Apache 2.0. The abstract frames the target as enterprise workflows (generation, bug fixing, explanation, documentation) instead of a single benchmark.",
+  "key_result": "In this work, we introduce the Granite series of decoder-only code models for code generative tasks, trained with code written in 116 programming languages.",
+  "catalog_ids": [
+   "granite-8b-code-base"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2405.04324, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 3,
+  "primary": "pretrain"
+ },
+ {
+  "id": "kimi-dev",
+  "title": "Kimi-Dev: Agentless Training as Skill Prior for SWE-Agents",
+  "authors": "Zonghan Yang et al.",
+  "year": 2025,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2509.23045",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "sft",
+   "rl"
+  ],
+  "level": "hard",
+  "teaches": "Kimi-Dev reaches 60.4% on SWE-bench Verified among workflow approaches, and with SFT on 5k public trajectories it powers SWE-Agents to 48.6% pass@1. Shows the order of operations: train single-turn verifiable skills first, then adapt to multi-turn agents.",
+  "key_result": "We argue these paradigms are not mutually exclusive: reasoning-intensive Agentless training induces skill priors, including localization, code edit, and self-reflection that enable efficient and effective SWE-Agent adaptation.",
+  "catalog_ids": [
+   "paper-kimi-dev",
+   "kimi-dev-72b",
+   "paper-agentless"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2509.23045, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 3,
+  "primary": "sft"
+ },
+ {
+  "id": "self-instruct",
+  "title": "Self-Instruct: Aligning Language Models with Self-Generated Instructions",
+  "authors": "Yizhong Wang et al.",
+  "year": 2022,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2212.10560",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "sft"
+  ],
+  "level": "intro",
+  "teaches": "Read it first for the generate, filter, finetune loop that code-specific instruction pipelines modify: the model writes instructions, inputs, and outputs, invalid or similar ones are dropped, and the original model is finetuned on the rest. Applied to vanilla GPT3 it gave a 33% absolute improvement on Super-NaturalInstructions.",
+  "key_result": "We introduce Self-Instruct, a framework for improving the instruction-following capabilities of pretrained language models by bootstrapping off their own generations.",
+  "catalog_ids": [],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2212.10560, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 4,
+  "primary": "sft"
+ },
+ {
+  "id": "wizardcoder",
+  "title": "WizardCoder: Empowering Code Large Language Models with Evol-Instruct",
+  "authors": "Ziyang Luo et al.",
+  "year": 2023,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2306.08568",
+  "extra_links": [
+   {
+    "label": "Code",
+    "url": "https://github.com/nlpxucan/WizardLM"
+   }
+  ],
+  "type": "paper",
+  "stages": [
+   "sft"
+  ],
+  "level": "intermediate",
+  "teaches": "The lever is complexity: instructions are evolved into harder ones before fine-tuning. Evaluated on HumanEval, HumanEval+, MBPP, and DS-1000, with a claim of beating Claude and Bard on HumanEval and HumanEval+.",
+  "key_result": "In this paper, we introduce WizardCoder, which empowers Code LLMs with complex instruction fine-tuning, by adapting the Evol-Instruct method to the domain of code.",
+  "catalog_ids": [
+   "paper-wizardcoder"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2306.08568, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 4,
+  "primary": "sft"
+ },
+ {
+  "id": "magicoder",
+  "title": "Magicoder: Empowering Code Generation with OSS-Instruct",
+  "authors": "Yuxiang Wei et al.",
+  "year": 2023,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2312.02120",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "sft"
+  ],
+  "level": "intermediate",
+  "teaches": "The motivation is to reduce the bias of LLM-generated instruction data by grounding generation in real open-source snippets. OSS-Instruct combines with Evol-Instruct to give MagicoderS, and MagicoderS-CL-7B scores 66.5 against 65.9 for ChatGPT on HumanEval+ pass@1.",
+  "key_result": "Magicoder models are trained on 75K synthetic instruction data using OSS-Instruct, a novel approach to enlightening LLMs with open-source code snippets to generate diverse instruction data for code.",
+  "catalog_ids": [
+   "paper-magicoder",
+   "magicoder-oss-instruct-75k",
+   "magicoder-evol-instruct-110k"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2312.02120, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 4,
+  "primary": "sft"
+ },
+ {
+  "id": "octopack",
+  "title": "OctoPack: Instruction Tuning Code Large Language Models",
+  "authors": "Niklas Muennighoff et al.",
+  "year": 2023,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2308.07124",
+  "extra_links": [
+   {
+    "label": "Code",
+    "url": "https://github.com/bigcode-project/octopack"
+   }
+  ],
+  "type": "paper",
+  "stages": [
+   "sft",
+   "eval"
+  ],
+  "level": "intermediate",
+  "teaches": "CommitPack is 4 terabytes of Git commits across 350 languages, compared against xP3x, Self-Instruct, and OASST on StarCoder 16B, reaching 46.2% pass@1 on HumanEval among models not trained on OpenAI outputs. It also adds HumanEvalPack: three tasks (repair, explanation, synthesis) across six languages.",
+  "key_result": "We apply instruction tuning using code, leveraging the natural structure of Git commits, which pair code changes with human instructions.",
+  "catalog_ids": [
+   "paper-octopack",
+   "humanevalpack"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2308.07124, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 4,
+  "primary": "sft"
+ },
+ {
+  "id": "selfcodealign",
+  "title": "SelfCodeAlign: Self-Alignment for Code Generation",
+  "authors": "Yuxiang Wei et al.",
+  "year": 2024,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2410.24198",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "sft"
+  ],
+  "level": "intermediate",
+  "teaches": "The same base model extracts concepts from seed snippets, writes tasks, samples several responses per task, pairs each with test cases, and validates them in a sandbox, keeping only passing examples. With CodeQwen1.5-7B this gives 74k instruction-response pairs and 67.1 pass@1 on HumanEval+, above CodeLlama-70B-Instruct.",
+  "key_result": "We propose SelfCodeAlign, the first fully transparent and permissive pipeline for self-aligning code LLMs without extensive human annotations or distillation.",
+  "catalog_ids": [
+   "paper-selfcodealign",
+   "self-oss-instruct-sc2-exec-filter-50k"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2410.24198, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 4,
+  "primary": "sft"
+ },
+ {
+  "id": "opencodeinstruct",
+  "title": "OpenCodeInstruct: A Large-scale Instruction Tuning Dataset for Code LLMs",
+  "authors": "Wasi Uddin Ahmad et al.",
+  "year": 2025,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2504.04030",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "sft"
+  ],
+  "level": "intermediate",
+  "teaches": "Each sample carries a question, a solution, test cases, execution feedback, and LLM-generated quality assessments. The paper details seed data curation, synthetic instruction and solution generation, and filtering, and fine-tunes LLaMA and Qwen bases at 1B+, 3B+, and 7B+ scales.",
+  "key_result": "To bridge this gap, we introduce OpenCodeInstruct, the largest open-access instruction tuning dataset, comprising 5 million diverse samples.",
+  "catalog_ids": [
+   "opencodeinstruct"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2504.04030, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 4,
+  "primary": "sft"
+ },
+ {
+  "id": "opencodereasoning",
+  "title": "OpenCodeReasoning: Advancing Data Distillation for Competitive Coding",
+  "authors": "Wasi Uddin Ahmad et al.",
+  "year": 2025,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2504.01943",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "sft"
+  ],
+  "level": "intermediate",
+  "teaches": "Contains a negative result: execution filtering negatively affected benchmark accuracy, so the authors prioritized instruction diversity over solution correctness. Also analyzes the data sources, the token efficiency, and the reasoning patterns of the distilled models.",
+  "key_result": "Our distilled models use only SFT to achieve 61.8% on LiveCodeBench and 24.6% on CodeContests, surpassing alternatives trained with reinforcement learning.",
+  "catalog_ids": [
+   "paper-opencodereasoning",
+   "opencodereasoning"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2504.01943, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 4,
+  "primary": "sft"
+ },
+ {
+  "id": "open-r1-update-3",
+  "title": "Open R1: Update #3",
+  "authors": "Guilherme Penedo et al.",
+  "year": 2025,
+  "venue": "Hugging Face blog (Open R1)",
+  "url": "https://huggingface.co/blog/open-r1/update-3",
+  "extra_links": [
+   {
+    "label": "Code",
+    "url": "https://github.com/huggingface/open-r1"
+   }
+  ],
+  "type": "blog",
+  "stages": [
+   "sft",
+   "eval"
+  ],
+  "level": "intermediate",
+  "teaches": "Gives the dataset names of a competitive-programming distillation pipeline: open-r1/codeforces, open-r1/codeforces-cots, and the IOI problem, test-case, sample-solution, and cots sets. Describes a custom IOI grading setup in which a manager process coordinates submission and checker processes (code at github.com/huggingface/ioi).",
+  "key_result": "The post releases CodeForces and IOI problem sets with R1 chain-of-thought generations, and the OlympicCoder-7B and OlympicCoder-32B models fine-tuned from Qwen2.5 Coder Instruct.",
+  "catalog_ids": [
+   "open-r1",
+   "open-r1-codeforces",
+   "codeforces-cots"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Page huggingface.co/blog/open-r1/update-3 read on 2026-11-25: byline, date March 11, 2025, dataset and model names.",
+  "section": 4,
+  "primary": "sft"
+ },
+ {
+  "id": "swe-smith",
+  "title": "SWE-smith: Scaling Data for Software Engineering Agents",
+  "authors": "John Yang et al.",
+  "year": 2025,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2504.21798",
+  "extra_links": [
+   {
+    "label": "Project",
+    "url": "https://swesmith.com"
+   },
+   {
+    "label": "Code",
+    "url": "https://github.com/SWE-bench/SWE-smith"
+   }
+  ],
+  "type": "paper",
+  "stages": [
+   "sft",
+   "rl"
+  ],
+  "level": "intermediate",
+  "teaches": "Builds an execution environment for any Python codebase, then synthesizes 100s to 1,000s of task instances that break existing tests. Yields 50k instances from 128 GitHub repositories and trains SWE-agent-LM-32B to 40.2% Pass@1 on SWE-bench Verified; the abstract names the cost of earlier datasets as hundreds of hours of human labor and terabytes of environments.",
+  "key_result": "Given any Python codebase, SWE-smith constructs a corresponding execution environment, then automatically synthesizes 100s to 1,000s of task instances that break existing test(s) in the codebase.",
+  "catalog_ids": [
+   "paper-swe-smith",
+   "swe-smith",
+   "swe-agent-lm-32b",
+   "swe-smith-trajectories"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2504.21798, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 4,
+  "primary": "sft"
+ },
+ {
+  "id": "swe-gym",
+  "title": "Training Software Engineering Agents and Verifiers with SWE-Gym",
+  "authors": "Jiayi Pan et al.",
+  "year": 2024,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2412.21139",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "sft",
+   "rl"
+  ],
+  "level": "intermediate",
+  "teaches": "Fine-tuning on SWE-Gym trajectories gives up to 19% absolute gain in resolve rate on SWE-Bench Verified and Lite. Verifiers trained on sampled trajectories add inference-time scaling, reaching 32.0% on Verified and 26.0% on Lite.",
+  "key_result": "SWE-Gym contains 2,438 real-world Python task instances, each comprising a codebase with an executable runtime environment, unit tests, and a task specified in natural language.",
+  "catalog_ids": [
+   "paper-swe-gym",
+   "swe-gym"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2412.21139, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 4,
+  "primary": "sft"
+ },
+ {
+  "id": "swe-agent",
+  "title": "SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering",
+  "authors": "John Yang et al.",
+  "year": 2024,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2405.15793",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "tooling",
+   "eval"
+  ],
+  "level": "intermediate",
+  "teaches": "The variable studied is the interface, not the model: the paper shows how agent-computer interface design changes agent behavior. Reports 12.5% pass@1 on SWE-bench and 87.7% on HumanEvalFix, and explains the scaffold that much trajectory data for agent training is generated with.",
+  "key_result": "SWE-agent's custom agent-computer interface (ACI) significantly enhances an agent's ability to create and edit code files, navigate entire repositories, and execute tests and other programs.",
+  "catalog_ids": [
+   "sb-swe-agent"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2405.15793, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 4,
+  "primary": "tooling"
+ },
+ {
+  "id": "coderl",
+  "title": "CodeRL: Mastering Code Generation through Pretrained Models and Deep Reinforcement Learning",
+  "authors": "Hung Le et al.",
+  "year": 2022,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2207.01780",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "rl"
+  ],
+  "level": "intermediate",
+  "teaches": "Adds a critical sampling procedure at inference that regenerates programs using example unit-test feedback and critic scores. Uses an extended CodeT5 backbone and reports new state of the art on APPS and zero-shot state of the art on MBPP.",
+  "key_result": "Specifically, during training, we treat the code-generating LM as an actor network, and introduce a critic network that is trained to predict the functional correctness of generated programs and provide dense feedback signals to the actor.",
+  "catalog_ids": [
+   "paper-coderl"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2207.01780, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 5,
+  "primary": "rl"
+ },
+ {
+  "id": "ppocoder",
+  "title": "Execution-based Code Generation using Deep Reinforcement Learning",
+  "authors": "Parshin Shojaee et al.",
+  "year": 2023,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2301.13816",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "rl"
+  ],
+  "level": "intermediate",
+  "teaches": "Combines PPO with execution feedback and structure alignment, and is task and model agnostic. Reports gains in compilation success rate and functional correctness on three code generation tasks across programming languages.",
+  "key_result": "By utilizing non-differentiable feedback from code execution and structure alignment, PPOCoder seamlessly integrates external code-specific knowledge into the model optimization process.",
+  "catalog_ids": [
+   "paper-ppocoder"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2301.13816, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 5,
+  "primary": "rl"
+ },
+ {
+  "id": "rltf",
+  "title": "RLTF: Reinforcement Learning from Unit Test Feedback",
+  "authors": "Jiate Liu et al.",
+  "year": 2023,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2307.04349",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "rl"
+  ],
+  "level": "intermediate",
+  "teaches": "Generates data online during training, in contrast to offline frameworks, and uses fine-grained signals that account for specific error locations within the code. Reports state of the art on APPS and MBPP.",
+  "key_result": "Our approach generates data in real-time during training and simultaneously utilizes fine-grained feedback signals to guide the model towards producing higher-quality code.",
+  "catalog_ids": [
+   "paper-rltf"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2307.04349, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 5,
+  "primary": "rl"
+ },
+ {
+  "id": "plum",
+  "title": "PLUM: Improving Code LMs with Execution-Guided On-Policy Preference Learning Driven By Synthetic Test Cases",
+  "authors": "Dylan Zhang et al.",
+  "year": 2024,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2406.06887",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "preference"
+  ],
+  "level": "intermediate",
+  "teaches": "A preference-learning pipeline for code that needs no reward model: test cases are generated from instructions, candidates sampled from the policy are executed to form preference pairs, and the policy is trained on them. Evaluated on HumanEval, MBPP, and LiveCodeBench.",
+  "key_result": "The framework operates in three key stages: (1) automatic generation of test cases from natural language instructions, (2) creation of a preference data by evaluating candidate code solutions sampled from the policy, which can then be used to (3) train the policy LM.",
+  "catalog_ids": [],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2406.06887, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 5,
+  "primary": "preference"
+ },
+ {
+  "id": "deepseekmath-grpo",
+  "title": "DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models",
+  "authors": "Zhihong Shao et al.",
+  "year": 2024,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2402.03300",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "rl",
+   "pretrain"
+  ],
+  "level": "intermediate",
+  "teaches": "The source of GRPO, the algorithm most code RL recipes in this list start from. DeepSeekMath 7B also continues pretraining from DeepSeek-Coder-Base-v1.5 7B with 120B math tokens, which is a case of a code base model feeding a reasoning model.",
+  "key_result": "Second, we introduce Group Relative Policy Optimization (GRPO), a variant of Proximal Policy Optimization (PPO), that enhances mathematical reasoning abilities while concurrently optimizing the memory usage of PPO.",
+  "catalog_ids": [],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2402.03300, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 5,
+  "primary": "rl"
+ },
+ {
+  "id": "deepseek-r1",
+  "title": "DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning",
+  "authors": "DeepSeek-AI",
+  "year": 2025,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2501.12948",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "rl"
+  ],
+  "level": "intermediate",
+  "teaches": "Reports that the RL framework produces self-reflection, verification, and dynamic strategy adaptation, with gains on verifiable tasks that include coding competitions. Shows that the emergent reasoning patterns can be used to improve smaller models.",
+  "key_result": "Here we show that the reasoning abilities of LLMs can be incentivized through pure reinforcement learning (RL), obviating the need for human-labeled reasoning trajectories.",
+  "catalog_ids": [
+   "paper-deepseek-r1"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2501.12948, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 5,
+  "primary": "rl"
+ },
+ {
+  "id": "dapo",
+  "title": "DAPO: An Open-Source LLM Reinforcement Learning System at Scale",
+  "authors": "Qiying Yu et al.",
+  "year": 2025,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2503.14476",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "rl"
+  ],
+  "level": "hard",
+  "teaches": "Names four techniques that make large-scale LLM RL work and releases training code built on verl plus a curated dataset. The evaluation is math (AIME 2024), but DeepCoder takes clip high and overlong filtering from it for code.",
+  "key_result": "Unlike previous works that withhold training details, we introduce four key techniques of our algorithm that make large-scale LLM RL a success.",
+  "catalog_ids": [
+   "paper-dapo"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2503.14476, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 5,
+  "primary": "rl"
+ },
+ {
+  "id": "swe-rl",
+  "title": "SWE-RL: Advancing LLM Reasoning via Reinforcement Learning on Open Software Evolution",
+  "authors": "Yuxiang Wei et al.",
+  "year": 2025,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2502.18449",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "rl"
+  ],
+  "level": "hard",
+  "teaches": "The reward is patch similarity to the ground truth, not test execution, computed on software evolution data: code snapshots, code changes, issues, and pull requests. Llama3-SWE-RL-70B reaches a 41.0% solve rate on SWE-bench Verified and improves on five out-of-domain tasks.",
+  "key_result": "Leveraging a lightweight rule-based reward (e.g., the similarity score between ground-truth and LLM-generated solutions), SWE-RL enables LLMs to autonomously recover a developer's reasoning processes and solutions by learning from extensive open-source software evolution data -- the record of a software's entire lifecycle, including its code snapshots, code changes, and events such as issues and pull requests.",
+  "catalog_ids": [
+   "paper-swe-rl"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2502.18449, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 5,
+  "primary": "rl"
+ },
+ {
+  "id": "r2e-gym",
+  "title": "R2E-Gym: Procedural Environments and Hybrid Verifiers for Scaling Open-Weights SWE Agents",
+  "authors": "Naman Jain et al.",
+  "year": 2025,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2504.07164",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "rl",
+   "sft",
+   "eval"
+  ],
+  "level": "hard",
+  "teaches": "SYNGEN builds executable environments from commits using test generation and back-translation, which cuts reliance on human-written issues or unit tests; the 32B model reaches 34.4% pass@1 on SWE-Bench Verified. The test-time analysis finds execution-based and execution-free verifiers each saturate around 42-43% and reach 51% when combined.",
+  "key_result": "We introduce AgentGym, the largest procedurally-curated executable gym environment for training real-world SWE-agents, consisting of more than 8.7K tasks.",
+  "catalog_ids": [
+   "paper-r2e-gym",
+   "r2e-gym"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2504.07164, read through the export.arxiv.org API. Abstract only; full text not read. The abstract calls the environment AgentGym; the paper title and the catalog use R2E-Gym.",
+  "section": 5,
+  "primary": "rl"
+ },
+ {
+  "id": "deepcoder-recipe",
+  "title": "DeepCoder-14B-Preview model card (GRPO+ recipe)",
+  "authors": "Agentica team and Together AI",
+  "year": 2025,
+  "venue": "Hugging Face model card",
+  "url": "https://huggingface.co/agentica-org/DeepCoder-14B-Preview",
+  "extra_links": [
+   {
+    "label": "Blog post",
+    "url": "https://pretty-radio-b75.notion.site/DeepCoder-A-Fully-Open-Source-14B-Coder-at-O3-mini-Level-1cf81902c14680b3bee5eb349a512a51"
+   }
+  ],
+  "type": "blog",
+  "stages": [
+   "rl"
+  ],
+  "level": "intermediate",
+  "teaches": "Lists the GRPO+ changes against GRPO: offline difficulty filtering in place of DAPO's online dynamic sampling, no entropy loss, no KL loss, overlong filtering, and clip high. Training uses about 24K unique problem-test pairs and iterative context lengthening from 16K to 32K, with evaluation at 64K giving 60.6%.",
+  "key_result": "DeepCoder-14B-Preview reaches 60.6% Pass@1 on LiveCodeBench v5, described as an 8% improvement over its base model DeepSeek-R1-Distill-Qwen-14B (53%).",
+  "catalog_ids": [
+   "recipe-deepcoder",
+   "deepcoder-14b-preview",
+   "deepcoder-preview"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Model card read on 2026-11-25 (base model, data sources, GRPO+ list, context lengths, LiveCodeBench v5 scores). The card gives no release date; year 2025 comes from its citation block as read through the page summary and from the catalog entry.",
+  "section": 5,
+  "primary": "rl"
+ },
+ {
+  "id": "deepswe-blog",
+  "title": "DeepSWE: Training a Fully Open-sourced, State-of-the-Art Coding Agent by Scaling RL",
+  "authors": "Michael Luo et al. (Agentica and Together AI)",
+  "year": 2025,
+  "venue": "Together AI blog",
+  "url": "https://www.together.ai/blog/deepswe",
+  "extra_links": [],
+  "type": "blog",
+  "stages": [
+   "rl"
+  ],
+  "level": "hard",
+  "teaches": "Details GRPO++ (clip high, no KL loss, no reward standard deviation, length normalization, leave-one-out advantage, compact filtering, no entropy loss) and its multi-turn extension that masks environment observations. Includes negative results: cold-start SFT on Claude trajectories did not improve performance over 100 iterations, and RL in non-thinking mode showed limited improvement; the run took six days on 64 H100 GPUs with about 4.5K R2E-Gym problems after removing repositories shared with SWE-Bench-Verified.",
+  "key_result": "DeepSWE-Preview is trained from Qwen/Qwen3-32B using only reinforcement learning and reaches 59% on SWE-Bench-Verified with hybrid test-time scaling (Best@16).",
+  "catalog_ids": [
+   "recipe-deepswe",
+   "deepswe-preview"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Page together.ai/blog/deepswe read on 2026-11-25: date July 2, 2025, author list, GRPO++ list, reward, compute, data filter, negative results. The page itself gives slightly different figures for the headline score in different places (59%, 59.2%), so only the first is quoted.",
+  "section": 5,
+  "primary": "rl"
+ },
+ {
+  "id": "tulu-3",
+  "title": "Tulu 3: Pushing Frontiers in Open Language Model Post-Training",
+  "authors": "Nathan Lambert et al.",
+  "year": 2024,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2411.15124",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "sft",
+   "preference",
+   "rl"
+  ],
+  "level": "intermediate",
+  "teaches": "An open recipe with data, code, and training details, plus an evaluation scheme with development and unseen evaluations and decontamination of existing open datasets. Closes with an analysis of training methods that did not reliably improve performance.",
+  "key_result": "The training algorithms for our models include supervised finetuning (SFT), Direct Preference Optimization (DPO), and a novel method we call Reinforcement Learning with Verifiable Rewards (RLVR).",
+  "catalog_ids": [
+   "tulu-3-sft-mixture"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2411.15124, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 5,
+  "primary": "sft"
+ },
+ {
+  "id": "mbpp",
+  "title": "Program Synthesis with Large Language Models",
+  "authors": "Jacob Austin et al.",
+  "year": 2021,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2108.07732",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "eval"
+  ],
+  "level": "intro",
+  "teaches": "Defines MBPP (974 tasks meant for entry-level programmers) and MathQA-Python (23,914 problems). Finds that natural-language feedback from a human halves the error rate of the model's first prediction, and that even the best models are generally unable to predict a program's output for a given input.",
+  "key_result": "On both datasets, we find that synthesis performance scales log-linearly with model size.",
+  "catalog_ids": [
+   "mbpp"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2108.07732, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 6,
+  "primary": "eval"
+ },
+ {
+  "id": "evalplus",
+  "title": "Is Your Code Generated by ChatGPT Really Correct? Rigorous Evaluation of Large Language Models for Code Generation",
+  "authors": "Jiawei Liu et al.",
+  "year": 2023,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2305.01210",
+  "extra_links": [
+   {
+    "label": "Code",
+    "url": "https://github.com/evalplus/evalplus"
+   }
+  ],
+  "type": "paper",
+  "stages": [
+   "eval"
+  ],
+  "level": "intro",
+  "teaches": "HumanEval+ extends the HumanEval tests by 80x using LLM-based and mutation-based input generation, and lowers pass@k by up to 19.3-28.9% across 26 LLMs. Test insufficiency also changed rankings: WizardCoder-CodeLlama and Phind-CodeLlama outperform ChatGPT on HumanEval+ but not on HumanEval.",
+  "key_result": "To answer this, we propose EvalPlus -- a code synthesis evaluation framework to rigorously benchmark the functional correctness of LLM-synthesized code.",
+  "catalog_ids": [
+   "evalplus-humanevalplus",
+   "evalplus-mbppplus",
+   "evalplus-cli"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2305.01210, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 6,
+  "primary": "eval"
+ },
+ {
+  "id": "livecodebench",
+  "title": "LiveCodeBench: Holistic and Contamination Free Evaluation of Large Language Models for Code",
+  "authors": "Naman Jain et al.",
+  "year": 2024,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2403.07974",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "eval"
+  ],
+  "level": "intermediate",
+  "teaches": "Problems carry publication dates, so a model can be scored on problems released after its training cutoff; the first release has 400 problems published between May 2023 and May 2024. Adds self-repair, code execution, and test output prediction scenarios and reports contamination and overfitting findings across 18 base and 34 instruction-tuned models.",
+  "key_result": "In this work, we propose LiveCodeBench, a comprehensive and contamination-free evaluation of LLMs for code, which continuously collects new problems over time from contests across three competition platforms, namely LeetCode, AtCoder, and CodeForces.",
+  "catalog_ids": [
+   "paper-livecodebench",
+   "livecodebench"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2403.07974, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 6,
+  "primary": "eval"
+ },
+ {
+  "id": "swe-bench",
+  "title": "SWE-bench: Can Language Models Resolve Real-World GitHub Issues?",
+  "authors": "Carlos E. Jimenez et al.",
+  "year": 2023,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2310.06770",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "eval"
+  ],
+  "level": "intermediate",
+  "teaches": "The task is to edit a codebase to resolve an issue, which needs coordinated changes across functions, classes, and files and very long contexts. At release the best model, Claude 2, solved 1.96% of issues, and the authors also release a fine-tuned model, SWE-Llama.",
+  "key_result": "To this end, we introduce SWE-bench, an evaluation framework consisting of $2,294$ software engineering problems drawn from real GitHub issues and corresponding pull requests across $12$ popular Python repositories.",
+  "catalog_ids": [
+   "swe-bench",
+   "swe-bench-lite",
+   "swe-bench-harness"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2310.06770, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 6,
+  "primary": "eval"
+ },
+ {
+  "id": "swe-bench-verified-openai",
+  "title": "Introducing SWE-bench Verified",
+  "authors": "OpenAI",
+  "year": 2024,
+  "venue": "OpenAI (updated February 24, 2025)",
+  "url": "https://openai.com/index/introducing-swe-bench-verified/",
+  "extra_links": [],
+  "type": "blog",
+  "stages": [
+   "eval"
+  ],
+  "level": "intermediate",
+  "teaches": "93 Python developers screened 1,699 random SWE-bench test samples: 38.3% were flagged for underspecified problem statements and 61.1% for unit tests that may unfairly mark valid solutions as incorrect. GPT-4o resolved 16% on the original SWE-bench and 33.2% on SWE-bench Verified.",
+  "key_result": "OpenAI released SWE-bench Verified, a human-validated subset of SWE-bench that more reliably evaluates AI models' ability to solve real-world software issues.",
+  "catalog_ids": [
+   "swe-bench-verified"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Page openai.com/index/introducing-swe-bench-verified/ read on 2026-11-25: date August 13, 2024, update note February 24, 2025, annotator and sample counts, flag rates, GPT-4o scores. The key result is the page's own description line.",
+  "section": 6,
+  "primary": "eval"
+ },
+ {
+  "id": "swe-bench-verified-retired",
+  "title": "Why we no longer evaluate SWE-bench Verified",
+  "authors": "OpenAI",
+  "year": 2026,
+  "venue": "OpenAI",
+  "url": "https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/",
+  "extra_links": [],
+  "type": "blog",
+  "stages": [
+   "eval"
+  ],
+  "level": "intermediate",
+  "teaches": "Audits 138 problems (a 27.6% subset that models often failed): 59.4% had material test or description issues, split as 35.5% narrow tests, 18.8% wide tests, and 5.1% miscellaneous. Gives contamination examples in which frontier models reproduce gold patches or verbatim task details, and says models that had seen a problem were more likely to pass its underspecified tests.",
+  "key_result": "OpenAI says it has stopped reporting SWE-bench Verified scores and recommends that other developers do the same, citing contamination and flawed tests.",
+  "catalog_ids": [
+   "swe-bench-verified"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Page openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/ read on 2026-11-25: date February 23, 2026, audit figures, contamination examples, recommendation. The page carries no later update banner.",
+  "section": 6,
+  "primary": "eval"
+ },
+ {
+  "id": "bigcodebench",
+  "title": "BigCodeBench: Benchmarking Code Generation with Diverse Function Calls and Complex Instructions",
+  "authors": "Terry Yue Zhuo et al.",
+  "year": 2024,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2406.15877",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "eval"
+  ],
+  "level": "intermediate",
+  "teaches": "Each task has 5.6 test cases with an average branch coverage of 99%, and BigCodeBench-Instruct rewrites docstrings into short instructions. Across 60 LLMs, scores reach up to 60% against 97% for humans.",
+  "key_result": "To assess how well LLMs can solve challenging and practical tasks via programs, we introduce BigCodeBench, a benchmark that challenges LLMs to invoke multiple function calls as tools from 139 libraries and 7 domains for 1,140 fine-grained tasks.",
+  "catalog_ids": [
+   "bigcodebench",
+   "bigcodebench-hard"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2406.15877, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 6,
+  "primary": "eval"
+ },
+ {
+  "id": "aider-polyglot",
+  "title": "o1 tops aider's new polyglot leaderboard",
+  "authors": "aider",
+  "year": 2024,
+  "venue": "aider blog",
+  "url": "https://aider.chat/2024/12/21/polyglot.html",
+  "extra_links": [],
+  "type": "blog",
+  "stages": [
+   "eval"
+  ],
+  "level": "intro",
+  "teaches": "Shows how to rebuild a saturated benchmark by difficulty filtering: seven top models attempted all 697 Exercism exercises in C++, Go, Java, JavaScript, Python, and Rust, and the 225 problems solved by 3 or fewer models were kept. Read it for the selection rule rather than the leaderboard.",
+  "key_result": "o1-2024-12-17 (high) scored 61.7% on the new polyglot benchmark.",
+  "catalog_ids": [
+   "aider-polyglot",
+   "aider-benchmark-harness"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Page aider.chat/2024/12/21/polyglot.html read on 2026-11-25: date December 21, 2024, 225 exercises, language list, selection rule, top score.",
+  "section": 6,
+  "primary": "eval"
+ },
+ {
+  "id": "terminal-bench",
+  "title": "Terminal-Bench: Benchmarking Agents on Hard, Realistic Tasks in Command Line Interfaces",
+  "authors": "Mike A. Merrill et al.",
+  "year": 2026,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2601.11868",
+  "extra_links": [
+   {
+    "label": "Site",
+    "url": "https://www.tbench.ai/"
+   }
+  ],
+  "type": "paper",
+  "stages": [
+   "eval"
+  ],
+  "level": "intermediate",
+  "teaches": "Each of the 89 tasks has a unique environment, a human-written solution, and comprehensive tests. Frontier models and agents score below 65%, and the paper includes an error analysis and a released harness.",
+  "key_result": "To this end, we present Terminal-Bench 2.0: a carefully curated hard benchmark composed of 89 tasks in computer terminal environments inspired by problems from real workflows.",
+  "catalog_ids": [
+   "terminal-bench-2"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2601.11868, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 6,
+  "primary": "eval"
+ },
+ {
+  "id": "rephrased-contamination",
+  "title": "Rethinking Benchmark and Contamination for Language Models with Rephrased Samples",
+  "authors": "Shuo Yang et al.",
+  "year": 2023,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2311.04850",
+  "extra_links": [
+   {
+    "label": "Code",
+    "url": "https://github.com/lm-sys/llm-decontaminator"
+   }
+  ],
+  "type": "paper",
+  "stages": [
+   "eval",
+   "pretrain"
+  ],
+  "level": "intermediate",
+  "teaches": "Finds 8-18% overlap with HumanEval in RedPajama-Data-1T and StarCoder-Data using an LLM-based decontamination method, and shows a 13B model can overfit a benchmark to GPT-4 level when rephrased test data stays in training. The decontamination tool is released.",
+  "key_result": "While most data decontamination efforts apply string matching (e.g., n-gram overlap) to remove benchmark data, we show that these methods are insufficient, and simple variations of test data (e.g., paraphrasing, translation) can easily bypass these decontamination measures.",
+  "catalog_ids": [
+   "paper-rephrased-contamination"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2311.04850, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 6,
+  "primary": "eval"
+ },
+ {
+  "id": "reward-hackability-audit",
+  "title": "Auditing Reward Hackability in Code RL Training Environments",
+  "authors": "Shreshth Rajan",
+  "year": 2026,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2606.16062",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "rl",
+   "eval"
+  ],
+  "level": "hard",
+  "teaches": "Measures how often open code RL environments accept wrong patches, checking each claim by execution against the gold patch. Finds repair is harder to verify than detection: 61.9% of LLM-written repair tests fail on the gold patch.",
+  "key_result": "First, 22.4% of 49 SWE-bench Verified tasks accept a Docker-verified patch that behaves differently from the gold patch, and 57.8% against a stronger attacker.",
+  "catalog_ids": [
+   "paper-reward-hack-audit"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2606.16062, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 6,
+  "primary": "rl"
+ },
+ {
+  "id": "weng-reward-hacking",
+  "title": "Reward Hacking in Reinforcement Learning",
+  "authors": "Lilian Weng",
+  "year": 2024,
+  "venue": "Lil'Log blog",
+  "url": "https://lilianweng.github.io/posts/2024-11-28-reward-hacking/",
+  "extra_links": [],
+  "type": "blog",
+  "stages": [
+   "rl",
+   "eval"
+  ],
+  "level": "intermediate",
+  "teaches": "Covers hacking of RL environments and of RLHF for LLMs, with coding cases such as a model learning to change unit tests to pass coding questions or to modify the code that calculates its reward. Ends with mitigations: RL algorithm changes and detecting reward hacking.",
+  "key_result": "Reward hacking occurs when a reinforcement learning (RL) agent exploits flaws or ambiguities in the reward function to achieve high rewards, without genuinely learning or completing the intended task.",
+  "catalog_ids": [],
+  "checked": "2026-11-25",
+  "evidence": "Page lilianweng.github.io/posts/2024-11-28-reward-hacking/ read on 2026-11-25: date November 28, 2024, section headings, coding examples. Key result is the page's own description line.",
+  "section": 6,
+  "primary": "rl"
+ },
+ {
+  "id": "trl-grpo-trainer",
+  "title": "GRPO Trainer (TRL documentation)",
+  "authors": "Hugging Face",
+  "year": null,
+  "venue": "Hugging Face docs",
+  "url": "https://huggingface.co/docs/trl/grpo_trainer",
+  "extra_links": [
+   {
+    "label": "Code",
+    "url": "https://github.com/huggingface/trl"
+   }
+  ],
+  "type": "code-walkthrough",
+  "stages": [
+   "rl",
+   "tooling"
+  ],
+  "level": "intermediate",
+  "teaches": "Shows the reward function contract (one float per completion, several functions summed or weighted) and the loss_type options: dapo (the default), dr_grpo, sapo, cispo, and vespo. Notes that beta defaults to 0.0 (KL off) and that vLLM runs in colocate or server mode; code execution rewards appear only as placeholder functions, so the sandbox side is not covered.",
+  "key_result": "The GRPO Trainer is based on the DeepSeekMath paper and runs four steps: generating completions, computing the advantage, estimating the KL divergence, and computing the loss.",
+  "catalog_ids": [
+   "fw-trl"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Living documentation page huggingface.co/docs/trl/grpo_trainer, first 100,000 of 116,300 characters read on 2026-11-25; no publication year is shown, so year is null.",
+  "section": 7,
+  "primary": "rl"
+ },
+ {
+  "id": "verl-docs",
+  "title": "verl documentation",
+  "authors": "verl project",
+  "year": null,
+  "venue": "verl docs",
+  "url": "https://verl.readthedocs.io/en/latest/",
+  "extra_links": [
+   {
+    "label": "Code",
+    "url": "https://github.com/verl-project/verl"
+   }
+  ],
+  "type": "code-walkthrough",
+  "stages": [
+   "rl",
+   "tooling"
+  ],
+  "level": "intermediate",
+  "teaches": "Lists PPO and GRPO plus DAPO and other recipes as algorithms, FSDP and Megatron-LM as training backends, and vLLM and SGLang for rollout. Has Sandbox Fusion example and tool integration pages and an Agentic RL Training section with multi-turn rollout support.",
+  "key_result": "verl is described as a flexible, efficient and production-ready RL training framework for post-training LLMs and an open-source implementation of the HybridFlow paper.",
+  "catalog_ids": [
+   "fw-verl",
+   "verl"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Living documentation page verl.readthedocs.io/en/latest/ read on 2026-11-25; no publication year is shown, so year is null.",
+  "section": 7,
+  "primary": "rl"
+ },
+ {
+  "id": "hybridflow",
+  "title": "HybridFlow: A Flexible and Efficient RLHF Framework",
+  "authors": "Guangming Sheng et al.",
+  "year": 2024,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2409.19256",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "rl",
+   "tooling"
+  ],
+  "level": "hard",
+  "teaches": "Explains why the RLHF dataflow is harder than classic RL: each node is a distributed LLM training or generation program and each edge a many-to-many multicast. The design is hierarchical APIs that decouple computation from data dependencies; verl is its open-source implementation.",
+  "key_result": "We propose HybridFlow, which combines single-controller and multi-controller paradigms in a hybrid manner to enable flexible representation and efficient execution of the RLHF dataflow.",
+  "catalog_ids": [
+   "fw-verl"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2409.19256, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 7,
+  "primary": "rl"
+ },
+ {
+  "id": "gke-agent-sandbox",
+  "title": "Accelerate agentic RL with GKE Agent Sandbox",
+  "authors": "Tinsley Shi and Tomer Glottmann (Google Cloud)",
+  "year": 2026,
+  "venue": "Google Cloud blog",
+  "url": "https://cloud.google.com/blog/products/containers-kubernetes/accelerate-agentic-rl-with-gke-agent-sandbox",
+  "extra_links": [],
+  "type": "blog",
+  "stages": [
+   "tooling",
+   "rl"
+  ],
+  "level": "intermediate",
+  "teaches": "The benchmark scales from 500 simultaneous sandboxes to 18,312 (4,578 R2E images with 4 rollouts each) on a 10-node gVisor pool. The post is vendor-authored and compares against Google's own raw Kubernetes baseline; the 10x figure is for average time to first command and the 45x figure is for the worst case.",
+  "key_result": "Average time to first command is 44 to 85 seconds for a raw Kubernetes pod baseline and 1.1 to 8.8 seconds for the GKE Agent Sandbox SDK, in Google's own benchmark.",
+  "catalog_ids": [],
+  "checked": "2026-11-25",
+  "evidence": "Page read on 2026-11-25: date September 30, 2026, cluster and workload description, timing tables, integration list (Gymnasium, NVIDIA NeMo Gym, OpenHands).",
+  "section": 7,
+  "primary": "tooling"
+ },
+ {
+  "id": "rollout-infrastructure-tax",
+  "title": "The Rollout Infrastructure Tax in Coding-Agent Reinforcement Learning",
+  "authors": "Daniel Thi Graviet et al.",
+  "year": 2026,
+  "venue": "arXiv",
+  "url": "https://arxiv.org/abs/2607.01415",
+  "extra_links": [],
+  "type": "paper",
+  "stages": [
+   "tooling",
+   "rl"
+  ],
+  "level": "intermediate",
+  "teaches": "Compares four execution substrates for coding-agent rollouts: single containers, hosted sandboxes, Kubernetes-orchestrated containers, and cloud virtual machines. Argues the execution substrate should be optimized as part of the training system, not treated as deployment plumbing.",
+  "key_result": "We find up to $110\\times$ variation in cold-start latency and a $1.8\\times$ spread in projected worker-hours for one million 150-step trajectories.",
+  "catalog_ids": [],
+  "checked": "2026-11-25",
+  "evidence": "Title, authors, date and abstract on arxiv.org/abs/2607.01415, read through the export.arxiv.org API. Abstract only; full text not read.",
+  "section": 7,
+  "primary": "tooling"
+ },
+ {
+  "id": "cs336",
+  "title": "Stanford CS336: Language Modeling from Scratch (Spring 2025)",
+  "authors": "Tatsunori Hashimoto and Percy Liang",
+  "year": 2025,
+  "venue": "Stanford course site",
+  "url": "https://cs336.stanford.edu/spring2025/",
+  "extra_links": [],
+  "type": "course",
+  "stages": [
+   "pretrain",
+   "sft",
+   "rl",
+   "tooling"
+  ],
+  "level": "hard",
+  "teaches": "Five assignments: tokenizer, model, and optimizer (1); a Triton FlashAttention2 and distributed training (2); fitting a scaling law from a training API (3); turning Common Crawl dumps into filtered, deduplicated pretraining data (4); and SFT plus RL for math reasoning, with optional DPO (5). The RL domain is math, so applying the pipeline to code is left to the reader.",
+  "key_result": "CS336 walks students through building a language model end to end, from data collection and cleaning to model construction, training, and evaluation.",
+  "catalog_ids": [],
+  "checked": "2026-11-25",
+  "evidence": "Course site (archived Spring 2025 page, redirected from stanford-cs336.github.io) read on 2026-11-25: staff, description, assignment list, schedule start. Videos were not checked.",
+  "section": 7,
+  "primary": "pretrain"
+ },
+ {
+  "id": "smol-training-playbook",
+  "title": "The Smol Training Playbook: The Secrets to Building World-Class LLMs",
+  "authors": "Loubna Ben Allal et al.",
+  "year": 2025,
+  "venue": "Hugging Face Space",
+  "url": "https://huggingface.co/spaces/HuggingFaceTB/smol-training-playbook",
+  "extra_links": [
+   {
+    "label": "Full page",
+    "url": "https://huggingfacetb-smol-training-playbook.hf.space/"
+   }
+  ],
+  "type": "blog",
+  "stages": [
+   "pretrain",
+   "sft",
+   "preference",
+   "rl",
+   "tooling"
+  ],
+  "level": "intermediate",
+  "teaches": "Sections cover a training compass (whether to pretrain at all), pretraining (ablations, evaluations, data mixing, architecture, hyperparameters), post-training (SFT, DPO, GRPO, model merging), and infrastructure. It records a run restarted after 1T tokens and how multilinguality, math, and code were balanced.",
+  "key_result": "The playbook documents the training of SmolLM3, a 3B-parameter multilingual reasoning model trained on 11T tokens, including the failures and decisions along the way.",
+  "catalog_ids": [
+   "smollm3-3b",
+   "smollm-recipes"
+  ],
+  "checked": "2026-11-25",
+  "evidence": "Space content read at huggingfacetb-smol-training-playbook.hf.space on 2026-11-25: author list, published Oct. 30, 2025, introduction and reading guide (first part of a 464,568-character page).",
+  "section": 7,
+  "primary": "pretrain"
+ },
+ {
+  "id": "karpathy-deep-dive",
+  "title": "Deep Dive into LLMs like ChatGPT",
+  "authors": "Andrej Karpathy",
+  "year": 2025,
+  "venue": "YouTube",
+  "url": "https://www.youtube.com/watch?v=7xTGNNLPyMI",
+  "extra_links": [],
+  "type": "talk",
+  "stages": [
+   "pretrain",
+   "sft",
+   "rl"
+  ],
+  "level": "intro",
+  "teaches": "A 3 hour 31 minute video whose chapters run from pretraining data and tokenization through GPT-2 training, post-training data, supervised finetuning to reinforcement learning, DeepSeek-R1, AlphaGo, and RLHF. It is not code-specific; use it to place the stages in this list in one picture.",
+  "key_result": "The video covers the full training stack of how the models are developed, along with mental models of how to think about their psychology and how to get the best use of them in practical applications.",
+  "catalog_ids": [],
+  "checked": "2026-11-25",
+  "evidence": "YouTube oEmbed (title, author) and the watch page (published 2025-02-05, length 12683 seconds, description with chapter list) read on 2026-11-25.",
+  "section": 7,
+  "primary": "pretrain"
+ },
+ {
+  "id": "raschka-state-of-rl",
+  "title": "The State of Reinforcement Learning for LLM Reasoning",
+  "authors": "Sebastian Raschka",
+  "year": 2025,
+  "venue": "Ahead of AI (Substack)",
+  "url": "https://magazine.sebastianraschka.com/p/the-state-of-llm-reasoning-model-training",
+  "extra_links": [],
+  "type": "blog",
+  "stages": [
+   "rl"
+  ],
+  "level": "intermediate",
+  "teaches": "Walks from RLHF basics and PPO to GRPO and RLVR, then covers length bias in PPO and GRPO, Dr. GRPO (removes length and standard-deviation normalization), and DAPO's four changes. It describes compiler feedback on predefined test cases as a rule-based reward for LeetCode-style problems; its length-bias discussion is about math and general reasoning, not code.",
+  "key_result": "GRPO was introduced in the DeepSeekMath paper and drops the separate value model (critic), instead comparing multiple sampled answers from the policy to estimate advantages.",
+  "catalog_ids": [],
+  "checked": "2026-11-25",
+  "evidence": "Page read on 2026-11-25: date April 19, 2025, author, eight section headings, GRPO, Dr. GRPO, DAPO and code-reward passages. Key result paraphrases the page's GRPO explanation.",
+  "section": 7,
+  "primary": "rl"
+ },
+ {
+  "id": "rlhf-book",
+  "title": "Reinforcement Learning from Human Feedback (the RLHF Book)",
+  "authors": "Nathan Lambert",
+  "year": 2026,
+  "venue": "Manning (2026); web edition and arXiv 2504.12501",
+  "url": "https://rlhfbook.com/",
+  "extra_links": [
+   {
+    "label": "arXiv",
+    "url": "https://arxiv.org/abs/2504.12501"
+   }
+  ],
+  "type": "book",
+  "stages": [
+   "sft",
+   "preference",
+   "rl",
+   "eval"
+  ],
+  "level": "intermediate",
+  "teaches": "The changelog on the site shows chapters on training recipes with agentic post-training examples, reward modeling, RL notation and the policy ratio, synthetic data and distillation with on-policy distillation, regularization, and evaluation with a short agentic evaluation subsection. It is general post-training, not code-specific.",
+  "key_result": "In this book, we give a comprehensive introduction to the core methods for post-training models for people with some level of quantitative background, organized around the canonical RLHF recipe.",
+  "catalog_ids": [],
+  "checked": "2026-11-25",
+  "evidence": "rlhfbook.com read on 2026-11-25 (changelog, Manning edition July 2026, last built 18 November 2026); abstract on arxiv.org/abs/2504.12501 read through the export.arxiv.org API (first version 2025-04-16).",
+  "section": 7,
+  "primary": "sft"
+ }
+]

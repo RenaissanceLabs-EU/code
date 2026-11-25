@@ -1,0 +1,100 @@
+<p>This is a worked example you can run. It takes a body of source code, reviews its licenses, cleans it, removes duplicates and secrets, splits it without leaking related files across splits, checks it against evaluation problems, and writes a versioned dataset with a card, ready to upload to the Hugging Face Hub. Every number on this page comes from one real run on 2026-11-25. The core pipeline uses only Python 3.9's standard library, needs no network, runs in about 20 seconds in under 50 MB of memory, and on the same Python tree with the settings in <code>run_all.sh</code> produces byte-identical output when you run it again.</p>
+<p>The corpus is the CPython 3.9.6 standard library, because it is already on your machine and its main license is clear (PSF License Version 2, read from the license file next to the source), though a few files carry other notices, which the license step handles. It is small and it is Python only. The steps are the ones you would follow for a real corpus of many repositories, and the page says where a real project needs more.</p>
+<div class="callout"><b>Get the code</b>Everything lives in <a href="https://github.com/RenaissanceLabs-EU/code/tree/main/examples/build-dataset">examples/build-dataset</a> in the site's repository: eight numbered scripts, a test suite of 15 tests, a run log with every count, and the generated dataset card.</div>
+{{code:examples/build-dataset/run_all.sh|run_all.sh|1-31}}
+
+<h2>0. Two different things: a catalog and a dataset</h2>
+<p>People often mix these up, and the difference decides what you may publish.</p>
+<div class="cmpwrap"><table class="cmp narrow">
+<thead><tr><th></th><th>Publishing a catalog of resource metadata</th><th>Redistributing training examples</th></tr></thead>
+<tbody>
+<tr><th>What you publish</th><td>Facts about resources: names, links, sizes, stated licenses, short descriptions in your own words.</td><td>The examples themselves: copies of files, or records that contain their text.</td></tr>
+<tr><th>Which licenses apply</th><td>In general, none of the code licenses, because you are not copying the code (local law may add database or other rights). You must still report each license correctly and link to the original.</td><td>The license of every file. Copies are copies of the source, and derived records usually count as derivative works.</td></tr>
+<tr><th>What you must do</th><td>Keep the entry accurate and dated. Do not copy a card's text word for word.</td><td>Keep license texts and copyright notices, summarize changes, meet attribution terms (MIT, BSD, Apache-2.0), respect copyleft terms where files carry them, and keep a per-file license field.</td></tr>
+<tr><th>This site's catalog</th><td>Is this kind. It links to datasets and does not host them.</td><td>The example on this page is this kind, which is why it ships the license file and records the license on every record.</td></tr>
+</tbody></table></div>
+<p>A dataset you compile can have its own terms for the compilation, but it cannot relicense the parts. That is why the card below sets <code>license: other</code> and carries a license field per file. Gated datasets such as The Stack add access terms on top of the file licenses, and those terms belong to the publisher, not to the code authors. This is general information, not legal advice. For a dataset of third-party code, have the license review checked by someone qualified.</p>
+<p><b>Which materials can be combined and republished?</b> Files under permissive licenses (MIT, BSD, Apache-2.0, PSF-2.0, 0BSD) can be combined and republished if you meet each license's terms: keep the license text and notices, and where required (Apache-2.0, PSF-2.0) say what you changed. 0BSD asks for nothing. Mixing in files under copyleft licenses (GPL family, LGPL, MPL, EPL) brings those terms along, The Stack v1.1 excluded MPL, EPL and LGPL code, which its card calls weak copyleft. Synthetic examples also have terms: check the dataset's own license and the terms of the model that wrote them, since they can differ. A benchmark's problems may be used for evaluation under its terms, and should stay out of the training set in any case.</p>
+
+<h2>1. Pick sources and record provenance</h2>
+<p>Provenance is what lets you answer questions later: where did this file come from, under what license, which version, and can I remove it if its author asks? Record it per file at the moment you collect, not afterwards.</p>
+{{code:examples/build-dataset/01_collect.py|01_collect.py: detect a per-file license header|17-32}}
+{{code:examples/build-dataset/01_collect.py|01_collect.py: one provenance record per file|88-105}}
+<p>For a real corpus of repositories the same record also needs the repository URL, commit hash, the license data from the host (for GitHub, the repository license API) and the date you retrieved it. If you build on an existing corpus, such as The Stack v2, read what its card says about license detection and opt-outs. The Stack v2 card states that it keeps repository-level license data from GH Archive and, where that is missing, detects file-level licenses with ScanCode and propagates them. BigCode also runs an opt-out process by which developers can have their repositories removed from later versions.</p>
+
+<h2>2. Review licenses</h2>
+<p>The pipeline uses an allow-list of SPDX license identifiers and refuses anything it cannot map to one. In this run 14 files carried their own third-party notices that matched permissive-style wording but not a known identifier, so they were dropped until a person reviews them. A header regex is a first pass, not a legal review.</p>
+{{code:examples/build-dataset/allowed_licenses.json|allowed_licenses.json|}}
+<ul>
+<li>Keep the license on every record, and ship the license text with the dataset.</li>
+<li>Keep enough provenance (path, source version, hash) to honor a removal request, and version the dataset so a removal produces a new tagged release.</li>
+<li>For third-party repositories, publish an opt-out channel on the card. The example has none, because its source is the Python standard library, which the PSF publishes.</li>
+</ul>
+
+<h2>3. Filter</h2>
+<p>Filters remove files that teach nothing or teach the wrong thing: tiny stubs, generated code, minified blobs, data tables disguised as code. Each rule is simple, and the run prints how many files each one removed so you can see whether a rule is too strict.</p>
+{{code:examples/build-dataset/02_filter.py|02_filter.py: the rules|9-40}}
+<p>Result: of 674 readable files, 24 were too small and 3 had an auto-generated header. No file hit the line-length rules, which is what you would expect from hand-written standard library code. In a web-scale corpus these rules remove far more. Read a sample of what each rule removes before you trust it.</p>
+
+<h2>4. Remove secrets and personal data</h2>
+<p>Source code contains keys, passwords, email addresses and addresses of private machines. The scrubber replaces them with placeholders and logs only the rule and the position, never the matched text.</p>
+{{code:examples/build-dataset/03_scrub.py|03_scrub.py: the patterns|13-18}}
+<p>Replacements in this run: 163 email addresses in 119 files, 10 globally routable IPv4 addresses and 1 password-like literal (an example in a docstring). There were no keys or tokens. Loopback, private and documentation addresses were kept on purpose, because they are not personal data and replacing them breaks code examples. After scrubbing, every file that parsed before still parses.</p>
+<p>A pattern scrubber has hard limits. It cannot find secrets with no fixed format, such as a random password in a config file, or names and other personal data in prose and comments, or usernames in file paths. It also produces false positives, such as the addresses of authors in headers. For a real dataset use a stronger tool as well and review a sample by hand: the <a href="https://github.com/bigcode-project/bigcode-dataset/tree/main/pii">BigCode PII pipeline</a>, <a href="https://github.com/Yelp/detect-secrets">detect-secrets</a> or <a href="https://github.com/gitleaks/gitleaks">gitleaks</a>.</p>
+
+<h2>5. Deduplicate</h2>
+<p>Real code is full of copies: vendored libraries, forks, boilerplate. Duplicates inflate benchmark results and waste training tokens, and a test file that is a near-copy of a training file measures memory. First remove exact duplicates by content hash. Then remove near-duplicates: split each file into overlapping runs of five tokens, summarize the set with a MinHash signature, find candidate pairs with locality-sensitive hashing, and confirm each pair with the exact Jaccard similarity.</p>
+{{code:examples/build-dataset/04_dedup.py|04_dedup.py: MinHash and LSH, standard library only|11-55}}
+<p>Result: no exact duplicates, and 44 near-duplicates in 16 clusters, every one of them a codec module under <code>encodings/</code> that shares boilerplate (similarity 0.80 to 0.98). For a large corpus, use a tested implementation: <a href="https://github.com/huggingface/datatrove">datatrove</a> and the BigCode <code>near_deduplication</code> code do the same thing at scale.</p>
+
+<h2>6. Split without leaking, and check for contamination</h2>
+<p>If you split at random by file, near-identical files from one project land in both training and test data, and the test score measures memory. Split by <em>group</em> instead: all files of a repository go to the same split. Here the group is the top-level package, which stands in for a repository, and the split is a stable hash of the group name, so it does not change when you add data.</p>
+{{code:examples/build-dataset/05_split.py|05_split.py: group split|14-33}}
+<p>Result: 524 files for training (523 after the decontamination step below), 16 for validation and 49 for test, with 0 groups in more than one split (the run asserts it and writes the proof to <code>split_check.json</code>). The validation set is small because the hash assigns whole packages, which is the price of a clean split on a small corpus. Related repositories (forks, mirrors, a library and its copies in other projects) also leak: group them under one name before you split.</p>
+<p>Contamination is a separate problem: a training file may contain a benchmark problem or its solution. The decontamination script removes any training file that shares a 13-token sequence with an evaluation file. To show that it works, the example plants a problem that reuses the body of one standard library function. The run found 220 overlapping sequences, removed that file from training, and left the two clean probe problems alone.</p>
+{{code:examples/build-dataset/decontaminate.py|decontaminate.py: n-gram overlap|18-48}}
+<p>In real use, pass the actual benchmark files for every benchmark you will report on. N-gram matching misses paraphrased copies, so keep a private held-out set as well. Removing the whole file is blunt; cutting out the function is a reasonable refinement.</p>
+
+<h2>7. Format: a schema and example records</h2>
+<p>The pipeline writes two record types, one file per split, as JSONL. Each type is a Hugging Face <em>configuration</em>, so people can load either one.</p>
+<div class="cmpwrap"><table class="cmp narrow">
+<thead><tr><th>Config</th><th>Fields</th><th>Use</th></tr></thead>
+<tbody>
+<tr><th><code>code_corpus</code></th><td><code>id</code>, <code>repo</code>, <code>path</code>, <code>language</code>, <code>license</code>, <code>sha256</code>, <code>source_sha256</code>, <code>n_tokens_estimate</code>, <code>split</code>, <code>source_version</code>, <code>content</code></td><td>Pretraining or continued pretraining. Whole files with provenance.</td></tr>
+<tr><th><code>docstring_pairs</code></th><td><code>id</code>, <code>source_id</code>, <code>license</code>, <code>split</code>, <code>qualname</code>, <code>instruction</code>, <code>response</code></td><td>Supervised fine-tuning. Instruction is a function's docstring plus its signature. Response is the function. Built with the <code>ast</code> module.</td></tr>
+</tbody></table></div>
+{{code:examples/build-dataset/README.md|Two real records of each type, shortened|66-88}}
+<p>Keep <code>source_id</code> so every pair can be traced to its file, and with it to a license and a split. Pairs inherit the split of their source file, so one file never feeds two splits. Identical functions in different files can still land in different splits (3 responses appear in both train and test in this run), so deduplicate pairs across splits too if you need a strict split.</p>
+
+<h2>8. Write the dataset card</h2>
+<p>The card is the dataset repository's <code>README.md</code>. Hugging Face reads its YAML header to set the license, languages, tasks and the configurations that say which file is which split. The body should state, with numbers from the run, where the data came from, what was removed, how it was split, what is in each field, and what it is not good for. The card in the example is generated by a script from the run's own logs, so the numbers cannot drift from the data.</p>
+{{code:examples/build-dataset/out/README.md|The dataset card, YAML header (generated)|1-32}}
+<p>The Hub's license list has no PSF-2.0 entry, so the card uses <code>license: other</code> with a name and a link to the shipped license file. The sections after the header are: summary, provenance, licensing and what may be redistributed, processing steps with the counts, splits, schema, known limitations and contamination checks. Read the whole card in <a href="https://github.com/RenaissanceLabs-EU/code/blob/main/examples/build-dataset/out/README.md">the repository</a>.</p>
+
+<h2>9. Version and publish</h2>
+<p>Publish privately first, read the rendered card, then make the repository public. Tag every release so that experiments can pin the exact data they used, and record the tag in each training run.</p>
+{{code:examples/build-dataset/08_push.sh|08_push.sh: create, upload and tag (not run in this example)|}}
+<p>Anyone can then load a configuration at a fixed version: <code>load_dataset("your-org/your-dataset", "docstring_pairs", revision="v0.1.0")</code>. The example's check script loaded both configurations through the card with the <code>datasets</code> library and the split counts matched. The Hub's own acceptance of the card was not tested, since nothing was pushed.</p>
+
+<h2>10. What the run produced</h2>
+<div class="cmpwrap"><table class="cmp narrow">
+<thead><tr><th>Step</th><th>Files in</th><th>Files out</th><th>What happened</th></tr></thead>
+<tbody>
+<tr><th>Collect</th><td>682</td><td>674</td><td>6 not valid UTF-8, 2 over the 200 KB cap</td></tr>
+<tr><th>Filter</th><td>674</td><td>633</td><td>24 too small, 3 auto-generated, 14 failed the license gate</td></tr>
+<tr><th>Scrub</th><td>633</td><td>633</td><td>127 files changed</td></tr>
+<tr><th>Deduplicate</th><td>633</td><td>589</td><td>44 near-duplicates in 16 clusters</td></tr>
+<tr><th>Split and decontaminate</th><td>589</td><td>588</td><td>1 training file removed for overlap</td></tr>
+<tr><th>Format</th><td>588</td><td>588 files, 3,471 pairs</td><td>About 2.3 million estimated tokens; 13.3 MB of JSONL</td></tr>
+</tbody></table></div>
+<p>Two complete runs from scratch gave identical SHA-256 checksums for every output file. The run took 20 to 21 seconds, most of it in the deduplication step (about 16 of 21 seconds), and the largest stage used 46 MB of memory. The tests cover the scrubber on planted fake secrets, near-duplicate detection on planted copies, the group-split check, and decontamination on planted overlap.</p>
+
+<h2>Where a real project goes beyond this</h2>
+<ul>
+<li><b>More sources and languages.</b> Add a collection step for repositories and a language detector, and keep a repository field distinct from the license.</li>
+<li><b>A stronger license step.</b> Use a license scanner such as ScanCode, and get a person to review anything unmapped.</li>
+<li><b>Stronger secret and personal-data removal.</b> Add a purpose-built tool and review a sample by hand.</li>
+<li><b>Scale.</b> Move deduplication and filtering to a framework such as datatrove, and stream instead of loading files in memory.</li>
+<li><b>Execution checks.</b> For instruction data, run each solution against tests in a sandbox and keep only passing pairs, as in <a href="/train/evaluate/">evaluation</a>.</li>
+</ul>
+<p>With a dataset in hand, choose <a href="/train/tools/">tools</a> and run <a href="/train/first-run/">a first experiment</a>.</p>

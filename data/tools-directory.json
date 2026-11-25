@@ -1,0 +1,1133 @@
+{
+ "checked": "2026-11-25",
+ "about": "Tools for training a code language model, grouped by workflow role. Versions and dates come from the PyPI JSON API or the GitHub releases API on the check date; install lines come from each project's own README or docs.",
+ "notes": [
+  "Training frameworks pin different dependency versions (Axolotl pins transformers==5.20.1 and trl==1.14.1, LLaMA-Factory caps datasets<=4.0.0, OpenRLHF pins deepspeed==0.19.6). Give each framework its own virtual environment.",
+  "Python floors on 2026-11-25: transformers, TRL, PEFT, Accelerate, vLLM and SGLang need 3.11 or newer; datasets 3.10; EvalPlus 3.9; Axolotl, SkyRL, Harbor and text-dedup 3.12. The macOS system Python 3.9.6 is too old for the training stack.",
+  "Sandboxes differ in what they isolate. Docker, nsjail and Apptainer use the host kernel; gVisor intercepts system calls; Firecracker, and E2B per its docs, use virtual machines; Modal offers gVisor or a VM runtime. SandboxFusion documents no isolation strength."
+ ],
+ "roles": [
+  {
+   "id": "collection",
+   "title": "Collection",
+   "summary": "Get source files, metadata and events with known provenance: clones and API scripts, Software Heritage, streamed Hub datasets, GH Archive, BigCode's scripts."
+  },
+  {
+   "id": "processing",
+   "title": "Processing",
+   "summary": "Filter, deduplicate, parse, scan for secrets, personal data and licenses, and reshape records."
+  },
+  {
+   "id": "tokenization",
+   "title": "Tokenization",
+   "summary": "Turn text into token ids with the same tokenizer and special tokens the model uses, including fill-in-the-middle markers."
+  },
+  {
+   "id": "training",
+   "title": "Training and sampling",
+   "summary": "Fine-tune or RL-train a model, and the engines that sample from it during RL and evaluation."
+  },
+  {
+   "id": "tracking",
+   "title": "Tracking and artifacts",
+   "summary": "Log metrics and configs for each run and store versioned checkpoints and datasets."
+  },
+  {
+   "id": "execution",
+   "title": "Execution",
+   "summary": "Run generated code in isolation for tests, rewards and evaluation; the isolation each tool documents is stated in its entry."
+  },
+  {
+   "id": "evaluation",
+   "title": "Evaluation",
+   "summary": "Score a model with execution-based benchmarks and agentic task suites."
+  }
+ ],
+ "tools": [
+  {
+   "id": "git-github-api",
+   "name": "git clone and GitHub REST API scripts",
+   "role": "collection",
+   "url": "https://docs.github.com/en/rest",
+   "license": null,
+   "latest_release": {
+    "version": null,
+    "date": null,
+    "source": "https://docs.github.com/en/rest",
+    "note": "git and the REST API are services, not versioned packages"
+   },
+   "what": "Lists public repositories through the GitHub REST API and fetches each one with git clone, so you control which repositories, branches and commits enter the corpus.",
+   "when": "Reach for it when you need a small, well-documented repository set with exact commit hashes; for millions of repositories use Software Heritage, because the API enforces primary rate limits.",
+   "connects": "Takes a repository list or search query and hands cloned working trees (with commit SHAs and license files) to the processing step.",
+   "scale": "any",
+   "maturity": "established",
+   "install": "git clone https://github.com/<owner>/<repo>.git",
+   "checked": "2026-11-25",
+   "evidence": "Read the GitHub Docs page on REST API rate limits (primary limit depends on authentication method) on 2026-11-25. License is null because git and the API are governed by GitHub terms and each repository carries its own license."
+  },
+  {
+   "id": "pygithub",
+   "name": "PyGithub",
+   "role": "collection",
+   "url": "https://github.com/PyGithub/PyGithub",
+   "license": "LGPL-3.0",
+   "latest_release": {
+    "version": "2.10.0",
+    "date": "2026-08-20",
+    "source": "https://pypi.org/pypi/PyGithub/json"
+   },
+   "what": "Python client for the GitHub REST API, used to script repository search, metadata and license lookups.",
+   "when": "Use it to avoid hand-writing HTTP calls in a collection script; skip it if gh or plain requests already covers your needs.",
+   "connects": "Takes a token and queries; hands repository metadata (stars, license, default branch) to the cloning and filtering steps.",
+   "scale": "any",
+   "maturity": "established",
+   "install": "pip install PyGithub",
+   "checked": "2026-11-25",
+   "evidence": "PyPI JSON (version 2.10.0, requires Python >=3.10) and GitHub API license field (LGPL-3.0), read 2026-11-25. Install name from PyPI project name; install line not copied from a README."
+  },
+  {
+   "id": "software-heritage-graph",
+   "name": "Software Heritage archive, swh-graph and vault",
+   "role": "collection",
+   "url": "https://archive.softwareheritage.org",
+   "license": "GPL-3.0",
+   "latest_release": {
+    "version": "13.0.1",
+    "date": "2026-10-26",
+    "source": "https://pypi.org/pypi/swh.graph/json"
+   },
+   "what": "Universal archive of public source code; the swh.graph package downloads and queries its compressed graph locally, and the vault service cooks archived directories and revisions into downloadable bundles.",
+   "when": "Reach for it when you need provenance at scale or the exact archived state of a repository; for a few repositories git clone is simpler.",
+   "connects": "Takes SWHIDs or origin URLs; hands directory and revision contents with archive identifiers to deduplication and license steps.",
+   "scale": "cluster",
+   "maturity": "established",
+   "install": "pip install swh.graph",
+   "checked": "2026-11-25",
+   "evidence": "swh-graph quickstart (pip install swh.graph; swh graph download and grpc-serve commands) and swh-vault docs (cookers directory, git_bare, revision_flat, revision_gitfast) read 2026-11-25; PyPI JSON for swh.graph; GPL-3.0 from swh-graph GitHub API and PyPI classifier. Scale is a judgment (full graph size not checked). The documentation host returned HTTP 403 to a scripted browser user agent and pointed to the Software Heritage users ethical charter, so follow it for bulk access."
+  },
+  {
+   "id": "hf-datasets-streaming",
+   "name": "Hugging Face datasets (streaming)",
+   "role": "collection",
+   "url": "https://huggingface.co/docs/datasets/stream",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "5.2.0",
+    "date": "2026-11-09",
+    "source": "https://pypi.org/pypi/datasets/json"
+   },
+   "what": "Loads a Hub dataset lazily with load_dataset(..., streaming=True), so records are read without downloading the whole set.",
+   "when": "Use it to inspect or sample large public code datasets before committing disk; for gated sets accept the terms and log in first, and do not use it as a substitute for a pinned local copy in a final training run.",
+   "connects": "Takes a Hub dataset id; hands an iterable of records to filtering, dedup or a trainer.",
+   "scale": "any",
+   "maturity": "established",
+   "install": "pip install datasets",
+   "checked": "2026-11-25",
+   "evidence": "datasets README install line and the Stream docs page (streaming=True in load_dataset) read 2026-11-25; PyPI JSON requires Python >=3.10; license from GitHub API. The earlier snippet hf-datasets-streaming was run locally with datasets 4.5.0."
+  },
+  {
+   "id": "gh-archive",
+   "name": "GH Archive",
+   "role": "collection",
+   "url": "https://www.gharchive.org/",
+   "license": "MIT (repository code); archive content may include third-party rights",
+   "latest_release": {
+    "version": null,
+    "date": null,
+    "source": "https://api.github.com/repos/igrigorik/gharchive.org/releases/latest",
+    "note": "hourly data files, not a versioned package; repository has no release"
+   },
+   "what": "Hourly JSON archives of public GitHub timeline events (pushes, issues, pull requests), fetched over HTTP or queried in BigQuery.",
+   "when": "Use it to find which repositories and issues were active, or to build issue and pull-request signals; it holds events, not file contents, so you still need git or Software Heritage for code.",
+   "connects": "Takes a date range; hands event records (repository, actor, payload) to repository selection and issue-patch pairing.",
+   "scale": "any",
+   "maturity": "established",
+   "install": "wget https://data.gharchive.org/2015-01-01-15.json.gz",
+   "checked": "2026-11-25",
+   "evidence": "gharchive.org home page (example wget URLs, BigQuery mention) and the repository README (MIT code license; dataset may include third-party rights) read 2026-11-25."
+  },
+  {
+   "id": "bigcode-dataset",
+   "name": "bigcode-dataset",
+   "role": "collection",
+   "url": "https://github.com/bigcode-project/bigcode-dataset",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": null,
+    "date": null,
+    "source": "https://api.github.com/repos/bigcode-project/bigcode-dataset/releases/latest",
+    "note": "no GitHub release object; latest push 2024-08-15"
+   },
+   "what": "The BigCode project's code for building The Stack: language-to-extension selection, filters, PII handling, decontamination, and conversion scripts for notebooks, issues and commits.",
+   "when": "Read and adapt it when you want the reference recipe for a StarCoder-style dataset; do not expect a packaged library, because it is a set of scripts.",
+   "connects": "Takes raw repository files; hands filtered, decontaminated, redacted records to tokenization.",
+   "scale": "any",
+   "maturity": "established",
+   "install": "git clone https://github.com/bigcode-project/bigcode-dataset.git",
+   "checked": "2026-11-25",
+   "evidence": "Repository README contents list (language_selection, pii, decontamination, preprocessing) read 2026-11-25; license and last push (2024-08-15) from the GitHub API. No PyPI package exists (404)."
+  },
+  {
+   "id": "datatrove",
+   "name": "datatrove",
+   "role": "processing",
+   "url": "https://github.com/huggingface/datatrove",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "0.10.1",
+    "date": "2026-09-30",
+    "source": "https://pypi.org/pypi/datatrove/json"
+   },
+   "what": "Pipeline library of readers, filters, MinHash deduplication, tokenization and writers that runs on local, Slurm or Ray executors.",
+   "when": "Use it to run the whole processing chain on many cores or a cluster (check its MinHash shingling on code, since the defaults are tuned for prose), and use datasets map/filter for a one-off script on a small set.",
+   "connects": "Takes jsonl or parquet shards from collection; hands deduplicated, filtered shards or tokenized files to training.",
+   "scale": "cluster",
+   "maturity": "established",
+   "install": "uv sync   # from a clone of the repository; README requires Python 3.11+",
+   "checked": "2026-11-25",
+   "evidence": "README installation section (Python 3.11+, uv sync, extras io, processing, s3, all) and PyPI JSON (requires_python >=3.10, so the README is the stricter statement) read 2026-11-25; license from PyPI and GitHub API."
+  },
+  {
+   "id": "text-dedup",
+   "name": "text-dedup",
+   "role": "processing",
+   "url": "https://github.com/ChenghaoMou/text-dedup",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "0.4.1",
+    "date": "2025-12-28",
+    "source": "https://pypi.org/pypi/text-dedup/json"
+   },
+   "what": "Collection of ready-to-run deduplication scripts (MinHash, suffix array, Bloom filter and others) for text datasets.",
+   "when": "Reach for it when you want a tested near-duplicate script for a single machine; for cluster-scale runs use datatrove, and note it needs Python 3.12 or newer.",
+   "connects": "Takes a Hugging Face or local dataset; hands a deduplicated dataset to the next filter or the tokenizer.",
+   "scale": "any",
+   "maturity": "emerging",
+   "install": "git clone https://github.com/ChenghaoMou/text-dedup && cd text-dedup && uv sync",
+   "checked": "2026-11-25",
+   "evidence": "README (Python 3.12+ badge, install via clone and uv sync) and PyPI JSON (version 0.4.1, requires >=3.12,<4.0) read 2026-11-25; license from GitHub API. Feature list beyond the README summary not checked."
+  },
+  {
+   "id": "datasketch",
+   "name": "datasketch",
+   "role": "processing",
+   "url": "https://github.com/ekzhu/datasketch",
+   "license": "MIT",
+   "latest_release": {
+    "version": "2.0.0",
+    "date": "2026-07-05",
+    "source": "https://pypi.org/pypi/datasketch/json"
+   },
+   "what": "Python library implementing MinHash, MinHash LSH and related probabilistic sketches for near-duplicate search.",
+   "when": "Use it as a building block when you write your own code-aware dedup (for example shingling on tokens rather than words); use a ready pipeline if you just want results.",
+   "connects": "Takes token or shingle sets per file; hands duplicate clusters to a filter that keeps one file per cluster.",
+   "scale": "any",
+   "maturity": "established",
+   "install": "pip install datasketch",
+   "checked": "2026-11-25",
+   "evidence": "README install line (pip install datasketch) and PyPI JSON (version 2.0.0, requires >=3.9, MIT) read 2026-11-25."
+  },
+  {
+   "id": "tree-sitter",
+   "name": "py-tree-sitter (tree-sitter)",
+   "role": "processing",
+   "url": "https://github.com/tree-sitter/py-tree-sitter",
+   "license": "MIT",
+   "latest_release": {
+    "version": "0.27.0",
+    "date": "2026-11-23",
+    "source": "https://pypi.org/pypi/tree-sitter/json"
+   },
+   "what": "Python bindings to the tree-sitter incremental parser, giving concrete syntax trees for code in many languages.",
+   "when": "Use it to drop files that do not parse, split code at function boundaries, or detect language; it does not run or type-check code.",
+   "connects": "Takes source files from collection; hands trees, spans and parse-success flags to filters and to formatting.",
+   "scale": "any",
+   "maturity": "established",
+   "install": "pip install tree-sitter && pip install tree-sitter-python",
+   "checked": "2026-11-25",
+   "evidence": "py-tree-sitter README installation section (pip install tree-sitter; language grammars installed as separate wheels, example tree-sitter-python) and PyPI JSON (version 0.27.0, requires >=3.11) read 2026-11-25."
+  },
+  {
+   "id": "bigcode-pii",
+   "name": "BigCode PII pipeline and StarPII",
+   "role": "processing",
+   "url": "https://github.com/bigcode-project/bigcode-dataset/tree/main/pii",
+   "license": "Apache-2.0 (pipeline code); StarPII model card declares no license field and is gated",
+   "latest_release": {
+    "version": null,
+    "date": null,
+    "source": "https://api.github.com/repos/bigcode-project/bigcode-dataset/releases/latest",
+    "note": "no GitHub release object; latest push 2024-08-15"
+   },
+   "what": "Detects and redacts names, emails, IP addresses, passwords and keys in code datasets, using regexes plus detect-secrets (regex route) or the StarPII NER model.",
+   "when": "Use it before publishing or training on scraped code; treat its output as risk reduction, not proof of removal, because the README reports its own evaluation limits and the NER route needs GPUs.",
+   "connects": "Takes filtered code records; hands the same records with PII replaced by placeholders and extra columns of what was found.",
+   "scale": "multi-gpu",
+   "maturity": "established",
+   "install": "git clone https://github.com/bigcode-project/bigcode-dataset.git && cd bigcode-dataset/pii && pip install -r requirements.txt",
+   "checked": "2026-11-25",
+   "evidence": "pii/README.md (NER approach with StarPII, regex approach with detect-secrets, pip install -r requirements.txt, example main.py command, 800 GB in 800 A100 GPU-hours for StarCoderData) and Hugging Face API for bigcode/starpii (gated: auto, no license field) read 2026-11-25. Repository has no release object."
+  },
+  {
+   "id": "detect-secrets",
+   "name": "detect-secrets",
+   "role": "processing",
+   "url": "https://github.com/Yelp/detect-secrets",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "1.5.0",
+    "date": "2024-05-06",
+    "source": "https://pypi.org/pypi/detect-secrets/json"
+   },
+   "what": "Scans files for high-entropy strings and known secret patterns and writes a baseline of findings.",
+   "when": "Use it for a fast secret pass over code files; pair it with a second scanner because each has different false negatives, and its last release is from 2024.",
+   "connects": "Takes file contents; hands a findings list that a redaction step replaces or that drops the file.",
+   "scale": "any",
+   "maturity": "established",
+   "install": "pip install detect-secrets",
+   "checked": "2026-11-25",
+   "evidence": "README (pip install detect-secrets; detect-secrets scan command) and PyPI JSON (version 1.5.0 released 2024-05-06) read 2026-11-25; the BigCode PII README names it as the key detector in its regex route."
+  },
+  {
+   "id": "gitleaks",
+   "name": "Gitleaks",
+   "role": "processing",
+   "url": "https://github.com/gitleaks/gitleaks",
+   "license": "MIT",
+   "latest_release": {
+    "version": "v8.30.1",
+    "date": "2026-03-21",
+    "source": "https://api.github.com/repos/gitleaks/gitleaks/releases/latest"
+   },
+   "what": "Detects secrets such as passwords, API keys and tokens in git repositories, files and stdin.",
+   "when": "Use it on whole cloned repositories, including git history, before files are flattened into a dataset; a Go binary, so it is not a Python library call.",
+   "connects": "Takes a repository or directory from collection; hands a findings report used to drop or redact files.",
+   "scale": "any",
+   "maturity": "established",
+   "install": "brew install gitleaks   # or: docker pull ghcr.io/gitleaks/gitleaks:latest",
+   "checked": "2026-11-25",
+   "evidence": "README install section (Homebrew, Docker, Go, release binaries) and GitHub releases API (v8.30.1, 2026-03-21) read 2026-11-25."
+  },
+  {
+   "id": "scancode-toolkit",
+   "name": "ScanCode Toolkit",
+   "role": "processing",
+   "url": "https://github.com/aboutcode-org/scancode-toolkit",
+   "license": "Apache-2.0 AND CC-BY-4.0 (software Apache-2.0, data CC-BY-4.0)",
+   "latest_release": {
+    "version": "32.5.0",
+    "date": "2026-01-15",
+    "source": "https://pypi.org/pypi/scancode-toolkit/json"
+   },
+   "what": "Scans files for licenses, copyrights and package metadata and reports SPDX-style license expressions.",
+   "when": "Use it for the license review that decides whether a file may enter the corpus; it is slow on large trees, and the pip route has no ARM wheels for some dependencies (see the Apple silicon note in its docs).",
+   "connects": "Takes cloned repositories; hands per-file license findings that a filter turns into allow and deny lists.",
+   "scale": "any",
+   "maturity": "established",
+   "install": "pip install scancode-toolkit",
+   "checked": "2026-11-25",
+   "evidence": "ScanCode pip installation page (create venv, pip install scancode-toolkit, note on ARM chips), NOTICE file (SPDX Apache-2.0 AND CC-BY-4.0) and PyPI JSON (version 32.5.0, requires >=3.10) read 2026-11-25."
+  },
+  {
+   "id": "go-license-detector",
+   "name": "go-license-detector",
+   "role": "processing",
+   "url": "https://github.com/src-d/go-license-detector",
+   "license": "Apache-2.0 (LICENSE.md; GitHub reports NOASSERTION)",
+   "latest_release": {
+    "version": "v3.1.0",
+    "date": "2020-02-19",
+    "source": "https://api.github.com/repos/src-d/go-license-detector/releases/latest"
+   },
+   "what": "Go tool that detects the license of a project directory by matching root license files to SPDX texts.",
+   "when": "Use it for a fast repository-level license label; it is unmaintained (last push 2023-06-09) and only reads project-level files, so prefer ScanCode when file-level answers matter.",
+   "connects": "Takes a cloned repository; hands one SPDX label with a confidence per repository.",
+   "scale": "any",
+   "maturity": "experimental",
+   "install": "git clone https://github.com/src-d/go-license-detector && cd go-license-detector && go build -v gopkg.in/src-d/go-license-detector.v3/cmd/license-detector",
+   "checked": "2026-11-25",
+   "evidence": "README (algorithm: root license files, SPDX normalization; installation uses go mod download and go build; license Apache 2.0 per LICENSE.md) and GitHub API (last push 2023-06-09, latest release v3.1.0 2020-02-19) read 2026-11-25. Marked experimental because the project is dormant, not because the method is untested."
+  },
+  {
+   "id": "hf-datasets-map-filter",
+   "name": "Hugging Face datasets (map and filter)",
+   "role": "processing",
+   "url": "https://huggingface.co/docs/datasets/process",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "5.2.0",
+    "date": "2026-11-09",
+    "source": "https://pypi.org/pypi/datasets/json"
+   },
+   "what": "Applies a Python function to every record (Dataset.map) or keeps records that satisfy a predicate (Dataset.filter), with multiprocessing and on-disk caching.",
+   "when": "Use it for formatting, simple heuristics and prompt/completion construction on one machine; for global dedup or cluster scale, use datatrove.",
+   "connects": "Takes a loaded or streamed dataset; hands a dataset in the exact columns a trainer expects.",
+   "scale": "any",
+   "maturity": "established",
+   "install": "pip install datasets",
+   "checked": "2026-11-25",
+   "evidence": "Hugging Face datasets docs page 'process' (map and filter present) and README install line read 2026-11-25; the earlier snippet trl-sft-python uses map to build prompt/completion columns."
+  },
+  {
+   "id": "hf-tokenizers",
+   "name": "Hugging Face tokenizers",
+   "role": "tokenization",
+   "url": "https://github.com/huggingface/tokenizers",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "0.23.3",
+    "date": "2026-10-09",
+    "source": "https://pypi.org/pypi/tokenizers/json"
+   },
+   "what": "Fast Rust tokenizer library with Python bindings for training and running BPE, WordPiece and Unigram tokenizers.",
+   "when": "Use it to train a new code tokenizer or to load any tokenizer.json; for an existing model, load the model's own tokenizer instead.",
+   "connects": "Takes raw text or code from processing; hands token ids (or a trained tokenizer.json) to training.",
+   "scale": "any",
+   "maturity": "established",
+   "install": "pip install tokenizers",
+   "checked": "2026-11-25",
+   "evidence": "README install section (shows pip install --pre tokenizers; a stable 0.23.3 release is on PyPI, so the plain command is used) and PyPI JSON (requires >=3.10) read 2026-11-25."
+  },
+  {
+   "id": "tiktoken",
+   "name": "tiktoken",
+   "role": "tokenization",
+   "url": "https://github.com/openai/tiktoken",
+   "license": "MIT",
+   "latest_release": {
+    "version": "0.14.0",
+    "date": "2026-08-17",
+    "source": "https://pypi.org/pypi/tiktoken/json"
+   },
+   "what": "Fast BPE tokenizer library that ships OpenAI's encodings and lets you define your own.",
+   "when": "Use it to count tokens for OpenAI-style models or to reuse their encodings; it is not the tokenizer for most open code models.",
+   "connects": "Takes text; hands token ids or token counts for budgeting and packing.",
+   "scale": "any",
+   "maturity": "established",
+   "install": "pip install tiktoken",
+   "checked": "2026-11-25",
+   "evidence": "README (pip install tiktoken) and PyPI JSON (version 0.14.0, requires >=3.9, MIT) read 2026-11-25."
+  },
+  {
+   "id": "sentencepiece",
+   "name": "SentencePiece",
+   "role": "tokenization",
+   "url": "https://github.com/google/sentencepiece",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "0.2.3",
+    "date": "2026-11-05",
+    "source": "https://pypi.org/pypi/sentencepiece/json"
+   },
+   "what": "Unsupervised text tokenizer and detokenizer (BPE and unigram) that trains directly on raw text.",
+   "when": "Use it when a base model or recipe requires a SentencePiece model file; for a new tokenizer, tokenizers is usually easier to integrate.",
+   "connects": "Takes raw text; hands a .model file and token ids to training.",
+   "scale": "any",
+   "maturity": "established",
+   "install": "pip install sentencepiece",
+   "checked": "2026-11-25",
+   "evidence": "README (pip install sentencepiece) and PyPI JSON (version 0.2.3, requires >=3.10, Apache-2.0) read 2026-11-25."
+  },
+  {
+   "id": "model-tokenizer",
+   "name": "The model's own tokenizer (transformers AutoTokenizer)",
+   "role": "tokenization",
+   "url": "https://huggingface.co/docs/transformers/main_classes/tokenizer",
+   "license": "Apache-2.0 (library); each tokenizer inherits its model's license",
+   "latest_release": {
+    "version": "5.24.1",
+    "date": "2026-11-24",
+    "source": "https://pypi.org/pypi/transformers/json"
+   },
+   "what": "Loads the exact tokenizer, special tokens and chat template that ship with a base model, so training and inference agree.",
+   "when": "Always use it when fine-tuning an existing model, and for fill-in-the-middle use that model's own FIM tokens (<fim_prefix>, <fim_suffix>, <fim_middle>, <fim_pad> in StarCoder2; <|fim_prefix|>, <|fim_suffix|>, <|fim_middle|>, <|fim_pad|> in Qwen2.5-Coder) and never another family's.",
+   "connects": "Takes raw code; hands token ids with the right special tokens and masks to the trainer.",
+   "scale": "any",
+   "maturity": "established",
+   "install": "pip install transformers",
+   "checked": "2026-11-25",
+   "evidence": "tokenizer_config.json of bigcode/starcoder2-3b (added tokens <fim_prefix>, <fim_middle>, <fim_suffix>, <fim_pad>, <repo_name>, <file_sep>) and Qwen/Qwen2.5-Coder-1.5B (<|fim_prefix|>, <|fim_middle|>, <|fim_suffix|>, <|fim_pad|>, <|repo_name|>, <|file_sep|>) fetched from Hugging Face 2026-11-25; PyPI JSON for transformers 5.24.1 (requires >=3.11). Model licenses from the Hub API: StarCoder2 bigcode-openrail-m, Qwen2.5-Coder-1.5B apache-2.0."
+  },
+  {
+   "id": "transformers",
+   "name": "Transformers",
+   "role": "training",
+   "url": "https://github.com/huggingface/transformers",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "5.24.1",
+    "date": "2026-11-24",
+    "source": "https://pypi.org/pypi/transformers/json"
+   },
+   "what": "Library of model definitions, tokenizers and a Trainer class that nearly every open training framework builds on.",
+   "when": "Use it directly for a custom loop or small experiment; for SFT, DPO or GRPO prefer TRL, which wraps it.",
+   "connects": "Takes tokenized datasets and a base model id; hands checkpoints (safetensors) to evaluation and the Hub.",
+   "scale": "any",
+   "maturity": "established",
+   "install": "uv pip install \"transformers[torch]\"",
+   "checked": "2026-11-25",
+   "evidence": "README install line and PyPI JSON (version 5.24.1, requires Python >=3.11, huggingface-hub>=1.31.0, tokenizers>=0.23.1,<0.24) read 2026-11-25. The local environment (transformers 4.57.3) is older than the 5.x line."
+  },
+  {
+   "id": "fw-trl",
+   "name": "TRL",
+   "role": "training",
+   "url": "https://github.com/huggingface/trl",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "1.18.2",
+    "date": "2026-11-19",
+    "source": "https://pypi.org/pypi/trl/json"
+   },
+   "what": "Post-training library with SFTTrainer, DPOTrainer, GRPOTrainer and other trainers, plus a trl command line, built on Transformers.",
+   "when": "Reach for it first for a small SFT or GRPO run on one to a few GPUs; for large multi-node RL use verl, OpenRLHF or SkyRL.",
+   "connects": "Takes a Hub or local dataset in prompt/completion or chat format and a base model; hands a fine-tuned model or LoRA adapter to evaluation.",
+   "scale": "multi-gpu",
+   "maturity": "established",
+   "install": "pip install trl",
+   "checked": "2026-11-25",
+   "evidence": "TRL pyproject.toml on main (requires-python >=3.11; transformers>=4.56.2, accelerate>=1.11.0, datasets>=4.7.0, torch>=2.6.0; extras peft>=0.18.0, deepspeed>=0.18.6, harbor) and README (pip install trl; trl sft CLI) read 2026-11-25; PyPI JSON version 1.18.2. pip on local Python 3.9 lists trl only up to 0.24.0, which confirms the 3.11 floor."
+  },
+  {
+   "id": "peft",
+   "name": "PEFT",
+   "role": "training",
+   "url": "https://github.com/huggingface/peft",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "0.22.0",
+    "date": "2026-11-19",
+    "source": "https://pypi.org/pypi/peft/json"
+   },
+   "what": "Parameter-efficient fine-tuning library (LoRA, QLoRA-style adapters and others) that trains small adapter weights on a frozen base model.",
+   "when": "Use it when memory is the constraint; do not use it when you need the full capacity of continued pretraining.",
+   "connects": "Takes a base model from Transformers; hands a small adapter that TRL trains and that you merge or load at evaluation time.",
+   "scale": "single-gpu",
+   "maturity": "established",
+   "install": "pip install peft",
+   "checked": "2026-11-25",
+   "evidence": "README install line and PyPI JSON (version 0.22.0, requires Python >=3.11) read 2026-11-25; TRL's peft extra asks for peft>=0.18.0."
+  },
+  {
+   "id": "accelerate",
+   "name": "Accelerate",
+   "role": "training",
+   "url": "https://github.com/huggingface/accelerate",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "1.16.0",
+    "date": "2026-11-16",
+    "source": "https://pypi.org/pypi/accelerate/json"
+   },
+   "what": "Launcher and thin wrapper that runs the same PyTorch script on one GPU, many GPUs, many nodes, DeepSpeed or FSDP.",
+   "when": "Use it to go from one GPU to several without rewriting the script; TRL's own docs launch with torchrun, which is an equal choice.",
+   "connects": "Takes a training script; hands a process group that the trainer uses and that writes checkpoints.",
+   "scale": "multi-gpu",
+   "maturity": "established",
+   "install": "pip install accelerate",
+   "checked": "2026-11-25",
+   "evidence": "README install line, launch tutorial (accelerate launch, --multi_gpu, --num_processes) and examples/slurm/submit_multigpu.sh read 2026-11-25; PyPI JSON version 1.16.0, requires Python >=3.11."
+  },
+  {
+   "id": "deepspeed",
+   "name": "DeepSpeed",
+   "role": "training",
+   "url": "https://github.com/deepspeedai/DeepSpeed",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "0.20.1",
+    "date": "2026-11-24",
+    "source": "https://pypi.org/pypi/deepspeed/json"
+   },
+   "what": "Training and inference library with ZeRO optimizer-state, gradient and parameter sharding and offloading.",
+   "when": "Use ZeRO when a model does not fit with plain data parallelism; FSDP is the alternative inside PyTorch.",
+   "connects": "Takes a JSON config and a script from Transformers or TRL; hands sharded checkpoints that you consolidate before evaluation.",
+   "scale": "multi-gpu",
+   "maturity": "established",
+   "install": "pip install deepspeed",
+   "checked": "2026-11-25",
+   "evidence": "README install line and TRL's DeepSpeed integration page (pip install deepspeed; set deepspeed=<config.json> in SFTConfig; launch with torchrun) read 2026-11-25; PyPI JSON version 0.20.1 (no requires_python declared); license from GitHub API."
+  },
+  {
+   "id": "axolotl",
+   "name": "Axolotl",
+   "role": "training",
+   "url": "https://github.com/axolotl-ai-cloud/axolotl",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "0.21.1",
+    "date": "2026-10-27",
+    "source": "https://pypi.org/pypi/axolotl/json"
+   },
+   "what": "YAML-driven fine-tuning tool (axolotl train config.yml) for SFT, preference training and LoRA, with multi-GPU and multi-node support.",
+   "when": "Use it when you want a config file instead of code; it pins exact versions of torch, transformers, peft and trl, so keep it in its own environment.",
+   "connects": "Takes a YAML config naming a dataset and base model; hands checkpoints or adapters to evaluation.",
+   "scale": "multi-gpu",
+   "maturity": "established",
+   "install": "uv venv --python 3.12 && source .venv/bin/activate && uv pip install torch==2.14.0 torchvision && uv pip install axolotl[deepspeed]",
+   "checked": "2026-11-25",
+   "evidence": "README quickstart (uv venv --python 3.12, torch==2.14.0, axolotl[deepspeed], axolotl train examples/llama-3/lora-1b.yml) and PyPI JSON (version 0.21.1, requires >=3.12; pins transformers==5.20.1, peft==0.21.2, trl==1.14.1, datasets==5.0.1) read 2026-11-25."
+  },
+  {
+   "id": "llama-factory",
+   "name": "LLaMA-Factory",
+   "role": "training",
+   "url": "https://github.com/hiyouga/LlamaFactory",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "0.9.5",
+    "date": "2026-05-30",
+    "source": "https://pypi.org/pypi/llamafactory/json"
+   },
+   "what": "Fine-tuning framework with a CLI and web UI covering continued pretraining, SFT, reward modeling, PPO, DPO and others across many model families.",
+   "when": "Use it for config-driven or UI-driven runs without writing code; its pins (datasets<=4.0.0, peft<=0.18.1, accelerate<=1.11.0) clash with current TRL, so use a separate environment.",
+   "connects": "Takes a dataset_info entry and a YAML config; hands checkpoints or merged weights to evaluation.",
+   "scale": "multi-gpu",
+   "maturity": "established",
+   "install": "git clone --depth 1 https://github.com/hiyouga/LlamaFactory.git && cd LlamaFactory && pip install -e . && pip install -r requirements/metrics.txt",
+   "checked": "2026-11-25",
+   "evidence": "README installation section and the llamafactory-cli train example (examples/train_lora/qwen3_lora_sft.yaml) read 2026-11-25; PyPI JSON for llamafactory 0.9.5 (2026-05-30, requires >=3.11) with the pins quoted above."
+  },
+  {
+   "id": "unsloth",
+   "name": "Unsloth",
+   "role": "training",
+   "url": "https://github.com/unslothai/unsloth",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "2026.11.11",
+    "date": "2026-11-24",
+    "source": "https://pypi.org/pypi/unsloth/json"
+   },
+   "what": "Training library with custom kernels for faster, lower-memory LoRA, QLoRA, full fine-tuning and GRPO on a single GPU, plus a local UI.",
+   "when": "Use it to fit a larger model on one consumer or workstation GPU; check its docs before relying on multi-GPU, which was not verified here.",
+   "connects": "Takes a Hub model and a prompt/completion dataset; hands adapters or merged weights (including GGUF) onward.",
+   "scale": "single-gpu",
+   "maturity": "established",
+   "install": "uv venv unsloth_env --python 3.13 && source unsloth_env/bin/activate && uv pip install unsloth --torch-backend=auto",
+   "checked": "2026-11-25",
+   "evidence": "README Unsloth Core install block (Linux, WSL) and feature line (LoRA, QLoRA, full fine tuning, pretraining, RL, GRPO, DPO, FP8) read 2026-11-25; PyPI JSON version 2026.11.11 (requires >=3.9,<3.15). GitHub release tags use a different scheme (v0.1.924-beta, 2026-11-24)."
+  },
+  {
+   "id": "torchtune",
+   "name": "torchtune",
+   "role": "training",
+   "url": "https://github.com/meta-pytorch/torchtune",
+   "license": "BSD-3-Clause",
+   "latest_release": {
+    "version": "0.6.1",
+    "date": "2025-04-07",
+    "source": "https://pypi.org/pypi/torchtune/json"
+   },
+   "what": "PyTorch-native library of hackable fine-tuning recipes (SFT, distillation, DPO, PPO, GRPO) driven by YAML configs.",
+   "when": "Read it for clean reference recipes; do not start a new project on it, because its README states it is no longer actively maintained.",
+   "connects": "Takes a YAML config and a downloaded base model; hands checkpoints to evaluation.",
+   "scale": "multi-gpu",
+   "maturity": "established",
+   "install": "pip install torch torchvision torchao && pip install torchtune",
+   "checked": "2026-11-25",
+   "evidence": "README banner (no longer actively maintained; development wound down in 2025) and install section, PyPI JSON (version 0.6.1 released 2025-04-07) read 2026-11-25."
+  },
+  {
+   "id": "verl",
+   "name": "verl",
+   "role": "training",
+   "url": "https://github.com/verl-project/verl",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "0.9.1",
+    "date": "2026-09-20",
+    "source": "https://pypi.org/pypi/verl/json"
+   },
+   "what": "HybridFlow RL post-training framework that runs PPO, GRPO and related algorithms with FSDP or Megatron training and vLLM or SGLang rollouts on Ray.",
+   "when": "Use it for execution-based RL at multi-GPU or cluster scale with a custom reward function; for a first fine-tune use TRL.",
+   "connects": "Takes parquet prompts with ground truth and a reward function (which can call a sandbox); hands RL-trained checkpoints that you merge with verl.model_merger.",
+   "scale": "cluster",
+   "maturity": "established",
+   "install": "git clone https://github.com/verl-project/verl && cd verl   # no install step; prefix commands with: uv run --frozen --all-packages --extra vllm --extra fsdp",
+   "checked": "2026-11-25",
+   "evidence": "Installation page (uv workflow, Linux, Python 3.12, extras vllm|sglang and fsdp|megatron) and quickstart (GSM8K PPO, needs a GPU with at least 24 GB) read 2026-11-25; PyPI JSON version 0.9.1 (requires >=3.10,<3.13, transformers>=5.5.3,<5.11). The catalog also lists this project as fw-verl under the old volcengine URL."
+  },
+  {
+   "id": "fw-openrlhf",
+   "name": "OpenRLHF",
+   "role": "training",
+   "url": "https://github.com/OpenRLHF/OpenRLHF",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "0.11.2",
+    "date": "2026-09-14",
+    "source": "https://pypi.org/pypi/openrlhf/json"
+   },
+   "what": "Ray, vLLM and DeepSpeed based framework for PPO, REINFORCE++, GRPO and RLOO training, plus SFT and reward-model training.",
+   "when": "Use it when you want a DeepSpeed-based RL stack with a Docker-first setup; it pins deepspeed==0.19.6 and flash-attn==2.8.3, so isolate it.",
+   "connects": "Takes prompt datasets and an optional reward function or agent; hands trained actor checkpoints to evaluation.",
+   "scale": "cluster",
+   "maturity": "established",
+   "install": "pip install openrlhf[vllm]   # run inside nvcr.io/nvidia/pytorch:26.03-py3 as the README recommends",
+   "checked": "2026-11-25",
+   "evidence": "README Installation section (docker run with nvcr.io/nvidia/pytorch:26.03-py3, pip install openrlhf[vllm]) and ray job submit example read 2026-11-25; PyPI JSON version 0.11.2 (requires >=3.10)."
+  },
+  {
+   "id": "skyrl",
+   "name": "SkyRL",
+   "role": "training",
+   "url": "https://github.com/skyrl-project/SkyRL",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "0.5.0",
+    "date": "2026-11-17",
+    "source": "https://pypi.org/pypi/skyrl/json"
+   },
+   "what": "Modular full-stack RL library for LLMs with training backends, a gymnasium of tool-use environments and an agent layer, integrated with Harbor.",
+   "when": "Use it for multi-turn agent RL on real environments such as terminal or SWE tasks; it requires CUDA 13.0, so check your driver first.",
+   "connects": "Takes parquet prompts and an environment class; hands RL-trained checkpoints and trajectories to evaluation.",
+   "scale": "cluster",
+   "maturity": "emerging",
+   "install": "docker run -it --runtime=nvidia --gpus all --shm-size=8g --name skyrl novaskyai/skyrl-train-ray-2.57.0-py3.12-cu13.0 /bin/bash",
+   "checked": "2026-11-25",
+   "evidence": "Installation docs (CUDA 13.0, driver r580 or newer, uv, Docker image above, git clone https://github.com/novasky-ai/SkyRL.git) and quickstart (GRPO on GSM8K via uv run --isolated --extra fsdp -m skyrl.train.entrypoints.main_base) read 2026-11-25; PyPI JSON version 0.5.0 (requires >=3.12,<3.15). The catalog also lists this project as fw-skyrl under the old NovaSky-AI URL."
+  },
+  {
+   "id": "vllm",
+   "name": "vLLM",
+   "role": "training",
+   "url": "https://github.com/vllm-project/vllm",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "0.34.0",
+    "date": "2026-11-16",
+    "source": "https://pypi.org/pypi/vllm/json"
+   },
+   "what": "High-throughput inference and serving engine (PagedAttention, continuous batching, OpenAI-compatible server) used to sample from the policy.",
+   "when": "Use it as the rollout and evaluation sampler; TRL, verl, OpenRLHF and SkyRL all call it, so match the version they pin.",
+   "connects": "Takes a model checkpoint; hands generated completions to a reward function, a sandbox or an evaluator.",
+   "scale": "multi-gpu",
+   "maturity": "established",
+   "install": "uv pip install vllm",
+   "checked": "2026-11-25",
+   "evidence": "README install line and feature list, quickstart (Python 3.11 to 3.14, uv venv, vllm serve), and TRL's vLLM integration page (vllm serve in server mode) read 2026-11-25; PyPI JSON version 0.34.0."
+  },
+  {
+   "id": "sglang",
+   "name": "SGLang",
+   "role": "training",
+   "url": "https://github.com/sgl-project/sglang",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "0.5.23",
+    "date": "2026-10-30",
+    "source": "https://pypi.org/pypi/sglang/json"
+   },
+   "what": "High-performance serving framework for language and multimodal models, used as an alternative rollout engine.",
+   "when": "Use it when your RL framework supports it as a rollout backend (verl lists sglang as an extra) or you prefer its serving features; vLLM is the more common default.",
+   "connects": "Takes a model checkpoint; hands completions to the same reward and evaluation steps as vLLM.",
+   "scale": "multi-gpu",
+   "maturity": "established",
+   "install": "uv pip install --prerelease=allow sglang   # or: docker pull lmsysorg/sglang:latest",
+   "checked": "2026-11-25",
+   "evidence": "README install section (Docker image and uv command) and verl install page (extras vllm or sglang) read 2026-11-25; PyPI JSON version 0.5.23 (requires >=3.11)."
+  },
+  {
+   "id": "wandb",
+   "name": "Weights & Biases",
+   "role": "tracking",
+   "url": "https://github.com/wandb/wandb",
+   "license": "MIT",
+   "latest_release": {
+    "version": "0.31.2",
+    "date": "2026-11-21",
+    "source": "https://pypi.org/pypi/wandb/json"
+   },
+   "what": "Experiment tracker that logs metrics, configs, artifacts and system stats to a hosted or self-hosted dashboard.",
+   "when": "Use it for team dashboards and sweeps; it needs an account and API key, so choose Trackio or TensorBoard for a no-account local setup.",
+   "connects": "Takes metrics from the trainer (report_to=wandb) and eval scripts; hands run URLs and artifacts for comparing experiments.",
+   "scale": "any",
+   "maturity": "established",
+   "install": "pip install wandb",
+   "checked": "2026-11-25",
+   "evidence": "README (pip install wandb; wandb.init and run logging; API key from wandb.ai/settings) and PyPI JSON (version 0.31.2, requires >=3.10, MIT) read 2026-11-25."
+  },
+  {
+   "id": "mlflow",
+   "name": "MLflow",
+   "role": "tracking",
+   "url": "https://github.com/mlflow/mlflow",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "3.18.0",
+    "date": "2026-11-03",
+    "source": "https://pypi.org/pypi/mlflow/json"
+   },
+   "what": "Open-source platform for tracking runs, models and LLM traces, with a self-hostable server and UI.",
+   "when": "Use it when you need a self-hosted tracking server and model registry; it is broader than a single training run needs.",
+   "connects": "Takes logged params, metrics and artifacts from scripts; hands a run registry and model versions for deployment or comparison.",
+   "scale": "any",
+   "maturity": "established",
+   "install": "pip install mlflow",
+   "checked": "2026-11-25",
+   "evidence": "README (uvx mlflow server, UI at http://localhost:5000) and PyPI JSON (version 3.18.0, requires >=3.10) read 2026-11-25. The pip install line is the standard PyPI name, not copied from the README text."
+  },
+  {
+   "id": "tensorboard",
+   "name": "TensorBoard",
+   "role": "tracking",
+   "url": "https://github.com/tensorflow/tensorboard",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "2.21.0",
+    "date": "2026-06-29",
+    "source": "https://pypi.org/pypi/tensorboard/json"
+   },
+   "what": "Local web dashboard that reads event files and plots scalars, histograms and text from a log directory.",
+   "when": "Use it for the simplest local curves, since Transformers and TRL can write TensorBoard logs; it has no run registry or artifact store.",
+   "connects": "Takes event files from the trainer's logging_dir; hands plots you read during or after the run.",
+   "scale": "any",
+   "maturity": "established",
+   "install": "pip install tensorboard   # then: tensorboard --logdir path/to/logs",
+   "checked": "2026-11-25",
+   "evidence": "README (tensorboard --logdir path/to/logs; can run without TensorFlow) and PyPI JSON (version 2.21.0, requires >=3.9) read 2026-11-25."
+  },
+  {
+   "id": "trackio",
+   "name": "Trackio",
+   "role": "tracking",
+   "url": "https://github.com/gradio-app/trackio",
+   "license": "MIT",
+   "latest_release": {
+    "version": "0.45.1",
+    "date": "2026-11-12",
+    "source": "https://pypi.org/pypi/trackio/json"
+   },
+   "what": "Local-first experiment tracker from Hugging Face with a wandb-compatible API (init, log, finish), SQLite storage and an optional Hugging Face Space dashboard.",
+   "when": "Use it for a free, account-free tracker that is easy to query from a CLI or agent; it is newer than W&B or MLflow, so expect faster change.",
+   "connects": "Takes metrics logged through its wandb-style calls or trainer integrations; hands a local database or Space dashboard.",
+   "scale": "any",
+   "maturity": "emerging",
+   "install": "pip install trackio",
+   "checked": "2026-11-25",
+   "evidence": "README (wandb-compatible API, local-first, SQLite, Space hosting, Python 3.10+, pip install trackio) and PyPI JSON (version 0.45.1) read 2026-11-25; TRL and Axolotl list it as a dependency or integration (Axolotl pins trackio==0.40.0)."
+  },
+  {
+   "id": "hf-hub",
+   "name": "Hugging Face Hub (huggingface_hub)",
+   "role": "tracking",
+   "url": "https://github.com/huggingface/huggingface_hub",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "2.4.0",
+    "date": "2026-10-29",
+    "source": "https://pypi.org/pypi/huggingface_hub/json"
+   },
+   "what": "Python client and hf CLI for versioned model, dataset and Space repositories, used as the artifact store for checkpoints and datasets.",
+   "when": "Use it to version datasets and push checkpoints with commit history and model cards; it stores artifacts but does not plot metrics.",
+   "connects": "Takes checkpoints, adapters or dataset folders (upload_folder, push_to_hub); hands versioned repo revisions that evaluation and later runs pull by commit.",
+   "scale": "any",
+   "maturity": "established",
+   "install": "pip install huggingface_hub",
+   "checked": "2026-11-25",
+   "evidence": "README (pip install huggingface_hub; hf auth login; upload_folder example) and PyPI JSON (version 2.4.0, requires >=3.10) read 2026-11-25. The local environment has 0.36.0."
+  },
+  {
+   "id": "sb-docker",
+   "name": "Docker (Moby)",
+   "role": "execution",
+   "url": "https://github.com/moby/moby",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "docker-v29.10.1",
+    "date": "2026-11-24",
+    "source": "https://api.github.com/repos/moby/moby/releases/latest"
+   },
+   "what": "Container runtime that isolates processes with namespaces and cgroups on the host kernel; hardened flags (no network, read-only root, dropped capabilities, resource limits) tighten it.",
+   "when": "Use it as the default sandbox for tests and RL rewards on trusted-ish model output; for adversarial code add a stronger layer such as gVisor or a microVM, because the kernel is shared.",
+   "connects": "Takes a candidate program and tests mounted read-only; hands exit code, stdout and a timeout verdict back to the reward or evaluator.",
+   "scale": "any",
+   "maturity": "established",
+   "install": null,
+   "checked": "2026-11-25",
+   "evidence": "Docker Engine security page (namespaces and cgroups give isolation; intrinsic kernel security is listed as a review area) read 2026-11-25; the hardened command was run on Docker 29.1.3 on 2026-11-24 (see data/snippets.json docker-hardened-sandbox) with flags checked against docker/cli source. GitHub releases API: docker-v29.10.1, 2026-11-24. Install of the daemon is OS specific and not covered here; the hardened run command is in data/setups.json."
+  },
+  {
+   "id": "sb-gvisor",
+   "name": "gVisor",
+   "role": "execution",
+   "url": "https://github.com/google/gvisor",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "release-20261123.0",
+    "date": "2026-11-24",
+    "source": "https://api.github.com/repos/gvisor/gvisor/releases/latest"
+   },
+   "what": "Application kernel (runsc runtime) written in Go that intercepts a container's system calls so the program does not talk to the host kernel directly.",
+   "when": "Use it behind Docker or Kubernetes when you run untrusted code and want stronger isolation than plain containers; expect some syscall incompatibility and overhead.",
+   "connects": "Takes the same OCI container as Docker; hands the same result streams while the workload runs against gVisor's kernel.",
+   "scale": "any",
+   "maturity": "established",
+   "install": null,
+   "checked": "2026-11-25",
+   "evidence": "README and gvisor.dev home ('provides a strong layer of isolation between running applications and the host operating system'; runsc integrates with Docker and Kubernetes) read 2026-11-25; GitHub releases API: release-20261123.0. Install is null because the quick-start page (gvisor.dev/docs/user_guide/quick_start/docker/) was not read."
+  },
+  {
+   "id": "sb-firecracker",
+   "name": "Firecracker",
+   "role": "execution",
+   "url": "https://github.com/firecracker-microvm/firecracker",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "v1.18.0",
+    "date": "2026-11-09",
+    "source": "https://api.github.com/repos/firecracker-microvm/firecracker/releases/latest"
+   },
+   "what": "Virtual machine monitor that runs lightweight KVM microVMs for secure, multi-tenant, minimal-overhead execution.",
+   "when": "Use it when you run untrusted code at scale and need hardware-virtualization isolation; it needs KVM and your own orchestration, so most teams use it through a hosted service.",
+   "connects": "Takes a kernel image, root filesystem and a job; hands console output or files back through your guest agent.",
+   "scale": "cluster",
+   "maturity": "established",
+   "install": null,
+   "checked": "2026-11-25",
+   "evidence": "README ('combine the security and isolation properties provided by hardware virtualization technology'; uses KVM) read 2026-11-25; GitHub releases API: v1.18.0, 2026-11-09. Install is null because the getting-started page was not read."
+  },
+  {
+   "id": "sb-nsjail",
+   "name": "nsjail",
+   "role": "execution",
+   "url": "https://github.com/google/nsjail",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "3.6",
+    "date": "2026-03-18",
+    "source": "https://api.github.com/repos/google/nsjail/releases/latest"
+   },
+   "what": "Linux process-isolation tool that combines namespaces, resource limits, read-only mounts and seccomp-bpf syscall filters in one command.",
+   "when": "Use it to wrap a single untrusted process with a syscall policy without a container runtime; it shares the host kernel and you write the policy.",
+   "connects": "Takes a command and a config or flags; hands the process exit status and output after limits are applied.",
+   "scale": "any",
+   "maturity": "established",
+   "install": "sudo apt-get install autoconf bison flex gcc g++ git libprotobuf-dev libnl-route-3-dev libtool make pkg-config protobuf-compiler && git clone https://github.com/google/nsjail && cd nsjail && make",
+   "checked": "2026-11-25",
+   "evidence": "README (namespace isolation UTS, MOUNT, PID, IPC, NET, USER, CGROUPS, TIME; chroot and pivot_root; Kafel seccomp-bpf policies) read 2026-11-25; GitHub releases API: 3.6, 2026-03-18. Build-from-source steps (apt dependencies, make, or docker build -t nsjail .) are from the README Installation section."
+  },
+  {
+   "id": "sb-apptainer",
+   "name": "Apptainer",
+   "role": "execution",
+   "url": "https://github.com/apptainer/apptainer",
+   "license": "BSD-3-Clause (LICENSE.md; third-party licenses listed separately)",
+   "latest_release": {
+    "version": "v1.5.5",
+    "date": "2026-10-22",
+    "source": "https://api.github.com/repos/apptainer/apptainer/releases/latest"
+   },
+   "what": "Container runtime for HPC systems that runs as your own user, with a security model where you are the same user inside and outside the container.",
+   "when": "Use it on Slurm clusters where Docker is not allowed; its design favors integration (GPUs, host filesystems) over isolation by default, so it is not a strong sandbox for hostile code.",
+   "connects": "Takes a SIF image built from a Docker image or definition file; hands job results through the host filesystem.",
+   "scale": "cluster",
+   "maturity": "established",
+   "install": null,
+   "checked": "2026-11-25",
+   "evidence": "README ('Integration over isolation by default'; 'You are the same user inside a container as outside') and the Security in Apptainer page (setuid and non-setuid modes, kernel filesystem driver caveats) read 2026-11-25; GitHub releases API: v1.5.5, 2026-10-22. Install is null because its installation page was not read."
+  },
+  {
+   "id": "sb-sandboxfusion",
+   "name": "SandboxFusion",
+   "role": "execution",
+   "url": "https://github.com/bytedance/SandboxFusion",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "0.3.7",
+    "date": "2025-01-06",
+    "source": "https://pypi.org/pypi/sandbox-fusion/json"
+   },
+   "what": "Self-hostable service that runs code in about 20 languages through an HTTP API (/run_code) and ships judges for benchmark datasets such as HumanEval, MBPP and CRUXEval.",
+   "when": "Use it as a ready code-execution reward or eval backend for RL frameworks; its docs call it a secure sandbox but state no isolation guarantee, so run it inside a VM or gVisor for untrusted code.",
+   "connects": "Takes JSON with code, language and tests; hands a status, stdout, stderr and return code per run.",
+   "scale": "cluster",
+   "maturity": "emerging",
+   "install": "docker run -it -p 8080:8080 volcengine/sandbox-fusion:server-20250609",
+   "checked": "2026-11-25",
+   "evidence": "README and docs get-started page (docker run image from the docs constants file, curl example against /run_code, language and dataset lists) read 2026-11-25; sandbox/runners/isolation.py shows temporary overlayfs and cgroups. Version shown is the PyPI client sandbox-fusion 0.3.7 (2025-01-06); the server ships as a Docker image tagged by date, and the repo has no GitHub release."
+  },
+  {
+   "id": "sb-e2b",
+   "name": "E2B",
+   "role": "execution",
+   "url": "https://github.com/e2b-dev/E2B",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "2.64.0",
+    "date": "2026-11-13",
+    "source": "https://pypi.org/pypi/e2b/json"
+   },
+   "what": "Hosted and open-source infrastructure that starts isolated cloud sandboxes (documented as isolated Linux VMs) controlled from Python or JavaScript SDKs.",
+   "when": "Use it when you want a managed sandbox API with minimal operations work, and accept network dependence and per-use cost.",
+   "connects": "Takes code or commands through the SDK; hands stdout, files and exit status back.",
+   "scale": "cluster",
+   "maturity": "established",
+   "install": "pip install e2b",
+   "checked": "2026-11-25",
+   "evidence": "README (Sandbox.create, sandbox.commands.run; 'secure isolated sandboxes in the cloud') and docs (sandbox lifecycle page: 'an isolated Linux VM for your agent') read 2026-11-25; PyPI JSON version 2.64.0 (requires >=3.11, MIT). README step 1 gives pip install e2b. Needs an API key from the E2B service (not checked in detail)."
+  },
+  {
+   "id": "sb-modal",
+   "name": "Modal Sandboxes",
+   "role": "execution",
+   "url": "https://github.com/modal-labs/modal-client",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "1.6.4",
+    "date": "2026-11-12",
+    "source": "https://pypi.org/pypi/modal/json"
+   },
+   "what": "Modal's sandbox API for running untrusted code in containers on gVisor by default or in a VM runtime, created from the Modal Python SDK.",
+   "when": "Use it for elastic cloud execution of many short jobs, or to run GPU workloads (GPU sandboxes work only with the gVisor runtime); it is a paid hosted service.",
+   "connects": "Takes an image and commands from your script; hands process output and files back and can be terminated after a timeout.",
+   "scale": "cluster",
+   "maturity": "established",
+   "install": "pip install modal",
+   "checked": "2026-11-25",
+   "evidence": "Modal Sandboxes guide ('secure containers for executing untrusted code'; runtimes gVisor and VM; GPU only with gVisor) and security page (isolation primitives for untrusted code) read 2026-11-25; PyPI JSON version 1.6.4 (requires >=3.10,<3.16). Install line (pip install modal, then modal setup) from the Modal guide home."
+  },
+  {
+   "id": "lm-evaluation-harness",
+   "name": "lm-evaluation-harness (code tasks)",
+   "role": "evaluation",
+   "url": "https://github.com/EleutherAI/lm-evaluation-harness",
+   "license": "MIT",
+   "latest_release": {
+    "version": "0.4.13",
+    "date": "2026-08-31",
+    "source": "https://pypi.org/pypi/lm-eval/json"
+   },
+   "what": "General evaluation framework whose humaneval and mbpp tasks (and plus and instruct variants) score generated code with execution-based pass@1.",
+   "when": "Use it to run code tasks next to general benchmarks in one tool; for stricter code tests use EvalPlus, and run it only with execution isolated.",
+   "connects": "Takes a model (hf, vllm or API backend) and task names; hands per-task metrics and logged samples for comparison.",
+   "scale": "multi-gpu",
+   "maturity": "established",
+   "install": "pip install \"lm_eval[hf]\"   # or lm_eval[vllm]",
+   "checked": "2026-11-25",
+   "evidence": "README (extras hf, vllm, api) and task files lm_eval/tasks/humaneval and mbpp (humaneval, humaneval_instruct, humaneval_plus, mbpp, mbpp_plus) read 2026-11-25; PyPI JSON version 0.4.13 (requires >=3.10). Running code tasks needs HF_ALLOW_CODE_EVAL=1 and --confirm_run_unsafe_code (checked earlier in data/snippets.json)."
+  },
+  {
+   "id": "sb-bigcode-eval",
+   "name": "bigcode-evaluation-harness",
+   "role": "evaluation",
+   "url": "https://github.com/bigcode-project/bigcode-evaluation-harness",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "v0.1.0",
+    "date": "2023-05-25",
+    "source": "https://api.github.com/repos/bigcode-project/bigcode-evaluation-harness/releases/latest"
+   },
+   "what": "Framework for evaluating code language models on tasks such as HumanEval, MBPP and MultiPL-E, with multi-GPU generation through accelerate and Docker execution.",
+   "when": "Use it for the classic multi-language code benchmark suite or to reproduce StarCoder-era numbers; its last tagged release is from 2023, so prefer it for reproduction over new projects.",
+   "connects": "Takes a model and task; hands generations (generations.json) and pass@k, with execution off by default until you pass --allow_code_execution.",
+   "scale": "multi-gpu",
+   "maturity": "established",
+   "install": "git clone https://github.com/bigcode-project/bigcode-evaluation-harness.git && cd bigcode-evaluation-harness && pip install -e .",
+   "checked": "2026-11-25",
+   "evidence": "README (install from clone with pip install -e .; --allow_code_execution is off by default; --generation_only plus Dockerfiles for safer execution) read 2026-11-25; GitHub releases API: v0.1.0, 2023-05-25; last push 2025-07-22. No PyPI package (404)."
+  },
+  {
+   "id": "evalplus-cli",
+   "name": "EvalPlus",
+   "role": "evaluation",
+   "url": "https://github.com/evalplus/evalplus",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "0.3.1",
+    "date": "2024-10-20",
+    "source": "https://pypi.org/pypi/evalplus/json"
+   },
+   "what": "Evaluator for HumanEval+ and MBPP+, which add many more tests per problem, with hf, vllm and API backends and a Docker image for execution.",
+   "when": "Use it as the first correctness check after a code fine-tune; its problems are public and widely trained on, so contamination limits what a high score proves.",
+   "connects": "Takes a model name, dataset and backend; hands samples (.jsonl) and pass@k results.",
+   "scale": "multi-gpu",
+   "maturity": "established",
+   "install": "pip install --upgrade \"evalplus[vllm]\"   # README also shows the git+https form for the latest main",
+   "checked": "2026-11-25",
+   "evidence": "README (pip install evalplus[vllm], evalplus.evaluate, Docker image ganler/evalplus:latest for safe execution) read 2026-11-25; PyPI JSON and GitHub release v0.3.1 (2024-10-20, requires >=3.9); last push 2025-10-02."
+  },
+  {
+   "id": "livecodebench",
+   "name": "LiveCodeBench",
+   "role": "evaluation",
+   "url": "https://github.com/LiveCodeBench/LiveCodeBench",
+   "license": "MIT",
+   "latest_release": {
+    "version": null,
+    "date": null,
+    "source": "https://api.github.com/repos/LiveCodeBench/LiveCodeBench/releases/latest",
+    "note": "no GitHub release object; latest push 2025-07-16"
+   },
+   "what": "Continuously updated benchmark with a runner (lcb_runner) for code generation, execution and test-output prediction, with dated release versions for contamination control.",
+   "when": "Use it to measure on problems newer than your model's training cutoff by choosing --release_version or a start date; it needs Python 3.11 and runs code on the host, so use a container.",
+   "connects": "Takes a model name listed in lm_styles.py and a scenario; hands scored results that you can filter by problem date.",
+   "scale": "multi-gpu",
+   "maturity": "established",
+   "install": "git clone https://github.com/LiveCodeBench/LiveCodeBench.git && cd LiveCodeBench && uv venv --python 3.11 && source .venv/bin/activate && uv pip install -e .",
+   "checked": "2026-11-25",
+   "evidence": "README (install block, dataset release versions release_v1 to release_v6 with problem counts and date windows, python -m lcb_runner.runner.main) read 2026-11-25; GitHub API shows no releases or tags, last push 2025-07-16. No PyPI package (404)."
+  },
+  {
+   "id": "swe-bench-harness",
+   "name": "SWE-bench evaluation harness",
+   "role": "evaluation",
+   "url": "https://github.com/SWE-bench/SWE-bench",
+   "license": "MIT",
+   "latest_release": {
+    "version": "5.0.2",
+    "date": "2026-08-18",
+    "source": "https://pypi.org/pypi/swebench/json"
+   },
+   "what": "Docker-based harness that applies a model's patch to a real repository snapshot and runs the project's tests to decide whether the issue is resolved.",
+   "when": "Use it for repository-level issue-fixing evaluation; it builds many images and needs a lot of disk, and on ARM Macs the README says to build images locally with --task-repo.",
+   "connects": "Takes a predictions file (instance_id, model_name_or_path, model_patch); hands resolved/unresolved results per instance under logs/evaluation.",
+   "scale": "cluster",
+   "maturity": "established",
+   "install": "git clone https://github.com/SWE-bench/SWE-bench.git && cd SWE-bench && pip install -e .   # or: pip install swebench",
+   "checked": "2026-11-25",
+   "evidence": "README (Docker required, pip install -e ., swebench eval verified -p <predictions> --run-id <id> -j <workers>, ARM note) read 2026-11-25; PyPI JSON version 5.0.2 (2026-08-18, requires >=3.10)."
+  },
+  {
+   "id": "inspect-evals",
+   "name": "Inspect AI and inspect_evals",
+   "role": "evaluation",
+   "url": "https://inspect.aisi.org.uk/",
+   "license": "MIT",
+   "latest_release": {
+    "version": "0.3.292",
+    "date": "2026-11-23",
+    "source": "https://pypi.org/pypi/inspect-ai/json"
+   },
+   "what": "Evaluation framework with tasks, solvers, scorers, agents and sandboxing, plus a separate inspect_evals package of ready benchmarks including HumanEval and MBPP.",
+   "when": "Use it to write your own tool-using or agentic evals with logs and a viewer; for a single standard benchmark a dedicated harness is faster to start.",
+   "connects": "Takes a task definition and a model provider; hands structured logs and scores you can analyze.",
+   "scale": "any",
+   "maturity": "established",
+   "install": "pip install inspect-ai   # benchmarks: pip install inspect-evals",
+   "checked": "2026-11-25",
+   "evidence": "Inspect docs home (pip install inspect-ai; sandboxing section) read 2026-11-25; PyPI JSON inspect-ai 0.3.292 (requires >=3.11) and inspect-evals 0.30.0 (requires >=3.11, MIT). Docker as the default sandbox for HumanEval and MBPP comes from the per-eval READMEs read for data/snippets.json."
+  },
+  {
+   "id": "harbor",
+   "name": "Harbor and Terminal-Bench",
+   "role": "evaluation",
+   "url": "https://github.com/harbor-framework/harbor",
+   "license": "Apache-2.0",
+   "latest_release": {
+    "version": "0.27.0",
+    "date": "2026-11-21",
+    "source": "https://pypi.org/pypi/harbor/json"
+   },
+   "what": "Framework for running agents against containerized task sets such as Terminal-Bench, locally in Docker or on cloud sandboxes like Modal, with the same tasks usable for RL rollouts.",
+   "when": "Use it to evaluate or train terminal and software-engineering agents on sandboxed tasks; it needs Python 3.12 and a model or agent API key.",
+   "connects": "Takes a dataset id, an agent and a model; hands trial results and trajectories.",
+   "scale": "cluster",
+   "maturity": "emerging",
+   "install": "uv tool install harbor   # or: pip install harbor",
+   "checked": "2026-11-25",
+   "evidence": "Harbor README (uv tool install harbor; harbor run --dataset terminal-bench@2.0 --agent claude-code ...; local Docker by default) and Terminal-Bench README (uv tool install 'harbor[modal]'; --env modal) read 2026-11-25; PyPI JSON version 0.27.0 (requires >=3.12), GitHub release v0.27.0 2026-11-21."
+  }
+ ]
+}

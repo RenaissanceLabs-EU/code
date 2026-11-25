@@ -1,5 +1,5 @@
 {
- "checked": 647,
+ "checked": 1211,
  "bad": [
   {
    "url": "https://dl.acm.org/doi/abs/10.1145/3520312.3534867",
@@ -20,6 +20,329 @@
    "status": 403,
    "used_by": [
     "netconfeval"
+   ]
+  },
+  {
+   "url": "https://doi.org/10.1093/comjnl/27.2.97",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-program.json"
+   ]
+  },
+  {
+   "url": "https://doi.org/10.1073/pnas.20.11.584",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-program.json"
+   ]
+  },
+  {
+   "url": "https://doi.org/10.1145/3158154",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-program.json"
+   ]
+  },
+  {
+   "url": "https://doi.org/10.1145/2837614.2837630",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-program.json"
+   ]
+  },
+  {
+   "url": "https://doi.org/10.1561/2500000031",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-program.json"
+   ]
+  },
+  {
+   "url": "https://doi.org/10.1112/plms/s2-42.1.230",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-program.json",
+    "data:landmarks-program.json"
+   ]
+  },
+  {
+   "url": "https://doi.org/10.1145/367177.367199",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-program.json"
+   ]
+  },
+  {
+   "url": "https://doi.org/10.1093/comjnl/6.4.308",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-program.json"
+   ]
+  },
+  {
+   "url": "https://doi.org/10.1145/3290380",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-program.json"
+   ]
+  },
+  {
+   "url": "https://doi.org/10.1145/1926385.1926394",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-program.json"
+   ]
+  },
+  {
+   "url": "https://doi.org/10.1145/512950.512973",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-program.json"
+   ]
+  },
+  {
+   "url": "https://doi.org/10.1145/96267.96279",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-program.json"
+   ]
+  },
+  {
+   "url": "https://doi.org/10.1145/351240.351266",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-program.json"
+   ]
+  },
+  {
+   "url": "https://doi.org/10.1145/2635868.2635920",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-program.json"
+   ]
+  },
+  {
+   "url": "https://doi.org/10.1145/2568225.2568271",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-program.json"
+   ]
+  },
+  {
+   "url": "https://doi.org/10.1145/363235.363259",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-program.json"
+   ]
+  },
+  {
+   "url": "https://apps.dtic.mil/sti/pdfs/AD0785072.pdf",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-program.json"
+   ]
+  },
+  {
+   "url": "https://doi.org/10.1145/360933.360975",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-program.json"
+   ]
+  },
+  {
+   "url": "https://doi.org/10.1145/1538788.1538814",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-program.json"
+   ]
+  },
+  {
+   "url": "https://doi.org/10.1145/1629575.1629596",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-program.json"
+   ]
+  },
+  {
+   "url": "https://doi.org/10.1145/3064176.3064183",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-program.json"
+   ]
+  },
+  {
+   "url": "https://doi.org/10.1145/2652524.2652551",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-program.json"
+   ]
+  },
+  {
+   "url": "https://doi.org/10.1002/spe.4380150703",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-program.json"
+   ]
+  },
+  {
+   "url": "https://doi.org/10.1145/2025113.2025141",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-program.json"
+   ]
+  },
+  {
+   "url": "https://doi.org/10.1090/S0002-9947-1953-0053041-6",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-program.json"
+   ]
+  },
+  {
+   "url": "https://doi.org/10.1145/800157.805047",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-program.json"
+   ]
+  },
+  {
+   "url": "https://doi.org/10.1093/mind/LIX.236.433",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-program.json"
+   ]
+  },
+  {
+   "url": "https://doi.org/10.1145/1926385.1926423",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-program.json"
+   ]
+  },
+  {
+   "url": "https://pr.tsmc.com/english/news/2010",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-stack.json"
+   ]
+  },
+  {
+   "url": "https://www.intel.com/content/www/us/en/history/virtual-vault/articles/the-intel-8086.html",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-stack.json"
+   ]
+  },
+  {
+   "url": "https://developer.arm.com/community/arm-community-blogs/b/architectures-and-processors-blog/posts/a-brief-history-of-arm-part-1",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-stack.json"
+   ]
+  },
+  {
+   "url": "https://info.cern.ch/Proposal.html",
+   "status": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certi",
+   "used_by": [
+    "data:landmarks-stack.json"
+   ]
+  },
+  {
+   "url": "https://www.rand.org/pubs/research_memoranda/RM3420.html",
+   "status": 403,
+   "used_by": [
+    "data:landmarks-stack.json"
+   ]
+  },
+  {
+   "url": "https://developer.arm.com/documentation/ddi0602/latest/",
+   "status": 403,
+   "used_by": [
+    "data:languages-a.json"
+   ]
+  },
+  {
+   "url": "https://www.open-std.org/jtc1/sc22/wg14/",
+   "status": "<urlopen error _ssl.c:1112: The handshake operation timed out>",
+   "used_by": [
+    "data:languages-a.json"
+   ]
+  },
+  {
+   "url": "https://www.mathworks.com/company/technical-articles/a-brief-history-of-matlab.html",
+   "status": 403,
+   "used_by": [
+    "data:languages-b.json",
+    "data:languages-b.json"
+   ]
+  },
+  {
+   "url": "https://www.mathworks.com/products/matlab.html",
+   "status": 403,
+   "used_by": [
+    "data:languages-b.json",
+    "data:languages-b.json",
+    "data:languages-b.json"
+   ]
+  },
+  {
+   "url": "https://www.gao.gov/products/gao-19-471",
+   "status": 403,
+   "used_by": [
+    "data:languages-b.json",
+    "data:world.json"
+   ]
+  },
+  {
+   "url": "https://info.cern.ch/",
+   "status": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certi",
+   "used_by": [
+    "data:languages-b.json"
+   ]
+  },
+  {
+   "url": "https://www.hashicorp.com/blog/terraform-announcement",
+   "status": 429,
+   "used_by": [
+    "data:languages-b.json"
+   ]
+  },
+  {
+   "url": "https://www.swift.com/about-us/who-we-are",
+   "status": 403,
+   "used_by": [
+    "data:world.json"
+   ]
+  },
+  {
+   "url": "https://www.gao.gov/products/gao-16-468",
+   "status": 403,
+   "used_by": [
+    "data:world.json",
+    "data:world.json",
+    "data:world.json",
+    "data:world.json"
+   ]
+  },
+  {
+   "url": "https://www.iso.org/standard/68383.html",
+   "status": 403,
+   "used_by": [
+    "data:world.json"
+   ]
+  },
+  {
+   "url": "https://www.sec.gov/news/press-release/2013-222",
+   "status": 403,
+   "used_by": [
+    "data:world.json"
+   ]
+  },
+  {
+   "url": "https://sback.it/publications/icse2018seip.pdf",
+   "status": "Remote end closed connection without response",
+   "used_by": [
+    "data:world.json"
    ]
   }
  ]

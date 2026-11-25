@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Build a code dataset for Hugging Face: a worked example | Renaissance Labs Code</title>
+<meta name="description" content="A worked, reproducible pipeline from source code to a versioned, documented Hugging Face dataset: licenses, filtering, deduplication, secret removal, group splits, decontamination, schema, records and dataset card.">
+<link rel="canonical" href="https://code.renaissancelabs.eu/train/build-dataset/">
+<meta property="og:title" content="Build a code dataset for Hugging Face: a worked example | Renaissance Labs Code"><meta property="og:description" content="A worked, reproducible pipeline from source code to a versioned, documented Hugging Face dataset: licenses, filtering, deduplication, secret removal, group splits, decontamination, schema, records and dataset card."><meta property="og:url" content="https://code.renaissancelabs.eu/train/build-dataset/"><meta property="og:type" content="website">
+<meta property="og:image" content="https://code.renaissancelabs.eu/assets/og/train-build-dataset.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Build a code dataset for Hugging Face: a worked example | Renaissance Labs Code"><meta property="og:site_name" content="Renaissance Labs Code">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://code.renaissancelabs.eu/assets/og/train-build-dataset.jpg"><meta name="twitter:title" content="Build a code dataset for Hugging Face: a worked example | Renaissance Labs Code"><meta name="twitter:description" content="A worked, reproducible pipeline from source code to a versioned, documented Hugging Face dataset: licenses, filtering, deduplication, secret removal, group splits, decontamination, schema, records and dataset card."><meta name="theme-color" content="#121311">
+<link rel="icon" href="/assets/favicon.png">
+<link rel="stylesheet" href="/styles.css?v=a11fdfbf">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+  <a class="brand" href="/"><img src="/assets/mark.png" alt=""><span>Renaissance Labs &middot; Code</span></a>
+  <nav><a href="/program/">Program</a><a href="/stack/">Stack</a><a href="/languages/">Languages</a><a href="/world/">World</a><a href="/intelligence/">Intelligence</a><a href="/train/" aria-current="page">Train</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
+  <button class="theme" id="theme" type="button" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+</header>
+<main id="main">
+<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/train/">Train</a> / Step 4</div><span class="eyebrow">Step 4 of 7</span><h1>Build a documented <em>dataset</em></h1><p class="lede">A runnable example from source files to a versioned Hugging Face dataset: provenance, licenses, filtering, deduplication, secrets, splits, contamination, schema, example records and the dataset card.</p></div><div class="pathbar"><span class="eyebrow">Part two: how to train language models for code</span><ol><li><a href="/train/capability/"><span>1</span>Choose the capability</a></li><li><a href="/train/data/"><span>2</span>Choose the data</a></li><li><a href="/train/datasets/"><span>3</span>Find datasets</a></li><li class="cur"><a href="/train/build-dataset/"><span>4</span>Build a dataset</a></li><li><a href="/train/tools/"><span>5</span>Pick tools</a></li><li><a href="/train/first-run/"><span>6</span>Run a first experiment</a></li><li><a href="/train/evaluate/"><span>7</span>Evaluate</a></li></ol></div><div class="prose wide"><p>This is a worked example you can run. It takes a body of source code, reviews its licenses, cleans it, removes duplicates and secrets, splits it without leaking related files across splits, checks it against evaluation problems, and writes a versioned dataset with a card, ready to upload to the Hugging Face Hub. Every number on this page comes from one real run on 2026-11-25. The core pipeline uses only Python 3.9's standard library, needs no network, runs in about 20 seconds in under 50 MB of memory, and on the same Python tree with the settings in <code>run_all.sh</code> produces byte-identical output when you run it again.</p>
+<p>The corpus is the CPython 3.9.6 standard library, because it is already on your machine and its main license is clear (PSF License Version 2, read from the license file next to the source), though a few files carry other notices, which the license step handles. It is small and it is Python only. The steps are the ones you would follow for a real corpus of many repositories, and the page says where a real project needs more.</p>
+<div class="callout"><b>Get the code</b>Everything lives in <a href="https://github.com/RenaissanceLabs-EU/code/tree/main/examples/build-dataset">examples/build-dataset</a> in the site's repository: eight numbered scripts, a test suite of 15 tests, a run log with every count, and the generated dataset card.</div>
+<div class="codebox"><div class="lab"><span>run_all.sh</span><button class="copy" type="button">Copy</button></div><pre>#!/bin/bash
+# Run the whole pipeline from scratch. Usage: ./run_all.sh   (set RETRIEVAL_DATE to override the recorded date)
+# Per-stage wall time and peak memory (macOS /usr/bin/time -l) go to timings/, outside out/, so out/ stays deterministic.
+set -euo pipefail
+cd &quot;$(dirname &quot;$0&quot;)&quot;
+export RETRIEVAL_DATE=&quot;${RETRIEVAL_DATE:-2026-11-25}&quot;
+export PYTHONHASHSEED=0 PYTHONDONTWRITEBYTECODE=1
+PY=${PYTHON:-python3}
+rm -rf data out timings
+mkdir -p data out timings
+
+run() {  # run &lt;name&gt; &lt;command...&gt;
+  local name=$1; shift
+  echo &quot;== $name&quot;
+  /usr/bin/time -l &quot;$@&quot; 2&gt; &quot;timings/$name.txt&quot; | tee &quot;timings/$name.out&quot;
+  grep -E &quot;real|maximum resident&quot; &quot;timings/$name.txt&quot; | sed &#x27;s/^/   /&#x27;
+}
+
+run 01_collect   $PY 01_collect.py
+run 02_filter    $PY 02_filter.py
+run 03_scrub     $PY 03_scrub.py
+run 04_dedup     $PY 04_dedup.py
+run 05_split     $PY 05_split.py
+run decontaminate $PY decontaminate.py --eval eval_probe.jsonl --input data/split.jsonl --output data/split_decon.jsonl --report out/logs/decontamination.json
+run 06_format    $PY 06_format.py
+run 07_card      $PY 07_card.py
+
+# checksums of every released file (and of the intermediates) for the determinism check
+( cd out &amp;&amp; find . -type f ! -name SHA256SUMS | sort | xargs shasum -a 256 &gt; SHA256SUMS )
+( cd data &amp;&amp; find . -type f | sort | xargs shasum -a 256 ) &gt; timings/data_sha256.txt
+echo &quot;== done. out size:&quot;; du -sk out | awk &#x27;{printf &quot;   %.1f MB\n&quot;, $1/1024}&#x27;</pre></div>
+
+<h2>0. Two different things: a catalog and a dataset</h2>
+<p>People often mix these up, and the difference decides what you may publish.</p>
+<div class="cmpwrap"><table class="cmp narrow">
+<thead><tr><th></th><th>Publishing a catalog of resource metadata</th><th>Redistributing training examples</th></tr></thead>
+<tbody>
+<tr><th>What you publish</th><td>Facts about resources: names, links, sizes, stated licenses, short descriptions in your own words.</td><td>The examples themselves: copies of files, or records that contain their text.</td></tr>
+<tr><th>Which licenses apply</th><td>In general, none of the code licenses, because you are not copying the code (local law may add database or other rights). You must still report each license correctly and link to the original.</td><td>The license of every file. Copies are copies of the source, and derived records usually count as derivative works.</td></tr>
+<tr><th>What you must do</th><td>Keep the entry accurate and dated. Do not copy a card's text word for word.</td><td>Keep license texts and copyright notices, summarize changes, meet attribution terms (MIT, BSD, Apache-2.0), respect copyleft terms where files carry them, and keep a per-file license field.</td></tr>
+<tr><th>This site's catalog</th><td>Is this kind. It links to datasets and does not host them.</td><td>The example on this page is this kind, which is why it ships the license file and records the license on every record.</td></tr>
+</tbody></table></div>
+<p>A dataset you compile can have its own terms for the compilation, but it cannot relicense the parts. That is why the card below sets <code>license: other</code> and carries a license field per file. Gated datasets such as The Stack add access terms on top of the file licenses, and those terms belong to the publisher, not to the code authors. This is general information, not legal advice. For a dataset of third-party code, have the license review checked by someone qualified.</p>
+<p><b>Which materials can be combined and republished?</b> Files under permissive licenses (MIT, BSD, Apache-2.0, PSF-2.0, 0BSD) can be combined and republished if you meet each license's terms: keep the license text and notices, and where required (Apache-2.0, PSF-2.0) say what you changed. 0BSD asks for nothing. Mixing in files under copyleft licenses (GPL family, LGPL, MPL, EPL) brings those terms along, The Stack v1.1 excluded MPL, EPL and LGPL code, which its card calls weak copyleft. Synthetic examples also have terms: check the dataset's own license and the terms of the model that wrote them, since they can differ. A benchmark's problems may be used for evaluation under its terms, and should stay out of the training set in any case.</p>
+
+<h2>1. Pick sources and record provenance</h2>
+<p>Provenance is what lets you answer questions later: where did this file come from, under what license, which version, and can I remove it if its author asks? Record it per file at the moment you collect, not afterwards.</p>
+<div class="codebox"><div class="lab"><span>01_collect.py: detect a per-file license header</span><button class="copy" type="button">Copy</button></div><pre>HEADER_PATTERNS = [
+    (&quot;Apache-2.0&quot;, re.compile(r&quot;licen[sc]ed under the apache license,? version 2\.0|also licen[sc]ed under the apache license, 2\.0&quot;)),
+    (&quot;MIT&quot;, re.compile(r&quot;licen[sc]ed under the mit license|permission is hereby granted, free of charge&quot;)),
+    (&quot;LicenseRef-HPND-style&quot;, re.compile(r&quot;permission to use, copy, modify,? and distribute this software&quot;)),
+    (&quot;LicenseRef-BSD-style&quot;, re.compile(r&quot;redistribution and use in source and binary forms&quot;)),
+]
+
+
+def detect_header_license(text):
+    head = text[:6000].lower()
+    found = [name for name, rx in HEADER_PATTERNS if rx.search(head)]
+    if not found:
+        return None
+    if &quot;MIT&quot; in found and &quot;Apache-2.0&quot; in found:
+        return &quot;MIT OR Apache-2.0&quot;
+    return found[0]</pre></div>
+<div class="codebox"><div class="lab"><span>01_collect.py: one provenance record per file</span><button class="copy" type="button">Copy</button></div><pre>            header = detect_header_license(text)
+            records.append({
+                &quot;path&quot;: rel,
+                &quot;source_tree&quot;: common.SOURCE_TREE,
+                &quot;source_version&quot;: version,
+                &quot;license&quot;: header or &quot;PSF-2.0&quot;,
+                &quot;license_source&quot;: &quot;file-header-regex&quot; if header else &quot;tree-default&quot;,
+                &quot;license_file&quot;: &quot;LICENSE.txt&quot;,
+                &quot;license_file_sha256&quot;: lic_sha,
+                &quot;sha256&quot;: hashlib.sha256(raw).hexdigest(),
+                &quot;size&quot;: len(raw),
+                &quot;retrieval_date&quot;: common.RETRIEVAL_DATE,
+                &quot;content&quot;: text,
+            })
+    records.sort(key=lambda r: r[&quot;path&quot;])
+    n = common.write_jsonl(os.path.join(common.DATA, &quot;raw.jsonl&quot;), records)
+    lic_counts = {}
+    for r in records:</pre></div>
+<p>For a real corpus of repositories the same record also needs the repository URL, commit hash, the license data from the host (for GitHub, the repository license API) and the date you retrieved it. If you build on an existing corpus, such as The Stack v2, read what its card says about license detection and opt-outs. The Stack v2 card states that it keeps repository-level license data from GH Archive and, where that is missing, detects file-level licenses with ScanCode and propagates them. BigCode also runs an opt-out process by which developers can have their repositories removed from later versions.</p>
+
+<h2>2. Review licenses</h2>
+<p>The pipeline uses an allow-list of SPDX license identifiers and refuses anything it cannot map to one. In this run 14 files carried their own third-party notices that matched permissive-style wording but not a known identifier, so they were dropped until a person reviews them. A header regex is a first pass, not a legal review.</p>
+<div class="codebox"><div class="lab"><span>allowed_licenses.json</span><button class="copy" type="button">Copy</button></div><pre>{
+  &quot;allowed&quot;: [&quot;PSF-2.0&quot;, &quot;Apache-2.0&quot;, &quot;MIT&quot;, &quot;BSD-2-Clause&quot;, &quot;BSD-3-Clause&quot;, &quot;0BSD&quot;],
+  &quot;note&quot;: &quot;SPDX identifiers whose terms allow redistribution of source with notices retained. An SPDX expression &#x27;A OR B&#x27; passes if either side is allowed. Labels starting with LicenseRef- are file-header patterns that were not matched to an SPDX identifier; they are NOT allowed until a person reviews the file.&quot;
+}</pre></div>
+<ul>
+<li>Keep the license on every record, and ship the license text with the dataset.</li>
+<li>Keep enough provenance (path, source version, hash) to honor a removal request, and version the dataset so a removal produces a new tagged release.</li>
+<li>For third-party repositories, publish an opt-out channel on the card. The example has none, because its source is the Python standard library, which the PSF publishes.</li>
+</ul>
+
+<h2>3. Filter</h2>
+<p>Filters remove files that teach nothing or teach the wrong thing: tiny stubs, generated code, minified blobs, data tables disguised as code. Each rule is simple, and the run prints how many files each one removed so you can see whether a rule is too strict.</p>
+<div class="codebox"><div class="lab"><span>02_filter.py: the rules</span><button class="copy" type="button">Copy</button></div><pre>import common
+
+MIN_BYTES = 150
+MAX_LINES = 5000
+MAX_LINE_LEN = 1000
+MAX_AVG_LINE_LEN = 100
+MIN_ALNUM_FRAC = 0.25
+AUTOGEN_RE = re.compile(r&quot;auto[- ]?generated|do not edit|generated by|this file was generated&quot;, re.I)
+
+RULES = [&quot;min_size&quot;, &quot;max_lines&quot;, &quot;max_line_length&quot;, &quot;avg_line_length&quot;, &quot;alnum_fraction&quot;, &quot;autogenerated_header&quot;]
+
+
+def rule_hits(text, size):
+    lines = text.split(&quot;\n&quot;)
+    longest = max((len(l) for l in lines), default=0)
+    avg = sum(len(l) for l in lines) / max(len(lines), 1)
+    alnum = sum(c.isalnum() for c in text) / max(len(text), 1)
+    head = &quot;\n&quot;.join(lines[:5])
+    return {
+        &quot;min_size&quot;: size &lt; MIN_BYTES,
+        &quot;max_lines&quot;: len(lines) &gt; MAX_LINES,
+        &quot;max_line_length&quot;: longest &gt; MAX_LINE_LEN,
+        &quot;avg_line_length&quot;: avg &gt; MAX_AVG_LINE_LEN,
+        &quot;alnum_fraction&quot;: alnum &lt; MIN_ALNUM_FRAC,
+        &quot;autogenerated_header&quot;: bool(AUTOGEN_RE.search(head)),
+    }
+
+
+def license_allowed(expr, allowed):
+    &quot;&quot;&quot;SPDX-style: &#x27;A OR B&#x27; passes if any side is on the allow-list.&quot;&quot;&quot;
+    return any(part.strip() in allowed for part in expr.split(&quot; OR &quot;))</pre></div>
+<p>Result: of 674 readable files, 24 were too small and 3 had an auto-generated header. No file hit the line-length rules, which is what you would expect from hand-written standard library code. In a web-scale corpus these rules remove far more. Read a sample of what each rule removes before you trust it.</p>
+
+<h2>4. Remove secrets and personal data</h2>
+<p>Source code contains keys, passwords, email addresses and addresses of private machines. The scrubber replaces them with placeholders and logs only the rule and the position, never the matched text.</p>
+<div class="codebox"><div class="lab"><span>03_scrub.py: the patterns</span><button class="copy" type="button">Copy</button></div><pre>PRIVATE_KEY_RE = re.compile(r&quot;-----BEGIN [A-Z0-9 ]*PRIVATE KEY(?: BLOCK)?-----.*?-----END [A-Z0-9 ]*PRIVATE KEY(?: BLOCK)?-----&quot;, re.S)
+AWS_RE = re.compile(r&quot;\bAKIA[0-9A-Z]{16}\b&quot;)
+GITHUB_RE = re.compile(r&quot;\bgh[pousr]_[A-Za-z0-9]{36,}\b&quot;)
+PASSWORD_RE = re.compile(r&quot;&quot;&quot;(?i)([\w.]*(?:password|passwd|pwd|secret|api_key)\w*)(\s*=\s*)([&quot;&#x27;])([^&quot;&#x27;\n]{4,})\3&quot;&quot;&quot;)
+EMAIL_RE = re.compile(r&quot;[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}&quot;)
+IPV4_RE = re.compile(r&quot;(?&lt;![\d.])(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.){3}(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?![\d.])&quot;)</pre></div>
+<p>Replacements in this run: 163 email addresses in 119 files, 10 globally routable IPv4 addresses and 1 password-like literal (an example in a docstring). There were no keys or tokens. Loopback, private and documentation addresses were kept on purpose, because they are not personal data and replacing them breaks code examples. After scrubbing, every file that parsed before still parses.</p>
+<p>A pattern scrubber has hard limits. It cannot find secrets with no fixed format, such as a random password in a config file, or names and other personal data in prose and comments, or usernames in file paths. It also produces false positives, such as the addresses of authors in headers. For a real dataset use a stronger tool as well and review a sample by hand: the <a href="https://github.com/bigcode-project/bigcode-dataset/tree/main/pii">BigCode PII pipeline</a>, <a href="https://github.com/Yelp/detect-secrets">detect-secrets</a> or <a href="https://github.com/gitleaks/gitleaks">gitleaks</a>.</p>
+
+<h2>5. Deduplicate</h2>
+<p>Real code is full of copies: vendored libraries, forks, boilerplate. Duplicates inflate benchmark results and waste training tokens, and a test file that is a near-copy of a training file measures memory. First remove exact duplicates by content hash. Then remove near-duplicates: split each file into overlapping runs of five tokens, summarize the set with a MinHash signature, find candidate pairs with locality-sensitive hashing, and confirm each pair with the exact Jaccard similarity.</p>
+<div class="codebox"><div class="lab"><span>04_dedup.py: MinHash and LSH, standard library only</span><button class="copy" type="button">Copy</button></div><pre>SEED = 1337
+NUM_PERM = 64
+BANDS = 16          # 16 bands x 4 rows: P(candidate | J=0.8) = 1-(1-0.8**4)**16 &gt; 0.999
+ROWS = NUM_PERM // BANDS
+SHINGLE = 5
+THRESHOLD = 0.8
+PRIME = (1 &lt;&lt; 61) - 1
+MASK64 = (1 &lt;&lt; 64) - 1
+
+
+def shingle_hashes(text):
+    toks = common.tokens(text)
+    if len(toks) &lt; SHINGLE:
+        toks = toks + [&quot;&quot;] * (SHINGLE - len(toks))
+    return {int.from_bytes(hashlib.blake2b(&quot; &quot;.join(toks[i:i + SHINGLE]).encode(&quot;utf-8&quot;), digest_size=8).digest(), &quot;big&quot;)
+            for i in range(len(toks) - SHINGLE + 1)}
+
+
+def make_perms(seed=SEED, n=NUM_PERM):
+    rng = random.Random(seed)
+    return [(rng.randrange(1, PRIME), rng.randrange(0, PRIME)) for _ in range(n)]
+
+
+def minhash(hashes, perms):
+    return tuple(min((a * h + b) % PRIME for h in hashes) for a, b in perms)
+
+
+def jaccard(a, b):
+    return len(a &amp; b) / len(a | b) if (a or b) else 1.0
+
+
+def lsh_candidates(sigs):
+    &quot;&quot;&quot;sigs: {key: signature}. Returns sorted candidate pairs (key_a &lt; key_b) sharing any band bucket.&quot;&quot;&quot;
+    pairs = set()
+    for band in range(BANDS):
+        buckets = {}
+        for key in sorted(sigs):
+            buckets.setdefault(sigs[key][band * ROWS:(band + 1) * ROWS], []).append(key)
+        for members in buckets.values():
+            for i in range(len(members)):
+                for j in range(i + 1, len(members)):
+                    pairs.add((members[i], members[j]))
+    return sorted(pairs)</pre></div>
+<p>Result: no exact duplicates, and 44 near-duplicates in 16 clusters, every one of them a codec module under <code>encodings/</code> that shares boilerplate (similarity 0.80 to 0.98). For a large corpus, use a tested implementation: <a href="https://github.com/huggingface/datatrove">datatrove</a> and the BigCode <code>near_deduplication</code> code do the same thing at scale.</p>
+
+<h2>6. Split without leaking, and check for contamination</h2>
+<p>If you split at random by file, near-identical files from one project land in both training and test data, and the test score measures memory. Split by <em>group</em> instead: all files of a repository go to the same split. Here the group is the top-level package, which stands in for a repository, and the split is a stable hash of the group name, so it does not change when you add data.</p>
+<div class="codebox"><div class="lab"><span>05_split.py: group split</span><button class="copy" type="button">Copy</button></div><pre>def group_of(path):
+    &quot;&quot;&quot;Top-level package directory, or the module name for a top-level file. Stands in for a repository.&quot;&quot;&quot;
+    first = path.split(&quot;/&quot;)[0]
+    return first[:-3] if first.endswith(&quot;.py&quot;) else first
+
+
+def split_of(group, salt=SALT):
+    b = int(hashlib.sha256((salt + &quot;:&quot; + group).encode(&quot;utf-8&quot;)).hexdigest(), 16) % 100
+    for name, rng in BUCKETS.items():
+        if b in rng:
+            return name
+
+
+def check_no_group_overlap(records):
+    &quot;&quot;&quot;Return (ok, offending_groups). A group is offending if it appears in more than one split.&quot;&quot;&quot;
+    seen = {}
+    for r in records:
+        seen.setdefault(r[&quot;repo&quot;], set()).add(r[&quot;split&quot;])
+    bad = sorted(g for g, s in seen.items() if len(s) &gt; 1)
+    return (not bad), bad</pre></div>
+<p>Result: 524 files for training (523 after the decontamination step below), 16 for validation and 49 for test, with 0 groups in more than one split (the run asserts it and writes the proof to <code>split_check.json</code>). The validation set is small because the hash assigns whole packages, which is the price of a clean split on a small corpus. Related repositories (forks, mirrors, a library and its copies in other projects) also leak: group them under one name before you split.</p>
+<p>Contamination is a separate problem: a training file may contain a benchmark problem or its solution. The decontamination script removes any training file that shares a 13-token sequence with an evaluation file. To show that it works, the example plants a problem that reuses the body of one standard library function. The run found 220 overlapping sequences, removed that file from training, and left the two clean probe problems alone.</p>
+<div class="codebox"><div class="lab"><span>decontaminate.py: n-gram overlap</span><button class="copy" type="button">Copy</button></div><pre>N = 13
+SKIP_FIELDS = {&quot;id&quot;, &quot;note&quot;}
+
+
+def ngrams(toks, n=N):
+    return zip(*[toks[i:] for i in range(n)])
+
+
+def eval_index(eval_path, n=N):
+    &quot;&quot;&quot;{13-gram tuple: eval id of the first record that contains it}&quot;&quot;&quot;
+    idx = {}
+    for rec in common.read_jsonl(eval_path):
+        text = &quot;\n&quot;.join(str(v) for k, v in sorted(rec.items()) if k not in SKIP_FIELDS and isinstance(v, str))
+        for g in ngrams(common.tokens(text), n):
+            idx.setdefault(g, rec[&quot;id&quot;])
+    return idx
+
+
+def overlap(text, idx, n=N):
+    &quot;&quot;&quot;Return (count of overlapping 13-grams, sorted eval ids matched, example gram as a string or None).&quot;&quot;&quot;
+    hits = 0
+    ids = set()
+    example = None
+    for g in ngrams(common.tokens(text), n):
+        if g in idx:
+            hits += 1
+            ids.add(idx[g])
+            if example is None:
+                example = &quot; &quot;.join(g)
+    return hits, sorted(ids), example</pre></div>
+<p>In real use, pass the actual benchmark files for every benchmark you will report on. N-gram matching misses paraphrased copies, so keep a private held-out set as well. Removing the whole file is blunt; cutting out the function is a reasonable refinement.</p>
+
+<h2>7. Format: a schema and example records</h2>
+<p>The pipeline writes two record types, one file per split, as JSONL. Each type is a Hugging Face <em>configuration</em>, so people can load either one.</p>
+<div class="cmpwrap"><table class="cmp narrow">
+<thead><tr><th>Config</th><th>Fields</th><th>Use</th></tr></thead>
+<tbody>
+<tr><th><code>code_corpus</code></th><td><code>id</code>, <code>repo</code>, <code>path</code>, <code>language</code>, <code>license</code>, <code>sha256</code>, <code>source_sha256</code>, <code>n_tokens_estimate</code>, <code>split</code>, <code>source_version</code>, <code>content</code></td><td>Pretraining or continued pretraining. Whole files with provenance.</td></tr>
+<tr><th><code>docstring_pairs</code></th><td><code>id</code>, <code>source_id</code>, <code>license</code>, <code>split</code>, <code>qualname</code>, <code>instruction</code>, <code>response</code></td><td>Supervised fine-tuning. Instruction is a function's docstring plus its signature. Response is the function. Built with the <code>ast</code> module.</td></tr>
+</tbody></table></div>
+<div class="codebox"><div class="lab"><span>Two real records of each type, shortened</span><button class="copy" type="button">Copy</button></div><pre>```json
+{&quot;id&quot;: &quot;b16008396f44e302&quot;, &quot;repo&quot;: &quot;_pyio&quot;, &quot;path&quot;: &quot;_pyio.py&quot;, &quot;language&quot;: &quot;python&quot;, &quot;license&quot;: &quot;PSF-2.0&quot;,
+ &quot;sha256&quot;: &quot;18219c71...5a129e72&quot;, &quot;source_sha256&quot;: &quot;18219c71...5a129e72&quot;, &quot;n_tokens_estimate&quot;: 23353,
+ &quot;split&quot;: &quot;validation&quot;, &quot;source_version&quot;: &quot;cpython-stdlib-3.9.6&quot;,
+ &quot;content&quot;: &quot;\&quot;\&quot;\&quot;\nPython implementation of the io module.\n\&quot;\&quot;\&quot;\n\nimport os\nimport abc\nimport codecs\nimport errno\nimport stat\nimport sys\n# Import _thread instead of threading to [...]&quot;}
+
+{&quot;id&quot;: &quot;b39619937b22e8d2&quot;, &quot;repo&quot;: &quot;_threading_local&quot;, &quot;path&quot;: &quot;_threading_local.py&quot;, &quot;language&quot;: &quot;python&quot;, &quot;license&quot;: &quot;PSF-2.0&quot;,
+ &quot;sha256&quot;: &quot;e1bf3dae...ef29cb&quot;, &quot;source_sha256&quot;: &quot;e1bf3dae...ef29cb&quot;, &quot;n_tokens_estimate&quot;: 1805,
+ &quot;split&quot;: &quot;validation&quot;, &quot;source_version&quot;: &quot;cpython-stdlib-3.9.6&quot;,
+ &quot;content&quot;: &quot;\&quot;\&quot;\&quot;Thread-local objects.\n\n(Note that this module provides a Python version of the threading.local\n class.  Depending on the version of Python you&#x27;re using, ther [...]&quot;}
+```
+
+`out/docstring_pairs/validation.jsonl`, first two records:
+
+```json
+{&quot;id&quot;: &quot;0d69675883e850a8&quot;, &quot;source_id&quot;: &quot;163f083a8d3a678c&quot;, &quot;license&quot;: &quot;PSF-2.0&quot;, &quot;split&quot;: &quot;validation&quot;, &quot;qualname&quot;: &quot;insort_left&quot;,
+ &quot;instruction&quot;: &quot;Write the Python function below. Its docstring is:\n\nInsert item x in list a, and keep it sorted assuming a is sorted.\n\nIf x is already in a, insert it to the le [...]&quot;,
+ &quot;response&quot;: &quot;def insort_left(a, x, lo=0, hi=None):\n    lo = bisect_left(a, x, lo, hi)\n    a.insert(lo, x)&quot;}
+
+{&quot;id&quot;: &quot;785dd109985d3cb4&quot;, &quot;source_id&quot;: &quot;163f083a8d3a678c&quot;, &quot;license&quot;: &quot;PSF-2.0&quot;, &quot;split&quot;: &quot;validation&quot;, &quot;qualname&quot;: &quot;insort_right&quot;,
+ &quot;instruction&quot;: &quot;Write the Python function below. Its docstring is:\n\nInsert item x in list a, and keep it sorted assuming a is sorted.\n\nIf x is already in a, insert it to the ri [...]&quot;,
+ &quot;response&quot;: &quot;def insort_right(a, x, lo=0, hi=None):\n    lo = bisect_right(a, x, lo, hi)\n    a.insert(lo, x)&quot;}
+```</pre></div>
+<p>Keep <code>source_id</code> so every pair can be traced to its file, and with it to a license and a split. Pairs inherit the split of their source file, so one file never feeds two splits. Identical functions in different files can still land in different splits (3 responses appear in both train and test in this run), so deduplicate pairs across splits too if you need a strict split.</p>
+
+<h2>8. Write the dataset card</h2>
+<p>The card is the dataset repository's <code>README.md</code>. Hugging Face reads its YAML header to set the license, languages, tasks and the configurations that say which file is which split. The body should state, with numbers from the run, where the data came from, what was removed, how it was split, what is in each field, and what it is not good for. The card in the example is generated by a script from the run's own logs, so the numbers cannot drift from the data.</p>
+<div class="codebox"><div class="lab"><span>The dataset card, YAML header (generated)</span><button class="copy" type="button">Copy</button></div><pre>---
+pretty_name: &quot;CPython 3.9.6 standard library: code corpus and docstring pairs (build-dataset example)&quot;
+license: other
+license_name: psf-2.0-and-per-file-licenses
+license_link: LICENSE
+language:
+- en
+task_categories:
+- text-generation
+size_categories:
+- 1K&lt;n&lt;10K
+tags:
+- code
+- python
+- example-pipeline
+source_datasets:
+- original
+configs:
+- config_name: code_corpus
+  data_files:
+  - split: train
+    path: code_corpus/train.jsonl
+  - split: validation
+    path: code_corpus/validation.jsonl
+  - split: test
+    path: code_corpus/test.jsonl
+- config_name: docstring_pairs
+  data_files:
+  - split: train
+    path: docstring_pairs/train.jsonl
+  - split: validation
+    path: docstring_pairs/validation.jsonl</pre></div>
+<p>The Hub's license list has no PSF-2.0 entry, so the card uses <code>license: other</code> with a name and a link to the shipped license file. The sections after the header are: summary, provenance, licensing and what may be redistributed, processing steps with the counts, splits, schema, known limitations and contamination checks. Read the whole card in <a href="https://github.com/RenaissanceLabs-EU/code/blob/main/examples/build-dataset/out/README.md">the repository</a>.</p>
+
+<h2>9. Version and publish</h2>
+<p>Publish privately first, read the rendered card, then make the repository public. Tag every release so that experiments can pin the exact data they used, and record the tag in each training run.</p>
+<div class="codebox"><div class="lab"><span>08_push.sh: create, upload and tag (not run in this example)</span><button class="copy" type="button">Copy</button></div><pre>#!/bin/bash
+# Stage 8: publish out/ to the Hugging Face Hub as a dataset repo and tag the version.
+# NOT RUN as part of this example. It refuses to do anything until you set REPO_ID and CONFIRM_PUSH=yes.
+#
+# Command names checked 2026-11-25 against huggingface_hub 0.36.0 installed here (`hf repo create`, `hf repo tag create`,
+# `hf upload`; --help output read) and against the current CLI guide https://huggingface.co/docs/huggingface_hub/guides/cli,
+# which spells the group `hf repos` (`hf repos create`, `hf repos tag create`). Use whichever your installed version has;
+# the legacy `huggingface-cli` entry point still ships in 0.36 but the `hf` CLI is the documented one.
+set -euo pipefail
+cd &quot;$(dirname &quot;$0&quot;)&quot;
+REPO_ID=&quot;${REPO_ID:?set REPO_ID, for example your-org/cpython-stdlib-example}&quot;
+VERSION=&quot;${VERSION:-v0.1.0}&quot;
+[ &quot;${CONFIRM_PUSH:-no}&quot; = &quot;yes&quot; ] || { echo &quot;Dry run only. Set CONFIRM_PUSH=yes to push $REPO_ID at $VERSION.&quot;; exit 0; }
+[ -f out/README.md ] &amp;&amp; [ -f out/SHA256SUMS ] || { echo &quot;run ./run_all.sh first&quot;; exit 1; }
+( cd out &amp;&amp; shasum -a 256 -c SHA256SUMS )   # refuse to upload files that changed since the run
+
+hf auth login                                                     # or: export HF_TOKEN=... (needs write access)
+hf repos create &quot;$REPO_ID&quot; --repo-type dataset --private --exist-ok  # start private; flip to public in the repo settings after review
+hf upload &quot;$REPO_ID&quot; out . --repo-type dataset --commit-message &quot;Dataset $VERSION: CPython 3.9.6 stdlib example&quot;
+hf repos tag create &quot;$REPO_ID&quot; &quot;$VERSION&quot; --repo-type dataset -m &quot;Dataset $VERSION&quot;
+
+# Equivalent Python (huggingface_hub 0.36 signatures read from the installed package):
+#   from huggingface_hub import HfApi
+#   api = HfApi()
+#   api.create_repo(repo_id=REPO_ID, repo_type=&quot;dataset&quot;, private=True, exist_ok=True)
+#   api.upload_folder(repo_id=REPO_ID, repo_type=&quot;dataset&quot;, folder_path=&quot;out&quot;, commit_message=&quot;Dataset v0.1.0&quot;)
+#   api.create_tag(repo_id=REPO_ID, tag=&quot;v0.1.0&quot;, repo_type=&quot;dataset&quot;, tag_message=&quot;Dataset v0.1.0&quot;)
+# Consumers pin the version with: load_dataset(REPO_ID, &quot;docstring_pairs&quot;, revision=&quot;v0.1.0&quot;)</pre></div>
+<p>Anyone can then load a configuration at a fixed version: <code>load_dataset("your-org/your-dataset", "docstring_pairs", revision="v0.1.0")</code>. The example's check script loaded both configurations through the card with the <code>datasets</code> library and the split counts matched. The Hub's own acceptance of the card was not tested, since nothing was pushed.</p>
+
+<h2>10. What the run produced</h2>
+<div class="cmpwrap"><table class="cmp narrow">
+<thead><tr><th>Step</th><th>Files in</th><th>Files out</th><th>What happened</th></tr></thead>
+<tbody>
+<tr><th>Collect</th><td>682</td><td>674</td><td>6 not valid UTF-8, 2 over the 200 KB cap</td></tr>
+<tr><th>Filter</th><td>674</td><td>633</td><td>24 too small, 3 auto-generated, 14 failed the license gate</td></tr>
+<tr><th>Scrub</th><td>633</td><td>633</td><td>127 files changed</td></tr>
+<tr><th>Deduplicate</th><td>633</td><td>589</td><td>44 near-duplicates in 16 clusters</td></tr>
+<tr><th>Split and decontaminate</th><td>589</td><td>588</td><td>1 training file removed for overlap</td></tr>
+<tr><th>Format</th><td>588</td><td>588 files, 3,471 pairs</td><td>About 2.3 million estimated tokens; 13.3 MB of JSONL</td></tr>
+</tbody></table></div>
+<p>Two complete runs from scratch gave identical SHA-256 checksums for every output file. The run took 20 to 21 seconds, most of it in the deduplication step (about 16 of 21 seconds), and the largest stage used 46 MB of memory. The tests cover the scrubber on planted fake secrets, near-duplicate detection on planted copies, the group-split check, and decontamination on planted overlap.</p>
+
+<h2>Where a real project goes beyond this</h2>
+<ul>
+<li><b>More sources and languages.</b> Add a collection step for repositories and a language detector, and keep a repository field distinct from the license.</li>
+<li><b>A stronger license step.</b> Use a license scanner such as ScanCode, and get a person to review anything unmapped.</li>
+<li><b>Stronger secret and personal-data removal.</b> Add a purpose-built tool and review a sample by hand.</li>
+<li><b>Scale.</b> Move deduplication and filtering to a framework such as datatrove, and stream instead of loading files in memory.</li>
+<li><b>Execution checks.</b> For instruction data, run each solution against tests in a sandbox and keep only passing pairs, as in <a href="/train/evaluate/">evaluation</a>.</li>
+</ul>
+<p>With a dataset in hand, choose <a href="/train/tools/">tools</a> and run <a href="/train/first-run/">a first experiment</a>.</p>
+</div><div class="cta-row" style="margin-top:34px"><a class="btn" href="/train/datasets/">&larr; Find datasets</a><a class="btn primary" href="/train/tools/">Pick tools &rarr;</a></div></div></div>
+</main>
+<footer class="wrap foot">
+  <a class="brand" href="https://renaissancelabs.eu"><img src="/assets/mark.png" alt="">Renaissance Labs</a>
+  <div class="foot-links"><a href="/catalog/">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
+</footer>
+<script src="/app.js?v=a11fdfbf" defer></script>
+<script src="/lang.js?v=a11fdfbf" defer></script><script src="/figs.js?v=a11fdfbf" defer></script></body>
+</html>

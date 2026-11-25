@@ -61,6 +61,40 @@
     readHash(); apply();
   }
 
+  // ---- dataset directory: show one kind of resource
+  var dsb = Array.prototype.slice.call(document.querySelectorAll('.chipb[data-k]'));
+  if (dsb.length) {
+    var dsk = '';
+    function dsapply() {
+      document.querySelectorAll('table.ds tbody tr').forEach(function (r) { r.hidden = !!dsk && r.dataset.kind !== dsk; });
+      document.querySelectorAll('.dsec').forEach(function (s) { s.hidden = !s.querySelector('tbody tr:not([hidden])'); });
+      dsb.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.k === dsk)); });
+    }
+    dsb.forEach(function (b) { b.addEventListener('click', function () { dsk = dsk === b.dataset.k ? '' : b.dataset.k; dsapply(); }); });
+    document.getElementById('dsreset').addEventListener('click', function () { dsk = ''; dsapply(); });
+  }
+
+  // ---- reading list filters
+  var rg = document.getElementById('rgrid');
+  if (rg) {
+    var rcards = Array.prototype.slice.call(rg.querySelectorAll('.rd')), rs = { q: '', stage: '', type: '', level: '' };
+    var rq = document.getElementById('rq'), rt = document.getElementById('rf-type'), rl = document.getElementById('rf-level'), rc = document.getElementById('rcnt'), rn = document.getElementById('rnone');
+    var rchips = Array.prototype.slice.call(document.querySelectorAll('.chipb[data-stage]'));
+    function rhas(attr, v) { return (' ' + attr + ' ').indexOf(' ' + v + ' ') >= 0; }
+    function rapply() {
+      var terms = rs.q.toLowerCase().split(/\s+/).filter(Boolean), n = 0;
+      rcards.forEach(function (c) { var d = c.dataset, ok = (!rs.stage || rhas(d.stage, rs.stage)) && (!rs.type || d.type === rs.type) && (!rs.level || d.level === rs.level) && terms.every(function (t) { return d.s.indexOf(t) >= 0; }); c.hidden = !ok; if (ok) n++; });
+      rc.textContent = n + (n === 1 ? ' item' : ' items'); rn.hidden = n > 0;
+      rchips.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.stage === rs.stage)); });
+    }
+    rq.addEventListener('input', function () { rs.q = rq.value; rapply(); });
+    rt.addEventListener('change', function () { rs.type = rt.value; rapply(); });
+    rl.addEventListener('change', function () { rs.level = rl.value; rapply(); });
+    rchips.forEach(function (b) { b.addEventListener('click', function () { rs.stage = rs.stage === b.dataset.stage ? '' : b.dataset.stage; rapply(); }); });
+    document.getElementById('rreset').addEventListener('click', function () { rs = { q: '', stage: '', type: '', level: '' }; rq.value = ''; rt.value = ''; rl.value = ''; rapply(); });
+    rapply();
+  }
+
   // ---- figure: why verifiable-reward RL needs a middle band of difficulty
   var fig = document.getElementById('gradfig');
   if (fig) {

@@ -7,17 +7,18 @@ Source for https://code.renaissancelabs.eu: a map of what code is, from the prog
 - **Languages** (`data/languages-*.json`): 44 verified language entries, each with the same sample program.
 - **Code in the world** (`data/world.json`): sourced facts, failures, and why software is never finished.
 - **Code and intelligence** (`data/pages/intelligence.html`): computation, its limits, learned programs.
-- **Train**: the verified catalog of datasets, environments, benchmarks and tools for training coding models (`data/resources/*.json`), a recipe builder and a guide. Every entry is filed under a form of a program, a level of the stack and a language.
+- **Part two, Train** (`/train/`): a learning path in seven steps (choose a capability, choose data, find datasets, build a dataset, pick tools, run a first experiment, evaluate), plus how code models are trained, how open models were trained, a reading list, the recipe builder and the verified catalog of datasets, environments, benchmarks and tools for training coding models (`data/resources/*.json`), a recipe builder and a guide. Every entry is filed under a form of a program, a level of the stack and a language.
 
 ```
 docs/            the built site (static HTML, served by GitHub Pages from main:/docs)
 data/            program.txt, stack.txt, languages-*.json, landmarks-*.json, world.json, coverage.json (languages per catalog entry),
                  taxonomy.json, resources/*.json (schema in SCHEMA.md), snippets.json, recipes.json, pages/*.html
+examples/        build-dataset/ (runnable dataset pipeline, run log, generated card) and first-run/ (training recipe files)
 tools/           build.py (site), make_og.py + render_og.mjs (social previews), page_check.mjs and fig_check.mjs (headless Chrome),
                  check_links.py, shot.mjs (screenshots)
 notes/           research notes per topic, factcheck-prose.md, link-report.json, what could not be verified
 site_lang.js     Mini: a tiny language (lexer, parser, type checker, compiler, stack machine) that the figures run on
-site_figs.js     the 21 live figures;  site_app.js, site_recipe.js   catalog filters and recipe planner
+site_figs.js     the 23 live figures;  site_app.js, site_recipe.js   catalog filters and recipe planner
 ```
 
 ## Commands

@@ -18,6 +18,15 @@ for p in ("data/snippets.json",):
             for u in s.get("source_urls", []): urls.setdefault(u, []).append("snippet:" + s["id"])
 for fn in os.listdir(os.path.join(ROOT, "data/pages")) if os.path.isdir(os.path.join(ROOT, "data/pages")) else []:
     for u in re.findall(r'href="(https?://[^"]+)"', open(os.path.join(ROOT, "data/pages", fn), encoding="utf-8").read()): urls.setdefault(u, []).append("page:" + fn)
+def walk(o, tag):
+    if isinstance(o, dict):
+        for v in o.values(): walk(v, tag)
+    elif isinstance(o, list):
+        for v in o: walk(v, tag)
+    elif isinstance(o, str) and re.match(r"https?://\S+$", o): urls.setdefault(o, []).append(tag)
+for fn in sorted(os.listdir(os.path.join(ROOT, "data"))):
+    if fn.endswith(".json") and fn not in ("taxonomy.json", "snippets.json", "recipes.json", "coverage.json"):
+        walk(json.load(open(os.path.join(ROOT, "data", fn), encoding="utf-8")), "data:" + fn)
 UA = {"User-Agent": "Mozilla/5.0 (compatible; link-check)"}
 HF = threading.Semaphore(2)
 def hf_api(u):

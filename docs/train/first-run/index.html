@@ -1,0 +1,921 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A first training run: fine-tune a small code model | Renaissance Labs Code</title>
+<meta name="description" content="A reproducible recipe for LoRA fine-tuning Qwen2.5-Coder-1.5B-Instruct on a filtered execution-checked dataset with TRL, with hardware tiers, settings, commands and a before-and-after evaluation.">
+<link rel="canonical" href="https://code.renaissancelabs.eu/train/first-run/">
+<meta property="og:title" content="A first training run: fine-tune a small code model | Renaissance Labs Code"><meta property="og:description" content="A reproducible recipe for LoRA fine-tuning Qwen2.5-Coder-1.5B-Instruct on a filtered execution-checked dataset with TRL, with hardware tiers, settings, commands and a before-and-after evaluation."><meta property="og:url" content="https://code.renaissancelabs.eu/train/first-run/"><meta property="og:type" content="website">
+<meta property="og:image" content="https://code.renaissancelabs.eu/assets/og/train-first-run.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="A first training run: fine-tune a small code model | Renaissance Labs Code"><meta property="og:site_name" content="Renaissance Labs Code">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://code.renaissancelabs.eu/assets/og/train-first-run.jpg"><meta name="twitter:title" content="A first training run: fine-tune a small code model | Renaissance Labs Code"><meta name="twitter:description" content="A reproducible recipe for LoRA fine-tuning Qwen2.5-Coder-1.5B-Instruct on a filtered execution-checked dataset with TRL, with hardware tiers, settings, commands and a before-and-after evaluation."><meta name="theme-color" content="#121311">
+<link rel="icon" href="/assets/favicon.png">
+<link rel="stylesheet" href="/styles.css?v=a11fdfbf">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+  <a class="brand" href="/"><img src="/assets/mark.png" alt=""><span>Renaissance Labs &middot; Code</span></a>
+  <nav><a href="/program/">Program</a><a href="/stack/">Stack</a><a href="/languages/">Languages</a><a href="/world/">World</a><a href="/intelligence/">Intelligence</a><a href="/train/" aria-current="page">Train</a><a href="/about/">About</a><a class="ext" href="https://math.renaissancelabs.eu">Math</a><a class="ext" href="https://practice.renaissancelabs.eu">Practice</a><a class="ext" href="https://renaissancelabs.eu">Renaissance Labs</a></nav>
+  <button class="theme" id="theme" type="button" aria-label="Toggle dark mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+</header>
+<main id="main">
+<div class="wrap "><div class="page"><div class="page-head"><div class="crumbs"><a href="/">Code</a> / <a href="/train/">Train</a> / Step 6</div><span class="eyebrow">Step 6 of 7</span><h1>Run a first <em>experiment</em></h1><p class="lede">Fine-tune a small existing code model on a small, carefully prepared dataset, and measure whether it helped. Objective, model, data, hardware, configuration, commands and evaluation.</p></div><div class="pathbar"><span class="eyebrow">Part two: how to train language models for code</span><ol><li><a href="/train/capability/"><span>1</span>Choose the capability</a></li><li><a href="/train/data/"><span>2</span>Choose the data</a></li><li><a href="/train/datasets/"><span>3</span>Find datasets</a></li><li><a href="/train/build-dataset/"><span>4</span>Build a dataset</a></li><li><a href="/train/tools/"><span>5</span>Pick tools</a></li><li class="cur"><a href="/train/first-run/"><span>6</span>Run a first experiment</a></li><li><a href="/train/evaluate/"><span>7</span>Evaluate</a></li></ol></div><div class="prose wide"><div class="callout"><b>Status of this recipe</b>Nothing here was trained or evaluated by the site's authors. Versions, settings and commands were checked against each project's source and documentation on 2026-11-25. Memory, time and outcome figures are estimates, and each one is labeled and states its basis, so you can replace it with your own measurement. The files are also in <a href="https://github.com/RenaissanceLabs-EU/code/tree/main/examples/first-run">examples/first-run</a>.</div><h2>Objective</h2><p>Fine-tune Qwen2.5-Coder-1.5B-Instruct with LoRA (TRL SFTTrainer) on about 4,000 filtered, execution-checked instruction examples from nvidia/OpenCodeInstruct, then measure the change with EvalPlus (HumanEval+ and MBPP+), a held-out slice of the same dataset executed in a sandbox, and a regression check. The point is a complete, inspectable, reproducible loop (prepare, train, merge, evaluate, publish), not a record score.</p><h2>Run it: the steps</h2><ol class="steps plain"><li>Create two Python 3.11 or 3.12 virtual environments (training and evaluation) and install <code>requirements-train.txt</code> and <code>requirements-eval.txt</code>.</li><li><code>python prepare_data.py --out data</code>   (add --rl-pool 3000 for the stretch recipe). Read data/manifest.json and look at 20 rows by eye.</li><li>Baseline first: run <code>eval.sh</code> sections 1 to 3 for the BASE model only and keep the logs. Compare with the published numbers in evaluation.baseline.</li><li>Smoke test: <code>python train_sft.py --max-steps 5 --out out/smoke.</code> Check that loss is finite, memory is under your limit and the adapter is saved.</li><li>Train: <code>python train_sft.py</code>   (or <code>bash trl_sft_cli.sh).</code> Note peak memory and wall-clock time.</li><li><code>python merge_push.py --adapter out/sft-lora --out out/merged</code></li><li>Run <code>eval.sh</code> again for the tuned model, then <code>python eval_heldout.py</code> compare and the sanity script. Fill the table in <code>model_card.md</code>.</li><li>Optional: --push your-name/model-name after reading the dataset attribution rule and checking the card; keep the adapter too.</li></ol><h2>Environment</h2><p><b>Python 3.11 or newer</b></p><p>Packages (latest on the check date): trl 1.18.2, peft 0.22.0, transformers 5.24.1, datasets 5.2.0, accelerate 1.16.0, torch 2.15.0, evalplus 0.3.1, vllm (evaluation, optional) 0.34.0 latest on PyPI; TRL&#x27;s own vllm extra pins &lt;0.34.0, so use an older vllm in a GRPO environment, verl (stretch alternative) 0.9.1, bitsandbytes (optional, not used) 0.50.2.</p><p>Use two environments: training (requirements-train.txt) and evaluation (requirements-eval.txt). evalplus 0.3.1 dates from October 2024 and only requires transformers&gt;=4.43; whether its HF backend runs unchanged under transformers 5.x was not tested, so keep it out of the training environment and record <code>pip freeze</code>. The local machine has TRL missing, datasets 4.5.0 (TRL 1.18.2 requires &gt;=4.7.0) and transformers 4.57.3, so a fresh environment is needed anyway.</p><h2>Base model</h2><div class="cmpwrap"><table class="cmp narrow"><thead><tr><th>Model</th><th>Role</th><th>Parameters</th><th>Context</th><th>License</th><th>Why</th><th>Memory (estimate)</th></tr></thead><tbody><tr><th>Qwen/Qwen2.5-Coder-1.5B-Instruct</th><td>primary</td><td>1,543,714,304</td><td>32,768 tokens</td><td>Apache-2.0 (HF API cardData.license)</td><td>Smallest model that is already a competent instruction-following coder (reported HumanEval+ 66.5), permissive license, standard Qwen2 architecture that TRL and PEFT support without custom code, fits a 16 GB GPU for LoRA, and has a published EvalPlus baseline to check against.</td><td>Weights 3.09 GB in bf16 (1,543,714,304 x 2 bytes). LoRA r=32 on all linear layers adds 36,929,536 trainable parameters (2.4 percent), 0.59 GB for fp32 weights, gradients and the two AdamW states (36.93M x 16 bytes). Training peak about 12 to 13 GB at micro-batch 4 (estimate, see hardware_tiers).</td></tr><tr><th>Qwen/Qwen2.5-Coder-0.5B-Instruct</th><td>fallback for laptops</td><td>494,032,768</td><td>32,768 tokens</td><td>Apache-2.0 (HF API cardData.license)</td><td>Same family and template, so the whole recipe runs unchanged with --model, --rank 16 and a smaller batch. Weights are 0.99 GB in bf16 or 1.98 GB in float32 (494,032,768 x 4 bytes), small enough for CPU or Apple silicon. Reported baseline: HumanEval 61.6, HumanEval+ 57.3, MBPP 52.4, MBPP+ 43.7.</td><td>Float32 training on a laptop about 5 to 6 GB total (estimate, see hardware_tiers). LoRA r=16 adds 8,798,208 parameters.</td></tr></tbody></table></div><ul><li><b>Qwen/Qwen2.5-Coder-1.5B (base)</b>: Valid variant B: start from the base model with the same script (add --eos-token '&lt;|im_end|&gt;' as the TRL SFT docs require for Qwen base models) and evaluate with evalplus --force-base-prompt for the baseline. Larger gains are plausible here because the base model lacks instruction tuning; the OpenCodeInstruct paper trained base models. Not primary because the Instruct model gives a working chat model before any training and a published baseline.</li><li><b>Qwen/Qwen2.5-Coder-3B-Instruct</b>: 3.09B parameters, but the Hugging Face API license field is 'other' (not Apache-2.0); license text not read, so excluded from a recipe that promises a clean license.</li><li><b>HuggingFaceTB/SmolLM3-3B</b>: Apache-2.0, 3.08B parameters, 65,536 context (docs/data/resources.json, HF API). General-purpose rather than code-specialized and twice the size; its chat template carries the {% generation %} markers that make TRL assistant_only_loss work out of the box (TRL docs), which makes it a good second recipe, not the first.</li><li><b>HuggingFaceTB/SmolLM2-1.7B-Instruct and SmolLM2-360M-Instruct</b>: Apache-2.0 (HF API), 1.71B and 0.36B parameters, general-purpose. Code benchmark numbers were not checked, so not chosen.</li></ul><h2>Dataset</h2><p><b><a href="https://huggingface.co/datasets/nvidia/OpenCodeInstruct">nvidia/OpenCodeInstruct</a></b>, pinned to revision <code>8f3ba5bafe4d6e8db46082cf7ae6741bc370604d</code>.</p><ul><li><b>Subset and filter.</b> Stream the 'train' config (50 parquet shards, about 115 to 133 MB each, 6.86 GB download, 5,000,000 rows). shuffle(seed=42, buffer_size=20000), keep rows passing the filter rule, stop at 4,500 kept rows (4,000 train + 200 validation + 300 held-out). Filter rule: (1) average_test_score == 1 and tests_execution_status all 'pass' with at least 5 tests; (2) llm_judgement scores all equal 5 for the three criteria; (3) the output has a ```python block with no input(), network, subprocess, file-open, sleep, random or clock calls; (4) input plus output at most 6,000 characters; (5) exact duplicate questions removed; (6) any shared 10-word gram with HumanEval or MBPP text removes the row; (7) held-out and validation rows with 5-word-shingle Jaccard above 0.5 to any training question are dropped.</li><li><b>Size.</b> Final: about 4,000 train, 200 validation, 300 held-out (the last two shrink slightly after the near-duplicate guard). ESTIMATE of the scan: the filter kept 66 of 500 rows (13 percent) on a non-random sample read from the datasets server (earlier 11 percent on 600 rows), so reaching 4,500 kept rows needs roughly 35,000 to 45,000 streamed rows; datasets.shuffle fills its buffer from up to 10 shards, so expect to transfer up to about 1.2 GB (10 shards), likely less. Token count estimate: median kept row is 1,311 characters (n=66); at an assumed 3.5 characters per token plus about 40 template tokens that is roughly 400 to 450 tokens per example, so about 1.8M tokens per epoch.</li><li><b>Split.</b> Deterministic: sort kept rows by md5(id) mod 10,000, first 300 held-out, next 200 validation, next 4,000 train. Held-out and validation rows are never trained on; row ids are written to train_ids.txt and validation_ids.txt. Held-out tests are re-run against the reference solutions in your own sandbox and failing rows are dropped before use.</li><li><b>Why this dataset.</b> Rows carry unit tests and execution results, so the same data feeds filtering, training, held-out evaluation and the stretch RL pool. CC-BY-4.0 and Apache-2.0 generators give a clean license chain. The OpenCodeInstruct paper (Table 4, Qwen2.5-Coder-7B, 500k rows) found that selecting rows with LLM judgment score 5 beat random selection (HumanEval+ 80.5 vs 77.8, MBPP+ 71.4 vs 70.1) and that unit-test-passing rows were marginally better than random; QLoRA (arXiv 2305.14314) reports data quality matters far more than size (9k OASST1 beat 450k FLAN v2). Rejected alternatives: KodCode-V1 and KodCode-Light-RL-10K are CC-BY-NC-4.0 (HF API), so not clean for commercial reuse; Magicoder-OSS-Instruct-75K is MIT but generated by GPT-3.5 (OpenAI terms apply) and has no tests; bigcode/self-oss-instruct-sc2-exec-filter-50k (ODC-By, 50,661 rows) has no separate test field.</li><li><b>License.</b> CC-BY-4.0 (dataset card and HF API). Attribution to NVIDIA is required; the model card template includes it. The card adds that users must check the license of each dataset they use.</li><li><b>Terms of the model that wrote it.</b> Per the OpenCodeInstruct paper (arXiv 2504.04030, read 2026-11-25): responses, the 10 unit tests per question and the quality judgments were produced by Qwen2.5-Coder-32B-Instruct (Apache-2.0 per HF API); seed instructions were written by Qwen2.5-32B-Instruct (Apache-2.0 per HF API) from Python functions collected from GitHub, plus 25,443 algorithmic questions from TACO (Apache-2.0 per its dataset card). Apache-2.0 places no restriction on using model outputs to train other models. Open points: the model that ran the Genetic-Instruct mutation and crossover step is not named in the sections read (the Genetic-Instruct paper's own experiment used Mixtral-8x22B); the licenses of the GitHub functions and the original competitive-programming statements behind the seeds were not checked.</li><li><b>Limits.</b> Both the answers and the tests were written by a model; the tests were only checked against that model's own answer, so a passing test proves consistency, not correctness. The dataset is stored in blocks (the first 100 rows at offsets 0, 300000 and 1000000 are all 'generic', at 100000 and 500000 all 'algorithmic', all 'self-instruct'), so never take the first N rows: always shuffle. Instructions were evolved from shared seeds, so near-duplicates exist; the Jaccard guard reduces but does not remove this leakage into the held-out slice. The dataset authors state n-gram decontamination against benchmarks (open-r1 script); the benchmark list was not verified, so prepare_data.py adds its own check against HumanEval and MBPP.</li></ul><h2>Hardware</h2><div class="cmpwrap"><table class="cmp narrow"><thead><tr><th>Tier</th><th>Assumes</th><th>Memory (estimate)</th><th>Time (estimate)</th><th>Basis</th></tr></thead><tbody><tr><th>Tier 1: CPU-only or Apple silicon laptop (unified memory 16 GB or more)</th><td>Fallback model Qwen2.5-Coder-0.5B-Instruct in float32, LoRA r=16, micro-batch 2 x accumulation 16, max_length 1024, first 1,000 training rows, 1 epoch (about 31 optimizer steps). Run: python train_sft.py --model Qwen/Qwen2.5-Coder-0.5B-Instruct --rank 16 --batch 2 --accum 16 --max-length 1024 --epochs 1 (after head -n 1000 on train.jsonl). bf16 is not assumed (train_sft.py switches it off without a bf16 CUDA GPU). Not tested on a Mac; PyTorch MPS support for every op is not verified.</td><td>ESTIMATE about 5 to 6 GB. Arithmetic: weights 494,032,768 x 4 B = 1.98 GB; LoRA r=16 has 8,798,208 parameters x 16 B (weights, gradients, two Adam states, fp32) = 0.14 GB; logits for 2 x 512 = 1,024 tokens: 1,024 x 151,936 x 4 B = 0.62 GB, times about 2.5 for the bf16/fp32 copies and the gradient = 1.6 GB; checkpointed activations under 0.5 GB; plus 1 to 2 GB of framework overhead. Watch free memory before starting and halve the batch if it climbs.</td><td>ROUGH GUESS 1 to 4 hours for training and 1 to 4 hours per EvalPlus model on the HF backend (evalplus 0.3.1 uses CUDA if present, otherwise CPU, with no MPS path in its source).</td><td>Training FLOPs = 6 x N x D = 6 x 0.494e9 x 0.45M tokens = 1.3e15 (the 6ND rule counts 2ND forward, 2ND activation gradients and 2ND recompute under gradient checkpointing; frozen weights need no weight-gradient pass). Divide by an ASSUMED sustained 0.1 to 0.5 TFLOP/s for CPU or the Apple GPU: 44 to 222 minutes. No published throughput for this setup was found, so the range is a guess. EvalPlus: 542 prompts, up to 768 new tokens each, at an assumed 10 to 30 tokens per second on CPU.</td></tr><tr><th>Tier 2: one 16 to 24 GB GPU</th><td>Primary model Qwen2.5-Coder-1.5B-Instruct in bf16, LoRA r=32, micro-batch 4 x accumulation 8 (effective 32), max_length 2048, gradient checkpointing on (TRL default), 4,000 rows, 2 epochs (about 250 steps, D about 3.6M tokens). If memory is tight use micro-batch 2 x accumulation 16.</td><td>ESTIMATE about 12 to 13 GB at micro-batch 4, worst case 4 x 1,024 = 4,096 tokens. Arithmetic: base weights 1,543,714,304 x 2 B = 3.09 GB; LoRA states 36,929,536 x 16 B = 0.59 GB (PEFT keeps adapter weights in fp32: autocast_adapter_dtype defaults to True); checkpointed layer inputs 4,096 x 1,536 x 2 B x 28 layers = 0.35 GB; one-layer recompute workspace about 0.5 GB (assumed, 34 x tokens x hidden is 0.21 GB); logits 4,096 x 151,936 = 622M values: fp32 2.49 GB + bf16 1.24 GB + gradient 2.49 GB = 6.2 GB; sum 10.7 GB plus 1 to 2 GB CUDA context and allocator fragmentation. This is the largest term to watch: the 151,936-token vocabulary makes logits bigger than the weights. Micro-batch 2 gives roughly 8 to 9 GB.</td><td>ROUGH GUESS 20 to 60 minutes for training; EvalPlus with vLLM a few minutes per model per dataset, with the HF backend (batch size 1) up to a couple of hours per model.</td><td>FLOPs = 6 x 1.544e9 x 3.6M = 3.3e16. At an ASSUMED sustained 10 to 30 TFLOP/s (no measured throughput used) that is 19 to 56 minutes. Cross-checks from sources: the TRL source states gradient checkpointing costs about 20 percent more time (already included in 6ND), and Biderman et al. 2024 Appendix I measured LoRA at about 15 percent lower throughput than full fine-tuning on H100s (their figure, not a number to reuse). EvalPlus HF backend: 542 prompts x up to 768 tokens at an assumed 30 to 60 tokens per second.</td></tr><tr><th>Tier 3: one 80 GB GPU</th><td>Same recipe with micro-batch 8 x accumulation 4, or the 7B variant Qwen/Qwen2.5-Coder-7B-Instruct (7,615,616,512 parameters, Apache-2.0 per HF API; reported by Qwen and repeated in the OpenCodeInstruct paper Table 3: HumanEval 88.4, HumanEval+ 84.1, MBPP 83.5, MBPP+ 71.7) with LoRA r=32 and micro-batch 8. Also the right tier for the stretch GRPO run.</td><td>ESTIMATE 1.5B at micro-batch 8: about 20 to 25 GB (weights 3.09 + LoRA 0.59 + checkpoints 0.70 + workspace about 1 + logits 8,192 tokens: 4.98 fp32 + 2.49 bf16 + 4.98 gradient = 12.45 GB, plus overhead). 7B at micro-batch 8: about 33 to 40 GB (weights 7,615,616,512 x 2 B = 15.23 GB; LoRA r=32 on hidden 3584, 28 layers, intermediate 18944 has 80,740,352 parameters x 16 B = 1.29 GB; checkpoints 8,192 x 3,584 x 2 B x 28 = 1.64 GB; workspace about 2; logits 12.45 GB; plus overhead).</td><td>ROUGH GUESS 5 to 20 minutes for the 1.5B run, 0.5 to 1.5 hours for the 7B run.</td><td>FLOPs 3.3e16 (1.5B) and 6 x 7.616e9 x 3.6M = 1.6e17 (7B) divided by an ASSUMED sustained 30 to 100 TFLOP/s (about 5.6 to 18.5 minutes and 27 to 91 minutes). Small models and short sequences reach a low fraction of peak, so the low end is more likely; no measurement was available.</td></tr></tbody></table></div><p>All memory and time figures are estimates from arithmetic and stated assumptions; none was measured. Log peak memory (torch.cuda.max_memory_allocated) and wall-clock time in your own run and replace these numbers in the model card.</p><h2>The files</h2><p>Save these in one folder. The data step streams and filters the dataset, the training step fits the adapter, then you merge and evaluate.</p><div class="codebox"><div class="lab"><span>requirements-train.txt</span><button class="copy" type="button">Copy</button></div><pre># Python 3.11 or newer (3.12 recommended). Versions read from PyPI on 2026-11-25.
+# Install the torch build for your platform first (https://pytorch.org); 2.15.0 was the latest on PyPI.
+trl==1.18.2
+peft==0.22.0
+transformers==5.24.1
+datasets==5.2.0
+accelerate==1.16.0
+torch==2.15.0</pre></div><div class="codebox"><div class="lab"><span>requirements-eval.txt</span><button class="copy" type="button">Copy</button></div><pre># Separate environment for evaluation. evalplus 0.3.1 (2024-10-20) is the latest release on PyPI.
+# Its vllm extra only requires vllm&gt;=0.5.1, so let pip resolve and record the result with `pip freeze`.
+evalplus[vllm]==0.3.1</pre></div><div class="codebox"><div class="lab"><span>prepare_data.py</span><button class="copy" type="button">Copy</button></div><pre>&quot;&quot;&quot;Build the SFT, validation and held-out sets from nvidia/OpenCodeInstruct (CC-BY-4.0).
+
+Run once. Streams the dataset (no full download), keeps only rows that pass strict filters,
+removes overlap with HumanEval and MBPP, splits by a hash of the row id, and writes JSONL files:
+
+  data/oci-sft-4k/train.jsonl        prompt/completion rows for TRL (conversational prompt-completion)
+  data/oci-sft-4k/*_ids.txt          row ids of each split, same order
+  data/oci-sft-4k/validation.jsonl   same format, used only for eval loss
+  data/oci-heldout/heldout.jsonl     question, tests and reference solution, never trained on
+  data/oci-rl-pool/pool.jsonl        optional pool for the stretch GRPO recipe (--rl-pool N)
+  data/manifest.json                 counts, dataset revision, filter rule, seed
+
+Usage:  python prepare_data.py --out data
+&quot;&quot;&quot;
+import argparse
+import hashlib
+import json
+import random
+import re
+from pathlib import Path
+
+DATASET = &quot;nvidia/OpenCodeInstruct&quot;
+# Commit of the dataset repo read from the Hugging Face API on 2026-11-25.
+REVISION = &quot;8f3ba5bafe4d6e8db46082cf7ae6741bc370604d&quot;
+SEED = 42
+
+# Programs that need the network, a terminal or the filesystem make unit tests flaky; drop them.
+BAD_CODE = re.compile(
+    r&quot;\binput\s*\(|\brequests\b|\burllib\b|\bsocket\b|\bsubprocess\b|os\.system|\bopen\s*\(|&quot;
+    r&quot;\bsleep\s*\(|random\.|datetime\.now|time\.time&quot;
+)
+CODE_BLOCK = re.compile(r&quot;```python\n(.*?)```&quot;, re.S)
+
+
+def words(text):
+    return re.findall(r&quot;\w+&quot;, text.lower())
+
+
+def ngrams(text, n):
+    w = words(text)
+    return {&quot; &quot;.join(w[i:i + n]) for i in range(len(w) - n + 1)}
+
+
+def judged_all_five(raw):
+    &quot;&quot;&quot;llm_judgement is a JSON string with three criteria, each {score, justification}.&quot;&quot;&quot;
+    try:
+        j = json.loads(raw)
+        return len(j) &gt;= 3 and all(v.get(&quot;score&quot;) == 5 for v in j.values())
+    except Exception:
+        return False
+
+
+def keep(row):
+    &quot;&quot;&quot;Filter rule. Returns the parsed tests list or None.
+
+    1. all generated unit tests passed on the reference solution (average_test_score == 1)
+    2. every entry of tests_execution_status is &quot;pass&quot; and there are at least 5 tests
+    3. the LLM judge gave 5 out of 5 on all three criteria (OpenCodeInstruct paper, Table 4)
+    4. the response has a ```python block, and the code passes the BAD_CODE screen
+    5. question plus answer is at most 6000 characters (fits max_length 2048 tokens)
+    &quot;&quot;&quot;
+    try:
+        if float(row[&quot;average_test_score&quot;]) != 1.0:
+            return None
+        tests = json.loads(row[&quot;unit_tests&quot;])
+        status = json.loads(row[&quot;tests_execution_status&quot;])
+    except Exception:
+        return None
+    if len(tests) &lt; 5 or len(status) != len(tests) or any(s != &quot;pass&quot; for s in status):
+        return None
+    if not judged_all_five(row[&quot;llm_judgement&quot;]):
+        return None
+    m = CODE_BLOCK.search(row[&quot;output&quot;])
+    if not m or BAD_CODE.search(m.group(1)):
+        return None
+    if len(row[&quot;input&quot;]) + len(row[&quot;output&quot;]) &gt; 6000:
+        return None
+    return tests
+
+
+def benchmark_ngrams(n=10):
+    &quot;&quot;&quot;Own decontamination on top of the dataset&#x27;s: 10-word grams of HumanEval and MBPP.&quot;&quot;&quot;
+    from datasets import load_dataset
+
+    grams = set()
+    for r in load_dataset(&quot;openai/openai_humaneval&quot;, split=&quot;test&quot;):
+        grams |= ngrams(r[&quot;prompt&quot;] + &quot;\n&quot; + r[&quot;canonical_solution&quot;], n)
+    mbpp = load_dataset(&quot;google-research-datasets/mbpp&quot;, &quot;full&quot;)
+    for split in mbpp:
+        for r in mbpp[split]:
+            grams |= ngrams(r[&quot;text&quot;] + &quot;\n&quot; + r[&quot;code&quot;], n)
+    return grams
+
+
+def bucket(row_id):
+    return int(hashlib.md5(row_id.encode()).hexdigest(), 16) % 10_000
+
+
+def jaccard(a, b):
+    return len(a &amp; b) / max(1, len(a | b))
+
+
+def main():
+    from datasets import load_dataset
+
+    ap = argparse.ArgumentParser()
+    ap.add_argument(&quot;--out&quot;, default=&quot;data&quot;)
+    ap.add_argument(&quot;--n-train&quot;, type=int, default=4000)
+    ap.add_argument(&quot;--n-val&quot;, type=int, default=200)
+    ap.add_argument(&quot;--n-heldout&quot;, type=int, default=300)
+    ap.add_argument(&quot;--rl-pool&quot;, type=int, default=0, help=&quot;extra rows for the stretch recipe&quot;)
+    ap.add_argument(&quot;--max-scan&quot;, type=int, default=400_000, help=&quot;stop after this many streamed rows&quot;)
+    a = ap.parse_args()
+
+    want = a.n_train + a.n_val + a.n_heldout + a.rl_pool
+    bench = benchmark_ngrams()
+    stream = load_dataset(DATASET, split=&quot;train&quot;, streaming=True, revision=REVISION)
+    # shuffle() reorders the shards and uses a buffer over up to 10 shards at a time (datasets docs),
+    # which mixes the &quot;generic&quot; and &quot;algorithmic&quot; domains that are stored in separate blocks.
+    stream = stream.shuffle(seed=SEED, buffer_size=20_000)
+
+    kept, seen_inputs, scanned = [], set(), 0
+    stats = {&quot;scanned&quot;: 0, &quot;filtered_out&quot;: 0, &quot;contaminated&quot;: 0, &quot;duplicate&quot;: 0}
+    for row in stream:
+        scanned += 1
+        if scanned &gt; a.max_scan or len(kept) &gt;= want:
+            break
+        tests = keep(row)
+        if tests is None:
+            stats[&quot;filtered_out&quot;] += 1
+            continue
+        key = re.sub(r&quot;\s+&quot;, &quot; &quot;, row[&quot;input&quot;].strip().lower())
+        if key in seen_inputs:
+            stats[&quot;duplicate&quot;] += 1
+            continue
+        if ngrams(row[&quot;input&quot;] + &quot;\n&quot; + row[&quot;output&quot;], 10) &amp; bench:
+            stats[&quot;contaminated&quot;] += 1
+            continue
+        seen_inputs.add(key)
+        kept.append({&quot;id&quot;: row[&quot;id&quot;], &quot;input&quot;: row[&quot;input&quot;], &quot;output&quot;: row[&quot;output&quot;],
+                     &quot;domain&quot;: row[&quot;domain&quot;], &quot;tests&quot;: tests})
+    stats[&quot;scanned&quot;] = scanned
+    print(&quot;kept&quot;, len(kept), stats)
+
+    # Deterministic split by hash of id: first held-out, then validation, then train, then RL pool.
+    kept.sort(key=lambda r: bucket(r[&quot;id&quot;]))
+    heldout = kept[:a.n_heldout]
+    val = kept[a.n_heldout:a.n_heldout + a.n_val]
+    train = kept[a.n_heldout + a.n_val:a.n_heldout + a.n_val + a.n_train]
+    pool = kept[a.n_heldout + a.n_val + a.n_train:]
+
+    # Leakage guard: instructions in this dataset are evolved from shared seeds, so drop held-out and
+    # validation rows whose 5-word shingles overlap a training row (Jaccard &gt; 0.5).
+    train_sh = [ngrams(r[&quot;input&quot;], 5) for r in train]
+
+    def clean(rows):
+        out = []
+        for r in rows:
+            sh = ngrams(r[&quot;input&quot;], 5)
+            if all(jaccard(sh, t) &lt;= 0.5 for t in train_sh):
+                out.append(r)
+        return out
+
+    heldout_c, val_c = clean(heldout), clean(val)
+    print(&quot;near-duplicates dropped: heldout&quot;, len(heldout) - len(heldout_c), &quot;val&quot;, len(val) - len(val_c))
+
+    out = Path(a.out)
+    for d in (&quot;oci-sft-4k&quot;, &quot;oci-heldout&quot;, &quot;oci-rl-pool&quot;):
+        (out / d).mkdir(parents=True, exist_ok=True)
+
+    def write(path, rows):
+        with open(path, &quot;w&quot;) as f:
+            for r in rows:
+                f.write(json.dumps(r, ensure_ascii=False) + &quot;\n&quot;)
+
+    def sft(r):
+        return {&quot;prompt&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: r[&quot;input&quot;]}],
+                &quot;completion&quot;: [{&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: r[&quot;output&quot;]}]}
+
+    # ids live in separate files so the JSONL has only the columns TRL needs
+    (out / &quot;oci-sft-4k&quot; / &quot;train_ids.txt&quot;).write_text(&quot;\n&quot;.join(r[&quot;id&quot;] for r in train))
+    (out / &quot;oci-sft-4k&quot; / &quot;validation_ids.txt&quot;).write_text(&quot;\n&quot;.join(r[&quot;id&quot;] for r in val_c))
+    write(out / &quot;oci-sft-4k&quot; / &quot;train.jsonl&quot;, [sft(r) for r in train])
+    write(out / &quot;oci-sft-4k&quot; / &quot;validation.jsonl&quot;, [sft(r) for r in val_c])
+    write(out / &quot;oci-heldout&quot; / &quot;heldout.jsonl&quot;,
+          [{&quot;id&quot;: r[&quot;id&quot;], &quot;input&quot;: r[&quot;input&quot;], &quot;tests&quot;: r[&quot;tests&quot;], &quot;reference_output&quot;: r[&quot;output&quot;]}
+           for r in heldout_c])
+    if pool:
+        rng = random.Random(SEED)
+        rows = []
+        for r in pool:
+            t = list(r[&quot;tests&quot;])
+            rng.shuffle(t)  # 6 tests drive the reward, the rest stay hidden to detect reward hacking
+            rows.append({&quot;id&quot;: r[&quot;id&quot;], &quot;prompt&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: r[&quot;input&quot;]}],
+                         &quot;reward_tests&quot;: t[:6], &quot;holdout_tests&quot;: t[6:]})
+        write(out / &quot;oci-rl-pool&quot; / &quot;pool.jsonl&quot;, rows)
+
+    manifest = {&quot;dataset&quot;: DATASET, &quot;revision&quot;: REVISION, &quot;seed&quot;: SEED, &quot;stats&quot;: stats,
+                &quot;counts&quot;: {&quot;train&quot;: len(train), &quot;validation&quot;: len(val_c),
+                           &quot;heldout&quot;: len(heldout_c), &quot;rl_pool&quot;: len(pool) if pool else 0},
+                &quot;filter&quot;: keep.__doc__}
+    (out / &quot;manifest.json&quot;).write_text(json.dumps(manifest, indent=2))
+
+
+if __name__ == &quot;__main__&quot;:
+    main()</pre></div><div class="codebox"><div class="lab"><span>train_sft.py</span><button class="copy" type="button">Copy</button></div><pre>&quot;&quot;&quot;LoRA supervised fine-tuning of Qwen2.5-Coder-1.5B-Instruct on the filtered OpenCodeInstruct subset.
+
+Verified against TRL 1.18.2, PEFT 0.22.0, transformers 5.24.1 (API names read from source on 2026-11-25).
+Not executed by the authors of this recipe: treat the first run as a smoke test (--max-steps 5).
+
+  python train_sft.py                                  # primary: 1.5B model, ~250 optimizer steps
+  python train_sft.py --model Qwen/Qwen2.5-Coder-0.5B-Instruct --rank 16 --batch 2 --accum 16   # fallback
+&quot;&quot;&quot;
+import argparse
+
+import torch
+from datasets import load_dataset
+from peft import LoraConfig
+from trl import SFTConfig, SFTTrainer
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument(&quot;--model&quot;, default=&quot;Qwen/Qwen2.5-Coder-1.5B-Instruct&quot;)
+    ap.add_argument(&quot;--data&quot;, default=&quot;data/oci-sft-4k&quot;)
+    ap.add_argument(&quot;--out&quot;, default=&quot;out/sft-lora&quot;)
+    ap.add_argument(&quot;--lr&quot;, type=float, default=1e-4)
+    ap.add_argument(&quot;--epochs&quot;, type=float, default=2.0)
+    ap.add_argument(&quot;--rank&quot;, type=int, default=32)
+    ap.add_argument(&quot;--batch&quot;, type=int, default=4, help=&quot;per-device micro batch size&quot;)
+    ap.add_argument(&quot;--accum&quot;, type=int, default=8, help=&quot;gradient accumulation steps&quot;)
+    ap.add_argument(&quot;--max-length&quot;, type=int, default=2048)
+    ap.add_argument(&quot;--max-steps&quot;, type=int, default=-1, help=&quot;set 5 for a smoke test&quot;)
+    ap.add_argument(&quot;--seed&quot;, type=int, default=42)
+    ap.add_argument(&quot;--eos-token&quot;, default=None, help=&quot;for BASE models with a chat template, use &lt;|im_end|&gt;&quot;)
+    a = ap.parse_args()
+
+    # bf16 only where the hardware supports it; CPU and Apple silicon run in float32 (slower, more memory).
+    use_bf16 = torch.cuda.is_available() and torch.cuda.is_bf16_supported()
+    dtype = torch.bfloat16 if use_bf16 else torch.float32
+
+    # Rows are conversational prompt-completion: {&quot;prompt&quot;: [user msg], &quot;completion&quot;: [assistant msg]}.
+    data = load_dataset(&quot;json&quot;, data_files={&quot;train&quot;: f&quot;{a.data}/train.jsonl&quot;,
+                                            &quot;validation&quot;: f&quot;{a.data}/validation.jsonl&quot;})
+
+    peft_config = LoraConfig(
+        r=a.rank,
+        lora_alpha=2 * a.rank,        # alpha = 2r, Biderman et al. 2024, Sec. 4.7
+        lora_dropout=0.05,            # QLoRA appendix A.1: useful for small models
+        target_modules=&quot;all-linear&quot;,  # QLoRA Sec. 4 and Biderman Fig. 7: attention-only underperforms
+        task_type=&quot;CAUSAL_LM&quot;,
+    )
+
+    args = SFTConfig(
+        output_dir=a.out,
+        num_train_epochs=a.epochs,
+        max_steps=a.max_steps,
+        per_device_train_batch_size=a.batch,
+        per_device_eval_batch_size=a.batch,
+        gradient_accumulation_steps=a.accum,
+        learning_rate=a.lr,
+        lr_scheduler_type=&quot;cosine&quot;,
+        warmup_steps=0.05,            # transformers 5.x: a float below 1 is a ratio of total steps
+        weight_decay=0.0,
+        max_grad_norm=1.0,
+        eos_token=a.eos_token,        # None keeps the tokenizer eos (&lt;|im_end|&gt; for the Instruct models)
+        max_length=a.max_length,      # SFTConfig name for the sequence limit (default 1024)
+        packing=False,                # bfd packing needs flash-attention padding-free mode
+        completion_only_loss=True,    # loss on the assistant answer only (default for prompt-completion)
+        bf16=use_bf16,
+        fp16=False,
+        # gradient checkpointing is on by default in SFTConfig; leave it, memory matters more than speed
+        model_init_kwargs={&quot;dtype&quot;: dtype},
+        eval_strategy=&quot;steps&quot;,
+        eval_steps=50,
+        save_strategy=&quot;steps&quot;,
+        save_steps=50,
+        save_total_limit=2,
+        logging_steps=10,
+        seed=a.seed,
+        data_seed=a.seed,
+        report_to=&quot;none&quot;,
+    )
+
+    trainer = SFTTrainer(
+        model=a.model,
+        args=args,
+        train_dataset=data[&quot;train&quot;],
+        eval_dataset=data[&quot;validation&quot;],
+        peft_config=peft_config,
+    )
+    trainer.train()
+    trainer.save_model(a.out)  # saves the adapter only; merge with merge_push.py
+
+
+if __name__ == &quot;__main__&quot;:
+    main()</pre></div><div class="codebox"><div class="lab"><span>eval.sh</span><button class="copy" type="button">Copy</button></div><pre>#!/usr/bin/env bash
+# Evaluation before and after. Use a separate virtual environment from training.
+# Commands follow the EvalPlus README (read 2026-11-25) and eval_heldout.py. Not executed by the authors.
+set -euo pipefail
+
+BASE=Qwen/Qwen2.5-Coder-1.5B-Instruct
+TUNED=./out/merged          # output of merge_push.py
+BACKEND=${BACKEND:-vllm}    # vllm needs a GPU; use hf on CPU. Use the SAME backend for both models.
+
+# --- 0. environment (evaluation) ---
+# python3.12 -m venv .venv-eval &amp;&amp; source .venv-eval/bin/activate
+# pip install &quot;evalplus[vllm]==0.3.1&quot;      # for --backend vllm
+# pip install &quot;evalplus==0.3.1&quot;            # for --backend hf (runs on CUDA if present, else CPU)
+# pip freeze &gt; runs/eval-requirements.txt  # record what pip resolved
+
+# --- 1. EvalPlus, README one-liners (generate and execute locally) ---
+# evalplus.evaluate --model &quot;$BASE&quot; --dataset humaneval --backend &quot;$BACKEND&quot; --greedy
+# evalplus.evaluate --model &quot;$BASE&quot; --dataset mbpp      --backend &quot;$BACKEND&quot; --greedy
+
+# --- 1b. EvalPlus, safer: generate locally, execute inside the official Docker image (README). The README uses :latest; the v0.3.1 tag exists on Docker Hub (checked 2026-11-25) and is pinned here. ---
+sample_id() {  # mirrors evalplus/codegen.py: model.strip(&quot;./&quot;).replace(&quot;/&quot;, &quot;--&quot;) + _{backend}_temp_0.0
+  local m; m=$(echo &quot;$1&quot; | sed -e &#x27;s#^[./]*##&#x27; -e &#x27;s#[./]*$##&#x27; -e &#x27;s#/#--#g&#x27;)
+  echo &quot;${m}_${BACKEND}_temp_0.0&quot;
+}
+for MODEL in &quot;$BASE&quot; &quot;$TUNED&quot;; do
+  for DATASET in humaneval mbpp; do
+    evalplus.codegen --model &quot;$MODEL&quot; --dataset &quot;$DATASET&quot; --backend &quot;$BACKEND&quot; --greedy
+    docker run --rm -v &quot;$(pwd)/evalplus_results:/app&quot; ganler/evalplus:v0.3.1 \
+      evalplus.evaluate --dataset &quot;$DATASET&quot; \
+      --samples &quot;/app/${DATASET}/$(sample_id &quot;$MODEL&quot;).jsonl&quot;
+  done
+done
+# The evaluate output prints two pass@1 lines per dataset: the base tests (&quot;humaneval&quot;, &quot;mbpp&quot;) and
+# base plus extra tests (&quot;humaneval+&quot;, &quot;mbpp+&quot;). The base-test line is the regression check.
+
+# --- 2. held-out slice of the training dataset, executed in Docker (python:3.12-slim) ---
+mkdir -p runs
+python eval_heldout.py reference --data data/oci-heldout/heldout.jsonl --out runs/ref_gen.jsonl
+python eval_heldout.py score --gen runs/ref_gen.jsonl --data data/oci-heldout/heldout.jsonl --out runs/ref_score.jsonl
+#   -&gt; the reference solutions must pass (about 100 percent). Drop any row that fails in your sandbox.
+python eval_heldout.py generate --model &quot;$BASE&quot;  --data data/oci-heldout/heldout.jsonl --out runs/base_gen.jsonl
+python eval_heldout.py generate --model &quot;$TUNED&quot; --data data/oci-heldout/heldout.jsonl --out runs/tuned_gen.jsonl
+python eval_heldout.py score --gen runs/base_gen.jsonl  --data data/oci-heldout/heldout.jsonl --out runs/base_score.jsonl
+python eval_heldout.py score --gen runs/tuned_gen.jsonl --data data/oci-heldout/heldout.jsonl --out runs/tuned_score.jsonl
+python eval_heldout.py compare --a runs/base_score.jsonl --b runs/tuned_score.jsonl
+
+# --- 3. general sanity prompts (12 prompts, greedy, regex checks, also flags answers that never stop) ---
+python eval_heldout.py sanity --model &quot;$BASE&quot;  --out runs/base_sanity.json
+python eval_heldout.py sanity --model &quot;$TUNED&quot; --out runs/tuned_sanity.json</pre></div><div class="codebox"><div class="lab"><span>eval_heldout.py</span><button class="copy" type="button">Copy</button></div><pre>&quot;&quot;&quot;Held-out execution eval, paired comparison, and a small sanity prompt set.
+
+  python eval_heldout.py generate --model Qwen/Qwen2.5-Coder-1.5B-Instruct --data data/oci-heldout/heldout.jsonl --out runs/base_gen.jsonl
+  python eval_heldout.py generate --model out/merged --data data/oci-heldout/heldout.jsonl --out runs/tuned_gen.jsonl
+  python eval_heldout.py reference --data data/oci-heldout/heldout.jsonl --out runs/ref_gen.jsonl   # sandbox self-check
+  python eval_heldout.py score --gen runs/base_gen.jsonl --data data/oci-heldout/heldout.jsonl --out runs/base_score.jsonl
+  python eval_heldout.py compare --a runs/base_score.jsonl --b runs/tuned_score.jsonl
+  python eval_heldout.py sanity --model out/merged --out runs/tuned_sanity.json
+
+`score` runs generated code in Docker (flags from data/snippets.json, docker-hardened-sandbox) unless --no-docker,
+which falls back to a plain subprocess with rlimits and is NOT a security sandbox.
+&quot;&quot;&quot;
+import argparse
+import json
+import os
+import re
+import subprocess
+import sys
+import tempfile
+import uuid
+from math import comb
+
+MAX_NEW_TOKENS = 1024
+
+RUNNER = r&#x27;&#x27;&#x27;
+import json, sys
+case = json.load(open(sys.argv[1]))
+marker = sys.argv[2]
+ns = {&quot;__name__&quot;: &quot;solution&quot;}
+loaded = True
+try:
+    exec(compile(case[&quot;code&quot;], &quot;&lt;solution&gt;&quot;, &quot;exec&quot;), ns)
+except BaseException:
+    loaded = False
+res = []
+for t in case[&quot;tests&quot;]:
+    if not loaded:
+        res.append(False)
+        continue
+    try:
+        exec(compile(t, &quot;&lt;test&gt;&quot;, &quot;exec&quot;), ns)
+        res.append(True)
+    except BaseException:
+        res.append(False)
+print(marker + json.dumps(res))
+&#x27;&#x27;&#x27;
+
+
+def extract_code(text):
+    blocks = re.findall(r&quot;```(?:python|py)?[ \t]*\n(.*?)```&quot;, text, re.S)
+    return blocks[0] if blocks else text
+
+
+def read_jsonl(path):
+    with open(path) as f:
+        return [json.loads(line) for line in f if line.strip()]
+
+
+def write_jsonl(path, rows):
+    os.makedirs(os.path.dirname(path) or &quot;.&quot;, exist_ok=True)
+    with open(path, &quot;w&quot;) as f:
+        for r in rows:
+            f.write(json.dumps(r, ensure_ascii=False) + &quot;\n&quot;)
+
+
+def load_model(name):
+    import torch
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+
+    dev = &quot;cuda&quot; if torch.cuda.is_available() else (&quot;mps&quot; if torch.backends.mps.is_available() else &quot;cpu&quot;)
+    dtype = torch.bfloat16 if dev == &quot;cuda&quot; else torch.float32
+    tok = AutoTokenizer.from_pretrained(name)
+    model = AutoModelForCausalLM.from_pretrained(name, dtype=dtype).to(dev)
+    model.eval()
+    return tok, model, dev
+
+
+def chat(tok, model, dev, user_text, max_new_tokens):
+    import torch
+
+    text = tok.apply_chat_template([{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: user_text}], tokenize=False,
+                                   add_generation_prompt=True)
+    ids = tok([text], return_tensors=&quot;pt&quot;).to(dev)
+    with torch.inference_mode():
+        # Greedy. generation_config.json of the model (for Qwen: repetition_penalty 1.1) still applies,
+        # so keep that file identical between the base and the merged model.
+        out = model.generate(**ids, do_sample=False, max_new_tokens=max_new_tokens)
+    new = out[0][ids[&quot;input_ids&quot;].shape[1]:]
+    finished = len(new) &lt; max_new_tokens  # stopped on an end token instead of hitting the limit
+    return tok.decode(new, skip_special_tokens=True), finished
+
+
+def cmd_generate(a):
+    tok, model, dev = load_model(a.model)
+    rows = read_jsonl(a.data)
+    out = []
+    for i, r in enumerate(rows):
+        text, finished = chat(tok, model, dev, r[&quot;input&quot;], MAX_NEW_TOKENS)
+        out.append({&quot;id&quot;: r[&quot;id&quot;], &quot;output&quot;: text, &quot;finished&quot;: finished})
+        if i % 25 == 0:
+            print(i, &quot;/&quot;, len(rows), flush=True)
+    write_jsonl(a.out, out)
+
+
+def cmd_reference(a):
+    rows = read_jsonl(a.data)
+    write_jsonl(a.out, [{&quot;id&quot;: r[&quot;id&quot;], &quot;output&quot;: r[&quot;reference_output&quot;], &quot;finished&quot;: True} for r in rows])
+
+
+def run_case(code, tests, docker, timeout=30):
+    marker = &quot;RESULT-&quot; + uuid.uuid4().hex + &quot;:&quot;
+    with tempfile.TemporaryDirectory() as tmp:
+        os.chmod(tmp, 0o755)
+        with open(os.path.join(tmp, &quot;runner.py&quot;), &quot;w&quot;) as f:
+            f.write(RUNNER)
+        with open(os.path.join(tmp, &quot;case.json&quot;), &quot;w&quot;) as f:
+            json.dump({&quot;code&quot;: code, &quot;tests&quot;: tests}, f)
+        if docker:
+            cmd = [&quot;docker&quot;, &quot;run&quot;, &quot;--rm&quot;, &quot;--network&quot;, &quot;none&quot;, &quot;--read-only&quot;, &quot;--memory&quot;, &quot;256m&quot;,
+                   &quot;--memory-swap&quot;, &quot;256m&quot;, &quot;--cpus&quot;, &quot;1&quot;, &quot;--pids-limit&quot;, &quot;64&quot;, &quot;--cap-drop&quot;, &quot;ALL&quot;,
+                   &quot;--security-opt&quot;, &quot;no-new-privileges&quot;, &quot;--user&quot;, &quot;65534:65534&quot;,
+                   &quot;--tmpfs&quot;, &quot;/tmp:rw,noexec,nosuid,size=16m&quot;, &quot;-v&quot;, tmp + &quot;:/work:ro&quot;, &quot;-w&quot;, &quot;/work&quot;,
+                   &quot;python:3.12-slim&quot;, &quot;timeout&quot;, str(timeout - 5), &quot;python&quot;, &quot;-I&quot;, &quot;runner.py&quot;,
+                   &quot;case.json&quot;, marker]
+            kw = {}
+        else:
+            import resource
+
+            def limits():
+                os.setsid()
+                resource.setrlimit(resource.RLIMIT_CPU, (timeout, timeout))
+                resource.setrlimit(resource.RLIMIT_FSIZE, (1 &lt;&lt; 20, 1 &lt;&lt; 20))
+            cmd = [sys.executable, &quot;-I&quot;, &quot;runner.py&quot;, &quot;case.json&quot;, marker]
+            kw = {&quot;cwd&quot;: tmp, &quot;preexec_fn&quot;: limits, &quot;env&quot;: {&quot;PATH&quot;: os.environ.get(&quot;PATH&quot;, &quot;&quot;)}}
+        try:
+            p = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout, **kw)
+        except subprocess.TimeoutExpired:
+            return [False] * len(tests)
+        for line in reversed(p.stdout.splitlines()):
+            if line.startswith(marker):
+                return json.loads(line[len(marker):])
+        return [False] * len(tests)
+
+
+def cmd_score(a):
+    data = {r[&quot;id&quot;]: r for r in read_jsonl(a.data)}
+    gens = read_jsonl(a.gen)
+    rows = []
+    for g in gens:
+        r = data[g[&quot;id&quot;]]
+        res = run_case(extract_code(g[&quot;output&quot;]), r[&quot;tests&quot;], docker=not a.no_docker)
+        rows.append({&quot;id&quot;: g[&quot;id&quot;], &quot;all_pass&quot;: all(res), &quot;frac&quot;: sum(res) / len(res),
+                     &quot;finished&quot;: g.get(&quot;finished&quot;, True)})
+    write_jsonl(a.out, rows)
+    n = len(rows)
+    print(json.dumps({&quot;n&quot;: n, &quot;strict_pass@1&quot;: sum(r[&quot;all_pass&quot;] for r in rows) / n,
+                      &quot;mean_test_pass&quot;: sum(r[&quot;frac&quot;] for r in rows) / n,
+                      &quot;unfinished&quot;: sum(not r[&quot;finished&quot;] for r in rows)}, indent=2))
+
+
+def cmd_compare(a):
+    A = {r[&quot;id&quot;]: r[&quot;all_pass&quot;] for r in read_jsonl(a.a)}
+    B = {r[&quot;id&quot;]: r[&quot;all_pass&quot;] for r in read_jsonl(a.b)}
+    ids = sorted(set(A) &amp; set(B))
+    b = sum(A[i] and not B[i] for i in ids)   # only the first run passes
+    c = sum(B[i] and not A[i] for i in ids)   # only the second run passes
+    n = b + c
+    # exact two-sided McNemar test (binomial, p = 0.5) on the discordant pairs
+    p = 1.0 if n == 0 else min(1.0, 2 * sum(comb(n, k) for k in range(0, min(b, c) + 1)) / 2 ** n)
+    print(json.dumps({&quot;n&quot;: len(ids), &quot;a_pass&quot;: sum(A[i] for i in ids) / len(ids),
+                      &quot;b_pass&quot;: sum(B[i] for i in ids) / len(ids), &quot;only_a&quot;: b, &quot;only_b&quot;: c,
+                      &quot;mcnemar_exact_p&quot;: p}, indent=2))
+
+
+SANITY = [
+    (&quot;What is the capital of Sweden? Answer in one word.&quot;, r&quot;(?i)stockholm&quot;),
+    (&quot;Explain in one sentence what a hash map is.&quot;, r&quot;(?i)\bkey&quot;),
+    (&#x27;Reply with valid JSON only: an object with keys &quot;name&quot; and &quot;age&quot; for a person named Ada aged 36.&#x27;,
+     &quot;json&quot;),
+    (&quot;Translate to French: Good morning&quot;, r&quot;(?i)bonjour&quot;),
+    (&quot;Write a SQL query that returns the 5 largest values of column price from table items.&quot;,
+     r&quot;(?is)select.*order\s+by.*desc.*limit\s+5&quot;),
+    (&quot;Write a JavaScript function that reverses a string.&quot;, r&quot;(?is)(function|=&gt;).*reverse|split\(&#x27;&#x27;\)&quot;),
+    (&quot;What is 17 * 23? Answer with the number only.&quot;, r&quot;\b391\b&quot;),
+    (&quot;Explain in two sentences what a unit test is.&quot;, r&quot;(?i)\btest&quot;),
+    (&quot;Write a bash one-liner that counts the lines in file.txt.&quot;, r&quot;wc\s+-l&quot;),
+    (&quot;Fix the bug and show only the corrected function: def add(a, b): return a - b&quot;,
+     r&quot;a\s*\+\s*b&quot;),
+    (&quot;Say hello and stop.&quot;, &quot;short&quot;),
+    (&quot;Write a Python function is_prime(n) and one sentence explaining it.&quot;, r&quot;def\s+is_prime&quot;),
+]
+
+
+def check(kind, text):
+    if kind == &quot;json&quot;:
+        m = re.search(r&quot;\{.*\}&quot;, text, re.S)
+        try:
+            d = json.loads(m.group(0))
+            return &quot;name&quot; in d and &quot;age&quot; in d
+        except Exception:
+            return False
+    if kind == &quot;short&quot;:
+        return 0 &lt; len(text) &lt; 300
+    return re.search(kind, text) is not None
+
+
+def cmd_sanity(a):
+    tok, model, dev = load_model(a.model)
+    results = []
+    for prompt, kind in SANITY:
+        text, finished = chat(tok, model, dev, prompt, 256)
+        results.append({&quot;prompt&quot;: prompt, &quot;ok&quot;: check(kind, text), &quot;finished&quot;: finished, &quot;output&quot;: text})
+    summary = {&quot;passed&quot;: sum(r[&quot;ok&quot;] for r in results), &quot;total&quot;: len(results),
+               &quot;unfinished&quot;: sum(not r[&quot;finished&quot;] for r in results)}
+    os.makedirs(os.path.dirname(a.out) or &quot;.&quot;, exist_ok=True)
+    with open(a.out, &quot;w&quot;) as f:
+        json.dump({&quot;summary&quot;: summary, &quot;results&quot;: results}, f, indent=2, ensure_ascii=False)
+    print(summary)
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    sub = ap.add_subparsers(dest=&quot;cmd&quot;, required=True)
+    g = sub.add_parser(&quot;generate&quot;)
+    g.add_argument(&quot;--model&quot;, required=True)
+    g.add_argument(&quot;--data&quot;, required=True)
+    g.add_argument(&quot;--out&quot;, required=True)
+    g.set_defaults(fn=cmd_generate)
+    r = sub.add_parser(&quot;reference&quot;)
+    r.add_argument(&quot;--data&quot;, required=True)
+    r.add_argument(&quot;--out&quot;, required=True)
+    r.set_defaults(fn=cmd_reference)
+    s = sub.add_parser(&quot;score&quot;)
+    s.add_argument(&quot;--gen&quot;, required=True)
+    s.add_argument(&quot;--data&quot;, required=True)
+    s.add_argument(&quot;--out&quot;, required=True)
+    s.add_argument(&quot;--no-docker&quot;, action=&quot;store_true&quot;)
+    s.set_defaults(fn=cmd_score)
+    c = sub.add_parser(&quot;compare&quot;)
+    c.add_argument(&quot;--a&quot;, required=True)
+    c.add_argument(&quot;--b&quot;, required=True)
+    c.set_defaults(fn=cmd_compare)
+    t = sub.add_parser(&quot;sanity&quot;)
+    t.add_argument(&quot;--model&quot;, required=True)
+    t.add_argument(&quot;--out&quot;, required=True)
+    t.set_defaults(fn=cmd_sanity)
+    a = ap.parse_args()
+    a.fn(a)
+
+
+if __name__ == &quot;__main__&quot;:
+    main()</pre></div><div class="codebox"><div class="lab"><span>merge_push.py</span><button class="copy" type="button">Copy</button></div><pre>&quot;&quot;&quot;Merge a LoRA adapter into its base model, save the merged weights, optionally push to the Hub.
+
+  python merge_push.py --adapter out/sft-lora --out out/merged
+  python merge_push.py --adapter out/sft-lora --out out/merged --push your-name/qwen2.5-coder-1.5b-oci-lora
+&quot;&quot;&quot;
+import argparse
+
+import torch
+from peft import AutoPeftModelForCausalLM
+from transformers import AutoTokenizer
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument(&quot;--adapter&quot;, required=True)
+    ap.add_argument(&quot;--out&quot;, required=True)
+    ap.add_argument(&quot;--push&quot;, default=None, help=&quot;Hub repo id, for example user/model-name&quot;)
+    a = ap.parse_args()
+
+    # Loads the base model named in adapter_config.json and attaches the adapter.
+    model = AutoPeftModelForCausalLM.from_pretrained(a.adapter, dtype=torch.bfloat16)
+    # merge_and_unload is not in place: use the returned model (PEFT docs). safe_merge checks for NaN.
+    merged = model.merge_and_unload(safe_merge=True)
+    base_name = model.peft_config[&quot;default&quot;].base_model_name_or_path
+    try:
+        tok = AutoTokenizer.from_pretrained(a.adapter)
+    except Exception:  # adapter folder has no tokenizer files: use the base model&#x27;s
+        tok = AutoTokenizer.from_pretrained(base_name)
+    merged.save_pretrained(a.out, safe_serialization=True)
+    tok.save_pretrained(a.out)
+    print(&quot;saved merged model to&quot;, a.out)
+    if a.push:
+        # Needs `hf auth login` or HF_TOKEN. Write README.md (the model card) into the repo as well.
+        merged.push_to_hub(a.push)
+        tok.push_to_hub(a.push)
+        print(&quot;pushed to https://huggingface.co/&quot; + a.push)
+
+
+if __name__ == &quot;__main__&quot;:
+    main()</pre></div><div class="codebox"><div class="lab"><span>trl_sft_cli.sh</span><button class="copy" type="button">Copy</button></div><pre>#!/usr/bin/env bash
+# Same recipe as train_sft.py through the TRL command line (flag names read from trl/scripts/sft.py,
+# SFTConfig and ModelConfig of TRL 1.18.2 on 2026-11-25). Not executed by the authors.
+# Note: the CLI default for --dtype is float32, so pass bfloat16 explicitly on a GPU.
+set -euo pipefail
+trl sft \
+  --model_name_or_path Qwen/Qwen2.5-Coder-1.5B-Instruct \
+  --dataset_name data/oci-sft-4k \
+  --dataset_train_split train \
+  --dataset_test_split validation \
+  --dtype bfloat16 \
+  --use_peft --lora_r 32 --lora_alpha 64 --lora_dropout 0.05 --lora_target_modules all-linear \
+  --learning_rate 1e-4 --num_train_epochs 2 \
+  --per_device_train_batch_size 4 --gradient_accumulation_steps 8 \
+  --lr_scheduler_type cosine --warmup_steps 0.05 --weight_decay 0.0 \
+  --max_length 2048 \
+  --eval_strategy steps --eval_steps 50 --save_steps 50 --save_total_limit 2 \
+  --seed 42 --output_dir out/sft-lora
+# Equivalent YAML: put the same keys (without the leading dashes) in sft_config.yaml and run
+#   trl sft --config sft_config.yaml</pre></div><h2>Settings, and why</h2><div class="cmpwrap"><table class="cmp narrow"><thead><tr><th>Setting</th><th>Value</th><th>Why</th><th>Source</th></tr></thead><tbody><tr><th>model</th><td>Qwen/Qwen2.5-Coder-1.5B-Instruct</td><td>See base_models.</td><td><a href="https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct">source</a></td></tr><tr><th>lora_r</th><td>32</td><td>LoRA trains r x (in + out) parameters per adapted matrix. QLoRA found r unrelated to final performance when all linear layers are adapted; Biderman et al. found code tasks gain from higher rank and recommend 256 if memory allows because ranks 16 to 64 tend not to suffice for code. 32 is a cheap middle (2.4 percent trainable); sweep 16, 64, 256 if you want to see the rank effect.</td><td>QLoRA appendix A.1 https://arxiv.org/abs/2305.14314 ; LoRA Learns Less and Forgets Less sec. 4.7 https://arxiv.org/abs/2405.09673 ; param count from the model config</td></tr><tr><th>lora_alpha</th><td>64 (alpha = 2r)</td><td>PEFT scales the update by alpha/r. Biderman et al. found alpha = 2r important, especially at higher rank, and that raising the learning rate does not compensate for a low alpha. (The PEFT default is alpha=8; PEFT's own docs recommend alpha equal to r only for the NoRA initialization.)</td><td><a href="https://arxiv.org/abs/2405.09673 sec. 4.7 ; LoraConfig defaults r=8, lora_alpha=8 in https://github.com/huggingface/peft/blob/v0.22.0/src/peft/tuners/lora/config.py">source</a></td></tr><tr><th>lora_dropout</th><td>0.05</td><td>Regularization on the adapter input. QLoRA found dropout 0.05 helpful for 7B and 13B models and unhelpful for 33B and 65B; the TRL ModelConfig default is also 0.05. Small models overfit small datasets faster.</td><td><a href="https://arxiv.org/abs/2305.14314 appendix A.1 ; TRL model_config.py">source</a></td></tr><tr><th>target_modules</th><td>all-linear (q, k, v, o, gate, up, down projections)</td><td>QLoRA: LoRA on all linear transformer layers is required to match full fine-tuning; Biderman et al.: attention-only underperforms MLP or all, and most gains come from the MLP modules. PEFT's default for qwen2 is only q_proj and v_proj, which is the weak choice.</td><td><a href="https://arxiv.org/abs/2305.14314 ; https://arxiv.org/abs/2405.09673 Fig. 7 ; PEFT constants.py TRANSFORMERS_MODELS_TO_LORA_TARGET_MODULES_MAPPING">source</a></td></tr><tr><th>learning_rate</th><td>1e-4 (sweep 5e-5, 1e-4, 2e-4)</td><td>Adapters need a higher rate than full fine-tuning because only new parameters are learned. TRL's SFT docs say about 1e-4 for adapters and its LoRA example script uses 2e-4; Biderman et al. found LoRA's best rates one order of magnitude above full fine-tuning, between 5e-5 and 5e-4, and to pick the highest stable value. Starting from an already tuned Instruct model, the low side of that range limits drift.</td><td><a href="https://github.com/huggingface/trl/blob/v1.18.2/docs/source/sft_trainer.md ; trl/scripts/sft.py docstring ; https://arxiv.org/abs/2405.09673 sec. 4.7">source</a></td></tr><tr><th>num_train_epochs</th><td>2 (range 1 to 3)</td><td>With about 4,000 rows one epoch is only about 125 optimizer steps. More epochs learn more but also forget more and risk memorizing the synthetic style; the OpenCodeInstruct authors used 3 epochs, but over 5M rows. Use 1 epoch on a laptop.</td><td><a href="https://arxiv.org/abs/2504.04030 sec. 3 ; https://arxiv.org/abs/2405.09673 sec. 4.1 and 4.3 (learning versus forgetting grows with epochs)">source</a></td></tr><tr><th>per_device_train_batch_size x gradient_accumulation_steps</th><td>4 x 8 = 32 effective (2 x 16 on 16 GB cards, 2 x 16 on laptops)</td><td>Effective batch 32 gives about 125 steps per epoch, enough for the cosine schedule to do its work; per-device size is set by the logits memory (151,936-token vocabulary), accumulation makes up the rest. TRL's own LoRA example is 2 x 8 = 16.</td><td>trl/scripts/sft.py docstring ; arithmetic in hardware_tiers</td></tr><tr><th>max_length</th><td>2048</td><td>SFTConfig default is 1024 and truncates; the filter caps rows at 6,000 characters (about 1,700 tokens, assumed 3.5 characters per token), so 2048 keeps every row whole. The OpenCodeInstruct authors also used a maximum sequence length of 2048.</td><td>SFTConfig.max_length in trl/trainer/sft_config.py ; https://arxiv.org/abs/2504.04030 sec. 3</td></tr><tr><th>lr_scheduler_type and warmup_steps</th><td>cosine, warmup_steps=0.05</td><td>Cosine decay with a short warmup is what both Biderman et al. (cosine with 10 percent warmup) and the OpenCodeInstruct authors (cosine annealing, 100 warmup steps) used. In transformers 5.24.1 the old warmup_ratio argument is gone and warmup_steps accepts a float below 1 as a ratio of total steps.</td><td><a href="https://github.com/huggingface/transformers/blob/v5.24.1/src/transformers/training_args.py (get_warmup_steps) ; papers above">source</a></td></tr><tr><th>weight_decay and max_grad_norm</th><td>0.0 and 1.0</td><td>Biderman et al. used weight decay 0 and gradient clipping at norm 1 for LoRA; 1.0 is also the transformers default.</td><td><a href="https://arxiv.org/abs/2405.09673 appendix A ; training_args.py">source</a></td></tr><tr><th>packing</th><td>False</td><td>Packing several examples per sequence saves padding, but TRL's default bfd packing turns on padding-free mode, which the docs say needs FlashAttention 2 or 3; otherwise the collator is wrong for attention. Rows are short and uniform, so padding waste is small.</td><td>SFTConfig docs (padding_free, packing_strategy) and sft_trainer.py comment about BFD packing, TRL v1.18.2</td></tr><tr><th>completion_only_loss</th><td>True (default for prompt-completion data)</td><td>Loss on the assistant answer only, so the model is not trained to reproduce the user's question. assistant_only_loss would instead need {% generation %} markers in the chat template, which the Qwen2.5-Coder template does not carry.</td><td><a href="https://github.com/huggingface/trl/blob/v1.18.2/docs/source/sft_trainer.md (Train on completion only, Train on assistant messages only)">source</a></td></tr><tr><th>precision</th><td>bf16 weights and bf16 autocast on CUDA, float32 on CPU and Apple silicon; PEFT keeps adapter weights in fp32</td><td>bf16 halves weight memory without fp16 loss scaling. PEFT get_peft_model autocasts bf16 or fp16 adapter weights to fp32 by default for stable training. Note the TRL CLI defaults --dtype to float32, so pass bfloat16 explicitly.</td><td>PEFT mapping_func.py autocast_adapter_dtype ; TRL model_config.py</td></tr><tr><th>gradient checkpointing</th><td>on (TRL default; do not set explicitly)</td><td>Trades about 20 percent more time for far less activation memory. In transformers 5.23 and later gradient_checkpointing is a deprecated alias of activation_checkpointing and TRL sets the right one itself, so leave the default.</td><td>TRL base_config.py ; transformers training_args.py</td></tr><tr><th>seed and data_seed</th><td>42 and 42</td><td>Fixes shuffling and LoRA initialization. GPU kernels are not bitwise deterministic, so two runs still differ a little; run 3 seeds if you want to know how much of a measured gain is training noise.</td><td>transformers TrainingArguments.seed (default 42)</td></tr><tr><th>evaluation during training</th><td>eval_strategy steps every 50 steps on the 200 validation rows; save_total_limit 2</td><td>Eval loss on held-out rows catches overfitting early (train loss falling while eval loss rises). It is not a code-correctness measure.</td><td>transformers training_args.py</td></tr></tbody></table></div><h2>Evaluate before and after</h2><p>Published baseline (greedy pass@1, read 2026-11-25):</p><div class="cmpwrap"><table class="cmp narrow"><thead><tr><th>Model</th><th>HumanEval</th><th>HumanEval+</th><th>MBPP</th><th>MBPP+</th></tr></thead><tbody><tr><th>Qwen/Qwen2.5-Coder-1.5B-Instruct</th><td>70.7</td><td>66.5</td><td>69.2</td><td>59.4</td></tr><tr><th>Qwen/Qwen2.5-Coder-0.5B-Instruct</th><td>61.6</td><td>57.3</td><td>52.4</td><td>43.7</td></tr></tbody></table></div><p class="snote">Source: <a href="https://arxiv.org/abs/2409.12186">Qwen2.5-Coder Technical Report, arXiv 2409.12186 (v3, last revised 12 Nov 2024), instruct-model code generation table evaluated with EvalPlus (columns HE, HE+, </a>. Decoding settings and the exact EvalPlus dataset versions behind Qwen's table are not stated in the text read. evalplus 0.3.1 uses HumanEval+ v0.1.10 and MBPP+ v0.2.0 (378 tasks). Always reproduce the baseline yourself with the same backend as the tuned model; a gap of a few points to the published number is plausible and is not a bug by itself.</p><p>Unpaired standard error of a pass rate p over n problems is sqrt(p(1-p)/n): HumanEval+ at 66.5 percent over 164 problems is 3.7 points; MBPP+ at 59.4 percent over 378 tasks is 2.5 points; the 300-row held-out slice at 50 percent is 2.9 points. One HumanEval problem is 0.61 points. Paired comparison on the same problems (exact McNemar test, implemented in eval_heldout.py compare and applicable to the EvalPlus per-task results) is more sensitive than comparing two percentages.</p><h3>Procedure</h3><ol><li>A. EvalPlus, base and tuned model, same backend, greedy: evalplus.codegen --model MODEL --dataset humaneval|mbpp --backend vllm|hf --greedy, then execute in the ganler/evalplus Docker image (eval.sh section 1b; one-line evalplus.evaluate forms from the README are in section 1). The tuned model is the MERGED model folder, which is what gets published; bf16 merge rounding can change outputs slightly.</li><li>B. Regression check, part 1: evalplus reports both the base tests (HumanEval, MBPP) and the base-plus-extra tests (HumanEval+, MBPP+). The base-test line is the HumanEval regression check against the base model.</li><li>C. Held-out slice: 300 questions with 10 generated asserts each that the model never trained on. Generate greedily, extract the first python block, run all asserts per question in Docker (python:3.12-slim, no network, read-only, 256 MB, 64 pids, uid 65534, from data/snippets.json docker-hardened-sandbox). First run the dataset's reference solutions through the same sandbox and drop rows that fail. Report strict pass@1 (all 10 asserts) and mean assert pass rate, plus McNemar p.</li><li>D. Regression check, part 2: 12 general sanity prompts (factual answer, JSON-only output, translation, SQL, JavaScript, arithmetic, bash, a bug fix, a stop-after-hello prompt) with regex checks, greedy, 256 new tokens; also count answers that never emit an end token.</li><li>E. Training diagnostics: train and eval loss curves, mean_token_accuracy, grad_norm (TRL logs these). Read 10 generations by eye before trusting any number.</li><li>F. Keep decoding settings identical: for Qwen the model's generation_config.json sets repetition_penalty 1.1 and the evalplus 0.3.1 HF backend passes only do_sample and max_new_tokens (768), so that file is silently part of the evaluation; copy it unchanged into the merged folder (save_pretrained does). vLLM reading the same file by default was not verified.</li><li>G. Do not tune hyperparameters on HumanEval+ or MBPP+. Select on validation loss and the held-out slice, then run EvalPlus once.</li></ol><h3>What counts as success</h3><ul><li>SUCCESS (our thresholds, chosen from the noise arithmetic above, not from a source): held-out strict pass@1 up by at least 3 points with McNemar p below 0.05, AND HumanEval+ and MBPP+ each no lower than baseline minus 2 points (about 3 HumanEval problems), AND the HumanEval and MBPP base-test lines no lower than baseline minus 3 points, AND sanity prompts passed at least baseline minus 1 with no new answers that fail to stop. A gain of 2 or more points on both EvalPlus sets would be notable but needs 3 training seeds before you believe it.</li><li>NO CHANGE: every delta inside about one standard error (HumanEval+ under 3.7 points, MBPP+ under 2.5, held-out under 3) and McNemar p of 0.05 or more. This is a valid and likely result; report it as no detectable change and do not search for a better seed.</li><li>FAILURE: HumanEval+ or MBPP+ down by more than 3 points, or sanity prompts down by 3 or more, or new unfinished generations, or eval loss rising while train loss falls. Check first: chat template and eos token (&lt;|im_end|&gt;), learning rate too high, and whether the merged model equals the adapter model in outputs.</li></ul><h2>Merge and publish</h2><p>AutoPeftModelForCausalLM.from_pretrained(adapter_dir, dtype=torch.bfloat16).merge_and_unload(safe_merge=True). PEFT docs: merge_and_unload folds the adapter into the base weights, returns a model with the base architecture, and is not in place, so use the returned object. safe_merge checks for NaN. Evaluate the merged folder, not only the adapter.</p><p>merged.push_to_hub('user/name') and tokenizer.push_to_hub('user/name') after hf auth login; also push the adapter folder (small: 36,929,536 fp32 parameters is about 148 MB) to a second repo or a subfolder so others can re-merge or stack it.</p><div class="codebox"><div class="lab"><span>model_card.md</span><button class="copy" type="button">Copy</button></div><pre>---
+license: apache-2.0
+base_model: Qwen/Qwen2.5-Coder-1.5B-Instruct
+datasets:
+  - nvidia/OpenCodeInstruct
+library_name: transformers
+pipeline_tag: text-generation
+tags:
+  - code
+  - lora
+  - sft
+  - trl
+  - peft
+model-index:
+  - name: YOUR-MODEL-NAME
+    results:
+      - task: {type: text-generation}
+        dataset: {name: HumanEval+ (EvalPlus), type: evalplus/humanevalplus}
+        metrics: [{type: pass@1, value: FILL_FROM_YOUR_RUN, name: &quot;greedy, EvalPlus 0.3.1&quot;}]
+      - task: {type: text-generation}
+        dataset: {name: MBPP+ (EvalPlus), type: evalplus/mbppplus}
+        metrics: [{type: pass@1, value: FILL_FROM_YOUR_RUN, name: &quot;greedy, EvalPlus 0.3.1&quot;}]
+---
+# YOUR-MODEL-NAME
+
+LoRA fine-tune of Qwen/Qwen2.5-Coder-1.5B-Instruct on about 4,000 execution-checked examples from
+nvidia/OpenCodeInstruct (CC BY 4.0, NVIDIA). The adapter is merged into the weights.
+
+## Intended use
+Research and learning: a small, reproducible example of supervised fine-tuning for code. Not evaluated for safety.
+
+## Training data
+- Source: nvidia/OpenCodeInstruct, revision 8f3ba5bafe4d6e8db46082cf7ae6741bc370604d.
+- Filter: all 10 generated unit tests pass, LLM judge 5 of 5 on all criteria, python block present,
+  no network or file access, at most 6000 characters, no 10-word overlap with HumanEval or MBPP.
+- Counts: FILL (train / validation / held-out). Split by hash of row id, seed 42.
+- Generators named by the dataset authors: Qwen2.5-Coder-32B-Instruct and Qwen2.5-32B-Instruct (both Apache-2.0).
+
+## Training
+TRL 1.18.2, PEFT 0.22.0, transformers 5.24.1. LoRA r=32, alpha=64, dropout 0.05, all linear layers.
+Learning rate 1e-4, cosine, 5 percent warmup, 2 epochs, effective batch 32, max length 2048, seed 42.
+Hardware, wall-clock time and peak memory: FILL (measured).
+
+## Evaluation (greedy, same backend for both rows)
+| Model | HumanEval | HumanEval+ | MBPP | MBPP+ | Held-out slice (strict pass@1) | Sanity prompts |
+|---|---|---|---|---|---|---|
+| Base | FILL | FILL | FILL | FILL | FILL | FILL |
+| This model | FILL | FILL | FILL | FILL | FILL | FILL |
+Paired McNemar p-values and the run logs: FILL. Differences under about 4 points on HumanEval+ are within noise.
+
+## Limitations
+Small training set; synthetic data written by a larger model; tests were also model-written and can be wrong;
+benchmark scores can move with decoding settings and backend.
+
+## Attribution
+Data: NVIDIA, OpenCodeInstruct, CC BY 4.0 (https://huggingface.co/datasets/nvidia/OpenCodeInstruct).
+Base model: Qwen/Qwen2.5-Coder-1.5B-Instruct, Apache-2.0.</pre></div><h2>What to expect</h2><ul class="est"><li>Most likely: no statistically detectable change on HumanEval+ and MBPP+ (changes within about plus or minus 3 points), because the model is already instruction-tuned for code and the run is tiny. <span class="tag exp">estimate</span><br><small>Basis: The OpenCodeInstruct authors trained for 3 epochs on 5,000,000 rows (about 15M sample-visits) with full fine-tuning from the BASE model and got HumanEval+ 73.8 and MBPP+ 68.3 for Qwen2.5-Coder-1.5B against 66.5 and 59.4 for the Instruct model (arXiv 2504.04030 Table 3). This recipe sees 4,000 x 2 = 8,000 sample-visits, about 0.05 percent of that, with LoRA, which Biderman et al. found learns less than full fine-tuning on code (arXiv 2405.09673). Benchmark standard errors (3.7 and 2.5 points) are of the same size as the plausible effect.</small></li><li>A small in-distribution gain on the held-out slice is plausible (roughly 0 to 5 points strict pass@1), mostly from adopting the dataset's answer style and signature conventions. <span class="tag exp">estimate</span><br><small>Basis: Training and held-out rows come from one generator pipeline and the training answers are execution-verified. The held-out slice is in-distribution, and instructions in the dataset are evolved from shared seeds, so near-duplicate leakage makes this the optimistic measurement. No published number exists for this exact setup; the range is a guess. A held-out gain with no EvalPlus gain is the expected shape.</small></li><li>Regression risk is low but not zero: slight drops on HumanEval base tests or on general sanity prompts (for example answers that become code-only), and small shifts in verbosity. <span class="tag exp">estimate</span><br><small>Basis: LoRA forgets less than full fine-tuning on out-of-domain tasks (Biderman et al. 2024, sec. 4.2), but training only on single-turn code answers can still shift the model's habits. Sanity prompts and the base-test lines are there to detect it.</small></li><li>Larger gains need more data, a higher rank or a base-model start, not more epochs on this subset. <span class="tag exp">estimate</span><br><small>Basis: OpenCodeInstruct Fig. 3 and sec. 4.2: pass rate on MBPP rises with the number of samples up to 5M; Biderman et al. sec. 4.7: rank 256 on all modules for code. Variant B (start from Qwen2.5-Coder-1.5B base with --eos-token) is the closest reproduction of the paper's setup at small scale.</small></li><li>Time and memory: about 12 to 13 GB and 20 to 60 minutes on a 24 GB GPU; about 5 to 6 GB and 1 to 4 hours for the 0.5B laptop variant. <span class="tag exp">estimate</span><br><small>Basis: Arithmetic in hardware_tiers (parameters x bytes, the 6ND FLOPs rule, assumed sustained throughput). Not measured.</small></li><li>Held-out reference solutions will pass in the sandbox for nearly all rows, but a few percent may fail because of sandbox differences (Python version, missing packages, time limits). <span class="tag exp">estimate</span><br><small>Basis: The dataset's own execution log marks them as passing; the sandbox here is python:3.12-slim with no third-party packages, so rows importing numpy and similar will fail and should be dropped. The share is unknown until you run it.</small></li></ul><h2>Stretch: execution-based RL <span class="tag exp">Experimental</span></h2><p>EXPERIMENTAL. Not executed. Reinforcement learning with execution feedback is an emerging practice; reward hacking and instability are common failure modes.</p><p>Starting from the SFT model (or the Instruct model), apply GRPO with a unit-test reward so the model is pushed toward programs that pass tests rather than programs that resemble reference answers.</p><p><b>Task set.</b> Run prepare_data.py --rl-pool 3000 to get prompts with reward_tests (6 asserts) and holdout_tests (the remaining 4). Sample 8 answers per prompt from the starting model with the reward function and keep only prompts whose pass rate is strictly between 0 and 1 (all-pass and all-fail groups give zero advantage and no learning signal). Save as data/oci-rl-pool/pool_filtered.jsonl. After training, evaluate on the hidden holdout_tests and on EvalPlus; a rise in reward with no rise on hidden tests means reward hacking.</p><p><b>Reward.</b> files['reward_fn.py']: unit_test_reward(completions, reward_tests, partial_credit=False, **kwargs) returns one float per completion. It accepts string completions (standard datasets) and message lists (conversational), extracts the first python block, runs the code plus each assert in a fresh subprocess with a wall-clock timeout, a process-group kill and Linux rlimits, and returns 1.0 for all-pass else 0.0. Self-test passed locally on Python 3.9 (pass, fail, timeout, sys.exit(0) trick, missing code block, partial credit). Derived from the checked code-reward-subprocess snippet in data/snippets.json.</p><div class="codebox"><div class="lab"><span>reward_fn.py</span><button class="copy" type="button">Copy</button></div><pre>&quot;&quot;&quot;Execution reward for GRPO (EXPERIMENTAL). Stdlib only.
+
+Runs the model&#x27;s code plus assert-style tests in a subprocess with a wall-clock timeout, a process-group
+kill and (on Linux) rlimits. This is NOT a security sandbox: run the whole training job in a container with
+no network and no secrets (see the Docker command in data/snippets.json, docker-hardened-sandbox).
+&quot;&quot;&quot;
+import json
+import os
+import re
+import signal
+import subprocess
+import sys
+import tempfile
+import uuid
+
+try:
+    import resource  # POSIX only
+except ImportError:  # pragma: no cover
+    resource = None
+
+RUNNER = r&#x27;&#x27;&#x27;
+import json, sys
+case = json.load(open(sys.argv[1]))
+ns = {&quot;__name__&quot;: &quot;solution&quot;}
+loaded = True
+try:
+    exec(compile(case[&quot;code&quot;], &quot;&lt;solution&gt;&quot;, &quot;exec&quot;), ns)
+except BaseException:
+    loaded = False
+res = []
+for t in case[&quot;tests&quot;]:
+    try:
+        if not loaded:
+            raise RuntimeError(&quot;solution did not load&quot;)
+        exec(compile(t, &quot;&lt;test&gt;&quot;, &quot;exec&quot;), ns)
+        res.append(True)
+    except BaseException:
+        res.append(False)
+print(sys.argv[2] + json.dumps(res))
+&#x27;&#x27;&#x27;
+
+CODE_BLOCK = re.compile(r&quot;```(?:python|py)?[ \t]*\n(.*?)```&quot;, re.S)
+
+
+def extract_code(completion):
+    &quot;&quot;&quot;TRL passes a string for standard datasets and a list of message dicts for conversational ones.&quot;&quot;&quot;
+    if isinstance(completion, list):
+        completion = completion[-1][&quot;content&quot;]
+    m = CODE_BLOCK.search(completion)
+    return m.group(1) if m else &quot;&quot;  # no code block means no reward
+
+
+def _limits(cpu_seconds, mem_bytes):
+    def apply():
+        os.setsid()  # own process group so the whole tree can be killed on timeout
+        if resource is None:
+            return
+        resource.setrlimit(resource.RLIMIT_CPU, (cpu_seconds, cpu_seconds))
+        resource.setrlimit(resource.RLIMIT_FSIZE, (1 &lt;&lt; 20, 1 &lt;&lt; 20))
+        resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
+        if sys.platform.startswith(&quot;linux&quot;):  # RLIMIT_AS is unreliable on macOS
+            resource.setrlimit(resource.RLIMIT_AS, (mem_bytes, mem_bytes))
+            resource.setrlimit(resource.RLIMIT_NPROC, (64, 64))
+    return apply
+
+
+def run_tests(code, tests, timeout=5.0, mem_mb=512):
+    &quot;&quot;&quot;Return the list of per-test booleans. All False on timeout, crash or missing code.&quot;&quot;&quot;
+    if not code.strip():
+        return [False] * len(tests)
+    marker = &quot;RESULT-&quot; + uuid.uuid4().hex + &quot;:&quot;
+    with tempfile.TemporaryDirectory() as tmp:
+        with open(os.path.join(tmp, &quot;runner.py&quot;), &quot;w&quot;) as f:
+            f.write(RUNNER)
+        with open(os.path.join(tmp, &quot;case.json&quot;), &quot;w&quot;) as f:
+            json.dump({&quot;code&quot;: code, &quot;tests&quot;: tests}, f)
+        proc = subprocess.Popen(
+            [sys.executable, &quot;-I&quot;, &quot;runner.py&quot;, &quot;case.json&quot;, marker], cwd=tmp, stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True,
+            env={&quot;PATH&quot;: os.environ.get(&quot;PATH&quot;, &quot;&quot;), &quot;PYTHONHASHSEED&quot;: &quot;0&quot;},
+            preexec_fn=_limits(int(timeout) + 1, mem_mb &lt;&lt; 20),
+        )
+        try:
+            out, _ = proc.communicate(timeout=timeout)
+        except subprocess.TimeoutExpired:
+            try:
+                os.killpg(proc.pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
+            proc.communicate()
+            return [False] * len(tests)
+        for line in reversed(out.splitlines()):
+            if line.startswith(marker):
+                return json.loads(line[len(marker):])
+        return [False] * len(tests)
+
+
+def unit_test_reward(completions, reward_tests, partial_credit=False, **kwargs):
+    &quot;&quot;&quot;GRPOTrainer reward function: one float per completion.
+
+    `reward_tests` is a dataset column (list of assert strings); TRL passes every dataset column except
+    `prompt` as a keyword argument. Binary by default (all tests pass = 1.0). Partial credit tends to be
+    gamed by programs that satisfy easy tests, so turn it on only after looking at samples.
+    &quot;&quot;&quot;
+    rewards = []
+    for completion, tests in zip(completions, reward_tests):
+        res = run_tests(extract_code(completion), tests)
+        rewards.append(sum(res) / len(res) if partial_credit else float(all(res)))
+    return rewards
+
+
+if __name__ == &quot;__main__&quot;:
+    tests = [&quot;assert add(2, 3) == 5&quot;, &quot;assert add(0, 0) == 0&quot;]
+    good = &quot;```python\ndef add(a, b):\n    return a + b\n```&quot;
+    assert unit_test_reward([good], [tests]) == [1.0]
+    assert unit_test_reward([[{&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: good}]], [tests]) == [1.0]
+    assert unit_test_reward([&quot;```python\ndef add(a, b):\n    return a * b\n```&quot;], [tests]) == [0.0]
+    assert unit_test_reward([&quot;```python\nwhile True:\n    pass\n```&quot;], [tests]) == [0.0]
+    assert unit_test_reward([&quot;```python\nimport sys\nsys.exit(0)\n```&quot;], [tests]) == [0.0]
+    assert unit_test_reward([&quot;no code here&quot;], [tests]) == [0.0]
+    assert unit_test_reward([&quot;```python\ndef add(a, b):\n    return a + b if a != 0 else 1\n```&quot;], [tests],
+                            partial_credit=True) == [0.5]
+    print(&quot;ok: pass=1.0 fail=0.0 timeout=0.0 sys.exit=0.0 no-code=0.0 partial=0.5&quot;)</pre></div><div class="codebox"><div class="lab"><span>grpo_train.py</span><button class="copy" type="button">Copy</button></div><pre>&quot;&quot;&quot;EXPERIMENTAL stretch recipe: GRPO with an execution reward on a small, filtered task pool.
+
+Config names read from TRL 1.18.2 source (trl/trainer/grpo_config.py) on 2026-11-25. Not executed.
+Prerequisite: a pool of prompts with `reward_tests` (drive the reward) and `holdout_tests` (never used in
+training, check them after training to detect reward hacking). prepare_data.py --rl-pool 3000 builds it;
+then keep only prompts the starting model solves sometimes but not always (pass rate strictly between 0 and 1
+over 8 samples), which you measure with the starting model first.
+&quot;&quot;&quot;
+from datasets import load_dataset
+from peft import LoraConfig
+from trl import GRPOConfig, GRPOTrainer
+
+from reward_fn import unit_test_reward
+
+ds = load_dataset(&quot;json&quot;, data_files=&quot;data/oci-rl-pool/pool_filtered.jsonl&quot;, split=&quot;train&quot;)
+ds = ds.remove_columns([c for c in ds.column_names if c not in (&quot;prompt&quot;, &quot;reward_tests&quot;)])
+
+args = GRPOConfig(
+    output_dir=&quot;out/grpo-lora&quot;,
+    num_generations=8,                 # completions per prompt (group size); default 8
+    per_device_train_batch_size=8,     # num_processes * this * accumulation must divide by num_generations
+    gradient_accumulation_steps=2,     # 16 completions per optimizer step = 2 prompts
+    max_completion_length=768,         # default 512; code answers with an explanation need more
+    temperature=1.0,                   # default 1.0: sampling diversity is the learning signal
+    learning_rate=1e-5,                # LoRA; the TRL default of 1e-6 is for full fine-tuning. Untested guess.
+    beta=0.0,                          # default: no KL term, no reference model
+    loss_type=&quot;dapo&quot;,                  # default in 1.18.2
+    scale_rewards=&quot;group&quot;,             # default
+    mask_truncated_completions=True,   # exclude answers cut off at max_completion_length from the loss
+    num_train_epochs=1,
+    logging_steps=1,
+    save_steps=50,
+    log_completions=True,              # print sample completions: read them to catch reward hacking
+    use_vllm=False,                    # True with vllm_mode=&quot;colocate&quot; is faster on an 80 GB GPU
+    bf16=True,
+    seed=42,
+    report_to=&quot;none&quot;,
+    model_init_kwargs={&quot;dtype&quot;: &quot;bfloat16&quot;},
+)
+
+trainer = GRPOTrainer(
+    model=&quot;out/merged&quot;,                # start from the SFT model, or Qwen/Qwen2.5-Coder-1.5B-Instruct
+    reward_funcs=unit_test_reward,
+    args=args,
+    train_dataset=ds,
+    peft_config=LoraConfig(r=32, lora_alpha=64, lora_dropout=0.0, target_modules=&quot;all-linear&quot;,
+                           task_type=&quot;CAUSAL_LM&quot;),
+)
+trainer.train()
+trainer.save_model(args.output_dir)</pre></div><p><b>Sandbox.</b> The reward function is NOT a security sandbox (no network or filesystem isolation). Run the entire training job inside a container with no network, no credentials and a read-only root, or call a separate sandbox service from the reward function (async reward functions are supported by TRL). Docker flags: data/snippets.json docker-hardened-sandbox.</p><p><b>Hardware (estimate).</b> ESTIMATE: 24 GB is tight for 1.5B (policy 3.09 GB bf16, LoRA states 0.59 GB, 16 completions of up to 768 tokens per step, logits for 12,288 completion tokens about 7.5 GB in fp32); 80 GB with use_vllm=True and vllm_mode='colocate' is comfortable. Time is dominated by generation and by test execution (8 completions x 2 prompts x up to 5 s timeout per step); no throughput source was found, so give only: ROUGH GUESS several hours for a few hundred steps.</p><p><b>Expected outcome.</b> ESTIMATE: a rise in training reward is likely; a rise on hidden tests and EvalPlus is uncertain and, if it happens, probably a point or two. Published RL-for-code results use far more prompts and compute; do not expect them at this scale.</p><h3>Risks</h3><ul><li>Reward hacking: programs that special-case the visible asserts; hidden holdout_tests and reading logged completions are the checks.</li><li>Same-process execution lets a program monkeypatch builtins; a stricter design runs tests in a separate process from the candidate and compares outputs.</li><li>Tests are model-written and can be wrong, which rewards wrong programs.</li><li>Zero-variance groups (all pass or all fail) waste compute: filter the pool first.</li><li>Untrusted code execution: container isolation is required.</li></ul><h2>Sources</h2><ul><li><a href="https://pypi.org/pypi/trl/json">PyPI JSON for trl, peft, transformers, datasets, accelerate, torch, evalplus, vllm, verl, bitsandbytes</a></li><li><a href="https://github.com/huggingface/trl/blob/v1.18.2/trl/trainer/sft_config.py">TRL v1.18.2 SFTConfig source</a></li><li><a href="https://github.com/huggingface/trl/blob/v1.18.2/docs/source/sft_trainer.md">TRL v1.18.2 SFT trainer docs</a></li><li><a href="https://github.com/huggingface/trl/blob/v1.18.2/trl/scripts/sft.py">TRL v1.18.2 CLI script (trl sft)</a></li><li><a href="https://github.com/huggingface/trl/blob/v1.18.2/trl/trainer/model_config.py">TRL v1.18.2 ModelConfig (use_peft, lora_*)</a></li><li><a href="https://github.com/huggingface/trl/blob/v1.18.2/trl/trainer/grpo_config.py">TRL v1.18.2 GRPOConfig and GRPO docs</a></li><li><a href="https://github.com/huggingface/peft/blob/v0.22.0/src/peft/tuners/lora/config.py">PEFT v0.22.0 LoraConfig, merge_and_unload, get_peft_model</a></li><li><a href="https://github.com/huggingface/transformers/blob/v5.24.1/src/transformers/training_args.py">transformers v5.24.1 TrainingArguments</a></li><li><a href="https://github.com/huggingface/datasets/blob/main/docs/source/stream.mdx">datasets streaming docs (shuffle buffer and shard order)</a></li><li><a href="https://github.com/evalplus/evalplus/blob/master/README.md">EvalPlus README (commands) and v0.3.1 source (codegen, hf provider, utility)</a></li><li><a href="https://github.com/evalplus/evalplus.github.io/blob/master/results.json">EvalPlus leaderboard data</a></li><li><a href="https://arxiv.org/abs/2409.12186">Qwen2.5-Coder technical report (baseline numbers)</a></li><li><a href="https://arxiv.org/abs/2504.04030">OpenCodeInstruct paper</a></li><li><a href="https://arxiv.org/abs/2407.21077">Genetic-Instruct paper</a></li><li><a href="https://arxiv.org/abs/2405.09673">LoRA Learns Less and Forgets Less (Biderman et al. 2024)</a></li><li><a href="https://arxiv.org/abs/2305.14314">QLoRA (Dettmers et al. 2023)</a></li><li><a href="https://huggingface.co/datasets/nvidia/OpenCodeInstruct">OpenCodeInstruct dataset card and API</a></li><li><a href="https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct">Qwen2.5-Coder-1.5B-Instruct model card, config, tokenizer_config, generation_config</a></li><li><a href="https://github.com/volcengine/verl/blob/main/docs/preparation/reward_function.rst">verl reward function docs</a></li><li><a href="https://hub.docker.com/r/ganler/evalplus">Docker Hub ganler/evalplus tags (v0.3.1 exists)</a></li></ul><p>Next, <a href="/train/evaluate/">evaluate</a> in depth, and when you have your own data, <a href="/train/build-dataset/">build a dataset</a>.</p></div><div class="cta-row" style="margin-top:34px"><a class="btn" href="/train/tools/">&larr; Pick tools</a><a class="btn primary" href="/train/evaluate/">Evaluate &rarr;</a></div></div></div>
+</main>
+<footer class="wrap foot">
+  <a class="brand" href="https://renaissancelabs.eu"><img src="/assets/mark.png" alt="">Renaissance Labs</a>
+  <div class="foot-links"><a href="/catalog/">Catalog</a><a href="/recipe/">Recipe builder</a><a href="/guide/">Guide</a><a href="/about/">About</a><a href="/data/resources.json">Data</a><a href="/data/resources.csv">CSV</a><a href="/llms.txt">llms.txt</a><a href="https://math.renaissancelabs.eu">Math</a><a href="https://practice.renaissancelabs.eu">Practice</a><a href="https://huggingface.co/RenaissanceLabsEU">Hugging Face</a></div>
+</footer>
+<script src="/app.js?v=a11fdfbf" defer></script>
+<script src="/lang.js?v=a11fdfbf" defer></script><script src="/figs.js?v=a11fdfbf" defer></script></body>
+</html>

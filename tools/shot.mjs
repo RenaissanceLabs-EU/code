@@ -7,7 +7,7 @@ const resolve = (p) => { p = decodeURIComponent(p.split('?')[0].split('#')[0]); 
 const server = http.createServer((q, r) => { const f = resolve(q.url); if (!fs.existsSync(f) || fs.statSync(f).isDirectory()) { r.writeHead(404); return r.end(); } r.writeHead(200, { 'content-type': types[path.extname(f)] || 'application/octet-stream' }); fs.createReadStream(f).pipe(r); });
 await new Promise((r) => server.listen(0, '127.0.0.1', r));
 const args = process.argv.slice(2), out = args.shift(), mobile = args.includes('--mobile'), dark = args.includes('--dark'), full = args.includes('--full');
-const paths = args.filter((a) => !a.startsWith('--'));
+const paths = args.filter((a) => !a.startsWith('--')), yArg = (args.find((a) => a.startsWith('--y=')) || '').slice(4), hArg = (args.find((a) => a.startsWith('--h=')) || '').slice(4);
 const b = await puppeteer.launch({ executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', headless: 'new', args: ['--no-sandbox'] });
 for (const p of paths) {
   const page = await b.newPage(); await page.setViewport(mobile ? { width: 390, height: 844, isMobile: true, deviceScaleFactor: 1 } : { width: 1280, height: 900 });
@@ -15,6 +15,6 @@ for (const p of paths) {
   page.on('pageerror', (e) => console.log('ERR', p, e.message)); page.on('console', (m) => { if (m.type() === 'error') console.log('CONSOLE', p, m.text()); });
   await page.goto(`http://127.0.0.1:${server.address().port}${p}`, { waitUntil: 'load' }); await new Promise((r) => setTimeout(r, 300));
   const name = (p.replace(/[^a-z0-9]+/gi, '_').replace(/^_|_$/g, '') || 'home') + (mobile ? '_m' : '') + (dark ? '_d' : '') + '.png';
-  await page.screenshot({ path: path.join(out, name), fullPage: full }); console.log('shot', name); await page.close();
+  if (yArg) { await page.screenshot({ path: path.join(out, name), clip: { x: 0, y: +yArg, width: mobile ? 390 : 1280, height: +(hArg || 1100) }, captureBeyondViewport: true }); } else await page.screenshot({ path: path.join(out, name), fullPage: full }); console.log('shot', name); await page.close();
 }
 await b.close(); server.close();

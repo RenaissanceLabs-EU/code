@@ -1,0 +1,60 @@
+{
+  "files_by_split": {
+    "test": 49,
+    "train": 524,
+    "validation": 16
+  },
+  "group_definition": "top-level package directory, or module name for a top-level .py file",
+  "groups_by_split": {
+    "test": 22,
+    "train": 152,
+    "validation": 16
+  },
+  "groups_in_more_than_one_split": [],
+  "largest_groups": [
+    {
+      "files": 78,
+      "group": "encodings",
+      "split": "train"
+    },
+    {
+      "files": 69,
+      "group": "lib2to3",
+      "split": "train"
+    },
+    {
+      "files": 50,
+      "group": "distutils",
+      "split": "train"
+    },
+    {
+      "files": 30,
+      "group": "tkinter",
+      "split": "train"
+    },
+    {
+      "files": 29,
+      "group": "asyncio",
+      "split": "train"
+    },
+    {
+      "files": 28,
+      "group": "email",
+      "split": "test"
+    },
+    {
+      "files": 23,
+      "group": "multiprocessing",
+      "split": "train"
+    },
+    {
+      "files": 21,
+      "group": "turtledemo",
+      "split": "train"
+    }
+  ],
+  "no_group_overlap": true,
+  "pairwise_group_overlap_count": 0,
+  "rule": "split = stable hash of group name (sha256 of salt:group) mod 100: <80 train, 80-89 validation, 90-99 test",
+  "salt": "build-dataset-v1"
+}

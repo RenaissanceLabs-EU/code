@@ -43,4 +43,6 @@ await run('/stack/learned/', 'xor', [async (p, s) => { await click(p, s + ' .lab
 await run('/intelligence/', 'ca', [(p, s) => txt(p, s, '.lab-sum')]);
 await run('/intelligence/', 'collatz', [async (p, s) => { await typeIn(p, s + ' input', '27'); return (await txt(p, s, '.lab-sum')).includes('111'); }]);
 await run('/', 'home', [async (p, s) => { for (const i of [0, 1, 2, 3, 4]) await click(p, s + ' .hf-tabs button', i); return txt(p, s, '.hf-out'); }, async (p, s) => { await click(p, s + ' .hf-tabs button', 5); return (await txt(p, s, '.hf-out')).includes('6'); }]);
+await run('/train/how/', 'fim', [(p, s) => txt(p, s, '.fimout'), async (p, s) => { await p.$eval(s + ' select', (e) => { e.value = '1'; e.dispatchEvent(new Event('change')); }); return (await txt(p, s, '.fimout')).indexOf('fim_suffix') < (await txt(p, s, '.fimout')).lastIndexOf('fim_prefix') + 400; }]);
+await run('/train/how/', 'passk', [async (p, s) => { const t = await txt(p, s, '.lab-sum'); return t.includes('pass@1 here is 20.0%'); }]);
 await b.close(); server.close(); console.log(bad ? bad + ' figure(s) failed' : 'all figures ok'); process.exit(bad ? 1 : 0);

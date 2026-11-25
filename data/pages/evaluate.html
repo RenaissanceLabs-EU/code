@@ -1,0 +1,50 @@
+<p>Evaluation is not the last step. It is how every earlier step gets decided. Without a fixed measurement before you start, you cannot say whether a change to the data, the method or the hyperparameters helped. This page lays out what to measure, how to run it safely, and where the standard benchmarks mislead.</p>
+
+<h2>1. Decide the tests before you train</h2>
+<p>Four kinds of check belong in every project. Set them up first, run them on the model you start from, and keep the numbers.</p>
+<div class="cmpwrap"><table class="cmp">
+<thead><tr><th>Check</th><th>Question it answers</th><th>How</th><th>Resources</th></tr></thead>
+<tbody>
+<tr><th>Held-out evaluation</th><td>Does it work on problems it has not seen?</td><td>A split of your own data that was never in training, split by repository or problem group so that related items stay together. Plus a public benchmark that fits your capability.</td><td>{{r:evalplus-humanevalplus}}, {{r:livecodebench}}, {{r:bigcodebench}}</td></tr>
+<tr><th>Execution-based correctness</th><td>Does the code run and give the right answer?</td><td>Run each generated solution against tests in a sandbox. Report pass@1 with a fixed sampling setup, not one lucky run.</td><td>{{r:evalplus-cli}}, {{r:sb-bigcode-eval}}</td></tr>
+<tr><th>Repository-level tasks</th><td>Can it work in a real codebase, with several files and its own tests?</td><td>Issues with a container per task. Success means the failing tests now pass and the passing tests still pass.</td><td>{{r:swe-bench-verified}}, {{r:swe-bench-multilingual}}, {{r:swe-bench-live}}</td></tr>
+<tr><th>Regression checks</th><td>Did training break something it used to do?</td><td>Run the base model's strong benchmarks and a small set of general prompts before and after. Compare per-task results, not only averages.</td><td>A frozen private set of 50 to 200 tasks from your own domain, plus a general chat check.</td></tr>
+</tbody></table></div>
+
+<h2>2. Report results so they can be trusted</h2>
+<ul>
+<li><b>Pin everything.</b> Harness version, prompt template, sampling temperature, number of samples, seed, maximum length, dataset version. Different harnesses give different numbers for the same model.</li>
+<li><b>State k.</b> pass@1 and pass@10 are different claims. The estimator is short, and the <a href="/train/how/">figure on the training page</a> lets you see how a solved-1-in-5 problem looks at each k.</li>
+</ul>
+{{snip:pass-at-k-unbiased}}
+<ul>
+<li><b>Use more than one sample.</b> Report pass@1 from several samples per problem, and a confidence interval or the spread across seeds. A difference of one or two points on a benchmark with a few hundred problems is within noise.</li>
+<li><b>Read failures by hand.</b> Some benchmark items have flawed tests or ambiguous statements. A sample of failures tells you more than a score.</li>
+<li><b>Compare like with like.</b> Same prompt, same harness, same settings for the base and the tuned model.</li>
+</ul>
+
+<h2>3. Benchmark limits and contamination</h2>
+<p>Public benchmarks are useful and unreliable in known ways.</p>
+<ul>
+<li><b>Contamination.</b> If a benchmark's problems or solutions appear in training data, the score measures memory. This is easy to cause by accident, because benchmark problems are copied across the web and repositories. Remove benchmark problems and near-copies from the training set, and confirm with an evaluation that cannot have been seen, such as {{r:livecodebench}}, which records release dates so you can score only problems published after the model's training cutoff.</li>
+<li><b>Rephrased copies slip through.</b> Plain n-gram matching misses paraphrases ({{r:paper-rephrased-contamination}}). Use a held-out set of your own as the number you trust most.</li>
+<li><b>Weak tests.</b> The original HumanEval tests accepted wrong programs, which is why {{r:evalplus-humanevalplus}} adds many more. {{r:swe-bench-verified}} is still widely reported, but OpenAI stopped using it in February 2026 because of flawed tests and contamination, so treat its numbers as upper bounds and add a contamination-resistant set such as {{r:swe-bench-live}}.</li>
+<li><b>Saturation.</b> When most models score near the top, the benchmark no longer separates them. Move to a harder one.</li>
+<li><b>Task mismatch.</b> A function-writing benchmark says little about repository work or tool use. Use the benchmark that matches the capability you chose.</li>
+</ul>
+
+<h2>4. Run generated code in isolation</h2>
+<p>Model output is untrusted code. Never run it on your own machine's account. Run it in a container or virtual machine with no network, a read-only file system apart from a scratch directory, limits on memory, processes and time, and no secrets in the environment. Keep the tests out of the model's reach, since a model that can read or edit them will.</p>
+{{snip:docker-hardened-sandbox}}
+<p>A Docker container shares the kernel of the Linux host (or of Docker Desktop's Linux VM), so stronger isolation adds a user-space kernel such as gVisor or a microVM such as Firecracker. The tools directory lists the options. For RL, run the reward function inside the sandbox and return only a number. The snippet below limits time and resources but does not isolate anything by itself:</p>
+{{snip:code-reward-subprocess}}
+
+<h2>5. Evaluation inside the training loop</h2>
+<ol class="steps">
+<li><h3>Baseline</h3><p>Run all four checks on the starting model. Save the outputs, the settings and the harness version.</p></li>
+<li><h3>Small experiment</h3><p>Train on a small slice for a short run. Re-run the fast checks. If nothing moves, the problem is the data or the objective, not the scale.</p></li>
+<li><h3>Compare per task</h3><p>Look at which tasks went from fail to pass and which went the other way. Gains that all come from one task family point to leakage or a narrow fix.</p></li>
+<li><h3>Gate</h3><p>Before any larger run, require the held-out score to improve, regressions to stay within a threshold you set in advance, and a sample of passing outputs to look correct when read.</p></li>
+<li><h3>Repeat with one change</h3><p>Change one thing at a time: the data, the filter, the learning rate. Record each run's settings and results in the experiment tracker.</p></li>
+</ol>
+<p>The <a href="/train/first-run/">first training run</a> applies this loop to a small fine-tune end to end.</p>

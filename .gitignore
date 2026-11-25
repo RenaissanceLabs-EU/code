@@ -2,3 +2,9 @@ __pycache__/
 tools/node/node_modules
 notes/og-run.log
 .DS_Store
+examples/build-dataset/data/
+examples/build-dataset/timings/
+examples/build-dataset/out/code_corpus/
+examples/build-dataset/out/docstring_pairs/
+examples/build-dataset/__pycache__/
+examples/build-dataset/tests/__pycache__/

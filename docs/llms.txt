@@ -73,7 +73,17 @@
 ## More
 - [Code in the world](https://code.renaissancelabs.eu/world/): sourced facts, failures, and why software is never finished
 - [Code and intelligence](https://code.renaissancelabs.eu/intelligence/): computation, its limits, and learned programs
-- [Train](https://code.renaissancelabs.eu/train/): the practical section
+- [Part two: how to train language models for code](https://code.renaissancelabs.eu/train/): a learning path
+- [Choose the capability](https://code.renaissancelabs.eu/train/capability/): Completion, instruction following, repair, repository editing, test generation, tool use. Then the approach: scratch, continued pretraining, SFT, preference, RL.
+- [Choose the data](https://code.renaissancelabs.eu/train/data/): What raw code, instruction pairs, patches, tests, traces and synthetic data each teach, the tradeoffs, and how the forms of a program map onto training signals.
+- [Find datasets](https://code.renaissancelabs.eu/train/datasets/): A curated starting set of training datasets, benchmarks and environments, with contents, languages, format, size, limits and evidence of use.
+- [Build a dataset](https://code.renaissancelabs.eu/train/build-dataset/): A worked, runnable example from source files to a versioned, documented Hugging Face dataset: licenses, filtering, dedup, secrets, splits, contamination.
+- [Pick tools](https://code.renaissancelabs.eu/train/tools/): Collection, processing, tokenization, training, tracking, execution and evaluation tools, with a minimal setup and options for scale.
+- [Run a first experiment](https://code.renaissancelabs.eu/train/first-run/): Fine-tune a small code model on a prepared dataset: base model, data, config, commands, hardware, evaluation.
+- [Evaluate](https://code.renaissancelabs.eu/train/evaluate/): Held-out tests, execution-based checks, repository tasks, regression checks, contamination, and running generated code in isolation.
+- [How a code model is trained](https://code.renaissancelabs.eu/train/how/): pretraining, fill-in-the-middle, SFT, preference data, RL with test rewards, evaluation
+- [How open code models were trained](https://code.renaissancelabs.eu/train/models/): recipes compared side by side
+- [Reading list](https://code.renaissancelabs.eu/train/reading/): papers, reports, posts and courses on training code models
 - [Catalog](https://code.renaissancelabs.eu/catalog/): all 384 resources, filterable
 - [Recipe builder](https://code.renaissancelabs.eu/recipe/): ordered plan from model size, budget, languages and goal
 - [Guide: how to improve any model at coding](https://code.renaissancelabs.eu/guide/)
@@ -96,6 +106,8 @@
 - [languages.json](https://code.renaissancelabs.eu/data/languages.json)
 - [landmarks.json](https://code.renaissancelabs.eu/data/landmarks.json)
 - [world.json](https://code.renaissancelabs.eu/data/world.json)
+- [reading.json](https://code.renaissancelabs.eu/data/reading.json)
+- [model-recipes.json](https://code.renaissancelabs.eu/data/model-recipes.json)
 - [taxonomy.json](https://code.renaissancelabs.eu/data/taxonomy.json)
 - [snippets.json](https://code.renaissancelabs.eu/data/snippets.json)
 

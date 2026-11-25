@@ -1,0 +1,4 @@
+{
+  "allowed": ["PSF-2.0", "Apache-2.0", "MIT", "BSD-2-Clause", "BSD-3-Clause", "0BSD"],
+  "note": "SPDX identifiers whose terms allow redistribution of source with notices retained. An SPDX expression 'A OR B' passes if either side is allowed. Labels starting with LicenseRef- are file-header patterns that were not matched to an SPDX identifier; they are NOT allowed until a person reviews the file."
+}
